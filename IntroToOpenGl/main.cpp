@@ -1,37 +1,49 @@
+#include <glad.h>
 #include <GLFW/glfw3.h>
 
-int main(void)
+using namespace std;
+
+// framebuffer size callback function
+void resize(GLFWwindow* window, int width, int height)
 {
-    GLFWwindow* window;
+    glViewport(0, 0, width, height);
+}
 
-    /* Initialize the library */
-    if (!glfwInit())
-        return -1;
+void render(GLFWwindow* window) {
 
-    /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
-    if (!window)
-    {
-        glfwTerminate();
-        return -1;
-    }
+    // here we put our rendering code
 
-    /* Make the window's context current */
+}
+
+void main() {
+
+    int width = 800;
+    int height = 600;
+
+    // We initialzie GLFW
+    glfwInit();
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+    // Now that it is initialized, we create a window
+    GLFWwindow* window = glfwCreateWindow(width, height, "My Title", NULL, NULL);
+
+    // We set the context to be our window and then initialize GLAD
     glfwMakeContextCurrent(window);
+    gladLoadGL();
 
-    /* Loop until the user closes the window */
+    // We can set a function to recieve framebuffer size callbacks, but it is optional
+    glfwSetFramebufferSizeCallback(window, resize);
+
+
+    //here we run our window, swapping buffers and all.
     while (!glfwWindowShouldClose(window))
     {
-        /* Render here */
         glClear(GL_COLOR_BUFFER_BIT);
-
-        /* Swap front and back buffers */
+        glClearColor(0.0f, 0.0f, 0.1f, 0.0f);
+        render(window);
         glfwSwapBuffers(window);
-
-        /* Poll for and process events */
         glfwPollEvents();
     }
-
-    glfwTerminate();
-    return 0;
 }
