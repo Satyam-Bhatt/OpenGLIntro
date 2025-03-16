@@ -2,17 +2,34 @@
 #include <glad.h>
 #include <GLFW/glfw3.h>
 #include <stdio.h>
+#include <iostream>
 
-using namespace std;
 
 int main()
 {
 	//Instantiate GLFW window
 	glfwInit();
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	//Configure GLFW to use OpenGL 3.3
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);//First argument is what option we want to configure. Second argument sets the value of our option
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	//To get access to smaller features of OpenGL, we get the core profile. But this is not backwards compatible.
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	//glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+	
+	GLFWwindow* window = glfwCreateWindow(800, 600, "Hello Window", NULL, NULL);
+	if (window == NULL)
+	{
+		std::cout << "Failed to create GLFW window" << std::endl;
+		glfwTerminate();
+		return -1;
+	}
+	glfwMakeContextCurrent(window);
+
+	//Initialize GLAD before calling any OpenGL functions
+	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+	{
+		std::cout << "Failed to initialize GLAD" << std::endl;
+	}
 
 	return 0;
 }
