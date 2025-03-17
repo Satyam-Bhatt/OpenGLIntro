@@ -4,6 +4,11 @@
 #include <stdio.h>
 #include <iostream>
 
+// Callback function called when the window is resized
+void framebuffer_size_callback(GLFWwindow* window, int width, int height)
+{
+	glViewport(0, 0, width, height);
+}
 
 int main()
 {
@@ -26,10 +31,24 @@ int main()
 	glfwMakeContextCurrent(window);
 
 	//Initialize GLAD before calling any OpenGL functions
-	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))// To get correct function based on OS we're compiling for.
 	{
 		std::cout << "Failed to initialize GLAD" << std::endl;
 	}
+
+	//To display the data and coordinates with respect to the window we need to set the viewport. This helps map the center and edge of the window with and extent of -1 to 1
+	glViewport(0, 0, 800, 600);
+
+	//Set the function to be called when the window is resized. Bind it once and GLFW will call it whenever the window is resized
+	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+
+	while (!glfwWindowShouldClose(window))
+	{
+		glfwSwapBuffers(window);
+		//Input Handling
+		glfwPollEvents();
+	}
+
 
 	return 0;
 }
