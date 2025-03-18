@@ -10,6 +10,15 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 	glViewport(0, 0, width, height);
 }
 
+//Handle Inputs
+void processInput(GLFWwindow* window)
+{
+	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) //To get the key press
+	{
+		glfwSetWindowShouldClose(window, true);
+	}
+}
+
 int main()
 {
 	//Instantiate GLFW window
@@ -42,13 +51,26 @@ int main()
 	//Set the function to be called when the window is resized. Bind it once and GLFW will call it whenever the window is resized
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
-	while (!glfwWindowShouldClose(window))
+	// Render loop runs until we tell it to stop
+	while (!glfwWindowShouldClose(window)) // Checks if GLFW has been instructed to close
 	{
-		glfwSwapBuffers(window);
-		//Input Handling
+		// Input
+		processInput(window);
+
+		//Rendering
+		//State Setting function
+		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);//This is the color which fills the color buffer when we clear the color buffer
+		//State Using function
+		glClear(GL_COLOR_BUFFER_BIT); // Clear the color buffer at the end of the frame. We need to clear other buffers too if we have them like depth buffer or stencil buffer.
+
+		//To swap the back and front buffer of specified window Double Buffer so that there is no artifacting
+		glfwSwapBuffers(window); //---> Add Double buffer Definition
+		//Event Handling mostly for Input.
 		glfwPollEvents();
 	}
 
+	//To clean/Terminate all GLFW's resources
+	glfwTerminate();
 
 	return 0;
 }
