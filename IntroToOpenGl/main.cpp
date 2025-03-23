@@ -174,6 +174,10 @@ int main()
 		// Run our first program
 		glUseProgram(shaderProgram); // Use the shader program
 		glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized. It is generally done if we want to draw some other thing with a different VAO
+		// Draws primitives using currently active shader program and the active/bound VAO. 
+		// arg1 -> Type of primitives to draw. GL_TRIANGLES means that we want to draw triangles using the vertices that are currently stored in the VAO
+		// arg2 -> Starting index in the currently bound VAO. In this case it's 0
+		// arg3 -> The number of vertices to be rendered
 		glDrawArrays(GL_TRIANGLES, 0, 3);
 		glBindVertexArray(0); // Unbind the VAO. A good practice
 
