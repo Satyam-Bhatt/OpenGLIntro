@@ -4,14 +4,24 @@
 #include <stdio.h>
 #include <iostream>
 
-//== Vertex Shader ==
+// == Vertex Shader ==
 const char* vertexShaderSource = "#version 330 core\n" // Define the version of openGL which is 3.3
 //in -> Input Variable of vertex shader
 "layout (location = 0) in vec3 aPos;\n"
 "void main()\n" // main function just like C
 "{\n"
-// out -> Output of vertex shader is what we assign to gl_Position
+// gl_Position -> Output of vertex shader is what we assign to gl_Position
 "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+"}\0";
+
+// == Fragment Shader ==
+const char* fragmentShaderSource = "#version 330 core\n"
+//out -> Output Variable of fragment shader. This is defined by out keyword
+"out vec4 FragColor;\n"
+"void main()\n"
+"{\n"
+// FragColor -> Output of fragment shader. Variable defined above with out keyword
+"   FragColor = vec4(1.0f,0.5f, 0.2f, 1.0f);\n"
 "}\0";
 
 // Callback function called when the window is resized
@@ -62,7 +72,7 @@ int main()
 	//Set the function to be called when the window is resized. Bind it once and GLFW will call it whenever the window is resized
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
-	// Build and compile shader program
+	// == Build and compile shader program ==
 	// Vertex shader
 	unsigned int vertexShader;
 	vertexShader = glCreateShader(GL_VERTEX_SHADER); // Create a shader object and refrence by ID. GL_VERTEX_SHADER is the type of shader we want to create with glCreateShader || DEFINE ||
@@ -77,6 +87,38 @@ int main()
 		glGetShaderInfoLog(vertexShader, 512, NULL, infoLog); // Get the error message || DEFINE ||
 		std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
 	}
+
+	// Fragment Shader 
+	unsigned int fragmentShader;
+	fragmentShader = glCreateShader(GL_FRAGMENT_SHADER); // as we want to create a fragment shader we use GL_FRAGMENT_SHADER
+	glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
+	glCompileShader(fragmentShader);
+	// Check shader compile errors
+	glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
+	if (!success)
+	{
+		glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
+		std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
+	}
+
+	// Link Shaders
+	// Create a shader program. Shader Program is a collection of multiple shader objects linked together. When linking shaders the output of each shader is the input for the next shader
+	unsigned int shaderProgram;
+	shaderProgram = glCreateProgram(); // Create a shader program and returns ID refrence
+	glAttachShader(shaderProgram, vertexShader); // Attach the vertex shader to the shader program. The vertex shader is the first shader to be compiled and linked and its output will be the input for the fragment shader
+	glAttachShader(shaderProgram, fragmentShader); // Attach the fragment shader to the shader program
+	glLinkProgram(shaderProgram); // Link the shader program
+	// Check linking errors
+	glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
+	if (!success)
+	{
+		glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
+		std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
+	}
+	// Delete the shader objects as they are linked to the shader program
+	glDeleteShader(vertexShader); // Delete the vertex shader
+	glDeleteShader(fragmentShader); // Delete the fragment shader
+
 
 	float vertices[] =
 	{
@@ -104,6 +146,9 @@ int main()
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);//This is the color which fills the color buffer when we clear the color buffer
 		//State Using function
 		glClear(GL_COLOR_BUFFER_BIT); // Clear the color buffer at the end of the frame. We need to clear other buffers too if we have them like depth buffer or stencil buffer.
+
+		// Run our first program
+		glUseProgram(shaderProgram); // Use the shader program
 
 		//To swap the back and front buffer of specified window Double Buffer so that there is no artifacting
 		glfwSwapBuffers(window); //---> Add Double buffer Definition
