@@ -118,7 +118,7 @@ int main()
 	// Delete the shader objects as they are linked to the shader program
 	glDeleteShader(vertexShader); // Delete the vertex shader
 	glDeleteShader(fragmentShader); // Delete the fragment shader
-
+	// == END ==
 
 	float vertices[] =
 	{
@@ -127,7 +127,18 @@ int main()
 		0.0f, 0.5f, 0.0f
 	};
 
-	// == Here we are storing the vertex data on the graphics card memory and is managed by verter buffer object called as VBO ==
+	// == VAO, VBO, EBO ==
+	// Vertex Array Object(VAO) is a container for vertex attribute data. It is a collection of attribute pointers that point to vertex attribute data stored in the vertex buffer object. It stores everything like the stride, size, should normalize etc.
+	// VAO stores the following:
+	// -> Calls to glEnableVertexAttribArray or glDisableVertexAttribArray.
+	// -> Vertex attribute configurations via glVertexAttribPointer.
+	// -> Vertex buffer objects associated with vertex attributes by calls to glVertexAttribPointer.
+	unsigned int VAO;
+	glGenVertexArrays(1, &VAO);
+	// Bind VAO. This should be done before glVertexAttribPointer as now it will store calls to it. Its good if we do it before binding VBO as well
+	glBindVertexArray(VAO);
+
+	// Here we are storing the vertex data on the graphics card memory and is managed by verter buffer object called as VBO
 	unsigned int VBO; //Vertex Buffer Object -> this is a buffer that holds the verticies and is also an openGL object and represents the buffer
 	glGenBuffers(1, &VBO); // It generated one buffer object and the ID is stored in VBO (more in the definition of glGenBuffers)
 	glBindBuffer(GL_ARRAY_BUFFER, VBO); // Bind the buffer to the target. GL_ARRAY_BUFFER is the target/buffer type for vertex buffer object
@@ -135,20 +146,36 @@ int main()
 	// glBufferData is a function specifically targeted to copy user-defined data into the currently bound buffer
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW); 
 
+	// How OpenGL should interpret the vertex data is defined by this function. It is defined for different attributes per vertex data. It takes in the data which is currently bound to VBO
+	// arg1 -> location defined in the vertex shader for the input variable
+	// arg2 -> number of components per generic vertex attribute
+	// arg3 -> data type
+	// arg4 -> whether the data is normalized (between -1 and 1)
+	// arg5 -> stride (the amount of bytes between consecutive vertex attributes. Consecutive vertex attributes mean the attributes that are same. Like if the vertex has (vec3)position and (vec4)color then the stride is size from first vertex position to second vertex position = 28 bytes). || EXPLAIN ||
+	// arg6 -> pointer to the offset of the first attribute in the first vertex
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0); // || DEFINE ||
+	// Enable the vertex attribute array by giving the location of the vertex attribute
+	glEnableVertexAttribArray(0);
+
+
 	// Render loop runs until we tell it to stop
 	while (!glfwWindowShouldClose(window)) // Checks if GLFW has been instructed to close
 	{
-		// Input
+		// == Input ==
 		processInput(window);
 
-		//Rendering
+		// == Rendering ==
 		//State Setting function
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);//This is the color which fills the color buffer when we clear the color buffer
 		//State Using function
 		glClear(GL_COLOR_BUFFER_BIT); // Clear the color buffer at the end of the frame. We need to clear other buffers too if we have them like depth buffer or stencil buffer.
 
+		// == Drawing ==
 		// Run our first program
 		glUseProgram(shaderProgram); // Use the shader program
+		glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized. It is generally done if we want to draw some other thing with a different VAO
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+		glBindVertexArray(0); // Unbind the VAO. A good practice
 
 		//To swap the back and front buffer of specified window Double Buffer so that there is no artifacting
 		glfwSwapBuffers(window); //---> Add Double buffer Definition
