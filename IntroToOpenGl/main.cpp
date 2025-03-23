@@ -4,6 +4,16 @@
 #include <stdio.h>
 #include <iostream>
 
+//== Vertex Shader ==
+const char* vertexShaderSource = "#version 330 core\n" // Define the version of openGL which is 3.3
+//in -> Input Variable of vertex shader
+"layout (location = 0) in vec3 aPos;\n"
+"void main()\n" // main function just like C
+"{\n"
+// out -> Output of vertex shader is what we assign to gl_Position
+"   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+"}\0";
+
 // Callback function called when the window is resized
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
@@ -43,6 +53,7 @@ int main()
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))// To get correct function based on OS we're compiling for.
 	{
 		std::cout << "Failed to initialize GLAD" << std::endl;
+		return -1;
 	}
 
 	//To display the data and coordinates with respect to the window we need to set the viewport. This helps map the center and edge of the window with and extent of -1 to 1
@@ -50,6 +61,22 @@ int main()
 
 	//Set the function to be called when the window is resized. Bind it once and GLFW will call it whenever the window is resized
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+
+	// Build and compile shader program
+	// Vertex shader
+	unsigned int vertexShader;
+	vertexShader = glCreateShader(GL_VERTEX_SHADER); // Create a shader object and refrence by ID. GL_VERTEX_SHADER is the type of shader we want to create with glCreateShader || DEFINE ||
+	glShaderSource(vertexShader, 1, &vertexShaderSource, NULL); // Attach the source code to the shader object || DEFINE ||
+	glCompileShader(vertexShader); // Compile the shader object || DEFINE ||
+	// Check shader compile errors
+	int success; // To indicate the success of shader compilation
+	char infoLog[512]; // To store the error message
+	glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success); // Get the compilation status. The function helps the developers to query the shader for information || DEFINE ||
+	if (!success)
+	{
+		glGetShaderInfoLog(vertexShader, 512, NULL, infoLog); // Get the error message || DEFINE ||
+		std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
+	}
 
 	float vertices[] =
 	{
