@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include <iostream>
 
+//#define TRIANGLE
+
 // == Vertex Shader ==
 const char* vertexShaderSource = "#version 330 core\n" // Define the version of openGL which is 3.3
 //in -> Input Variable of vertex shader
@@ -129,17 +131,15 @@ int main()
 	};
 
 	// Rectangle
-	float vertices2[] =
-	{
+	float vertices2[] = {
 		 0.5f,  0.5f, 0.0f,  // top right
 		 0.5f, -0.5f, 0.0f,  // bottom right
 		-0.5f, -0.5f, 0.0f,  // bottom left
 		-0.5f,  0.5f, 0.0f   // top left 
 	};
-	unsigned int indices[] =
-	{ // We start from 0
-		0,1,3, // first triangle
-		1,2,3  // second triangle
+	unsigned int indices[] = {  // note that we start from 0!
+		0, 1, 3,  // first Triangle
+		1, 2, 3   // second Triangle
 	};
 	// == VAO, VBO, EBO ==
 	// Vertex Array Object(VAO) is a container for vertex attribute data. It is a collection of attribute pointers that point to vertex attribute data stored in the vertex buffer object. It stores everything like the stride, size, should normalize etc.
@@ -156,10 +156,14 @@ int main()
 	// Here we are storing the vertex data on the graphics card memory and is managed by verter buffer object called as VBO
 	unsigned int VBO; //Vertex Buffer Object -> this is a buffer that holds the verticies and is also an openGL object and represents the buffer
 	glGenBuffers(1, &VBO); // It generated one buffer object and the ID is stored in VBO (more in the definition of glGenBuffers)
-	glBindBuffer(GL_ARRAY_BUFFER, VBO); // Bind the buffer to the target. GL_ARRAY_BUFFER is the target/buffer type for vertex buffer object
+	glBindBuffer(GL_ARRAY_BUFFER, VBO); // Bind the buffer to the target. GL_ARRAY_BUFFER is the target/buffer type for vertex buffer object // || DEFINE ||
 	// As GL_ARRAY_BUFFER is now bound to the buffer VBO so any buffer operation will be performed on this buffer. glBufferData just copies the vertices data defined above to the buffer's memory
 	// glBufferData is a function specifically targeted to copy user-defined data into the currently bound buffer
+#ifdef TRIANGLE
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+#else
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices2), vertices2, GL_STATIC_DRAW);
+#endif
 
 	// Declaring Element Buffer Object(EBO). 
 	// EBO stores indices that OpenGL uses to decide what vertices to draw in a specific winding order. 
@@ -183,7 +187,8 @@ int main()
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	// Unbind the VAO as well
 	glBindVertexArray(0);
-	// Unbind the GL_ELEMENT_ARRAY_BUFFER. Unbind it after unbiding VAO as VAO stores the glBindBuffer calls when the target is GL_ELEMENT_ARRAY_BUFFER.
+	// Unbind the GL_ELEMENT_ARRAY_BUFFER. Unbind it after unbiding VAO as VAO stores the glBindBuffer calls when the target is GL_ELEMENT_ARRAY_BUFFER. The last buffer object of VAO is EBO so if we unbind it before we unbind VAO then the last buffer object will not be there and we will have to
+	// manually bind it when rendering or it will throw an error
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 
@@ -200,23 +205,26 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT); // Clear the color buffer at the end of the frame. We need to clear other buffers too if we have them like depth buffer or stencil buffer.
 
 		// == Drawing ==
-		// To Draw in wireframe mode
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		// To Draw in wireframe mode. Default is glPolygonMode(GL_FRONT_AND_BACK, GL_FILL).
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); 
 		// Run our first program
 		glUseProgram(shaderProgram); // Use the shader program
 		glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized. It is generally done if we want to draw some other thing with a different VAO
-		//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO); // Bind the corresponding EBO each time we want to render object using indices. Although VAO stores it as the last buffer object but we are doing it here just to comment it out. || DEFINE ||
+		//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO); // Bind the corresponding EBO each time we want to render object using indices. Although VAO stores it as the last buffer object but we are doing it here just to show where to bind it if there was some issue earlier.
 		// Draws primitives using currently active shader program and the active/bound VAO. 
 		// arg1 -> Type of primitives to draw. GL_TRIANGLES means that we want to draw triangles using the vertices that are currently stored in the VAO
 		// arg2 -> Starting index in the currently bound VAO. In this case it's 0
 		// arg3 -> The number of vertices to be rendered
+#ifdef TRIANGLE
 		glDrawArrays(GL_TRIANGLES, 0, 3); // || DEFINE ||
+#else
 		// To draw triangles from indices/index buffer defined in EBO we use glDrawElements
 		// arg1 -> Type of primitive we want to draw
 		// arg2 -> number of elements we want to draw. A square is made up of 2 triangles hence 6 vertices
 		// arg3 -> The type of the indicies in the EBO
 		// arg4 -> specify an offset in the EBO (or pass in an index array, but that is when you're not using element buffer objects)
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0); // || DEFINE ||
+#endif
 		glBindVertexArray(0); // Unbind the VAO. A good practice
 		//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0); // Unbind the GL_ELEMENT_ARRAY_BUFFER. Unbind it after unbiding VAO as VAO stores the glBindBuffer calls when the target is GL_ELEMENT_ARRAY_BUFFER.
 
