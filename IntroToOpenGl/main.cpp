@@ -49,7 +49,7 @@ int main()
 	//To get access to smaller features of OpenGL, we get the core profile. But this is not backwards compatible.
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	//glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-	
+
 	GLFWwindow* window = glfwCreateWindow(800, 600, "Hello Window", NULL, NULL);
 	if (window == NULL)
 	{
@@ -120,6 +120,7 @@ int main()
 	glDeleteShader(fragmentShader); // Delete the fragment shader
 	// == END ==
 
+	// Triangle
 	float vertices[] =
 	{
 		-0.5f, -0.5f, 0.0f,
@@ -127,6 +128,19 @@ int main()
 		0.0f, 0.5f, 0.0f
 	};
 
+	// Rectangle
+	float vertices2[] =
+	{
+		 0.5f,  0.5f, 0.0f,  // top right
+		 0.5f, -0.5f, 0.0f,  // bottom right
+		-0.5f, -0.5f, 0.0f,  // bottom left
+		-0.5f,  0.5f, 0.0f   // top left 
+	};
+	unsigned int indices[] =
+	{ // We start from 0
+		0,1,3, // first triangle
+		1,2,3  // second triangle
+	};
 	// == VAO, VBO, EBO ==
 	// Vertex Array Object(VAO) is a container for vertex attribute data. It is a collection of attribute pointers that point to vertex attribute data stored in the vertex buffer object. It stores everything like the stride, size, should normalize etc.
 	// VAO stores the following:
@@ -136,6 +150,7 @@ int main()
 	unsigned int VAO;
 	glGenVertexArrays(1, &VAO);
 	// Bind VAO. This should be done before glVertexAttribPointer as now it will store calls to it. Its good if we do it before binding VBO as well
+	// The last element buffer object that gets bound while a VAO is bound, is stored as the VAO's element buffer object. Binding to a VAO then also automatically binds that EBO.
 	glBindVertexArray(VAO);
 
 	// Here we are storing the vertex data on the graphics card memory and is managed by verter buffer object called as VBO
@@ -144,7 +159,14 @@ int main()
 	glBindBuffer(GL_ARRAY_BUFFER, VBO); // Bind the buffer to the target. GL_ARRAY_BUFFER is the target/buffer type for vertex buffer object
 	// As GL_ARRAY_BUFFER is now bound to the buffer VBO so any buffer operation will be performed on this buffer. glBufferData just copies the vertices data defined above to the buffer's memory
 	// glBufferData is a function specifically targeted to copy user-defined data into the currently bound buffer
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW); 
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices2), vertices2, GL_STATIC_DRAW);
+
+	// Declaring Element Buffer Object(EBO). 
+	// EBO stores indices that OpenGL uses to decide what vertices to draw in a specific winding order. 
+	unsigned int EBO; // Buffer that holds the indices
+	glGenBuffers(1, &EBO); // Generate the buffer object with refrenced ID.
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO); // Buffer type for EBO is GL_ELEMENT_ARRAY_BUFFER
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW); // Copy indices data into the buffer
 
 	// How OpenGL should interpret the vertex data is defined by this function. It is defined for different attributes per vertex data. It takes in the data which is currently bound to VBO
 	// arg1 -> location defined in the vertex shader for the input variable
@@ -156,6 +178,13 @@ int main()
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0); // || DEFINE ||
 	// Enable the vertex attribute array by giving the location of the vertex attribute
 	glEnableVertexAttribArray(0);
+
+	// Unbind the Buffer after we have finished using it which is after we have finished setting the VAO
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	// Unbind the VAO as well
+	glBindVertexArray(0);
+	// Unbind the GL_ELEMENT_ARRAY_BUFFER. Unbind it after unbiding VAO as VAO stores the glBindBuffer calls when the target is GL_ELEMENT_ARRAY_BUFFER.
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 
 	// Render loop runs until we tell it to stop
@@ -171,15 +200,25 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT); // Clear the color buffer at the end of the frame. We need to clear other buffers too if we have them like depth buffer or stencil buffer.
 
 		// == Drawing ==
+		// To Draw in wireframe mode
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		// Run our first program
 		glUseProgram(shaderProgram); // Use the shader program
 		glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized. It is generally done if we want to draw some other thing with a different VAO
+		//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO); // Bind the corresponding EBO each time we want to render object using indices. Although VAO stores it as the last buffer object but we are doing it here just to comment it out. || DEFINE ||
 		// Draws primitives using currently active shader program and the active/bound VAO. 
 		// arg1 -> Type of primitives to draw. GL_TRIANGLES means that we want to draw triangles using the vertices that are currently stored in the VAO
 		// arg2 -> Starting index in the currently bound VAO. In this case it's 0
 		// arg3 -> The number of vertices to be rendered
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+		glDrawArrays(GL_TRIANGLES, 0, 3); // || DEFINE ||
+		// To draw triangles from indices/index buffer defined in EBO we use glDrawElements
+		// arg1 -> Type of primitive we want to draw
+		// arg2 -> number of elements we want to draw. A square is made up of 2 triangles hence 6 vertices
+		// arg3 -> The type of the indicies in the EBO
+		// arg4 -> specify an offset in the EBO (or pass in an index array, but that is when you're not using element buffer objects)
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0); // || DEFINE ||
 		glBindVertexArray(0); // Unbind the VAO. A good practice
+		//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0); // Unbind the GL_ELEMENT_ARRAY_BUFFER. Unbind it after unbiding VAO as VAO stores the glBindBuffer calls when the target is GL_ELEMENT_ARRAY_BUFFER.
 
 		//To swap the back and front buffer of specified window Double Buffer so that there is no artifacting
 		glfwSwapBuffers(window); //---> Add Double buffer Definition
