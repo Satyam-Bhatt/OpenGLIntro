@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <iostream>
 
-//#define TRIANGLE
+#define TRIANGLE
 
 // == Vertex Shader ==
 const char* vertexShaderSource = "#version 330 core\n" // Define the version of openGL which is 3.3
@@ -129,6 +129,18 @@ int main()
 		0.5f, -0.5f, 0.0f,
 		0.0f, 0.5f, 0.0f
 	};
+	// 2 Triangles
+	float vertices_Triangls[] =
+	{
+		// Triangle 1 
+		-0.75f, -0.75f, 0.0f,
+		0.0f, -0.75f, 0.0f,
+		-0.45f, 0.0f, 0.0f,
+		// Triangle 2
+		0.0f, 0.0f,0.0f,
+		0.75f,0.0f,0.0f,
+		0.4f,0.75f,0.0f 
+	};
 
 	// Rectangle
 	float vertices2[] = {
@@ -160,7 +172,7 @@ int main()
 	// As GL_ARRAY_BUFFER is now bound to the buffer VBO so any buffer operation will be performed on this buffer. glBufferData just copies the vertices data defined above to the buffer's memory
 	// glBufferData is a function specifically targeted to copy user-defined data into the currently bound buffer
 #ifdef TRIANGLE
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices_Triangls), vertices_Triangls, GL_STATIC_DRAW);
 #else
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices2), vertices2, GL_STATIC_DRAW);
 #endif
@@ -216,7 +228,7 @@ int main()
 		// arg2 -> Starting index in the currently bound VAO. In this case it's 0
 		// arg3 -> The number of vertices to be rendered
 #ifdef TRIANGLE
-		glDrawArrays(GL_TRIANGLES, 0, 3); // || DEFINE ||
+		glDrawArrays(GL_TRIANGLES, 0, 6); // || DEFINE ||
 #else
 		// To draw triangles from indices/index buffer defined in EBO we use glDrawElements
 		// arg1 -> Type of primitive we want to draw
