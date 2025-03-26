@@ -139,8 +139,23 @@ int main()
 		// Triangle 2
 		0.0f, 0.0f,0.0f,
 		0.75f,0.0f,0.0f,
-		0.4f,0.75f,0.0f 
+		0.4f,0.75f,0.0f
 	};
+
+	// 2 triangle with different VAO for test
+	float vertices_VAO1[] =
+	{
+		-0.75f, -0.75f, 0.0f,
+		0.0f, -0.75f, 0.0f,
+		-0.45f, 0.0f, 0.0f,
+	};
+	float vertices_VAO2[] =
+	{
+		0.0f, 0.0f,0.0f,
+		0.75f,0.0f,0.0f,
+		0.4f,0.75f,0.0f
+	};
+	//////
 
 	// Rectangle
 	float vertices2[] = {
@@ -172,7 +187,7 @@ int main()
 	// As GL_ARRAY_BUFFER is now bound to the buffer VBO so any buffer operation will be performed on this buffer. glBufferData just copies the vertices data defined above to the buffer's memory
 	// glBufferData is a function specifically targeted to copy user-defined data into the currently bound buffer
 #ifdef TRIANGLE
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices_Triangls), vertices_Triangls, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices_VAO1), vertices_VAO1, GL_STATIC_DRAW);
 #else
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices2), vertices2, GL_STATIC_DRAW);
 #endif
@@ -203,6 +218,18 @@ int main()
 	// manually bind it when rendering or it will throw an error
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
+	// Test Code. Use array for it and in glGenBuffers have 2 in it
+	unsigned int VAO2, VBO2;
+	glGenVertexArrays(1, &VAO2);
+	glBindVertexArray(VAO2);
+	glGenBuffers(1, &VBO2);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO2);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices_VAO2), vertices_VAO2, GL_STATIC_DRAW);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
+	/////
 
 	// Render loop runs until we tell it to stop
 	while (!glfwWindowShouldClose(window)) // Checks if GLFW has been instructed to close
@@ -218,7 +245,7 @@ int main()
 
 		// == Drawing ==
 		// To Draw in wireframe mode. Default is glPolygonMode(GL_FRONT_AND_BACK, GL_FILL).
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); 
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		// Run our first program
 		glUseProgram(shaderProgram); // Use the shader program
 		glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized. It is generally done if we want to draw some other thing with a different VAO
@@ -228,7 +255,7 @@ int main()
 		// arg2 -> Starting index in the currently bound VAO. In this case it's 0
 		// arg3 -> The number of vertices to be rendered
 #ifdef TRIANGLE
-		glDrawArrays(GL_TRIANGLES, 0, 6); // || DEFINE ||
+		glDrawArrays(GL_TRIANGLES, 0, 3); // || DEFINE ||
 #else
 		// To draw triangles from indices/index buffer defined in EBO we use glDrawElements
 		// arg1 -> Type of primitive we want to draw
@@ -240,11 +267,23 @@ int main()
 		glBindVertexArray(0); // Unbind the VAO. A good practice
 		//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0); // Unbind the GL_ELEMENT_ARRAY_BUFFER. Unbind it after unbiding VAO as VAO stores the glBindBuffer calls when the target is GL_ELEMENT_ARRAY_BUFFER.
 
+		//Test Code
+		glBindVertexArray(VAO2);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+		glBindVertexArray(0);
+		////
+
 		//To swap the back and front buffer of specified window Double Buffer so that there is no artifacting
 		glfwSwapBuffers(window); //---> Add Double buffer Definition
 		//Event Handling mostly for Input.
 		glfwPollEvents();
 	}
+
+	// Deallocate all resources once they have outlived their purpose
+	glDeleteVertexArrays(1, &VAO);
+	glDeleteBuffers(1, &VBO);
+	glDeleteBuffers(1, &EBO);
+	glDeleteProgram(shaderProgram);
 
 	//To clean/Terminate all GLFW's resources
 	glfwTerminate();
