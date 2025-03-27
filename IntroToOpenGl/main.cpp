@@ -26,6 +26,16 @@ const char* fragmentShaderSource = "#version 330 core\n"
 "   FragColor = vec4(1.0f,0.5f, 0.2f, 1.0f);\n"
 "}\0";
 
+//Test fragment shader
+const char* fragmentShaderSource_Test = "#version 330 core\n"
+//out -> Output Variable of fragment shader. This is defined by out keyword
+"out vec4 FragColor;\n"
+"void main()\n"
+"{\n"
+// FragColor -> Output of fragment shader. Variable defined above with out keyword
+"   FragColor = vec4(1.0f,1.0f, 0.0f, 1.0f);\n"
+"}\0";
+
 // Callback function called when the window is resized
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
@@ -122,6 +132,44 @@ int main()
 	glDeleteShader(fragmentShader); // Delete the fragment shader
 	// == END ==
 
+	// Test 3
+	unsigned int vertexShader_Test;
+	vertexShader_Test = glCreateShader(GL_VERTEX_SHADER);
+	glShaderSource(vertexShader_Test, 1, &vertexShaderSource, NULL);
+	glCompileShader(vertexShader_Test);
+	glGetShaderiv(vertexShader_Test, GL_COMPILE_STATUS, &success);
+	if (!success)
+	{
+		glGetShaderInfoLog(vertexShader_Test, 512, NULL, infoLog);
+		std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
+	}
+
+	unsigned int fragmentShader_Test;
+	fragmentShader_Test = glCreateShader(GL_FRAGMENT_SHADER);
+	glShaderSource(fragmentShader_Test, 1, &fragmentShaderSource_Test, NULL);
+	glCompileShader(fragmentShader_Test);
+	glGetShaderiv(fragmentShader_Test, GL_COMPILE_STATUS, &success);
+	if (!success)
+	{
+		glGetShaderInfoLog(fragmentShader_Test, 512, NULL, infoLog);
+		std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
+	}
+
+	unsigned int shaderProgram_Test;
+	shaderProgram_Test = glCreateProgram();
+	glAttachShader(shaderProgram_Test, vertexShader_Test);
+	glAttachShader(shaderProgram_Test, fragmentShader_Test);
+	glLinkProgram(shaderProgram_Test);
+	glGetProgramiv(shaderProgram_Test, GL_LINK_STATUS, &success);
+	if (!success)
+	{
+		glGetProgramInfoLog(shaderProgram_Test, 512, NULL, infoLog);
+		std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
+	}
+	glDeleteShader(vertexShader_Test);
+	glDeleteShader(fragmentShader_Test);
+	////
+
 	// Triangle
 	float vertices[] =
 	{
@@ -187,7 +235,7 @@ int main()
 	// As GL_ARRAY_BUFFER is now bound to the buffer VBO so any buffer operation will be performed on this buffer. glBufferData just copies the vertices data defined above to the buffer's memory
 	// glBufferData is a function specifically targeted to copy user-defined data into the currently bound buffer
 #ifdef TRIANGLE
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices_VAO1), vertices_VAO1, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 #else
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices2), vertices2, GL_STATIC_DRAW);
 #endif
@@ -245,7 +293,7 @@ int main()
 
 		// == Drawing ==
 		// To Draw in wireframe mode. Default is glPolygonMode(GL_FRONT_AND_BACK, GL_FILL).
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		// Run our first program
 		glUseProgram(shaderProgram); // Use the shader program
 		glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized. It is generally done if we want to draw some other thing with a different VAO
@@ -268,6 +316,7 @@ int main()
 		//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0); // Unbind the GL_ELEMENT_ARRAY_BUFFER. Unbind it after unbiding VAO as VAO stores the glBindBuffer calls when the target is GL_ELEMENT_ARRAY_BUFFER.
 
 		//Test Code
+		glUseProgram(shaderProgram_Test);
 		glBindVertexArray(VAO2);
 		glDrawArrays(GL_TRIANGLES, 0, 3);
 		glBindVertexArray(0);
