@@ -3,8 +3,11 @@
 #include <GLFW/glfw3.h>
 #include <stdio.h>
 #include <iostream>
+#include "GameState.h"
 
 #define TRIANGLE
+
+GameState* currentState = NULL;
 
 // == Vertex Shader ==
 const char* vertexShaderSource = "#version 330 core\n" // Define the version of openGL which is 3.3
