@@ -3,11 +3,42 @@
 #include <GLFW/glfw3.h>
 #include <stdio.h>
 #include <iostream>
+
+#include "HelloTriangle.h"
 #include "GameState.h"
 
 #define TRIANGLE
 
 GameState* currentState = NULL;
+GameState* nextState = NULL;
+
+bool Initialize()
+{
+	bool success = true;
+
+	return success;
+}
+
+void Close()
+{
+
+}
+
+void SetGameState(GameState * state)
+{
+	nextState = state;
+}
+
+void ChangeState()
+{
+	if (nextState != NULL)
+	{
+		currentState -> Exit();
+		currentState = nextState;
+		currentState -> Start();
+		nextState = NULL;
+	}
+}
 
 // == Vertex Shader ==
 const char* vertexShaderSource = "#version 330 core\n" // Define the version of openGL which is 3.3
@@ -56,6 +87,17 @@ void processInput(GLFWwindow* window)
 
 int main()
 {
+	if(!Initialize())
+	{
+		return -1;
+	}
+	else
+	{
+		// Enclose the Code here
+		currentState = HelloTriangle::GetInstance();
+		currentState->Start();
+	}
+
 	//Instantiate GLFW window
 	glfwInit();
 	//Configure GLFW to use OpenGL 3.3
@@ -329,6 +371,13 @@ int main()
 		glfwSwapBuffers(window); //---> Add Double buffer Definition
 		//Event Handling mostly for Input.
 		glfwPollEvents();
+
+
+		//OOP
+		currentState->HandleInput(window);
+		currentState->Update();
+		currentState->Render();
+		ChangeState();
 	}
 
 	// Deallocate all resources once they have outlived their purpose

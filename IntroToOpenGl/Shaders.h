@@ -1,11 +1,7 @@
 #pragma once
 #include "GameState.h"
 
-class Shaders;
-
-extern void SetGameState(GameState* state);
-
-class HelloTriangle : public GameState
+class Shaders : public GameState
 {
 public:
 	void Start() override;
@@ -14,12 +10,12 @@ public:
 	void HandleInput(GLFWwindow* window) override;
 	void Exit() override;
 	// Static Accessor
-	static HelloTriangle* GetInstance();
+	static Shaders* GetInstance();
 
-	HelloTriangle();
-	~HelloTriangle();
+	Shaders();
+	~Shaders();
 
 private:
-	static HelloTriangle instance;
+	static Shaders instance;
 };
 
