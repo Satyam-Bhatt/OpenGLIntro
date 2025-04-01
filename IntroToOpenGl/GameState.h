@@ -1,8 +1,8 @@
 #pragma once
 #include <stdio.h>
 #include <iostream>
+#include <glad.h>
 #include <GLFW/glfw3.h>
-
 
 class GameState
 {
