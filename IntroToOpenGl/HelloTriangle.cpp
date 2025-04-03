@@ -223,11 +223,19 @@ void HelloTriangle::Start()
 
 void HelloTriangle::Update()
 {
-	//std::cout << "YOYOY\n" << std::endl;
+
 }
 
 void HelloTriangle::Render()
 {
+	ImGui::Begin("Hello, triangle!", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
+	ImGui::SetWindowSize(ImVec2(400, 800), ImGuiCond_Once);
+	ImGui::SetWindowPos(ImVec2(0, 0), ImGuiCond_Once);
+	ImGui::Text("\n\nMy Sister is the best");
+	ImGui::End();
+
+	return;
+
 	// == Drawing ==
 // To Draw in wireframe mode. Default is glPolygonMode(GL_FRONT_AND_BACK, GL_FILL).
 //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);

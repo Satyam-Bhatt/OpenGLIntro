@@ -3,6 +3,10 @@
 #include <iostream>
 #include <glad.h>
 #include <GLFW/glfw3.h>
+//Imgui
+#include "Imgui/imgui.h"
+#include "Imgui/imgui_impl_glfw.h"
+#include "Imgui/imgui_impl_opengl3.h"
 
 class GameState
 {

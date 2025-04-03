@@ -131,7 +131,7 @@ int main()
 
 	// Our state
 	bool show_demo_window = true;
-	bool show_another_window = false;
+	bool show_another_window = true;
 	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
 	// Render loop runs until we tell it to stop
@@ -200,6 +200,8 @@ int main()
 			ImGui::End();
 		}
 
+		currentState->Render();
+
 		// Rendering
 		ImGui::Render();
 		int display_w, display_h;
@@ -210,7 +212,6 @@ int main()
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 		// END IMGUI
 
-		currentState->Render();
 
 		//To swap the back and front buffer of specified window Double Buffer so that there is no artifacting
 		glfwSwapBuffers(window); //---> Add Double buffer Definition
