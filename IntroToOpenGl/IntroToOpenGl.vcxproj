@@ -141,7 +141,31 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="glad.c" />
+    <ClCompile Include="HelloTriangle.cpp" />
+    <ClCompile Include="Imgui\imgui.cpp" />
+    <ClCompile Include="Imgui\imgui_demo.cpp" />
+    <ClCompile Include="Imgui\imgui_draw.cpp" />
+    <ClCompile Include="Imgui\imgui_impl_glfw.cpp" />
+    <ClCompile Include="Imgui\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="Imgui\imgui_tables.cpp" />
+    <ClCompile Include="Imgui\imgui_widgets.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Shaders.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="GameState.h" />
+    <ClInclude Include="HelloTriangle.h" />
+    <ClInclude Include="Imgui\imconfig.h" />
+    <ClInclude Include="Imgui\imgui.h" />
+    <ClInclude Include="Imgui\imgui_impl_glfw.h" />
+    <ClInclude Include="Imgui\imgui_impl_opengl3.h" />
+    <ClInclude Include="Imgui\imgui_impl_opengl3_loader.h" />
+    <ClInclude Include="Imgui\imgui_internal.h" />
+    <ClInclude Include="Imgui\imstb_rectpack.h" />
+    <ClInclude Include="Imgui\imstb_textedit.h" />
+    <ClInclude Include="Imgui\imstb_truetype.h" />
+    <ClInclude Include="Shaders.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
