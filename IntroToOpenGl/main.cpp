@@ -37,7 +37,7 @@ bool Initialize()
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	//glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
-	window = glfwCreateWindow(800, 600, "Hello Window", NULL, NULL);
+	window = glfwCreateWindow(1200, 600, "Hello Window", NULL, NULL);
 	if (window == NULL)
 	{
 		std::cout << "Failed to create GLFW window" << std::endl;
@@ -54,7 +54,7 @@ bool Initialize()
 	}
 
 	//To display the data and coordinates with respect to the window we need to set the viewport. This helps map the center and edge of the window with and extent of -1 to 1
-	glViewport(0, 0, 800, 600);
+	glViewport(400, 0, 800, 600);
 
 	//Set the function to be called when the window is resized. Bind it once and GLFW will call it whenever the window is resized
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
@@ -104,7 +104,9 @@ void processInput(GLFWwindow* window)
 void MainGUI()
 {
 	ImGui::Begin("Hello, triangle!", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
-	ImGui::SetWindowSize(ImVec2(400, 800), ImGuiCond_Once);
+	int display_w, display_h;
+	glfwGetFramebufferSize(window, &display_w, &display_h);
+	ImGui::SetWindowSize(ImVec2(400, display_h), ImGuiCond_Once);
 	ImGui::SetWindowPos(ImVec2(0, 0), ImGuiCond_Once);
 	ImGui::Text("\n\nMy Sister is the best");
 	ImGui::End();
@@ -140,7 +142,7 @@ int main()
 
 	// Our state
 	bool show_demo_window = true;
-	bool show_another_window = true;
+	bool show_another_window = false;
 	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
 	// Render loop runs until we tell it to stop
@@ -216,7 +218,7 @@ int main()
 		ImGui::Render();
 		int display_w, display_h;
 		glfwGetFramebufferSize(window, &display_w, &display_h);
-		glViewport(0, 0, display_w, display_h);
+		glViewport(400, 0, display_w - 400, display_h);
 		glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
 		glClear(GL_COLOR_BUFFER_BIT);
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
