@@ -101,6 +101,15 @@ void processInput(GLFWwindow* window)
 	}
 }
 
+void MainGUI()
+{
+	ImGui::Begin("Hello, triangle!", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
+	ImGui::SetWindowSize(ImVec2(400, 800), ImGuiCond_Once);
+	ImGui::SetWindowPos(ImVec2(0, 0), ImGuiCond_Once);
+	ImGui::Text("\n\nMy Sister is the best");
+	ImGui::End();
+}
+
 int main()
 {
 	if (!Initialize())
@@ -200,7 +209,8 @@ int main()
 			ImGui::End();
 		}
 
-		currentState->Render();
+		MainGUI();
+
 
 		// Rendering
 		ImGui::Render();
@@ -212,6 +222,7 @@ int main()
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 		// END IMGUI
 
+		currentState->Render();
 
 		//To swap the back and front buffer of specified window Double Buffer so that there is no artifacting
 		glfwSwapBuffers(window); //---> Add Double buffer Definition
