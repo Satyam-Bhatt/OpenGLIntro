@@ -103,13 +103,38 @@ void processInput(GLFWwindow* window)
 
 void MainGUI()
 {
-	ImGui::Begin("Hello, triangle!", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
+	ImGui::Begin("Hello, triangle!", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
 	int display_w, display_h;
 	glfwGetFramebufferSize(window, &display_w, &display_h);
-	std::cout<< display_w << " " << display_h << std::endl;
 	ImGui::SetWindowSize(ImVec2(400, display_h), ImGuiCond_Always);
 	ImGui::SetWindowPos(ImVec2(0, 0), ImGuiCond_Always);
 	ImGui::Text("\n\nMy Sister is the best");
+
+	if (ImGui::CollapsingHeader("First Triangle"))
+	{
+		ImGui::SeparatorText("What is a triangle");
+		ImGui::Text("More about triangle render");
+		ImGui::TextColored(ImVec4(0,0.3f,1,1), "Color text check");
+
+		if (ImGui::Button("Show Triangle"))
+		{
+			std::cout << "Triangle Render:: " << std::endl;
+		}
+		if (ImGui::Button("Test"))
+		{
+			std::cout << "Test1:: " << std::endl;
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("Test2"))
+		{
+			std::cout << "Test1:: " << std::endl;
+		}
+	}
+	if (ImGui::CollapsingHeader("Another Header"))
+	{
+		ImGui::Text("This is the text");
+	}
+
 	ImGui::End();
 }
 
@@ -142,7 +167,7 @@ int main()
 	currentState->Start();
 
 	// Our state
-	bool show_demo_window = false;
+	bool show_demo_window = true;
 	bool show_another_window = false;
 	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
