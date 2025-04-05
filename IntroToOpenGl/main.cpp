@@ -106,8 +106,9 @@ void MainGUI()
 	ImGui::Begin("Hello, triangle!", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
 	int display_w, display_h;
 	glfwGetFramebufferSize(window, &display_w, &display_h);
-	ImGui::SetWindowSize(ImVec2(400, display_h), ImGuiCond_Once);
-	ImGui::SetWindowPos(ImVec2(0, 0), ImGuiCond_Once);
+	std::cout<< display_w << " " << display_h << std::endl;
+	ImGui::SetWindowSize(ImVec2(400, display_h), ImGuiCond_Always);
+	ImGui::SetWindowPos(ImVec2(0, 0), ImGuiCond_Always);
 	ImGui::Text("\n\nMy Sister is the best");
 	ImGui::End();
 }
@@ -141,7 +142,7 @@ int main()
 	currentState->Start();
 
 	// Our state
-	bool show_demo_window = true;
+	bool show_demo_window = false;
 	bool show_another_window = false;
 	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
