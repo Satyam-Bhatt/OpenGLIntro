@@ -21,6 +21,7 @@ public:
 
 private:
 	static HelloTriangle instance;
+	void ImGuiRender(GLFWwindow* mainWindow);
 
 	unsigned int VAO, VBO, EBO, shaderProgram, shaderProgram_Test, VAO2, VBO2;
 

@@ -23,6 +23,16 @@ HelloTriangle::~HelloTriangle()
 
 }
 
+void HelloTriangle::ImGuiRender(GLFWwindow* window)
+{
+	ImGui::Begin("Level Specific", 0, ImGuiWindowFlags_NoMove);
+	int display_w, display_h;
+	glfwGetFramebufferSize(window, &display_w, &display_h);
+	ImVec2 val = ImGui::GetWindowSize();
+	ImGui::SetWindowPos(ImVec2(display_w/2 - val.x, display_h - val.y), ImGuiCond_Always);
+	ImGui::Text("This is text test");
+}
+
 void HelloTriangle::Start()
 {
 	// == Build and compile shader program ==
