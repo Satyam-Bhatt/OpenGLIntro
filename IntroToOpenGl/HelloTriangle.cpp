@@ -114,7 +114,7 @@ void HelloTriangle::Start()
 	// Triangle
 	float vertices[] =
 	{
-		-0.5f, -0.5f, 0.0f,
+		-1.0f, -1.0f, 0.0f,
 		0.5f, -0.5f, 0.0f,
 		0.0f, 0.5f, 0.0f
 	};
@@ -134,14 +134,14 @@ void HelloTriangle::Start()
 	// 2 triangle with different VAO for test
 	float vertices_VAO1[] =
 	{
-		-0.75f, -0.75f, 0.0f,
+		-1.0f, -1.0f, 0.0f,
 		0.0f, -0.75f, 0.0f,
 		-0.45f, 0.0f, 0.0f,
 	};
 	float vertices_VAO2[] =
 	{
 		0.0f, 0.0f,0.0f,
-		0.75f,0.0f,0.0f,
+		1.0f,0.0f,0.0f,
 		0.4f,0.75f,0.0f
 	};
 	//////
@@ -228,12 +228,13 @@ void HelloTriangle::Update()
 
 void HelloTriangle::ImGuiRender(GLFWwindow* window)
 {
-	ImGui::Begin("Level Specific", 0, ImGuiWindowFlags_NoMove);
+	ImGui::Begin("Level Specific", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
 	int display_w, display_h;
 	glfwGetFramebufferSize(window, &display_w, &display_h);
 	ImVec2 val = ImGui::GetWindowSize();
 	ImGui::SetWindowPos(ImVec2(display_w / 2 - val.x, display_h - val.y), ImGuiCond_Always);
 	ImGui::Text("This is text test");
+	ImGui::End();
 }
 
 void HelloTriangle::Render()

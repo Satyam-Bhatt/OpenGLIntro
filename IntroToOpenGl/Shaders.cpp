@@ -13,6 +13,10 @@ void Shaders::Update()
 	//std::cout << "New People \n" << std::endl;
 }
 
+void Shaders::ImGuiRender(GLFWwindow* window)
+{
+}
+
 void Shaders::Render()
 {
 }

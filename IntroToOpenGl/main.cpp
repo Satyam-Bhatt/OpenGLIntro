@@ -13,6 +13,7 @@
 #include "GameState.h"
 
 #define TRIANGLE
+#define VIEWPORT 75
 
 GameState* currentState = NULL;
 GameState* nextState = NULL;
@@ -21,7 +22,9 @@ GLFWwindow* window = NULL;
 // Callback function called when the window is resized
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
-	glViewport(0, 0, width, height);
+	float viewportStartPos = (100 - VIEWPORT) * width / 100;
+	float viewportWidth = width - viewportStartPos;
+	glViewport(viewportStartPos, 0, viewportWidth, height);
 }
 
 bool Initialize()
@@ -54,7 +57,11 @@ bool Initialize()
 	}
 
 	//To display the data and coordinates with respect to the window we need to set the viewport. This helps map the center and edge of the window with and extent of -1 to 1
-	glViewport(400, 0, 800, 600);
+	int display_w, display_h;
+	glfwGetFramebufferSize(window, &display_w, &display_h);
+	float viewportStartPos = (100 - VIEWPORT) * display_w / 100;
+	float viewportWidth = display_w - viewportStartPos;
+	glViewport(viewportStartPos, 0, viewportWidth, display_h);
 
 	//Set the function to be called when the window is resized. Bind it once and GLFW will call it whenever the window is resized
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
@@ -103,10 +110,11 @@ void processInput(GLFWwindow* window)
 
 void MainGUI()
 {
-	ImGui::Begin("Hello, triangle!", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
+	ImGui::Begin("Hello, triangle!", 0, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
 	int display_w, display_h;
 	glfwGetFramebufferSize(window, &display_w, &display_h);
-	ImGui::SetWindowSize(ImVec2(400, display_h), ImGuiCond_Always);
+	float valuePercent = (100 - VIEWPORT) * display_w / 100;
+	ImGui::SetWindowSize(ImVec2(valuePercent, display_h), ImGuiCond_Always);
 	ImGui::SetWindowPos(ImVec2(0, 0), ImGuiCond_Always);
 	ImGui::Text("\n\nMy Sister is the best");
 
@@ -238,19 +246,16 @@ int main()
 		}
 
 		MainGUI();
-
+		glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
+		glClear(GL_COLOR_BUFFER_BIT);
+		currentState->Render();
+		currentState->ImGuiRender(window);
 
 		// Rendering
 		ImGui::Render();
-		int display_w, display_h;
-		glfwGetFramebufferSize(window, &display_w, &display_h);
-		glViewport(400, 0, display_w - 400, display_h);
-		glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
-		glClear(GL_COLOR_BUFFER_BIT);
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-		// END IMGUI
 
-		currentState->Render();
+		// END IMGUI
 
 		//To swap the back and front buffer of specified window Double Buffer so that there is no artifacting
 		glfwSwapBuffers(window); //---> Add Double buffer Definition
