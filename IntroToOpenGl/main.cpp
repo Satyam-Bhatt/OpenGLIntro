@@ -10,6 +10,7 @@
 #include "Imgui/imgui_impl_opengl3.h"
 
 #include "HelloTriangle.h"
+#include "Intro.h"
 #include "GameState.h"
 
 #define TRIANGLE
@@ -22,9 +23,27 @@ GLFWwindow* window = NULL;
 // Callback function called when the window is resized
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
-	float viewportStartPos = (100 - VIEWPORT) * width / 100;
-	float viewportWidth = width - viewportStartPos;
-	glViewport(viewportStartPos, 0, viewportWidth, height);
+	if (width >= 800 && width <= 1200)
+	{
+		float viewportStartPos = (100 - VIEWPORT) * width / 100;
+		float viewportWidth = width - viewportStartPos;
+		glViewport(viewportStartPos, 0, viewportWidth, height);
+	}
+	else
+	{
+		if (width < 800)
+		{
+			float viewportStartPos = (100 - VIEWPORT) * 800 / 100;
+			float viewportWidth = width - viewportStartPos;
+			glViewport(viewportStartPos, 0, viewportWidth, height);
+		}
+		else
+		{
+			float viewportStartPos = (100 - VIEWPORT) * 1200 / 100;
+			float viewportWidth = width - viewportStartPos;
+			glViewport(viewportStartPos, 0, viewportWidth, height);
+		}
+	}
 }
 
 bool Initialize()
@@ -113,8 +132,24 @@ void MainGUI()
 	ImGui::Begin("Hello, triangle!", 0, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
 	int display_w, display_h;
 	glfwGetFramebufferSize(window, &display_w, &display_h);
-	float valuePercent = (100 - VIEWPORT) * display_w / 100;
-	ImGui::SetWindowSize(ImVec2(valuePercent, display_h), ImGuiCond_Always);
+	if (display_w >= 800 && display_w <= 1200)
+	{
+		float valuePercent = (100 - VIEWPORT) * display_w / 100;
+		ImGui::SetWindowSize(ImVec2(valuePercent, display_h), ImGuiCond_Always);
+	}
+	else
+	{
+		if(display_w < 800)
+		{
+			float valuePercent = (100 - VIEWPORT) * 800 / 100;
+			ImGui::SetWindowSize(ImVec2(valuePercent, display_h), ImGuiCond_Always);
+		}
+		else
+		{
+			float valuePercent = (100 - VIEWPORT) * 1200 / 100;
+			ImGui::SetWindowSize(ImVec2(valuePercent, display_h), ImGuiCond_Always);
+		}
+	}
 	ImGui::SetWindowPos(ImVec2(0, 0), ImGuiCond_Always);
 	ImGui::Text("\n\nMy Sister is the best");
 
@@ -171,7 +206,7 @@ int main()
 	// END
 
 	// Enclose the Code here
-	currentState = HelloTriangle::GetInstance();
+	currentState = Intro::GetInstance();
 	currentState->Start();
 
 	// Our state
