@@ -20,5 +20,6 @@ public:
 
 private:
 	static Intro instance;
+	ImFont* headingFont;
 };
 
