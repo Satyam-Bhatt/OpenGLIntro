@@ -21,5 +21,7 @@ public:
 private:
 	static Intro instance;
 	ImFont* headingFont;
+	ImFont* descriptionFont;
+	ImVec4 textColor = ImVec4(0.882f, 0.549f, 0.316f, 1.000f);
 };
 
