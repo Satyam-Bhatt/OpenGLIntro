@@ -2,6 +2,7 @@
 #include "GameState.h"
 
 extern void SetGameState(GameState* state);
+extern ImVec4 clear_color;
 
 class Intro : public GameState
 {
@@ -21,7 +22,9 @@ public:
 private:
 	static Intro instance;
 	ImFont* headingFont;
+	ImVec4 heading_TextColor = ImVec4(0.882f, 0.549f, 0.316f, 1.000f);
 	ImFont* descriptionFont;
-	ImVec4 textColor = ImVec4(0.882f, 0.549f, 0.316f, 1.000f);
+	ImVec4 description_TextColor = ImVec4(0.8f, 0.5f, 0.6f, 1.000f);
+	ImVec4 background_Color = ImVec4(0.882f, 0.549f, 0.316f, 1.000f);
 };
 
