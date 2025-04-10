@@ -17,7 +17,7 @@ void Intro::Start()
 	ImGuiIO& io = ImGui::GetIO();
 	io.Fonts->AddFontDefault();
 	headingFont = io.Fonts->AddFontFromFileTTF("Fonts/lemon_milk/LEMONMILK-Bold.otf", 52.0f);
-	descriptionFont = io.Fonts->AddFontFromFileTTF("Fonts/Inria_Sans/InriaSans-Regular.ttf", 28.0f);
+	descriptionFont = io.Fonts->AddFontFromFileTTF("Fonts/Inria_Sans/InriaSans-Regular.ttf", 24.0f);
 	io.Fonts->Build();
 }
 
@@ -107,6 +107,17 @@ void Intro::ImGuiRender(GLFWwindow* window)
 	ImGui::End();
 	ImGui::PopStyleColor();
 	ImGui::PopStyleVar();
+
+	ImGui::SetNextWindowPos(
+		ImVec2(viewport[0] + viewport[2] / 2, viewport[3]),
+		ImGuiCond_Always,
+		ImVec2(0.5f, 1.0f)  
+	);
+
+	ImGui::Begin("Control Area", 0, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_AlwaysAutoResize);
+	ImGui::ColorEdit3("Window Color", (float*)&clear_color);
+	ImGui::End();
+
 }
 
 void Intro::Render()
