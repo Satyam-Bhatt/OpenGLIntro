@@ -3,6 +3,7 @@
 #include <GLFW/glfw3.h>
 #include <stdio.h>
 #include <iostream>
+#include <string>
 
 //Imgui
 #include "Imgui/imgui.h"
@@ -12,6 +13,7 @@
 #include "HelloTriangle.h"
 #include "Intro.h"
 #include "GameState.h"
+#include "Shaders.h"
 
 #define TRIANGLE
 #define VIEWPORT 75
@@ -128,6 +130,34 @@ void processInput(GLFWwindow* window)
 	}
 }
 
+enum Scenes
+{
+	Intro,
+	HelloTriangle,
+	Shaders,
+	COUNT
+};
+
+bool openStates[Scenes::COUNT] = { false };
+Scenes current_scene = Intro;
+Scenes previous_scene = Intro;
+
+void ChangeScene()
+{
+	if (current_scene == Intro)
+	{
+		SetGameState(Intro::GetInstance());
+	}
+	else if (current_scene == HelloTriangle)
+	{
+		SetGameState(HelloTriangle::GetInstance());
+	}
+	else if (current_scene == Shaders)
+	{
+		SetGameState(Shaders::GetInstance());
+	}
+}
+
 void MainGUI()
 {
 	ImGui::Begin("Hello, triangle!", 0, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
@@ -152,31 +182,39 @@ void MainGUI()
 		}
 	}
 	ImGui::SetWindowPos(ImVec2(0, 0), ImGuiCond_Always);
-	ImGui::Text("\n\nMy Sister is the best");
+	ImGui::Text("OpenGl Projects");
 
-	if (ImGui::CollapsingHeader("First Triangle"))
-	{
-		ImGui::SeparatorText("What is a triangle");
-		ImGui::Text("More about triangle render");
-		ImGui::TextColored(ImVec4(0,0.3f,1,1), "Color text check");
 
-		if (ImGui::Button("Show Triangle"))
-		{
-			std::cout << "Triangle Render:: " << std::endl;
-		}
-		if (ImGui::Button("Test"))
-		{
-			std::cout << "Test1:: " << std::endl;
-		}
-		ImGui::SameLine();
-		if (ImGui::Button("Test2"))
-		{
-			std::cout << "Test1:: " << std::endl;
-		}
-	}
-	if (ImGui::CollapsingHeader("Another Header"))
+	for (int i = 0; i < Scenes::COUNT; i++)
 	{
-		ImGui::Text("This is the text");
+		ImGui::PushID(i);
+		ImGui::SetNextItemOpen(openStates[i]);
+		std::string header = "Scene " + std::to_string(i);
+		if (ImGui::CollapsingHeader(header.c_str()))
+		{
+			ImGui::Text("This is the text");
+			openStates[i] = true;
+			current_scene = (Scenes)i;
+
+			if (current_scene != previous_scene)
+			{
+				ChangeScene();
+				previous_scene = current_scene;
+			}
+
+			for (int j = 0; j < 3; j++)
+			{
+				if (j != i)
+				{
+					openStates[j] = false;
+				}
+			}
+		}
+		else
+		{
+			openStates[i] = false;
+		}
+		ImGui::PopID();
 	}
 
 	ImGui::End();
@@ -225,7 +263,7 @@ int main()
 
 		// == Rendering ==
 		//State Setting function
-		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);//This is the color which fills the color buffer when we clear the color buffer
+		glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w); //This is the color which fills the color buffer when we clear the color buffer
 		//State Using function
 		glClear(GL_COLOR_BUFFER_BIT); // Clear the color buffer at the end of the frame. We need to clear other buffers too if we have them like depth buffer or stencil buffer.
 
@@ -280,10 +318,8 @@ int main()
 			ImGui::End();
 		}
 
-		MainGUI();
-		glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
-		glClear(GL_COLOR_BUFFER_BIT);
 		currentState->Render();
+		MainGUI();
 		currentState->ImGuiRender(window);
 
 		// Rendering

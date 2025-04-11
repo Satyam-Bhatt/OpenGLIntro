@@ -1,5 +1,6 @@
 #include "HelloTriangle.h"
 #include "Shaders.h"
+#include "Intro.h"
 
 HelloTriangle HelloTriangle::instance;
 
@@ -276,7 +277,7 @@ void HelloTriangle::HandleInput(GLFWwindow* window)
 	if (glfwGetKey(window, GLFW_KEY_Y) == GLFW_PRESS) //To get the key press
 	{
 		std::cout << " Satyam \n" << std::endl;
-		SetGameState(Shaders::GetInstance());
+		SetGameState(Intro::GetInstance());
 	}
 }
 
@@ -287,6 +288,27 @@ void HelloTriangle::Exit()
 	glDeleteBuffers(1, &VBO);
 	glDeleteBuffers(1, &EBO);
 	glDeleteProgram(shaderProgram);
+}
+
+void HelloTriangle::ImGuiLeftPanel()
+{
+	ImGui::SeparatorText("What is a triangle");
+	ImGui::Text("More about triangle render");
+	ImGui::TextColored(ImVec4(0, 0.3f, 1, 1), "Color text check");
+
+	if (ImGui::Button("Show Triangle"))
+	{
+		std::cout << "Triangle Render:: " << std::endl;
+	}
+	if (ImGui::Button("Test"))
+	{
+		std::cout << "Test1:: " << std::endl;
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("Test2"))
+	{
+		std::cout << "Test1:: " << std::endl;
+	}
 }
 
 HelloTriangle* HelloTriangle::GetInstance()

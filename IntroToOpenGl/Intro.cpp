@@ -15,10 +15,20 @@ Intro::~Intro()
 void Intro::Start()
 {
 	ImGuiIO& io = ImGui::GetIO();
+
+	// Clear existing fonts
+	io.Fonts->Clear();
+
+	// Add fonts
 	io.Fonts->AddFontDefault();
 	headingFont = io.Fonts->AddFontFromFileTTF("Fonts/lemon_milk/LEMONMILK-Bold.otf", 52.0f);
 	descriptionFont = io.Fonts->AddFontFromFileTTF("Fonts/Inria_Sans/InriaSans-Regular.ttf", 24.0f);
+
+	// Build font atlas
 	io.Fonts->Build();
+
+	// Upload font texture to GPU
+	ImGui_ImplOpenGL3_CreateFontsTexture();
 }
 
 void Intro::Update()
@@ -132,6 +142,8 @@ void Intro::HandleInput(GLFWwindow* window)
 
 void Intro::Exit()
 {
+	headingFont = NULL;
+	descriptionFont = NULL;
 }
 
 Intro* Intro::GetInstance()

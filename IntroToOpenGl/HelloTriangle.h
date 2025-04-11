@@ -14,6 +14,8 @@ public:
 	void Render() override;
 	void HandleInput(GLFWwindow* window) override;
 	void Exit() override;
+
+	void ImGuiLeftPanel();
 	// Static Accessor
 	static HelloTriangle* GetInstance();
 
