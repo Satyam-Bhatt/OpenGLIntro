@@ -10,10 +10,9 @@
 #include "Imgui/imgui_impl_glfw.h"
 #include "Imgui/imgui_impl_opengl3.h"
 
-#include "HelloTriangle.h"
 #include "Intro.h"
 #include "GameState.h"
-#include "Shaders.h"
+#include "SceneManager.h"
 
 #define TRIANGLE
 #define VIEWPORT 75
@@ -130,96 +129,6 @@ void processInput(GLFWwindow* window)
 	}
 }
 
-enum Scenes
-{
-	Intro,
-	HelloTriangle,
-	Shaders,
-	COUNT
-};
-
-bool openStates[Scenes::COUNT] = { false };
-Scenes current_scene = Intro;
-Scenes previous_scene = Intro;
-
-void ChangeScene()
-{
-	if (current_scene == Intro)
-	{
-		SetGameState(Intro::GetInstance());
-	}
-	else if (current_scene == HelloTriangle)
-	{
-		SetGameState(HelloTriangle::GetInstance());
-	}
-	else if (current_scene == Shaders)
-	{
-		SetGameState(Shaders::GetInstance());
-	}
-}
-
-void MainGUI()
-{
-	ImGui::Begin("Hello, triangle!", 0, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
-	int display_w, display_h;
-	glfwGetFramebufferSize(window, &display_w, &display_h);
-	if (display_w >= 800 && display_w <= 1200)
-	{
-		float valuePercent = (100 - VIEWPORT) * display_w / 100;
-		ImGui::SetWindowSize(ImVec2(valuePercent, display_h), ImGuiCond_Always);
-	}
-	else
-	{
-		if(display_w < 800)
-		{
-			float valuePercent = (100 - VIEWPORT) * 800 / 100;
-			ImGui::SetWindowSize(ImVec2(valuePercent, display_h), ImGuiCond_Always);
-		}
-		else
-		{
-			float valuePercent = (100 - VIEWPORT) * 1200 / 100;
-			ImGui::SetWindowSize(ImVec2(valuePercent, display_h), ImGuiCond_Always);
-		}
-	}
-	ImGui::SetWindowPos(ImVec2(0, 0), ImGuiCond_Always);
-	ImGui::Text("OpenGl Projects");
-
-
-	for (int i = 0; i < Scenes::COUNT; i++)
-	{
-		ImGui::PushID(i);
-		ImGui::SetNextItemOpen(openStates[i]);
-		std::string header = "Scene " + std::to_string(i);
-		if (ImGui::CollapsingHeader(header.c_str()))
-		{
-			ImGui::Text("This is the text");
-			openStates[i] = true;
-			current_scene = (Scenes)i;
-
-			if (current_scene != previous_scene)
-			{
-				ChangeScene();
-				previous_scene = current_scene;
-			}
-
-			for (int j = 0; j < 3; j++)
-			{
-				if (j != i)
-				{
-					openStates[j] = false;
-				}
-			}
-		}
-		else
-		{
-			openStates[i] = false;
-		}
-		ImGui::PopID();
-	}
-
-	ImGui::End();
-}
-
 int main()
 {
 	if (!Initialize())
@@ -319,7 +228,8 @@ int main()
 		}
 
 		currentState->Render();
-		MainGUI();
+		//MainGUI();
+		SceneManager::GetInstance()->ImGuiRender(window);
 		currentState->ImGuiRender(window);
 
 		// Rendering

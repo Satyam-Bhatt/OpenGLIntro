@@ -10,12 +10,13 @@ class HelloTriangle : public GameState
 public:
 	void Start() override;
 	void Update() override;
+
 	void ImGuiRender(GLFWwindow* window) override;
 	void Render() override;
 	void HandleInput(GLFWwindow* window) override;
 	void Exit() override;
 
-	void ImGuiLeftPanel();
+	void ImGuiLeftPanel() override;
 	// Static Accessor
 	static HelloTriangle* GetInstance();
 
