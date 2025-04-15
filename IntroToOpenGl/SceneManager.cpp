@@ -91,6 +91,6 @@ void SceneManager::ChangeScene()
 	auto it = sceneFactories.find(current_scene);
 	if (it != sceneFactories.end())//Checks if we found something
 	{
-		currentState = it->second();//If we found something then get the second value as the first value is the key and second value is the value
+		SetGameState(it->second());//If we found something then get the second value as the first value is the key and second value is the value
 	}
 }

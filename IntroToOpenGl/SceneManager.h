@@ -15,6 +15,7 @@
 #include <unordered_map>
 #include <functional>
 
+extern void SetGameState(GameState* state);
 extern GameState* currentState;
 
 class SceneManager

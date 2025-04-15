@@ -229,12 +229,36 @@ void HelloTriangle::Update()
 
 void HelloTriangle::ImGuiRender(GLFWwindow* window)
 {
-	ImGui::Begin("Level Specific", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
-	int display_w, display_h;
-	glfwGetFramebufferSize(window, &display_w, &display_h);
-	ImVec2 val = ImGui::GetWindowSize();
-	ImGui::SetWindowPos(ImVec2(display_w / 2 - val.x, display_h - val.y), ImGuiCond_Always);
-	ImGui::Text("This is text test");
+	GLint viewport[4];
+	glGetIntegerv(GL_VIEWPORT, viewport);
+
+	ImGui::SetNextWindowPos(
+		ImVec2(viewport[0] + viewport[2] / 2, viewport[3]),
+		ImGuiCond_Always,
+		ImVec2(0.5f, 1.0f)
+	);
+
+	ImGui::Begin("Level Specific", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
+	ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_None;
+	if (ImGui::BeginTabBar("MyTabBar", tab_bar_flags))
+	{
+		if (ImGui::BeginTabItem("Avocado"))
+		{
+			ImGui::Text("This is the Avocado tab!\nblah blah blah blah blah");
+			ImGui::EndTabItem();
+		}
+		if (ImGui::BeginTabItem("Broccoli"))
+		{
+			ImGui::Text("This is the Broccoli tab!\nblah blah blah blah blah");
+			ImGui::EndTabItem();
+		}
+		if (ImGui::BeginTabItem("Cucumber"))
+		{
+			ImGui::Text("This is the Cucumber tab!\nblah blah blah blah blah");
+			ImGui::EndTabItem();
+		}
+		ImGui::EndTabBar();
+	}
 	ImGui::End();
 }
 

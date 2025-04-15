@@ -26,6 +26,8 @@ public:
 private:
 	static HelloTriangle instance;
 
+	HelloTriangle* currentProject = NULL;
+
 	unsigned int VAO, VBO, EBO, shaderProgram, shaderProgram_Test, VAO2, VBO2;
 
 	// == Vertex Shader ==

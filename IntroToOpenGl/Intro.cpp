@@ -37,7 +37,7 @@ void Intro::Update()
 
 void Intro::ImGuiLeftPanel()
 {
-	ImGui::Text("Just a normal dropdown that does not do anything");
+	ImGui::TextWrapped("Just a normal dropdown that does not do anything");
 }
 
 void Intro::ImGuiRender(GLFWwindow* window)
