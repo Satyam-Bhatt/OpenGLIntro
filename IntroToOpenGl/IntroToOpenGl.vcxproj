@@ -141,6 +141,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="FirstTriangle.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="HelloTriangle.cpp" />
     <ClCompile Include="Imgui\imgui.cpp" />
@@ -153,9 +154,11 @@
     <ClCompile Include="Intro.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="SceneManager.cpp" />
+    <ClCompile Include="SecondTriangle.cpp" />
     <ClCompile Include="Shaders.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="FirstTriangle.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="HelloTriangle.h" />
     <ClInclude Include="Imgui\imconfig.h" />
@@ -169,6 +172,7 @@
     <ClInclude Include="Imgui\imstb_truetype.h" />
     <ClInclude Include="Intro.h" />
     <ClInclude Include="SceneManager.h" />
+    <ClInclude Include="SecondTriangle.h" />
     <ClInclude Include="Shaders.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
