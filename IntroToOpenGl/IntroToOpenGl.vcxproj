@@ -156,6 +156,8 @@
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="SecondTriangle.cpp" />
     <ClCompile Include="Shaders.cpp" />
+    <ClCompile Include="TemporaryClass.cpp" />
+    <ClCompile Include="TwoTriangles.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FirstTriangle.h" />
@@ -174,6 +176,8 @@
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="SecondTriangle.h" />
     <ClInclude Include="Shaders.h" />
+    <ClInclude Include="TemporaryClass.h" />
+    <ClInclude Include="TwoTriangles.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

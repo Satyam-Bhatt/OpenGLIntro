@@ -22,8 +22,8 @@ HelloTriangle::HelloTriangle()
 	sceneNames[SubScenes::FirstTriangle] = "FirstTriangle";
 	sceneFactories[SubScenes::FirstTriangle] = []() -> HelloTriangle* { return FirstTriangle::GetInstance(); };
 
-	sceneNames[SubScenes::SecondTriangle] = "SecondTriangle";
-	sceneFactories[SubScenes::SecondTriangle] = []() -> HelloTriangle* { return SecondTriangle::GetInstance(); };
+	sceneNames[SubScenes::Square] = "SecondTriangle";
+	sceneFactories[SubScenes::Square] = []() -> HelloTriangle* { return SecondTriangle::GetInstance(); };
 }
 
 //Destructor
@@ -257,38 +257,6 @@ void HelloTriangle::Update()
 
 void HelloTriangle::ImGuiRender(GLFWwindow* window)
 {
-	GLint viewport[4];
-	glGetIntegerv(GL_VIEWPORT, viewport);
-
-	ImGui::SetNextWindowPos(
-		ImVec2(viewport[0] + viewport[2] / 2, viewport[3]),
-		ImGuiCond_Always,
-		ImVec2(0.5f, 1.0f)
-	);
-
-	ImGui::Begin("Level Specific", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
-	ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_None;
-	if (ImGui::BeginTabBar("MyTabBar", tab_bar_flags))
-	{
-		if (ImGui::BeginTabItem("Avocado"))
-		{
-			ImGui::Text("This is the Avocado tab!\nblah blah blah blah blah");
-			ImGui::EndTabItem();
-		}
-		if (ImGui::BeginTabItem("Broccoli"))
-		{
-			ImGui::Text("This is the Broccoli tab!\nblah blah blah blah blah");
-			ImGui::EndTabItem();
-		}
-		if (ImGui::BeginTabItem("Cucumber"))
-		{
-			ImGui::Text("This is the Cucumber tab!\nblah blah blah blah blah");
-			ImGui::EndTabItem();
-		}
-		ImGui::EndTabBar();
-	}
-	ImGui::End();
-
 	currentProject->ImGuiRender(window);
 }
 
@@ -420,12 +388,11 @@ void HelloTriangle::RenderText(SubScenes sceneName)
 {
 	if(sceneName == SubScenes::FirstTriangle)
 	{
-		ImGui::Text("Honey Singh");
+		ImGui::TextWrapped("Rendering a triangle by binding a VAO and VBO. No EBO is being used.");
 	}
-	if(sceneName == SubScenes::SecondTriangle)
+	if(sceneName == SubScenes::Square)
 	{
-		ImGui::Text("Angrezi beat te");
-
+		ImGui::TextWrapped("Rendering a square using 2 triangles. Using EBO to avoid repeating the verticies");
 	}
 }
 

@@ -1,24 +1,20 @@
 #pragma once
-#include "HelloTriangle.h"
-class FirstTriangle :
-    public HelloTriangle
+#include "GameState.h"
+
+class TemporaryClass : public GameState
 {
 public:
-    FirstTriangle();
-	~FirstTriangle();
+    TemporaryClass();
+    ~TemporaryClass();
 
     void Start() override;
     void Update() override;
     void ImGuiRender(GLFWwindow* window) override;
     void Render() override;
     void Exit() override;
-    static FirstTriangle* GetInstance();
 
 private:
-	static FirstTriangle instance;
-
-	unsigned int VAO, VBO, shaderProgram;
-	bool wireframeMode;
+	unsigned int VAO, VBO, EBO, shaderProgram, shaderProgram_Test, VAO2, VBO2;
 
 	// == Vertex Shader ==
 	const char* vertexShaderSource = "#version 330 core\n" // Define the version of openGL which is 3.3
@@ -38,6 +34,16 @@ private:
 		"{\n"
 		// FragColor -> Output of fragment shader. Variable defined above with out keyword
 		"   FragColor = vec4(1.0f,0.5f, 0.2f, 1.0f);\n"
+		"}\0";
+
+	//Test fragment shader
+	const char* fragmentShaderSource_Test = "#version 330 core\n"
+		//out -> Output Variable of fragment shader. This is defined by out keyword
+		"out vec4 FragColor;\n"
+		"void main()\n"
+		"{\n"
+		// FragColor -> Output of fragment shader. Variable defined above with out keyword
+		"   FragColor = vec4(1.0f,1.0f, 0.0f, 1.0f);\n"
 		"}\0";
 };
 
