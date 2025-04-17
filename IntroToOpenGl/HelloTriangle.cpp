@@ -18,6 +18,12 @@ HelloTriangle::HelloTriangle()
 	//shaderProgram_Test = 0;
 	//VAO2 = 0;
 	//VBO2 = 0;
+
+	sceneNames[SubScenes::FirstTriangle] = "FirstTriangle";
+	sceneFactories[SubScenes::FirstTriangle] = []() -> HelloTriangle* { return FirstTriangle::GetInstance(); };
+
+	sceneNames[SubScenes::SecondTriangle] = "SecondTriangle";
+	sceneFactories[SubScenes::SecondTriangle] = []() -> HelloTriangle* { return SecondTriangle::GetInstance(); };
 }
 
 //Destructor
@@ -282,6 +288,8 @@ void HelloTriangle::ImGuiRender(GLFWwindow* window)
 		ImGui::EndTabBar();
 	}
 	ImGui::End();
+
+	currentProject->ImGuiRender(window);
 }
 
 void HelloTriangle::Render()
@@ -347,20 +355,77 @@ void HelloTriangle::ImGuiLeftPanel()
 {
 	ImGui::SeparatorText("What is a triangle");
 	ImGui::Text("More about triangle render");
-	ImGui::TextColored(ImVec4(0, 0.3f, 1, 1), "Color text check");
 
-	if (ImGui::Button("Show Triangle"))
+	for (int i = 0; i < SubScenes::COUNT; i++)
 	{
-		std::cout << "Triangle Render:: " << std::endl;
+		SubScenes sceneToString = (SubScenes)i;
+		std::string sceneName = SceneToString(sceneToString);
+		ImGui::SetNextItemOpen(openScene[i]);
+
+		ImGui::Indent(15.0f);
+		ImGui::PushStyleColor(ImGuiCol_Header, ImVec4(0.5f, 0.5f, 0.8f, 0.5f));
+		ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 4.0f);
+		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(6, 2)); // Make slightly smaller
+
+		if (ImGui::CollapsingHeader(sceneName.c_str()))
+		{
+			RenderText((SubScenes)i);
+			openScene[i] = true;
+			current_SubScene = (SubScenes)i;
+			
+			if (current_SubScene != previous_SubScene)
+			{
+				ChangeScene();
+				previous_SubScene = current_SubScene;
+			}
+
+			for (int j = 0; j < SubScenes::COUNT; j++)
+			{
+				if (j != i)
+				{
+					openScene[j] = false;
+				}
+			}
+		}
+		else
+		{
+			openScene[i] = false;
+		}
+		ImGui::PopStyleVar(2);
+		ImGui::PopStyleColor();
+		ImGui::Unindent(15.0f);
 	}
-	if (ImGui::Button("Test"))
+}
+
+std::string HelloTriangle::SceneToString(SubScenes scene)
+{
+	auto it = sceneNames.find(scene);
+	if (it != sceneNames.end())//Checks if we found something
 	{
-		std::cout << "Test1:: " << std::endl;
+		return it->second;//If we found something then get the second value as the first value is the key and second value is the value
 	}
-	ImGui::SameLine();
-	if (ImGui::Button("Test2"))
+	return "Unknown";
+}
+
+void HelloTriangle::ChangeScene()
+{
+	auto it = sceneFactories.find(current_SubScene);
+	if (it != sceneFactories.end())//Checks if we found something
 	{
-		std::cout << "Test1:: " << std::endl;
+		SetNextState(it->second());//If we found something then get the second value as the first value is the key and second value is the value
+	}
+}
+
+void HelloTriangle::RenderText(SubScenes sceneName)
+{
+	if(sceneName == SubScenes::FirstTriangle)
+	{
+		ImGui::Text("Honey Singh");
+	}
+	if(sceneName == SubScenes::SecondTriangle)
+	{
+		ImGui::Text("Angrezi beat te");
+
 	}
 }
 

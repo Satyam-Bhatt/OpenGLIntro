@@ -1,7 +1,10 @@
 #pragma once
 #include "GameState.h"
+#include <unordered_map>
+#include <functional>
 
 class Shaders;
+class FirstTriangle;
 
 extern void SetGameState(GameState* state);
 
@@ -33,6 +36,25 @@ private:
 
 	HelloTriangle* currentProject = NULL;
 	HelloTriangle* nextProject = NULL;
+
+	enum SubScenes
+	{
+		FirstTriangle,
+		SecondTriangle,
+		COUNT
+	};
+
+	std::unordered_map<int, std::string> sceneNames;
+	std::unordered_map<int, std::function<HelloTriangle* ()>> sceneFactories;
+
+	std::string SceneToString(SubScenes scene);
+	void ChangeScene();
+
+	bool openScene[SubScenes::COUNT] = { false };
+	SubScenes current_SubScene = FirstTriangle;
+	SubScenes previous_SubScene = FirstTriangle;
+
+	void RenderText(SubScenes sceneName);
 
 	//unsigned int VAO, VBO, EBO, shaderProgram, shaderProgram_Test, VAO2, VBO2;
 

@@ -59,7 +59,7 @@ void SceneManager::ImGuiRender(GLFWwindow* window)
 				previous_scene = current_scene;
 			}
 
-			for (int j = 0; j < 3; j++)
+			for (int j = 0; j < Scenes::COUNT; j++)
 			{
 				if (j != i)
 				{

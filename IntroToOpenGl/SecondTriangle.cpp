@@ -20,6 +20,7 @@ void SecondTriangle::Update()
 
 void SecondTriangle::ImGuiRender(GLFWwindow* window)
 {
+	//std::cout << "Satyam \n" << std::endl;
 }
 
 void SecondTriangle::Render()

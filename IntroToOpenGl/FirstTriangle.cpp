@@ -221,6 +221,8 @@ void FirstTriangle::Update()
 
 void FirstTriangle::ImGuiRender(GLFWwindow* window)
 {
+	//std::cout << "Satyam 11 \n" << std::endl;
+
 }
 
 void FirstTriangle::Render()
