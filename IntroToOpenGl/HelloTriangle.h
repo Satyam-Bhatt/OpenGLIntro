@@ -34,6 +34,7 @@ private:
 	{
 		FirstTriangle,
 		Square,
+		TwoTriangles,
 		COUNT
 	};
 
