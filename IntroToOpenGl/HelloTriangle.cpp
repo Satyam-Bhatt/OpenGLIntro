@@ -4,6 +4,7 @@
 #include "FirstTriangle.h"
 #include "SecondTriangle.h"
 #include "TwoTriangles.h"
+#include "TriangleWithVertexDataManipulation.h"
 
 HelloTriangle HelloTriangle::instance;
 
@@ -20,6 +21,9 @@ HelloTriangle::HelloTriangle()
 
 	sceneNames[SubScenes::TwoTriangles] = "Two Triangles";
 	sceneFactories[SubScenes::TwoTriangles] = []() -> HelloTriangle* { return TwoTriangles::GetInstance(); };
+
+	sceneNames[SubScenes::TriangleWithVertexColor] = "Triangle With Vertex Color";
+	sceneFactories[SubScenes::TriangleWithVertexColor] = []() -> HelloTriangle* { return TriangleWithVertexDataManipulation::GetInstance(); };
 }
 
 //Destructor
@@ -160,6 +164,10 @@ void HelloTriangle::RenderText(SubScenes sceneName)
 	if(sceneName == SubScenes::TwoTriangles)
 	{
 		ImGui::TextWrapped("Rendering Two Triangles with 2 VBO and 2 VAO. Both the triangles use the same Shader Program.");
+	}
+	if(sceneName == SubScenes::TriangleWithVertexColor)
+	{
+		ImGui::TextWrapped("Rendering a triangle with vertex data containing position and color information. The fragment and vertex shader programs also have parameters defined in accordance.");
 	}
 }
 

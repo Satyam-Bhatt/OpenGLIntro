@@ -35,6 +35,7 @@ private:
 		FirstTriangle,
 		Square,
 		TwoTriangles,
+		TriangleWithVertexColor,
 		COUNT
 	};
 
