@@ -16,18 +16,24 @@
     <Filter Include="Imgui">
       <UniqueIdentifier>{c3f6a550-a9ba-4065-9855-23f17d6c1067}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Shader">
+      <UniqueIdentifier>{a3284baa-6a9a-416d-b18b-d73899d327fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Shader">
+      <UniqueIdentifier>{e991d379-797b-45e6-9aa4-bd3cdf1d8340}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\HelloTriangle">
+      <UniqueIdentifier>{c0a67e54-4973-4b57-8e71-e95854adedf0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\HelloTriangle">
+      <UniqueIdentifier>{33dcd654-7433-4cc0-816f-75fc277a873e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="glad.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="HelloTriangle.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Shaders.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Imgui\imgui_impl_glfw.cpp">
@@ -57,29 +63,26 @@
     <ClCompile Include="SceneManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Shaders.cpp">
+      <Filter>Source Files\Shader</Filter>
+    </ClCompile>
     <ClCompile Include="FirstTriangle.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\HelloTriangle</Filter>
+    </ClCompile>
+    <ClCompile Include="HelloTriangle.cpp">
+      <Filter>Source Files\HelloTriangle</Filter>
     </ClCompile>
     <ClCompile Include="SecondTriangle.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TemporaryClass.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TwoTriangles.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\HelloTriangle</Filter>
     </ClCompile>
     <ClCompile Include="TriangleWithVertexDataManipulation.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\HelloTriangle</Filter>
+    </ClCompile>
+    <ClCompile Include="TwoTriangles.cpp">
+      <Filter>Source Files\HelloTriangle</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="HelloTriangle.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Shaders.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="GameState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -116,20 +119,23 @@
     <ClInclude Include="SceneManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Shaders.h">
+      <Filter>Header Files\Shader</Filter>
+    </ClInclude>
     <ClInclude Include="FirstTriangle.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\HelloTriangle</Filter>
+    </ClInclude>
+    <ClInclude Include="HelloTriangle.h">
+      <Filter>Header Files\HelloTriangle</Filter>
     </ClInclude>
     <ClInclude Include="SecondTriangle.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TemporaryClass.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TwoTriangles.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\HelloTriangle</Filter>
     </ClInclude>
     <ClInclude Include="TriangleWithVertexDataManipulation.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\HelloTriangle</Filter>
+    </ClInclude>
+    <ClInclude Include="TwoTriangles.h">
+      <Filter>Header Files\HelloTriangle</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

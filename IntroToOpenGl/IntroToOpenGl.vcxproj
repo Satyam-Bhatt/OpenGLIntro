@@ -156,7 +156,6 @@
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="SecondTriangle.cpp" />
     <ClCompile Include="Shaders.cpp" />
-    <ClCompile Include="TemporaryClass.cpp" />
     <ClCompile Include="TriangleWithVertexDataManipulation.cpp" />
     <ClCompile Include="TwoTriangles.cpp" />
   </ItemGroup>
@@ -177,7 +176,6 @@
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="SecondTriangle.h" />
     <ClInclude Include="Shaders.h" />
-    <ClInclude Include="TemporaryClass.h" />
     <ClInclude Include="TriangleWithVertexDataManipulation.h" />
     <ClInclude Include="TwoTriangles.h" />
   </ItemGroup>
