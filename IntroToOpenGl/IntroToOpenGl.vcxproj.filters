@@ -81,6 +81,9 @@
     <ClCompile Include="TwoTriangles.cpp">
       <Filter>Source Files\HelloTriangle</Filter>
     </ClCompile>
+    <ClCompile Include="FirstShader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameState.h">
@@ -136,6 +139,9 @@
     </ClInclude>
     <ClInclude Include="TwoTriangles.h">
       <Filter>Header Files\HelloTriangle</Filter>
+    </ClInclude>
+    <ClInclude Include="FirstShader.h">
+      <Filter>Header Files\Shader</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

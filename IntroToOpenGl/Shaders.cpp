@@ -127,4 +127,8 @@ void Shaders::ChangeScene()
 
 void Shaders::RenderText(SubScene sceneName)
 {
+	if (sceneName == SubScene::FirstShader)
+	{
+		ImGui::TextWrapped("Intro Point");
+	}
 }

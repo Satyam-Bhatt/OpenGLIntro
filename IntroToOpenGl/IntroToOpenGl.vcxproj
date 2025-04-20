@@ -141,6 +141,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="FirstShader.cpp" />
     <ClCompile Include="FirstTriangle.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="HelloTriangle.cpp" />
@@ -160,6 +161,7 @@
     <ClCompile Include="TwoTriangles.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="FirstShader.h" />
     <ClInclude Include="FirstTriangle.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="HelloTriangle.h" />
