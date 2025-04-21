@@ -38,7 +38,7 @@ private:
 	//// == Fragment Shader ==
 	const char* fragmentShaderSource = "#version 330 core\n"
 		//out -> Output Variable of fragment shader. This is defined by out keyword
-		"in vec3 outColor;\n"
+		"in vec3 outColor;\n" // Populated by vertex shader
 		"out vec4 FragColor;\n"
 		"void main()\n"
 		"{\n"

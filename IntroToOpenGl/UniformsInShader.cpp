@@ -1,46 +1,44 @@
-#include "FirstShader.h"
+#include "UniformsInShader.h"
 
-FirstShader FirstShader::instance;
+UniformsInShader UniformsInShader::instance;
 
-FirstShader::FirstShader()
+UniformsInShader::UniformsInShader()
 {
 	VAO = 0;
 	VBO = 0;
 	shaderProgram = 0;
 }
 
-FirstShader::~FirstShader()
+UniformsInShader::~UniformsInShader()
 {
 }
 
-void FirstShader::Start()
+void UniformsInShader::Start()
 {
-	int nrAttributes;
-	glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &nrAttributes);
-	std::cout << "Maximum no. of vertex attributes supported: " << nrAttributes << std::endl;
+	std::cout << "UniformsInShader::Start()" << std::endl;
 
 	// == Vertex Shader ==
 	vertexShaderSource = "#version 330 core\n" // Define the version of openGL which is 3.3
-	//in -> Input Variable of vertex shader
-	"layout (location = 0) in vec3 aPos;\n"
-	"out vec4 vertexColor;\n"
-	"void main()\n" // main function just like C
-	"{\n"
-	// gl_Position -> Output of vertex shader is what we assign to gl_Position
-	"   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-	"   vertexColor = vec4(0.5f, 0.0f, 0.0f, 1.0f);\n"
-	"}\0";
+		//in -> Input Variable of vertex shader
+		"layout (location = 0) in vec3 aPos;\n"
+		"out vec4 vertexColor;\n"
+		"void main()\n" // main function just like C
+		"{\n"
+		// gl_Position -> Output of vertex shader is what we assign to gl_Position
+		"   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+		"   vertexColor = vec4(0.0f, 1.0f, 0.0f, 1.0f);\n"
+		"}\0";
 
 	// == Fragment Shader ==
 	fragmentShaderSource = "#version 330 core\n"
-	//out -> Output Variable of fragment shader. This is defined by out keyword
-	"out vec4 FragColor;\n"
-	"in vec4 vertexColor;\n"
-	"void main()\n"
-	"{\n"
-	// FragColor -> Output of fragment shader. Variable defined above with out keyword
-	"   FragColor = vertexColor;\n"
-	"}\0";
+		//out -> Output Variable of fragment shader. This is defined by out keyword
+		"out vec4 FragColor;\n"
+		"in vec4 vertexColor;\n"
+		"void main()\n"
+		"{\n"
+		// FragColor -> Output of fragment shader. Variable defined above with out keyword
+		"   FragColor = vertexColor;\n"
+		"}\0";
 
 	// == Build and compile shader program ==
 // Vertex shader
@@ -110,11 +108,11 @@ void FirstShader::Start()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-void FirstShader::Update()
+void UniformsInShader::Update()
 {
 }
 
-void FirstShader::ImGuiRender(GLFWwindow* window)
+void UniformsInShader::ImGuiRender(GLFWwindow* window)
 {
 	GLint viewport[4];
 	glGetIntegerv(GL_VIEWPORT, viewport);
@@ -132,27 +130,29 @@ void FirstShader::ImGuiRender(GLFWwindow* window)
 	ImGui::End();
 }
 
-void FirstShader::Render()
+void UniformsInShader::Render()
 {
 	// == Drawing ==
 	if (wireframeMode)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	else
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	glUseProgram(shaderProgram); // Use the shader program
-	glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized. It is generally done if we want to draw some other thing with a different VAO
-	glDrawArrays(GL_TRIANGLES, 0, 3); // || DEFINE ||
-	glBindVertexArray(0); // Unbind the VAO. A good practice
+	glUseProgram(shaderProgram); 
+	glBindVertexArray(VAO); 
+	glDrawArrays(GL_TRIANGLES, 0, 3); 
+	glBindVertexArray(0); 
 }
 
-void FirstShader::Exit()
+void UniformsInShader::Exit()
 {
 	glDeleteVertexArrays(1, &VAO);
 	glDeleteBuffers(1, &VBO);
 	glDeleteProgram(shaderProgram);
 }
 
-FirstShader* FirstShader::GetInstance()
+UniformsInShader* UniformsInShader::GetInstance()
 {
 	return &instance;
 }
+
+

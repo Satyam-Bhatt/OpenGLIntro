@@ -1,20 +1,21 @@
 #pragma once
 #include "Shaders.h"
-class FirstShader : public Shaders
+class UniformsInShader : public Shaders
 {
-public:
-	FirstShader();
-	~FirstShader();
+public: 
+	UniformsInShader();
+	~UniformsInShader();
 
     void Start() override;
     void Update() override;
     void ImGuiRender(GLFWwindow* window) override;
     void Render() override;
     void Exit() override;
-    static FirstShader* GetInstance();
+
+    static UniformsInShader* GetInstance();
 
 private:
-	static FirstShader instance;
+	static UniformsInShader instance;
 
 	unsigned int VAO, VBO, shaderProgram;
 	bool wireframeMode = false;

@@ -29,6 +29,7 @@ private:
 	enum SubScene
 	{
 		FirstShader,
+		ColorChangingTriangle,
 		COUNT
 	};
 
@@ -40,7 +41,7 @@ private:
 	SubScene current_SubScene = FirstShader;
 	SubScene previous_SubScene = FirstShader;
 
-	bool openScene[SubScene::COUNT] = { true };
+	bool openScene[SubScene::COUNT] = { true , false};
 
 	std::unordered_map<int, std::string> sceneNames;
 	std::unordered_map<int, std::function<Shaders* ()>> sceneFactories;

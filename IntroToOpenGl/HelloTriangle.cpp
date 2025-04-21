@@ -157,15 +157,15 @@ void HelloTriangle::RenderText(SubScenes sceneName)
 	{
 		ImGui::TextWrapped("Rendering a triangle by binding a VAO and VBO. No EBO is being used.");
 	}
-	if(sceneName == SubScenes::Square)
+	else if(sceneName == SubScenes::Square)
 	{
 		ImGui::TextWrapped("Rendering a square using 2 triangles. Using EBO to avoid repeating the verticies");
 	}
-	if(sceneName == SubScenes::TwoTriangles)
+	else if(sceneName == SubScenes::TwoTriangles)
 	{
 		ImGui::TextWrapped("Rendering Two Triangles with 2 VBO and 2 VAO. Both the triangles use the same Shader Program.");
 	}
-	if(sceneName == SubScenes::TriangleWithVertexColor)
+	else if(sceneName == SubScenes::TriangleWithVertexColor)
 	{
 		ImGui::TextWrapped("Rendering a triangle with vertex data containing position and color information. The fragment and vertex shader programs also have parameters defined in accordance.");
 	}

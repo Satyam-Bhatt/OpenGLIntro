@@ -159,6 +159,7 @@
     <ClCompile Include="Shaders.cpp" />
     <ClCompile Include="TriangleWithVertexDataManipulation.cpp" />
     <ClCompile Include="TwoTriangles.cpp" />
+    <ClCompile Include="UniformsInShader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FirstShader.h" />
@@ -180,6 +181,7 @@
     <ClInclude Include="Shaders.h" />
     <ClInclude Include="TriangleWithVertexDataManipulation.h" />
     <ClInclude Include="TwoTriangles.h" />
+    <ClInclude Include="UniformsInShader.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,5 +1,6 @@
 #include "Shaders.h"
 #include "FirstShader.h"
+#include "UniformsInShader.h"
 
 Shaders Shaders::instance;
 
@@ -7,6 +8,9 @@ Shaders::Shaders()
 {
 	sceneNames[SubScene::FirstShader] = "First Shader";
 	sceneFactories[SubScene::FirstShader] = []() -> Shaders* { return FirstShader::GetInstance(); };
+
+	sceneNames[SubScene::ColorChangingTriangle] = "Uniforms In Shader";
+	sceneFactories[SubScene::ColorChangingTriangle] = []() -> Shaders* { return UniformsInShader::GetInstance(); };
 }
 
 Shaders::~Shaders()
@@ -18,7 +22,6 @@ void Shaders::Start()
 	currentProject = FirstShader::GetInstance();
 	nextProject = FirstShader::GetInstance();
 	currentProject->Start();
-
 }
 
 void Shaders::Update()
@@ -114,6 +117,12 @@ std::string Shaders::SceneToString(SubScene scene)
 
 void Shaders::ChangeState()
 {
+	if (nextProject != currentProject)
+	{
+		currentProject->Exit();
+		currentProject = nextProject;
+		currentProject->Start();
+	}
 }
 
 void Shaders::ChangeScene()
@@ -129,6 +138,10 @@ void Shaders::RenderText(SubScene sceneName)
 {
 	if (sceneName == SubScene::FirstShader)
 	{
-		ImGui::TextWrapped("Intro Point");
+		ImGui::TextWrapped("Passing data from the Vertex Shader to the Fragment Shader. The triangle is being colored by the attribute defined in the vertex shader which is then passed on to the fragment shader.");
+	}
+	else if(sceneName == SubScene::ColorChangingTriangle)
+	{
+		ImGui::TextWrapped("Using a uniform in the fragment shader to change the color of the triangle.");
 	}
 }

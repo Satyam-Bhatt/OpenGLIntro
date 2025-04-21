@@ -82,7 +82,10 @@
       <Filter>Source Files\HelloTriangle</Filter>
     </ClCompile>
     <ClCompile Include="FirstShader.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="UniformsInShader.cpp">
+      <Filter>Source Files\Shader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -141,6 +144,9 @@
       <Filter>Header Files\HelloTriangle</Filter>
     </ClInclude>
     <ClInclude Include="FirstShader.h">
+      <Filter>Header Files\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="UniformsInShader.h">
       <Filter>Header Files\Shader</Filter>
     </ClInclude>
   </ItemGroup>
