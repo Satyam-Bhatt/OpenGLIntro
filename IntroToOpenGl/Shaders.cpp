@@ -142,6 +142,6 @@ void Shaders::RenderText(SubScene sceneName)
 	}
 	else if(sceneName == SubScene::ColorChangingTriangle)
 	{
-		ImGui::TextWrapped("Using a uniform in the fragment shader to change the color of the triangle.");
+		ImGui::TextWrapped("Using a uniform in the fragment shader to change the color of the triangle. Uniform in the vertex shader to move the triangle.");
 	}
 }

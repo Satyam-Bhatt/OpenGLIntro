@@ -22,10 +22,11 @@ void UniformsInShader::Start()
 		//in -> Input Variable of vertex shader
 		"layout (location = 0) in vec3 aPos;\n"
 		"out vec4 vertexColor;\n"
+		"uniform float time;\n"
 		"void main()\n" // main function just like C
 		"{\n"
 		// gl_Position -> Output of vertex shader is what we assign to gl_Position
-		"   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+		"   gl_Position = vec4(aPos.x + sin(time) * 0.5, aPos.y + cos(time) * 0.5, aPos.z, 1.0);\n"
 		"   vertexColor = vec4(0.0f, 1.0f, 0.0f, 1.0f);\n"
 		"}\0";
 
@@ -34,10 +35,11 @@ void UniformsInShader::Start()
 		//out -> Output Variable of fragment shader. This is defined by out keyword
 		"out vec4 FragColor;\n"
 		"in vec4 vertexColor;\n"
+		"uniform vec4 ourColor;\n"
 		"void main()\n"
 		"{\n"
 		// FragColor -> Output of fragment shader. Variable defined above with out keyword
-		"   FragColor = vertexColor;\n"
+		"   FragColor = ourColor;\n"
 		"}\0";
 
 	// == Build and compile shader program ==
@@ -110,6 +112,7 @@ void UniformsInShader::Start()
 
 void UniformsInShader::Update()
 {
+
 }
 
 void UniformsInShader::ImGuiRender(GLFWwindow* window)
@@ -132,12 +135,31 @@ void UniformsInShader::ImGuiRender(GLFWwindow* window)
 
 void UniformsInShader::Render()
 {
+	//Setting the Uniform in the fragment shader
+	float timeValue = glfwGetTime(); // Gets the running time in seconds since GLFW was initialized
+	float greenValue = (sin(timeValue) / 2.0f) + 0.5f; // Vary the green value using sin function and offset it so that values are positive
+	// Gets the location of the uniform variable for a particular shader program and if not found returns -1. It can be because of incorrect name or
+	// because the compiler deleted it as the uniform variable was not used <-- KEEP THIS IN MIND <NOT USING SO DELETED>
+	int vertexColorLocation = glGetUniformLocation(shaderProgram, "ourColor");
+	int timeLocation = glGetUniformLocation(shaderProgram, "time");
+
 	// == Drawing ==
 	if (wireframeMode)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	else
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	glUseProgram(shaderProgram); 
+	glUseProgram(shaderProgram); // When updating the uniform value we always need the shader program to be active but not when we are getting the location
+	// To update the uniform variable of the currently active shader program || DEFINE ||
+	// it takes in a location and the value (sometimes the count depends on the postfix)
+	// postfix is as per the type of uniform variable 3f means 3 floats and 4f means 4 floats etc
+	// as openGL does not have function overloading so we need to define new functions for each type
+	// f: the function expects a float as its value.
+	// i : the function expects an int as its value.
+	// ui : the function expects an unsigned int as its value.
+	// 3f : the function expects 3 floats as its value.
+	// fv : the function expects a float vector / array as its value.
+	glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f); 
+	glUniform1f(timeLocation, timeValue);
 	glBindVertexArray(VAO); 
 	glDrawArrays(GL_TRIANGLES, 0, 3); 
 	glBindVertexArray(0); 
