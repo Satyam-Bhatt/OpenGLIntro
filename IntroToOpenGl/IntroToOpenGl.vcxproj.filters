@@ -87,6 +87,9 @@
     <ClCompile Include="UniformsInShader.cpp">
       <Filter>Source Files\Shader</Filter>
     </ClCompile>
+    <ClCompile Include="VertexAttributes.cpp">
+      <Filter>Source Files\Shader</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameState.h">
@@ -147,6 +150,9 @@
       <Filter>Header Files\Shader</Filter>
     </ClInclude>
     <ClInclude Include="UniformsInShader.h">
+      <Filter>Header Files\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexAttributes.h">
       <Filter>Header Files\Shader</Filter>
     </ClInclude>
   </ItemGroup>

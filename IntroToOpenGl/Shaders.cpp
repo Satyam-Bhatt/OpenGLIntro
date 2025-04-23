@@ -1,6 +1,7 @@
 #include "Shaders.h"
 #include "FirstShader.h"
 #include "UniformsInShader.h"
+#include "VertexAttributes.h"
 
 Shaders Shaders::instance;
 
@@ -11,6 +12,9 @@ Shaders::Shaders()
 
 	sceneNames[SubScene::ColorChangingTriangle] = "Uniforms In Shader";
 	sceneFactories[SubScene::ColorChangingTriangle] = []() -> Shaders* { return UniformsInShader::GetInstance(); };
+
+	sceneNames[SubScene::VertexAttributes] = "Vertex Attributes";
+	sceneFactories[SubScene::VertexAttributes] = []() -> Shaders* { return VertexAttributes::GetInstance(); };
 }
 
 Shaders::~Shaders()
@@ -143,5 +147,9 @@ void Shaders::RenderText(SubScene sceneName)
 	else if(sceneName == SubScene::ColorChangingTriangle)
 	{
 		ImGui::TextWrapped("Using a uniform in the fragment shader to change the color of the triangle. Uniform in the vertex shader to move the triangle.");
+	}
+	else if(sceneName == SubScene::VertexAttributes)
+	{
+		ImGui::TextWrapped("Using vertex attributes to color each vertex.");
 	}
 }

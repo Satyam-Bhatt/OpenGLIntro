@@ -1,29 +1,31 @@
-#pragma once
-#include "Shaders.h"
-class UniformsInShader : public Shaders
-{
-public: 
-	UniformsInShader();
-	~UniformsInShader();
+#pragma once  
+#include "Shaders.h"  
 
-    void Start() override;
-    void Update() override;
-    void ImGuiRender(GLFWwindow* window) override;
-    void Render() override;
-    void Exit() override;
+class UniformsInShader : public Shaders  
+{  
+public:   
+   UniformsInShader();  
+   ~UniformsInShader();  
 
-    static UniformsInShader* GetInstance();
+   void Start() override;  
+   void Update() override;  
+   void ImGuiRender(GLFWwindow* window) override;  
+   void Render() override;  
+   void Exit() override;  
 
-private:
-	static UniformsInShader instance;
+   static UniformsInShader* GetInstance();  
 
-	unsigned int VAO, VBO, shaderProgram;
-	bool wireframeMode = false;
+private:  
+   static UniformsInShader instance;  
 
-	// == Vertex Shader ==
-	const char* vertexShaderSource = "";
+   unsigned int VAO, VBO, shaderProgram;  
+   bool wireframeMode = false;  
+   float speed;  
+   ImVec2 radius;
 
-	//// == Fragment Shader ==
-	const char* fragmentShaderSource = "";
+   // == Vertex Shader ==  
+   const char* vertexShaderSource = "";  
+
+   //// == Fragment Shader ==  
+   const char* fragmentShaderSource = "";  
 };
-

@@ -1,34 +1,30 @@
-#include "UniformsInShader.h"
+#include "VertexAttributes.h"
 
-UniformsInShader UniformsInShader::instance;
+VertexAttributes VertexAttributes::instance;
 
-UniformsInShader::UniformsInShader()
+VertexAttributes::VertexAttributes()
 {
-	VAO = 0;
-	VBO = 0;
-	shaderProgram = 0;
-	radius = ImVec2(0.5f, 0.5f);
-	speed = 1.0f;
+	VBO, VAO, EBO, shaderProgram = 0;
 }
 
-UniformsInShader::~UniformsInShader()
+VertexAttributes::~VertexAttributes()
 {
+	Exit();
 }
 
-void UniformsInShader::Start()
+void VertexAttributes::Start()
 {
+	std::cout << "UniformsInShader::Start()" << std::endl;
+
 	// == Vertex Shader ==
 	vertexShaderSource = "#version 330 core\n" // Define the version of openGL which is 3.3
 		//in -> Input Variable of vertex shader
 		"layout (location = 0) in vec3 aPos;\n"
 		"out vec4 vertexColor;\n"
-		"uniform float time;\n"
-		"uniform vec2 radius;\n"
-		"uniform float speed;\n"
 		"void main()\n" // main function just like C
 		"{\n"
 		// gl_Position -> Output of vertex shader is what we assign to gl_Position
-		"   gl_Position = vec4(aPos.x + sin(time * speed) * radius.y, aPos.y + cos(time * speed) * radius.x, aPos.z, 1.0);\n"
+		"   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
 		"   vertexColor = vec4(0.0f, 1.0f, 0.0f, 1.0f);\n"
 		"}\0";
 
@@ -37,11 +33,10 @@ void UniformsInShader::Start()
 		//out -> Output Variable of fragment shader. This is defined by out keyword
 		"out vec4 FragColor;\n"
 		"in vec4 vertexColor;\n"
-		"uniform vec4 ourColor;\n"
 		"void main()\n"
 		"{\n"
 		// FragColor -> Output of fragment shader. Variable defined above with out keyword
-		"   FragColor = ourColor;\n"
+		"   FragColor = vertexColor;\n"
 		"}\0";
 
 	// == Build and compile shader program ==
@@ -91,9 +86,16 @@ void UniformsInShader::Start()
 	// Triangle
 	float vertices[] =
 	{
-		-0.5f, -0.5f, 0.0f,
+		0.5f, 0.5f, 0.0f,
 		0.5f, -0.5f, 0.0f,
-		0.0f, 0.5f, 0.0f,
+		-0.5f, -0.5f, 0.0f,
+		-0.5f, 0.5f, 0.0f
+	};
+
+	int indices[] =
+	{
+		0, 1, 3,
+		1, 2, 3
 	};
 
 	// == VAO, VBO ==
@@ -104,19 +106,23 @@ void UniformsInShader::Start()
 	glBindBuffer(GL_ARRAY_BUFFER, VBO); // Bind the buffer to the target. GL_ARRAY_BUFFER is the target/buffer type for vertex buffer object // || DEFINE ||
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
+	glGenBuffers(1, &EBO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0); // || DEFINE ||
 	glEnableVertexAttribArray(0);
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-void UniformsInShader::Update()
+void VertexAttributes::Update()
 {
-
 }
 
-void UniformsInShader::ImGuiRender(GLFWwindow* window)
+void VertexAttributes::ImGuiRender(GLFWwindow* window)
 {
 	GLint viewport[4];
 	glGetIntegerv(GL_VIEWPORT, viewport);
@@ -130,59 +136,31 @@ void UniformsInShader::ImGuiRender(GLFWwindow* window)
 	ImGui::Begin("Level Specific", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
 
 	ImGui::Checkbox("Wireframe mode", &wireframeMode);
-	ImGui::SliderFloat2("Radius", &radius.x, 0.0f, 1.0f);
-	ImGui::SliderFloat("Speed", &speed, 1.0f, 10.0f);
 
 	ImGui::End();
 }
 
-void UniformsInShader::Render()
+void VertexAttributes::Render()
 {
-	//Setting the Uniform in the fragment shader
-	float timeValue = glfwGetTime(); // Gets the running time in seconds since GLFW was initialized
-	float greenValue = (sin(timeValue * speed) / 2.0f) + 0.5f; // Vary the green value using sin function and offset it so that values are positive
-	float redValue = (cos(timeValue * speed) / 2.0f) + 0.5f;
-	// Gets the location of the uniform variable for a particular shader program and if not found returns -1. It can be because of incorrect name or
-	// because the compiler deleted it as the uniform variable was not used <-- KEEP THIS IN MIND <NOT USING SO DELETED>
-	int vertexColorLocation = glGetUniformLocation(shaderProgram, "ourColor");
-	int timeLocation = glGetUniformLocation(shaderProgram, "time");
-	int radiusLocation = glGetUniformLocation(shaderProgram, "radius");
-	int speedLocation = glGetUniformLocation(shaderProgram, "speed");
-
 	// == Drawing ==
 	if (wireframeMode)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	else
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	glUseProgram(shaderProgram); // When updating the uniform value we always need the shader program to be active but not when we are getting the location
-	// To update the uniform variable of the currently active shader program || DEFINE ||
-	// it takes in a location and the value (sometimes the count depends on the postfix)
-	// postfix is as per the type of uniform variable 3f means 3 floats and 4f means 4 floats etc
-	// as openGL does not have function overloading so we need to define new functions for each type
-	// f: the function expects a float as its value.
-	// i : the function expects an int as its value.
-	// ui : the function expects an unsigned int as its value.
-	// 3f : the function expects 3 floats as its value.
-	// fv : the function expects a float vector / array as its value.
-	glUniform4f(vertexColorLocation, redValue, greenValue, 0.0f, 1.0f);
-	glUniform1f(timeLocation, timeValue);
-	glUniform2f(radiusLocation, radius.x, radius.y);
-	glUniform1f(speedLocation, speed);
-	glBindVertexArray(VAO); 
-	glDrawArrays(GL_TRIANGLES, 0, 3); 
-	glBindVertexArray(0); 
+	glUseProgram(shaderProgram);
+	glBindVertexArray(VAO);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+	glBindVertexArray(0);
 }
 
-void UniformsInShader::Exit()
+void VertexAttributes::Exit()
 {
 	glDeleteVertexArrays(1, &VAO);
 	glDeleteBuffers(1, &VBO);
 	glDeleteProgram(shaderProgram);
 }
 
-UniformsInShader* UniformsInShader::GetInstance()
+VertexAttributes* VertexAttributes::GetInstance()
 {
 	return &instance;
 }
-
-
