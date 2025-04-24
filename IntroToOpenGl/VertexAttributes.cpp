@@ -20,23 +20,25 @@ void VertexAttributes::Start()
 	vertexShaderSource = "#version 330 core\n" // Define the version of openGL which is 3.3
 		//in -> Input Variable of vertex shader
 		"layout (location = 0) in vec3 aPos;\n"
+		"layout (location = 1) in vec4 aColor;\n"
 		"out vec4 vertexColor;\n"
 		"void main()\n" // main function just like C
 		"{\n"
 		// gl_Position -> Output of vertex shader is what we assign to gl_Position
 		"   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-		"   vertexColor = vec4(0.0f, 1.0f, 0.0f, 1.0f);\n"
+		"   vertexColor = aColor;\n"
 		"}\0";
 
 	// == Fragment Shader ==
 	fragmentShaderSource = "#version 330 core\n"
 		//out -> Output Variable of fragment shader. This is defined by out keyword
 		"out vec4 FragColor;\n"
+		"uniform float time; \n"
 		"in vec4 vertexColor;\n"
 		"void main()\n"
 		"{\n"
 		// FragColor -> Output of fragment shader. Variable defined above with out keyword
-		"   FragColor = vertexColor;\n"
+		"   FragColor = vec4(vertexColor.r * sin(time) * 0.5f + 0.5f, vertexColor.g * cos(time) * 0.5f + 0.5f, vertexColor.b, 1.0);\n"
 		"}\0";
 
 	// == Build and compile shader program ==
@@ -86,10 +88,11 @@ void VertexAttributes::Start()
 	// Triangle
 	float vertices[] =
 	{
-		0.5f, 0.5f, 0.0f,
-		0.5f, -0.5f, 0.0f,
-		-0.5f, -0.5f, 0.0f,
-		-0.5f, 0.5f, 0.0f
+		//Poisitions        //Colors
+		0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f,1.0f,
+		0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f,1.0f,
+		-0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f,1.0f,
+		-0.5f, 0.5f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f
 	};
 
 	int indices[] =
@@ -110,8 +113,11 @@ void VertexAttributes::Start()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0); // || DEFINE ||
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)0); // || DEFINE ||
 	glEnableVertexAttribArray(0);
+
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
@@ -142,12 +148,16 @@ void VertexAttributes::ImGuiRender(GLFWwindow* window)
 
 void VertexAttributes::Render()
 {
+	float timeValue = glfwGetTime();
+	int timeLocation = glGetUniformLocation(shaderProgram, "time");
+
 	// == Drawing ==
 	if (wireframeMode)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	else
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	glUseProgram(shaderProgram);
+	glUniform1f(timeLocation, timeValue);
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
