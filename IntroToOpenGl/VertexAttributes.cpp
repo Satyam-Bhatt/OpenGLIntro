@@ -4,7 +4,7 @@ VertexAttributes VertexAttributes::instance;
 
 VertexAttributes::VertexAttributes()
 {
-	VBO, VAO, EBO, shaderProgram = 0;
+	VBO = 0, VAO = 0, EBO = 0, shaderProgram = 0;
 }
 
 VertexAttributes::~VertexAttributes()
@@ -34,11 +34,14 @@ void VertexAttributes::Start()
 		//out -> Output Variable of fragment shader. This is defined by out keyword
 		"out vec4 FragColor;\n"
 		"uniform float time; \n"
+		"uniform bool animateColors;\n"
 		"in vec4 vertexColor;\n"
 		"void main()\n"
 		"{\n"
 		// FragColor -> Output of fragment shader. Variable defined above with out keyword
-		"   FragColor = vec4(vertexColor.r * sin(time) * 0.5f + 0.5f, vertexColor.g * cos(time) * 0.5f + 0.5f, vertexColor.b, 1.0);\n"
+		"   if(animateColors) FragColor = vec4(vertexColor.r * sin(time) * 0.5f + 0.5f, vertexColor.g * cos(time) * 0.5f + 0.5f, vertexColor.b, 1.0);\n"
+		"   else \n "
+		"   FragColor = vec4(vertexColor.r, vertexColor.g, vertexColor.b, 1.0); \n"
 		"}\0";
 
 	// == Build and compile shader program ==
@@ -85,7 +88,7 @@ void VertexAttributes::Start()
 	glDeleteShader(fragmentShader); // Delete the fragment shader
 	// == END ==
 
-	// Triangle
+	// Rectangle
 	float vertices[] =
 	{
 		//Poisitions        //Colors
@@ -107,7 +110,7 @@ void VertexAttributes::Start()
 
 	glGenBuffers(1, &VBO); // It generated one buffer object and the ID is stored in VBO (more in the definition of glGenBuffers)
 	glBindBuffer(GL_ARRAY_BUFFER, VBO); // Bind the buffer to the target. GL_ARRAY_BUFFER is the target/buffer type for vertex buffer object // || DEFINE ||
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
 
 	glGenBuffers(1, &EBO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
@@ -126,6 +129,23 @@ void VertexAttributes::Start()
 
 void VertexAttributes::Update()
 {
+	float time = glfwGetTime();
+
+	float vertices[] =
+	{
+		//Poisitions        //Colors
+		rightTop.x , rightTop.y, 0.0f, rightTop_Color.x, rightTop_Color.y, rightTop_Color.z,1.0f,
+		rightBottom.x , rightBottom.y, 0.0f, rightBottom_Color.x, rightBottom_Color.y, rightBottom_Color.z,1.0f,
+		leftBottom.x , leftBottom.y, 0.0f, leftBottom_Color.x, leftBottom_Color.y, leftBottom_Color.z,1.0f,
+		leftTop.x , leftTop.y, 0.0f, leftTop_Color.x, leftTop_Color.y, leftTop_Color.z, 1.0f
+	};
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
+
+	// Unbind the buffer
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
 void VertexAttributes::ImGuiRender(GLFWwindow* window)
@@ -142,6 +162,32 @@ void VertexAttributes::ImGuiRender(GLFWwindow* window)
 	ImGui::Begin("Level Specific", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
 
 	ImGui::Checkbox("Wireframe mode", &wireframeMode);
+	ImGui::SameLine();
+	ImGui::Checkbox("Animate Colors", &animateColors);
+
+	ImGui::SliderFloat2("Left Top Position", &leftTop.x, -1.0f, 1.0f);
+	ImGui::SameLine();
+	ImGui::PushID("Color1");
+	ImGui::ColorEdit3("Color", (float*)&leftTop_Color);
+	ImGui::PopID();
+
+	ImGui::SliderFloat2("Right Top Position", &rightTop.x, -1.0f, 1.0f);
+	ImGui::SameLine();
+	ImGui::PushID("Color2");
+	ImGui::ColorEdit3("Color", (float*)&rightTop_Color);
+	ImGui::PopID();
+
+	ImGui::SliderFloat2("Left Bottom Position", &leftBottom.x, -1.0f, 1.0f);
+	ImGui::SameLine();
+	ImGui::PushID("Color3");
+	ImGui::ColorEdit3("Color", (float*)&leftBottom_Color);
+	ImGui::PopID();
+
+	ImGui::SliderFloat2("Right Bottom Position", &rightBottom.x, -1.0f, 1.0f);
+	ImGui::SameLine();
+	ImGui::PushID("Color4");
+	ImGui::ColorEdit3("Color", (float*)&rightBottom_Color);
+	ImGui::PopID();
 
 	ImGui::End();
 }
@@ -150,6 +196,7 @@ void VertexAttributes::Render()
 {
 	float timeValue = glfwGetTime();
 	int timeLocation = glGetUniformLocation(shaderProgram, "time");
+	int animateLocation = glGetUniformLocation(shaderProgram, "animateColors");
 
 	// == Drawing ==
 	if (wireframeMode)
@@ -158,6 +205,7 @@ void VertexAttributes::Render()
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	glUseProgram(shaderProgram);
 	glUniform1f(timeLocation, timeValue);
+	glUniform1i(animateLocation, animateColors);
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);

@@ -113,7 +113,6 @@ void UniformsInShader::Start()
 
 void UniformsInShader::Update()
 {
-
 }
 
 void UniformsInShader::ImGuiRender(GLFWwindow* window)
