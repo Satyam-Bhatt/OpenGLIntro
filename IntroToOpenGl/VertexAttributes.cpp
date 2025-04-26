@@ -14,8 +14,6 @@ VertexAttributes::~VertexAttributes()
 
 void VertexAttributes::Start()
 {
-	std::cout << "UniformsInShader::Start()" << std::endl;
-
 	// == Vertex Shader ==
 	vertexShaderSource = "#version 330 core\n" // Define the version of openGL which is 3.3
 		//in -> Input Variable of vertex shader
@@ -150,45 +148,82 @@ void VertexAttributes::Update()
 
 void VertexAttributes::ImGuiRender(GLFWwindow* window)
 {
+	// Get viewport dimensions and set window position
 	GLint viewport[4];
 	glGetIntegerv(GL_VIEWPORT, viewport);
 
+	// Apply minimal styling for a clean look
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 8.0f);
+	ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 2.0f);
+	ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.08f, 0.08f, 0.10f, 0.95f));
+	ImGui::PushStyleColor(ImGuiCol_TitleBgActive, ImVec4(0.12f, 0.16f, 0.24f, 1.0f));
+
+	// Position and create window
 	ImGui::SetNextWindowPos(
 		ImVec2(viewport[0] + viewport[2] / 2, viewport[3]),
-		ImGuiCond_Always,
-		ImVec2(0.5f, 1.0f)
+		ImGuiCond_Always, ImVec2(0.5f, 1.0f)
 	);
+	ImGui::Begin("Quad Editor", nullptr,
+		ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse |
+		ImGuiWindowFlags_AlwaysAutoResize);
 
-	ImGui::Begin("Level Specific", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
-
-	ImGui::Checkbox("Wireframe mode", &wireframeMode);
-	ImGui::SameLine();
+	// Global controls in one line
+	ImGui::Checkbox("Wireframe Mode", &wireframeMode);
+	ImGui::SameLine(0, 20);
 	ImGui::Checkbox("Animate Colors", &animateColors);
+	ImGui::Separator();
 
-	ImGui::SliderFloat2("Left Top Position", &leftTop.x, -1.0f, 1.0f);
+	// Vertex controls - horizontal layout with two rows
+	const float colorButtonWidth = 24.0f;
+	const float sliderWidth = 120.0f;
+
+	// Top row - Top vertices
+	ImGui::TextColored(ImVec4(0.7f, 0.9f, 1.0f, 1.0f), "Top:");
 	ImGui::SameLine();
-	ImGui::PushID("Color1");
-	ImGui::ColorEdit3("Color", (float*)&leftTop_Color);
+
+	// Left Top
+	ImGui::PushID("LT");
+	ImGui::SetNextItemWidth(sliderWidth);
+	ImGui::SliderFloat2("L", &leftTop.x, -1.0f, 1.0f);
+	ImGui::SameLine(0, 4);
+	ImGui::ColorEdit3("##c1", (float*)&leftTop_Color, ImGuiColorEditFlags_NoInputs);
 	ImGui::PopID();
 
-	ImGui::SliderFloat2("Right Top Position", &rightTop.x, -1.0f, 1.0f);
-	ImGui::SameLine();
-	ImGui::PushID("Color2");
-	ImGui::ColorEdit3("Color", (float*)&rightTop_Color);
+	ImGui::SameLine(0, 12);
+
+	// Right Top
+	ImGui::PushID("RT");
+	ImGui::SetNextItemWidth(sliderWidth);
+	ImGui::SliderFloat2("R", &rightTop.x, -1.0f, 1.0f);
+	ImGui::SameLine(0, 4);
+	ImGui::ColorEdit3("##c2", (float*)&rightTop_Color, ImGuiColorEditFlags_NoInputs);
 	ImGui::PopID();
 
-	ImGui::SliderFloat2("Left Bottom Position", &leftBottom.x, -1.0f, 1.0f);
+	// Bottom row - Bottom vertices
+	ImGui::TextColored(ImVec4(0.7f, 0.9f, 1.0f, 1.0f), "Bot:");
 	ImGui::SameLine();
-	ImGui::PushID("Color3");
-	ImGui::ColorEdit3("Color", (float*)&leftBottom_Color);
+
+	// Left Bottom
+	ImGui::PushID("LB");
+	ImGui::SetNextItemWidth(sliderWidth);
+	ImGui::SliderFloat2("L", &leftBottom.x, -1.0f, 1.0f);
+	ImGui::SameLine(0, 4);
+	ImGui::ColorEdit3("##c3", (float*)&leftBottom_Color, ImGuiColorEditFlags_NoInputs);
 	ImGui::PopID();
 
-	ImGui::SliderFloat2("Right Bottom Position", &rightBottom.x, -1.0f, 1.0f);
-	ImGui::SameLine();
-	ImGui::PushID("Color4");
-	ImGui::ColorEdit3("Color", (float*)&rightBottom_Color);
+	ImGui::SameLine(0, 12);
+
+	// Right Bottom
+	ImGui::PushID("RB");
+	ImGui::SetNextItemWidth(sliderWidth);
+	ImGui::SliderFloat2("R", &rightBottom.x, -1.0f, 1.0f);
+	ImGui::SameLine(0, 4);
+	ImGui::ColorEdit3("##c4", (float*)&rightBottom_Color, ImGuiColorEditFlags_NoInputs);
 	ImGui::PopID();
 
+	// Reset style
+	ImGui::PopStyleColor(2);
+	ImGui::PopStyleVar(2);
 	ImGui::End();
 }
 

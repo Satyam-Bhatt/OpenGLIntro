@@ -150,6 +150,6 @@ void Shaders::RenderText(SubScene sceneName)
 	}
 	else if(sceneName == SubScene::VertexAttributes)
 	{
-		ImGui::TextWrapped("Using vertex attributes to color each vertex.");
+		ImGui::TextWrapped("Using vertex attributes to color each vertex. VBO is updated every frame so that color and position can be changed. Time and an animate boolean is used as uniform to animate the colors.");
 	}
 }
