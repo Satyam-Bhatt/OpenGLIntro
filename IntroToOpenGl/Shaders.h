@@ -31,6 +31,7 @@ private:
 		FirstShader,
 		ColorChangingTriangle,
 		VertexAttributes,
+		ShaderClass,
 		COUNT
 	};
 

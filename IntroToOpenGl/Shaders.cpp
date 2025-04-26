@@ -2,6 +2,7 @@
 #include "FirstShader.h"
 #include "UniformsInShader.h"
 #include "VertexAttributes.h"
+#include "ShaderClass.h"
 
 Shaders Shaders::instance;
 
@@ -15,6 +16,9 @@ Shaders::Shaders()
 
 	sceneNames[SubScene::VertexAttributes] = "Vertex Attributes";
 	sceneFactories[SubScene::VertexAttributes] = []() -> Shaders* { return VertexAttributes::GetInstance(); };
+
+	sceneNames[SubScene::ShaderClass] = "Shader Class";
+	sceneFactories[SubScene::ShaderClass] = []() -> Shaders* { return ShaderClass::GetInstance(); };
 }
 
 Shaders::~Shaders()
@@ -151,5 +155,9 @@ void Shaders::RenderText(SubScene sceneName)
 	else if(sceneName == SubScene::VertexAttributes)
 	{
 		ImGui::TextWrapped("Using vertex attributes to color each vertex. VBO is updated every frame so that color and position can be changed. Time and an animate boolean is used as uniform to animate the colors.");
+	}
+	else if (sceneName == SubScene::ShaderClass)
+	{
+		ImGui::TextWrapped("Using Shader Class to render a triangle.");
 	}
 }

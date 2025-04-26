@@ -1,6 +1,8 @@
 #pragma once
 #include <stdio.h>
 #include <iostream>
+#include <fstream>
+#include <sstream>
 #include <glad.h>
 #include <GLFW/glfw3.h>
 //Imgui
