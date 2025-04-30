@@ -16,6 +16,8 @@ public:
     static ShaderClass* GetInstance();
 
 private:
+
+
 	static ShaderClass instance;
 
     unsigned int VAO, VBO, EBO, shaderProgram;
@@ -26,6 +28,8 @@ private:
 
     //// == Fragment Shader ==
     const char* fragmentShaderSource = "";
+
+    Shader shaderCode;
 };
 
 

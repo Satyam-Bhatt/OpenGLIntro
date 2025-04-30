@@ -190,6 +190,9 @@
     <ClInclude Include="UniformsInShader.h" />
     <ClInclude Include="VertexAttributes.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="ShaderClass.shader" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

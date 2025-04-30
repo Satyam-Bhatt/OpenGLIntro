@@ -28,6 +28,12 @@
     <Filter Include="Source Files\HelloTriangle">
       <UniqueIdentifier>{33dcd654-7433-4cc0-816f-75fc277a873e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shader">
+      <UniqueIdentifier>{4c9f707a-6269-4f3c-9fd6-c5feee95bdd8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shader\Shader">
+      <UniqueIdentifier>{a85039e5-8150-4c37-8c5b-707be1a22748}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -170,5 +176,10 @@
     <ClInclude Include="Shader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ShaderClass.shader">
+      <Filter>Shader\Shader</Filter>
+    </None>
   </ItemGroup>
 </Project>

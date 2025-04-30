@@ -2,7 +2,12 @@
 
 // Shader Class
 
-Shader::Shader(const char* vertexPath, const char* fragmentPath)
+Shader::Shader()
+{
+	ID = 0;
+}
+
+Shader::Shader(const std::string& shaderPath)
 {
 	// 1. retrieve the vertex/fragment source code from file path
 	std::string vertexCode; // Variable that stores the vertex shader code
@@ -10,28 +15,71 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath)
 
 	// This is an input file stream class that allows to read data from files. It is used for file input operations.
 	std::ifstream vShaderFile;// Input a file stream for vertex shader
-	std::ifstream fShaderFile;// Input a file stream for fragment shader
+	//std::ifstream fShaderFile;// Input a file stream for fragment shader
+
+	vShaderFile.open(shaderPath);
+
+
+	// check for file errors
+	if (vShaderFile.fail())
+	{
+		std::cout << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ SATYAM" << std::endl;
+	}
 
 	// ensure ifstream objects can throw exeptions: || Claude Define ||
 	vShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
-	fShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+	//fShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
 	try
 	{
 		// open files
-		vShaderFile.open(vertexPath);
-		fShaderFile.open(fragmentPath);
+		vShaderFile.open(shaderPath);
 		std::stringstream vShaderStream, fShaderStream; // Used to convert the file's buffer into a string stream on which we can use stream operators
+
+		enum ShaderType
+		{
+			NONE = -1,
+			VERTEX = 0,
+			FRAGMENT = 1
+		};
+
+		std::string line;
+		ShaderType type = ShaderType::NONE;
+
+
+		while (getline(vShaderFile, line))
+		{
+			if (line.find("#Satyam") != std::string::npos)
+			{
+				if(line.find("vertex") != std::string::npos)
+				{
+					type = ShaderType::VERTEX;
+				}
+				else if (line.find("fragment") != std::string::npos)
+				{
+					type = ShaderType::FRAGMENT;
+				}
+			}
+
+			if(type == ShaderType::VERTEX)
+			{
+				vShaderStream << line << "\n";
+			}
+			else if(type == ShaderType::FRAGMENT)
+			{
+				fShaderStream << line << "\n";
+			}
+		}
 
 		// read file's buffer contents into streams || Claude Define || 
 		// When ifstream object is created it is in the memory but the content are on the disk. rdBuf() just gets the pointer to the 
 		// buffer/stream object created. It does not get the contents. 
 		// Below we get the pointer to that object and then the stream operator << is used to get the contents into the stream
-		vShaderStream << vShaderFile.rdbuf();
-		fShaderStream << fShaderFile.rdbuf();
+		//vShaderStream << vShaderFile.rdbuf(); // NOT USING THEM AS WE ARE CREATING ONE SHADER FILE 
+		//fShaderStream << fShaderFile.rdbuf(); // NOT USING THEM AS WE ARE CREATING ONE SHADER FILE
 
 		// close file handlers
 		vShaderFile.close();
-		fShaderFile.close();
+		//fShaderFile.close();
 
 		// convert stream into string
 		vertexCode = vShaderStream.str();
@@ -41,6 +89,9 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath)
 	{
 		std::cout << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ" << std::endl;
 	}
+
+	std::cout << vertexCode << std::endl;
+	std::cout << fragmentCode << std::endl;
 
 	const char* vShaderCode = vertexCode.c_str();
 	const char* fShaderCode = fragmentCode.c_str();

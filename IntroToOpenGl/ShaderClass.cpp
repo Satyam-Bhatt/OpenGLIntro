@@ -4,6 +4,7 @@ ShaderClass ShaderClass::instance;
 
 ShaderClass::ShaderClass()
 {
+	shaderCode = Shader("ShaderClass.shader");
 	VAO = 0;
 	VBO = 0;
 	EBO = 0;
@@ -18,6 +19,7 @@ ShaderClass::~ShaderClass()
 
 void ShaderClass::Start()
 {
+
 	// == Vertex Shader ==
 	vertexShaderSource = "#version 330 core\n" // Define the version of openGL which is 3.3
 		//in -> Input Variable of vertex shader
