@@ -4,12 +4,12 @@ ShaderClass ShaderClass::instance;
 
 ShaderClass::ShaderClass()
 {
-	shaderCode = Shader("ShaderClass.shader");
 	VAO = 0;
 	VBO = 0;
 	EBO = 0;
 	shaderProgram = 0;
 	wireframeMode = false;
+	invertTriangle = false;
 }
 
 ShaderClass::~ShaderClass()
@@ -19,73 +19,7 @@ ShaderClass::~ShaderClass()
 
 void ShaderClass::Start()
 {
-
-	// == Vertex Shader ==
-	vertexShaderSource = "#version 330 core\n" // Define the version of openGL which is 3.3
-		//in -> Input Variable of vertex shader
-		"layout (location = 0) in vec3 aPos;\n"
-		"out vec4 vertexColor;\n"
-		"void main()\n" // main function just like C
-		"{\n"
-		// gl_Position -> Output of vertex shader is what we assign to gl_Position
-		"   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-		"   vertexColor = vec4(0.5f, 0.5f, 1.0f, 1.0f);\n"
-		"}\0";
-
-	// == Fragment Shader ==
-	fragmentShaderSource = "#version 330 core\n"
-		//out -> Output Variable of fragment shader. This is defined by out keyword
-		"out vec4 FragColor;\n"
-		"in vec4 vertexColor;\n"
-		"void main()\n"
-		"{\n"
-		// FragColor -> Output of fragment shader. Variable defined above with out keyword
-		"   FragColor = vertexColor;\n"
-		"}\0";
-
-	// == Build and compile shader program ==
-// Vertex shader
-	unsigned int vertexShader;
-	vertexShader = glCreateShader(GL_VERTEX_SHADER); // Create a shader object and refrence by ID. GL_VERTEX_SHADER is the type of shader we want to create with glCreateShader || DEFINE ||
-	glShaderSource(vertexShader, 1, &vertexShaderSource, NULL); // Attach the source code to the shader object || DEFINE ||
-	glCompileShader(vertexShader); // Compile the shader object || DEFINE ||
-	int success; // To indicate the success of shader compilation
-	char infoLog[512]; // To store the error message
-	glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success); // Get the compilation status. The function helps the developers to query the shader for information || DEFINE ||
-	if (!success)
-	{
-		glGetShaderInfoLog(vertexShader, 512, NULL, infoLog); // Get the error message || DEFINE ||
-		std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
-	}
-
-	// Fragment Shader 
-	unsigned int fragmentShader;
-	fragmentShader = glCreateShader(GL_FRAGMENT_SHADER); // as we want to create a fragment shader we use GL_FRAGMENT_SHADER
-	glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-	glCompileShader(fragmentShader);
-	// Check shader compile errors
-	glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
-	if (!success)
-	{
-		glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
-	}
-
-	// Link Shaders
-	shaderProgram = glCreateProgram(); // Create a shader program and returns ID refrence
-	glAttachShader(shaderProgram, vertexShader); // Attach the vertex shader to the shader program. The vertex shader is the first shader to be compiled and linked and its output will be the input for the fragment shader
-	glAttachShader(shaderProgram, fragmentShader); // Attach the fragment shader to the shader program
-	glLinkProgram(shaderProgram); // Link the shader program
-	// Check linking errors
-	glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
-	if (!success)
-	{
-		glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
-	}
-	glDeleteShader(vertexShader); // Delete the vertex shader
-	glDeleteShader(fragmentShader); // Delete the fragment shader
-	// == END ==
+	shaderCode = Shader("ShaderClass.shader");
 
 	// Triangle
 	float vertices[] =
@@ -129,18 +63,42 @@ void ShaderClass::ImGuiRender(GLFWwindow* window)
 	ImGui::Begin("Level Specific", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
 
 	ImGui::Checkbox("Wireframe mode", &wireframeMode);
+	ImGui::SameLine(0, 20);
+	ImGui::Checkbox("Invert triangle", &invertTriangle);
 
 	ImGui::End();
 }
 
 void ShaderClass::Render()
 {
+	float time = glfwGetTime();
+
+	if (invertTriangle && value <= 1.0f)
+	{
+		value += 0.0005f;
+	}
+	else if(!invertTriangle && value >= 0.0f)
+	{
+		value -= 0.0005f;
+	}
+	else if (value >= 1.0f)
+	{
+		value = 1.0f;
+	}
+	else if (value <= 0.0f)
+	{
+		value = 0.0f;
+	}
+	
 	// == Drawing ==
 	if (wireframeMode)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	else
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	glUseProgram(shaderProgram); // Use the shader program
+	//glUseProgram(shaderProgram); // Use the shader program
+	shaderCode.Use();
+	shaderCode.SetFloat("time", time);
+	shaderCode.SetFloat("valueOverTime", value);
 	glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized. It is generally done if we want to draw some other thing with a different VAO
 	glDrawArrays(GL_TRIANGLES, 0, 3); // || DEFINE ||
 	glBindVertexArray(0); // Unbind the VAO. A good practice

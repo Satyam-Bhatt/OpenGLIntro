@@ -10,90 +10,73 @@ Shader::Shader()
 Shader::Shader(const std::string& shaderPath)
 {
 	// 1. retrieve the vertex/fragment source code from file path
-	std::string vertexCode; // Variable that stores the vertex shader code
+	std::string vertexrCode; // Variable that stores the vertex shader code
 	std::string fragmentCode; // Variable that stores the fragment shader code
 
 	// This is an input file stream class that allows to read data from files. It is used for file input operations.
-	std::ifstream vShaderFile;// Input a file stream for vertex shader
-	//std::ifstream fShaderFile;// Input a file stream for fragment shader
+	std::ifstream shaderFile;// Input a file stream for vertex shader
 
-	vShaderFile.open(shaderPath);
-
+	shaderFile.open(shaderPath);
+	std::stringstream vShaderStream, fShaderStream;
 
 	// check for file errors
-	if (vShaderFile.fail())
+	if (shaderFile.fail())
 	{
 		std::cout << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ SATYAM" << std::endl;
 	}
 
-	// ensure ifstream objects can throw exeptions: || Claude Define ||
-	vShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
-	//fShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
-	try
+	enum ShaderType
 	{
-		// open files
-		vShaderFile.open(shaderPath);
-		std::stringstream vShaderStream, fShaderStream; // Used to convert the file's buffer into a string stream on which we can use stream operators
+		NONE = -1,
+		VERTEX = 0,
+		FRAGMENT = 1
+	};
 
-		enum ShaderType
+	std::string line;
+	ShaderType type = ShaderType::NONE;
+
+	while (getline(shaderFile, line))
+	{
+		if (line.find("#Satyam") != std::string::npos)
 		{
-			NONE = -1,
-			VERTEX = 0,
-			FRAGMENT = 1
-		};
-
-		std::string line;
-		ShaderType type = ShaderType::NONE;
-
-
-		while (getline(vShaderFile, line))
-		{
-			if (line.find("#Satyam") != std::string::npos)
+			if (line.find("vertex") != std::string::npos)
 			{
-				if(line.find("vertex") != std::string::npos)
-				{
-					type = ShaderType::VERTEX;
-				}
-				else if (line.find("fragment") != std::string::npos)
-				{
-					type = ShaderType::FRAGMENT;
-				}
+				type = ShaderType::VERTEX;
+				continue;
 			}
-
-			if(type == ShaderType::VERTEX)
+			else if (line.find("fragment") != std::string::npos)
 			{
-				vShaderStream << line << "\n";
-			}
-			else if(type == ShaderType::FRAGMENT)
-			{
-				fShaderStream << line << "\n";
+				type = ShaderType::FRAGMENT;
+				continue;
 			}
 		}
 
-		// read file's buffer contents into streams || Claude Define || 
-		// When ifstream object is created it is in the memory but the content are on the disk. rdBuf() just gets the pointer to the 
-		// buffer/stream object created. It does not get the contents. 
-		// Below we get the pointer to that object and then the stream operator << is used to get the contents into the stream
-		//vShaderStream << vShaderFile.rdbuf(); // NOT USING THEM AS WE ARE CREATING ONE SHADER FILE 
-		//fShaderStream << fShaderFile.rdbuf(); // NOT USING THEM AS WE ARE CREATING ONE SHADER FILE
-
-		// close file handlers
-		vShaderFile.close();
-		//fShaderFile.close();
-
-		// convert stream into string
-		vertexCode = vShaderStream.str();
-		fragmentCode = fShaderStream.str();
-	}
-	catch (std::ifstream::failure e)
-	{
-		std::cout << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ" << std::endl;
+		if (type == ShaderType::VERTEX)
+		{
+			vShaderStream << line << "\n";
+		}
+		else if (type == ShaderType::FRAGMENT)
+		{
+			fShaderStream << line << "\n";
+		}
 	}
 
-	std::cout << vertexCode << std::endl;
-	std::cout << fragmentCode << std::endl;
+	// read file's buffer contents into streams || Claude Define || 
+	// When ifstream object is created it is in the memory but the content are on the disk. rdBuf() just gets the pointer to the 
+	// buffer/stream object created. It does not get the contents. 
+	// Below we get the pointer to that object and then the stream operator << is used to get the contents into the stream
+	//vShaderStream << vShaderFile.rdbuf(); // NOT USING THEM AS WE ARE CREATING ONE SHADER FILE 
+	//fShaderStream << fShaderFile.rdbuf(); // NOT USING THEM AS WE ARE CREATING ONE SHADER FILE
 
-	const char* vShaderCode = vertexCode.c_str();
+	// close file handlers
+	shaderFile.close();
+	//fShaderFile.close();
+
+	// convert stream into string
+	vertexrCode = vShaderStream.str();
+	fragmentCode = fShaderStream.str();
+
+	const char* vShaderCode = vertexrCode.c_str();
 	const char* fShaderCode = fragmentCode.c_str();
 
 	// 2. compile shaders
@@ -150,15 +133,15 @@ void Shader::Use()
 
 void Shader::SetBool(const std::string& name, bool value) const
 {
-	glUniform1i(glGetUniformLocation(ID, name.c_str()), (int)value);
+	glUniform1i(glGetUniformLocation(ID, name.c_str()), (int)value); // Not Good for performance. We should cache the location
 }
 
 void Shader::SetInt(const std::string& name, int value) const
 {
-	glUniform1i(glGetUniformLocation(ID, name.c_str()), value);
+	glUniform1i(glGetUniformLocation(ID, name.c_str()), value); // Not Good for performance. We should cache the location
 }
 
 void Shader::SetFloat(const std::string& name, float value) const
 {
-	glUniform1f(glGetUniformLocation(ID, name.c_str()), value);
+	glUniform1f(glGetUniformLocation(ID, name.c_str()), value); // Not Good for performance. We should cache the location
 }
