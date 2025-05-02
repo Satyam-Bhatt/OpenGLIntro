@@ -1,6 +1,8 @@
 #pragma once
 #include "Shaders.h"
 
+extern float deltaTime;
+
 class ShaderClass : public Shaders
 {
 public:
@@ -22,6 +24,7 @@ private:
     bool wireframeMode, invertTriangle;
 
     float value = 0.0f;
+
 
     // == Vertex Shader ==
     const char* vertexShaderSource = "";

@@ -21,6 +21,7 @@ GameState* currentState = NULL;
 GameState* nextState = NULL;
 GLFWwindow* window = NULL;
 ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+float deltaTime = 0.0f; // Poor implementation of deltaTime. Using extern to call it in each class is not great
 
 // Callback function called when the window is resized
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
@@ -161,9 +162,17 @@ int main()
 	bool show_demo_window = true;
 	bool show_another_window = false;
 
+	// Calculate delta time
+	float lastTime = glfwGetTime();
+
 	// Render loop runs until we tell it to stop
 	while (!glfwWindowShouldClose(window)) // Checks if GLFW has been instructed to close
 	{
+		// Calculate delta time
+		float currentTime = glfwGetTime();
+		deltaTime = currentTime - lastTime;
+		lastTime = currentTime;
+
 		// == Input ==
 		processInput(window);
 

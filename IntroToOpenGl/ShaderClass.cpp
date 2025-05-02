@@ -75,11 +75,11 @@ void ShaderClass::Render()
 
 	if (invertTriangle && value <= 1.0f)
 	{
-		value += 0.0005f;
+		value += 2.0f * deltaTime;
 	}
 	else if(!invertTriangle && value >= 0.0f)
 	{
-		value -= 0.0005f;
+		value -= 2.0f * deltaTime;
 	}
 	else if (value >= 1.0f)
 	{

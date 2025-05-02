@@ -158,6 +158,15 @@ void Shaders::RenderText(SubScene sceneName)
 	}
 	else if (sceneName == SubScene::ShaderClass)
 	{
-		ImGui::TextWrapped("Using Shader Class to render a triangle.");
+		ImGui::BulletText("Shader Class");
+		ImGui::TextWrapped("Using Shader Class to render a triangle. Shader Class takes a .shader file as input and extracts the vertex and fragment shader code from it.");
+		ImGui::Spacing();
+		
+		ImGui::BulletText("Flipping Triangle");
+		ImGui::TextWrapped("The triangle can also be inverted. The flipping is done in the vertex shader by making the y value negative. It uses lerp to smoothely interpolate between 2 values. T value is uniform manipulated by the CPU");
+		ImGui::Spacing();
+
+		ImGui::BulletText("Color Interpolation");
+		ImGui::TextWrapped("The triangle color also interpolates smoothely when the triangle is inverted. The triangle has a smooth gradient created using Inigo Quilez palette function in the fragment shader.");
 	}
 }

@@ -146,6 +146,7 @@ void Shader::SetFloat(const std::string& name, float value)
 	glUniform1f(GetUniformLocation(name), value); // Not Good for performance. We should cache the location
 }
 
+// Responsible for caching the uniform location and returning it
 int Shader::GetUniformLocation(const std::string& name)
 {
 	if(locationCache.find(name) != locationCache.end())
