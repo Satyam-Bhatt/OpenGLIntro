@@ -131,17 +131,29 @@ void Shader::Use()
 	glUseProgram(ID);
 }
 
-void Shader::SetBool(const std::string& name, bool value) const
+void Shader::SetBool(const std::string& name, bool value)
 {
-	glUniform1i(glGetUniformLocation(ID, name.c_str()), (int)value); // Not Good for performance. We should cache the location
+	glUniform1i(GetUniformLocation(name), (int)value); // Not Good for performance. We should cache the location
 }
 
-void Shader::SetInt(const std::string& name, int value) const
+void Shader::SetInt(const std::string& name, int value)
 {
-	glUniform1i(glGetUniformLocation(ID, name.c_str()), value); // Not Good for performance. We should cache the location
+	glUniform1i(GetUniformLocation(name), value); // Not Good for performance. We should cache the location
 }
 
-void Shader::SetFloat(const std::string& name, float value) const
+void Shader::SetFloat(const std::string& name, float value)
 {
-	glUniform1f(glGetUniformLocation(ID, name.c_str()), value); // Not Good for performance. We should cache the location
+	glUniform1f(GetUniformLocation(name), value); // Not Good for performance. We should cache the location
+}
+
+int Shader::GetUniformLocation(const std::string& name)
+{
+	if(locationCache.find(name) != locationCache.end())
+		return locationCache[name];
+
+	int location = glGetUniformLocation(ID, name.c_str());
+	if(location == -1)
+		std::cout << "Warning: uniform '" << name << "' doesn't exist!" << std::endl;
+	locationCache[name] = location;
+	return location;
 }
