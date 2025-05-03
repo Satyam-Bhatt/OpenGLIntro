@@ -33,6 +33,7 @@ private:
 		ColorChangingTriangle,
 		VertexAttributes,
 		ShaderClass,
+		VertexPosToFrag,
 		COUNT
 	};
 

@@ -6,8 +6,6 @@ ShaderClass::ShaderClass()
 {
 	VAO = 0;
 	VBO = 0;
-	EBO = 0;
-	shaderProgram = 0;
 	wireframeMode = false;
 	invertTriangle = false;
 }
@@ -108,8 +106,6 @@ void ShaderClass::Exit()
 {
 	glDeleteVertexArrays(1, &VAO);
 	glDeleteBuffers(1, &VBO);
-	glDeleteBuffers(1, &EBO);
-	glDeleteProgram(shaderProgram);
 }
 
 ShaderClass* ShaderClass::GetInstance()

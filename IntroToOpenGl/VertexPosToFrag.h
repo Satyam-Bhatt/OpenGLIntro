@@ -18,5 +18,10 @@ public:
 private:
 	static VertexPosToFrag instance;
 
+	unsigned int VAO, VBO, EBO;
+	bool wireframeMode = false;
+
+	Shader shaderCode;
+
 };
 

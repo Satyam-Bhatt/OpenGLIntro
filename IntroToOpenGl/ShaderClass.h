@@ -20,16 +20,10 @@ public:
 private:
     static ShaderClass instance;
 
-    unsigned int VAO, VBO, EBO, shaderProgram;
+    unsigned int VAO, VBO;
     bool wireframeMode, invertTriangle;
 
     float value = 0.0f;
-
-    // == Vertex Shader ==
-    const char* vertexShaderSource = "";
-
-    //// == Fragment Shader ==
-    const char* fragmentShaderSource = "";
 
     Shader shaderCode;
 };

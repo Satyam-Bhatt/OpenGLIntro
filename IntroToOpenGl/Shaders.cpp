@@ -3,6 +3,7 @@
 #include "UniformsInShader.h"
 #include "VertexAttributes.h"
 #include "ShaderClass.h"
+#include "VertexPosToFrag.h"
 
 Shaders* Shaders::instance = nullptr;
 
@@ -19,6 +20,9 @@ Shaders::Shaders()
 
 	sceneNames[SubScene::ShaderClass] = "Shader Class";
 	sceneFactories[SubScene::ShaderClass] = []() -> Shaders* { return ShaderClass::GetInstance(); };
+
+	sceneNames[SubScene::VertexPosToFrag] = "Vertex Position To Fragment Shader";
+	sceneFactories[SubScene::VertexPosToFrag] = []() -> Shaders* { return VertexPosToFrag::GetInstance(); };
 }
 
 Shaders::~Shaders()
@@ -182,5 +186,9 @@ void Shaders::RenderText(SubScene sceneName)
 
 		ImGui::BulletText("Color Interpolation");
 		ImGui::TextWrapped("The triangle color also interpolates smoothely when the triangle is inverted. The triangle has a smooth gradient created using Inigo Quilez palette function in the fragment shader.");
+	}
+	else if (sceneName == SubScene::VertexPosToFrag)
+	{
+		ImGui::TextWrapped("Using vertex attributes to pass the position of each vertex to the fragment shader. The fragment shader interpolates the position of each vertex to create a smooth gradient.");
 	}
 }
