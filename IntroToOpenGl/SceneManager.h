@@ -27,6 +27,7 @@ public:
 		return &instance;
 	}
 	void ImGuiRender(GLFWwindow* window);
+	static void DestroyCurrentScene();
 
 private:
 	SceneManager();
@@ -40,13 +41,14 @@ private:
 		COUNT
 	};
 
-	std::unordered_map<int, std::string> sceneNames;
-	std::unordered_map<int, std::function<GameState* ()>> sceneFactories;
+	static std::unordered_map<int, std::string> sceneNames;
+	static std::unordered_map<int, std::function<GameState* ()>> sceneFactories;
+	static std::unordered_map<int, std::function<void()>> sceneDestructors;
 
-	std::string SceneToString(Scenes scene);
-	void ChangeScene();
+	static std::string SceneToString(Scenes scene);
+	static void ChangeScene();
 
 	bool openStates[Scenes::COUNT] = { false };
-	Scenes current_scene = Intro;
-	Scenes previous_scene = Intro;
+	static Scenes current_scene;
+	static Scenes previous_scene;
 };

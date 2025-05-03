@@ -4,7 +4,7 @@
 #include "VertexAttributes.h"
 #include "ShaderClass.h"
 
-Shaders Shaders::instance;
+Shaders* Shaders::instance = nullptr;
 
 Shaders::Shaders()
 {
@@ -105,7 +105,21 @@ void Shaders::Exit()
 }
 
 Shaders* Shaders::GetInstance() {
-	return &instance;
+	if (instance == nullptr)
+		instance = new Shaders();
+	
+	return instance;
+}
+
+void Shaders::DeleteInstance()
+{
+	std::cout << "Shaders destructor called" << std::endl;
+	if (instance != nullptr)
+	{
+		std::cout << "Deleting Shaders instance" << std::endl;
+		delete instance;
+		instance = nullptr;
+	}
 }
 
 void Shaders::SetNextState(Shaders* nextState)

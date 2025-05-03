@@ -6,7 +6,7 @@
 #include "TwoTriangles.h"
 #include "TriangleWithVertexDataManipulation.h"
 
-HelloTriangle HelloTriangle::instance;
+HelloTriangle* HelloTriangle::instance = nullptr;
 
 #define TRIANGLE
 
@@ -173,5 +173,19 @@ void HelloTriangle::RenderText(SubScenes sceneName)
 
 HelloTriangle* HelloTriangle::GetInstance()
 {
-	return &instance;
+	if (instance == nullptr)
+		instance = new HelloTriangle();
+	
+	return instance;
+}
+
+void HelloTriangle::DeleteInstance()
+{
+	std::cout << "HelloTriangle destructor called" << std::endl;
+	if (instance != nullptr)
+	{
+		std::cout << "Deleting HelloTriangle instance" << std::endl;
+		delete instance;
+		instance = nullptr;
+	}
 }

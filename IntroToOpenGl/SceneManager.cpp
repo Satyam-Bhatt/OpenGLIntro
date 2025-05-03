@@ -2,19 +2,29 @@
 
 #define VIEWPORT 75
 
+SceneManager::Scenes SceneManager::current_scene = SceneManager::Scenes::Intro;
+SceneManager::Scenes SceneManager::previous_scene = SceneManager::Scenes::Intro;
+
+std::unordered_map<int, std::string> SceneManager::sceneNames;
+std::unordered_map<int, std::function<GameState* ()>> SceneManager::sceneFactories;
+std::unordered_map<int, std::function<void()>> SceneManager::sceneDestructors;
+
 SceneManager::SceneManager()
 {
 	// Intro scene
 	sceneNames[Scenes::Intro] = "Intro";
 	sceneFactories[Scenes::Intro] = []() -> GameState* { return Intro::GetInstance(); };
+	sceneDestructors[Scenes::Intro] = []() -> void { Intro::DeleteInstance(); };
 
 	// HelloTriangle scene
 	sceneNames[Scenes::HelloTriangle] = "HelloTriangle";
 	sceneFactories[Scenes::HelloTriangle] = []() -> GameState* { return HelloTriangle::GetInstance(); };
+	sceneDestructors[Scenes::HelloTriangle] = []() -> void { HelloTriangle::DeleteInstance(); };
 
 	// Shaders scene
 	sceneNames[Scenes::Shaders] = "Shaders";
 	sceneFactories[Scenes::Shaders] = []() -> GameState* { return Shaders::GetInstance(); };
+	sceneDestructors[Scenes::Shaders] = []() -> void { Shaders::DeleteInstance(); };
 }
 
 void SceneManager::ImGuiRender(GLFWwindow* window)
@@ -56,7 +66,7 @@ void SceneManager::ImGuiRender(GLFWwindow* window)
 			if (current_scene != previous_scene)
 			{
 				ChangeScene();
-				previous_scene = current_scene;
+				//previous_scene = current_scene;
 			}
 
 			for (int j = 0; j < Scenes::COUNT; j++)
@@ -74,6 +84,17 @@ void SceneManager::ImGuiRender(GLFWwindow* window)
 	}
 
 	ImGui::End();
+}
+
+void SceneManager::DestroyCurrentScene()
+{
+	auto it = sceneDestructors.find(previous_scene);
+	if (it != sceneDestructors.end())//Checks if we found something
+	{
+		it->second();//If we found something then get the second value as the first value is the key and second value is the value
+		previous_scene = current_scene;
+
+	}
 }
 
 std::string SceneManager::SceneToString(Scenes scene)

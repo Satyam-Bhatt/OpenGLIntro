@@ -115,6 +115,7 @@ void ChangeState()
 	if (nextState != NULL)
 	{
 		currentState->Exit();
+		SceneManager::DestroyCurrentScene(); // Clears the heap allocated memory for the class
 		currentState = nextState;
 		currentState->Start();
 		nextState = NULL;

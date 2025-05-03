@@ -1,7 +1,7 @@
 #include "Intro.h"
 #include "HelloTriangle.h"
 
-Intro Intro::instance;
+Intro* Intro::instance = nullptr;
 
 Intro::Intro()
 {
@@ -153,5 +153,19 @@ void Intro::Exit()
 
 Intro* Intro::GetInstance()
 {
-	return &instance;
+	if(instance == nullptr)
+		instance = new Intro();
+
+	return instance;
+}
+
+void Intro::DeleteInstance()
+{
+	std::cout << "Intro destructor called" << std::endl;
+	if (instance != nullptr)
+	{
+		std::cout << "Deleting Intro instance" << std::endl;
+		delete instance;
+		instance = nullptr;
+	}
 }

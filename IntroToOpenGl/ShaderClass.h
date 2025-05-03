@@ -18,13 +18,12 @@ public:
     static ShaderClass* GetInstance();
 
 private:
-	static ShaderClass instance;
+    static ShaderClass instance;
 
     unsigned int VAO, VBO, EBO, shaderProgram;
     bool wireframeMode, invertTriangle;
 
     float value = 0.0f;
-
 
     // == Vertex Shader ==
     const char* vertexShaderSource = "";

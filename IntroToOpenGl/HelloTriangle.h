@@ -22,6 +22,7 @@ public:
 	void ImGuiLeftPanel() override;
 	// Static Accessor
 	static HelloTriangle* GetInstance();
+	static void DeleteInstance();
 
 	HelloTriangle();
 	~HelloTriangle();
@@ -39,7 +40,7 @@ private:
 		COUNT
 	};
 
-	static HelloTriangle instance;
+	static HelloTriangle* instance;
 
 	HelloTriangle* currentProject = NULL;
 	HelloTriangle* nextProject = NULL;

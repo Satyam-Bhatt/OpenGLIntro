@@ -17,6 +17,7 @@ public:
 	void Exit() override;
 	// Static Accessor
 	static Shaders* GetInstance();
+	static void DeleteInstance();
 
 	Shaders();
 	~Shaders();
@@ -35,7 +36,7 @@ private:
 		COUNT
 	};
 
-	static Shaders instance;
+	static Shaders* instance;
 
 	Shaders* currentProject = NULL;
 	Shaders* nextProject = NULL;

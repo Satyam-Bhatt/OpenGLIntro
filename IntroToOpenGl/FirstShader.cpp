@@ -16,8 +16,8 @@ FirstShader::~FirstShader()
 void FirstShader::Start()
 {
 	int nrAttributes;
-	glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &nrAttributes);
-	std::cout << "Maximum no. of vertex attributes supported: " << nrAttributes << std::endl;
+	glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &nrAttributes); // Get the maximum number of vertex attributes
+	//std::cout << "Maximum no. of vertex attributes supported: " << nrAttributes << std::endl;
 
 	// == Vertex Shader ==
 	vertexShaderSource = "#version 330 core\n" // Define the version of openGL which is 3.3

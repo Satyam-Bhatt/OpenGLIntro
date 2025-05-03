@@ -19,9 +19,10 @@ public:
 	void Exit() override;
 	// Static Accessor
 	static Intro* GetInstance();
+	static void DeleteInstance();
 
 private:
-	static Intro instance;
+	static Intro* instance;
 	ImFont* headingFont;
 	ImVec4 heading_TextColor = ImVec4(0.882f, 0.549f, 0.316f, 1.000f);
 	ImFont* descriptionFont;
