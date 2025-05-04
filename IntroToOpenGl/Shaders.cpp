@@ -189,6 +189,12 @@ void Shaders::RenderText(SubScene sceneName)
 	}
 	else if (sceneName == SubScene::VertexPosToFrag)
 	{
-		ImGui::TextWrapped("Using vertex attributes to pass the position of each vertex to the fragment shader. The fragment shader interpolates the position of each vertex to create a smooth gradient.");
+		ImGui::TextWrapped("Vetex position is passed into the fragment shader and that colors the rectangle.");
+		ImGui::Dummy(ImVec2(0.0f, 2.0f));
+		ImGui::TextWrapped("It signifies that color is:");
+		ImGui::BulletText("black at (0,0) or below");
+		ImGui::BulletText("red for (1,0)");
+		ImGui::BulletText("green for (0,1)");
+		ImGui::BulletText("orange for (1,1)");
 	}
 }

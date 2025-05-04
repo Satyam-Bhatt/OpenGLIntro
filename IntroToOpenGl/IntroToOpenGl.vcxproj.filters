@@ -106,7 +106,7 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="VertexPosToFrag.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Shader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -180,11 +180,17 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="VertexPosToFrag.h">
+      <Filter>Header Files\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ShaderClass.shader">
+      <Filter>Shader\Shader</Filter>
+    </None>
+    <None Include="VertexToPos.shader">
       <Filter>Shader\Shader</Filter>
     </None>
   </ItemGroup>

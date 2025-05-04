@@ -189,11 +189,13 @@
     <ClInclude Include="TriangleWithVertexDataManipulation.h" />
     <ClInclude Include="TwoTriangles.h" />
     <ClInclude Include="UniformsInShader.h" />
+    <ClInclude Include="Vector.h" />
     <ClInclude Include="VertexAttributes.h" />
     <ClInclude Include="VertexPosToFrag.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ShaderClass.shader" />
+    <None Include="VertexToPos.shader" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -96,6 +96,8 @@ bool Initialize()
 
 void Close()
 {
+	SceneManager::DestroyCurrentScene(); // Clears the heap allocated memory for the class
+
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplGlfw_Shutdown();
 	ImGui::DestroyContext();

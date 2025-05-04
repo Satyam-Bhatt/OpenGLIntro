@@ -18,11 +18,20 @@ void VertexPosToFrag::Start()
 {
 	shaderCode = Shader("VertexToPos.shader");
 
-	float vertices[] = 
+	// Rectangle
+	float vertices[] =
 	{
-		-0.5f, -0.5f, 0.0f,
-		0.5f, -0.5f, 0.0f,
-		0.0f, 0.5f, 0.0f
+		//Poisitions   
+		0.5f, 0.5f, 0.0f, 
+		0.5f, -0.5f, 0.0f, 
+		-0.5f, -0.5f, 0.0f, 
+		-0.5f, 0.5f, 0.0f
+	};
+
+	int indices[] =
+	{
+		0, 1, 3,
+		1, 2, 3
 	};
 
 	glGenVertexArrays(1, &VAO);
@@ -31,6 +40,10 @@ void VertexPosToFrag::Start()
 	glGenBuffers(1, &VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+	glGenBuffers(1, &EBO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
@@ -59,6 +72,7 @@ void VertexPosToFrag::ImGuiRender(GLFWwindow* window)
 	ImGui::Begin("Level Specific", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
 
 	ImGui::Checkbox("Wireframe mode", &wireframeMode);
+	ImGui::SliderFloat2("Postion Offset", &positionOffset.x, -1.0f, 1.0f);
 
 	ImGui::End();
 }
@@ -72,8 +86,9 @@ void VertexPosToFrag::Render()
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	//glUseProgram(shaderProgram); // Use the shader program
 	shaderCode.Use();
+	shaderCode.SetVec2("positionOffset", positionOffset.x, positionOffset.y);
 	glBindVertexArray(VAO); 
-	glDrawArrays(GL_TRIANGLES, 0, 3); 
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
 }
 

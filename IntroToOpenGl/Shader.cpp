@@ -146,6 +146,11 @@ void Shader::SetFloat(const std::string& name, float value)
 	glUniform1f(GetUniformLocation(name), value); // Not Good for performance. We should cache the location
 }
 
+void Shader::SetVec2(const std::string& name, float x, float y)
+{
+	glUniform2f(GetUniformLocation(name), x, y);
+}
+
 // Responsible for caching the uniform location and returning it
 int Shader::GetUniformLocation(const std::string& name)
 {
