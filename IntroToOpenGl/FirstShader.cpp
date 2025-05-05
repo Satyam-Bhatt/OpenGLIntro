@@ -23,6 +23,7 @@ void FirstShader::Start()
 	vertexShaderSource = "#version 330 core\n" // Define the version of openGL which is 3.3
 	//in -> Input Variable of vertex shader
 	"layout (location = 0) in vec3 aPos;\n"
+	// out -> Output Variable of vertex shader which goes to the fragment shader
 	"out vec4 vertexColor;\n"
 	"void main()\n" // main function just like C
 	"{\n"
@@ -35,6 +36,7 @@ void FirstShader::Start()
 	fragmentShaderSource = "#version 330 core\n"
 	//out -> Output Variable of fragment shader. This is defined by out keyword
 	"out vec4 FragColor;\n"
+	//in -> Input Variable of fragment shader. Comes from the vertex shader. The name of the variable should be the same
 	"in vec4 vertexColor;\n"
 	"void main()\n"
 	"{\n"

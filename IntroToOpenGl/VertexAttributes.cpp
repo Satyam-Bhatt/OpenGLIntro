@@ -16,8 +16,9 @@ void VertexAttributes::Start()
 {
 	// == Vertex Shader ==
 	vertexShaderSource = "#version 330 core\n" // Define the version of openGL which is 3.3
-		//in -> Input Variable of vertex shader
+		//in -> Gets postion from vertex data
 		"layout (location = 0) in vec3 aPos;\n"
+		//int-> Gets color from vertex data
 		"layout (location = 1) in vec4 aColor;\n"
 		"out vec4 vertexColor;\n"
 		"void main()\n" // main function just like C
