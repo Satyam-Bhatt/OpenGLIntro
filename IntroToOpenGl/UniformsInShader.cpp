@@ -22,9 +22,9 @@ void UniformsInShader::Start()
 		//in -> Input Variable of vertex shader
 		"layout (location = 0) in vec3 aPos;\n"
 		"out vec4 vertexColor;\n"
-		"uniform float time;\n"
-		"uniform vec2 radius;\n"
-		"uniform float speed;\n"
+		"uniform float time;\n" // Populated by the CPU
+		"uniform vec2 radius;\n" // Populated by the CPU
+		"uniform float speed;\n" // Populated by the CPU
 		"void main()\n" // main function just like C
 		"{\n"
 		// gl_Position -> Output of vertex shader is what we assign to gl_Position
@@ -37,7 +37,7 @@ void UniformsInShader::Start()
 		//out -> Output Variable of fragment shader. This is defined by out keyword
 		"out vec4 FragColor;\n"
 		"in vec4 vertexColor;\n"
-		"uniform vec4 ourColor;\n"
+		"uniform vec4 ourColor;\n" // Populated by the CPU
 		"void main()\n"
 		"{\n"
 		// FragColor -> Output of fragment shader. Variable defined above with out keyword
@@ -143,6 +143,7 @@ void UniformsInShader::Render()
 	float redValue = (cos(timeValue * speed) / 2.0f) + 0.5f;
 	// Gets the location of the uniform variable for a particular shader program and if not found returns -1. It can be because of incorrect name or
 	// because the compiler deleted it as the uniform variable was not used <-- KEEP THIS IN MIND <NOT USING SO DELETED>
+	// We generally cache these values so that we don't need to fetch it from the GPU every time
 	int vertexColorLocation = glGetUniformLocation(shaderProgram, "ourColor");
 	int timeLocation = glGetUniformLocation(shaderProgram, "time");
 	int radiusLocation = glGetUniformLocation(shaderProgram, "radius");
