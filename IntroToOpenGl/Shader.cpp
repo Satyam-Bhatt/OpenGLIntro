@@ -35,6 +35,7 @@ Shader::Shader(const std::string& shaderPath)
 	std::string line;
 	ShaderType type = ShaderType::NONE;
 
+	// Getting each line then checking if it contains #Satyam vertex or #Satyam fragment and then adding it to the stream as per the ShaderType
 	while (getline(shaderFile, line))
 	{
 		if (line.find("#Satyam") != std::string::npos)
