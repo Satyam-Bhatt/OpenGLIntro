@@ -20,7 +20,7 @@ public:
     // The Program ID
     unsigned int ID;
 
-    // Default constructor
+    // Default constructor. It should be there so that we can instantiate this class
 	Shader();
 
     // Constructor reads and builds the shader
