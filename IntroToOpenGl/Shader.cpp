@@ -16,6 +16,7 @@ Shader::Shader(const std::string& shaderPath)
 	// This is an input file stream class that allows to read data from files. It is used for file input operations.
 	std::ifstream shaderFile;// Input a file stream for vertex shader
 
+	// To open a file and read from it
 	shaderFile.open(shaderPath);
 	std::stringstream vShaderStream, fShaderStream;
 
@@ -25,6 +26,7 @@ Shader::Shader(const std::string& shaderPath)
 		std::cout << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ SATYAM" << std::endl;
 	}
 
+	// Different shader type that are contained in a shader file. We write to each stream depending on the type
 	enum ShaderType
 	{
 		NONE = -1,
@@ -32,19 +34,23 @@ Shader::Shader(const std::string& shaderPath)
 		FRAGMENT = 1
 	};
 
+	// Line which we will write to each line from the shader file
 	std::string line;
 	ShaderType type = ShaderType::NONE;
 
 	// Getting each line then checking if it contains #Satyam vertex or #Satyam fragment and then adding it to the stream as per the ShaderType
 	while (getline(shaderFile, line))
 	{
+		// if the line contains #Satyam
 		if (line.find("#Satyam") != std::string::npos)
 		{
+			// if the line contains vertex then set the type to vertex
 			if (line.find("vertex") != std::string::npos)
 			{
 				type = ShaderType::VERTEX;
 				continue;
 			}
+			// if the line contains fragment then set the type to fragment
 			else if (line.find("fragment") != std::string::npos)
 			{
 				type = ShaderType::FRAGMENT;
@@ -52,10 +58,12 @@ Shader::Shader(const std::string& shaderPath)
 			}
 		}
 
+		// if the type is vertex then add the line to the vertex stream
 		if (type == ShaderType::VERTEX)
 		{
 			vShaderStream << line << "\n";
 		}
+		// if the type is fragment then add the line to the fragment stream
 		else if (type == ShaderType::FRAGMENT)
 		{
 			fShaderStream << line << "\n";
@@ -71,7 +79,6 @@ Shader::Shader(const std::string& shaderPath)
 
 	// close file handlers
 	shaderFile.close();
-	//fShaderFile.close();
 
 	// convert stream into string
 	vertexrCode = vShaderStream.str();
@@ -132,21 +139,25 @@ void Shader::Use()
 	glUseProgram(ID);
 }
 
+// Set bool uniform. It checks if we have the location cached or not
 void Shader::SetBool(const std::string& name, bool value)
 {
-	glUniform1i(GetUniformLocation(name), (int)value); // Not Good for performance. We should cache the location
+	glUniform1i(GetUniformLocation(name), (int)value);
 }
 
+// Set int uniform
 void Shader::SetInt(const std::string& name, int value)
 {
-	glUniform1i(GetUniformLocation(name), value); // Not Good for performance. We should cache the location
+	glUniform1i(GetUniformLocation(name), value);
 }
 
+// Set float uniform
 void Shader::SetFloat(const std::string& name, float value)
 {
-	glUniform1f(GetUniformLocation(name), value); // Not Good for performance. We should cache the location
+	glUniform1f(GetUniformLocation(name), value);
 }
 
+// Set vec2 uniform
 void Shader::SetVec2(const std::string& name, float x, float y)
 {
 	glUniform2f(GetUniformLocation(name), x, y);
@@ -155,12 +166,16 @@ void Shader::SetVec2(const std::string& name, float x, float y)
 // Responsible for caching the uniform location and returning it
 int Shader::GetUniformLocation(const std::string& name)
 {
+	// If the name is in the unordered map then return the location which is int
 	if(locationCache.find(name) != locationCache.end())
 		return locationCache[name];
 
+	// if the location is not in the map then get it from the GPU
 	int location = glGetUniformLocation(ID, name.c_str());
+	// If the location is -1 then the uniform variable doesn't exist and we print a warning
 	if(location == -1)
 		std::cout << "Warning: uniform '" << name << "' doesn't exist!" << std::endl;
+	// If the location is not -1 then add it to the map with key as name and return the location
 	locationCache[name] = location;
 	return location;
 }
