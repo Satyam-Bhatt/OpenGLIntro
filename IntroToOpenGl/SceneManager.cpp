@@ -25,6 +25,11 @@ SceneManager::SceneManager()
 	sceneNames[Scenes::Shaders] = "Shaders";
 	sceneFactories[Scenes::Shaders] = []() -> GameState* { return Shaders::GetInstance(); };
 	sceneDestructors[Scenes::Shaders] = []() -> void { Shaders::DeleteInstance(); };
+
+	// Texture scene
+	sceneNames[Scenes::TextureMain] = "Texture";
+	sceneFactories[Scenes::TextureMain] = []() -> GameState* { return TextureMain::GetInstance(); };
+	sceneDestructors[Scenes::TextureMain] = []() -> void { TextureMain::DeleteInstance(); };
 }
 
 void SceneManager::ImGuiRender(GLFWwindow* window)

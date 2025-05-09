@@ -9,9 +9,13 @@
 #include "Imgui/imgui_impl_opengl3.h"
 
 #include "GameState.h"
+// Scenes
 #include "Intro.h"
 #include "HelloTriangle.h"
 #include "Shaders.h"
+#include "TextureMain.h"
+
+// STL
 #include <unordered_map>
 #include <functional>
 
@@ -38,6 +42,7 @@ private:
 		Intro,
 		HelloTriangle,
 		Shaders,
+		TextureMain,
 		COUNT
 	};
 

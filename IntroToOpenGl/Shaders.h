@@ -1,7 +1,6 @@
 #pragma once
 #include "GameState.h"
 #include <unordered_map>
-#include <functional>
 
 extern void SetGameState(GameState* state);
 

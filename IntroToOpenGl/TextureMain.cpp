@@ -1,0 +1,156 @@
+#include "TextureMain.h"
+#include "IntroTexture.h"
+
+TextureMain* TextureMain::instance = nullptr;
+
+TextureMain::TextureMain()
+{
+	sceneNames[SubScene::IntroTexture] = "IntroTexture";
+	sceneFactories[SubScene::IntroTexture] = []() -> TextureMain* { return IntroTexture::GetInstance(); };
+}
+
+TextureMain::~TextureMain()
+{
+	Exit();
+}
+
+void TextureMain::Start()
+{
+	currentProject = IntroTexture::GetInstance();
+	nextProject = IntroTexture::GetInstance();
+	currentProject->Start();
+}
+
+void TextureMain::Update()
+{
+	currentProject->Update();
+}
+
+void TextureMain::ImGuiLeftPanel()
+{
+	ImGui::SeparatorText("Render Texture");
+	ImGui::Text("More about Textuire");
+
+	for (int i = 0; i < SubScene::COUNT; i++)
+	{
+		SubScene sceneToString = (SubScene)i;
+		std::string sceneName = SceneToString(sceneToString);
+		ImGui::SetNextItemOpen(openScene[i]);
+
+		ImGui::Indent(15.0f);
+		ImGui::PushStyleColor(ImGuiCol_Header, ImVec4(0.5f, 0.5f, 0.8f, 0.5f));
+		ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 4.0f);
+		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(6, 2)); // Make slightly smaller
+
+		if (ImGui::CollapsingHeader(sceneName.c_str()))
+		{
+			RenderText((SubScene)i);
+			openScene[i] = true;
+			current_SubScene = (SubScene)i;
+
+			if (current_SubScene != previous_SubScene)
+			{
+				ChangeScene();
+				previous_SubScene = current_SubScene;
+			}
+
+			for (int j = 0; j < SubScene::COUNT; j++)
+			{
+				if (j != i)
+				{
+					openScene[j] = false;
+				}
+			}
+		}
+		else
+		{
+			openScene[i] = false;
+		}
+		ImGui::PopStyleVar(2);
+		ImGui::PopStyleColor();
+		ImGui::Unindent(15.0f);
+	}
+}
+
+void TextureMain::ImGuiRender(GLFWwindow* window)
+{
+	currentProject->ImGuiRender(window);
+}
+
+void TextureMain::Render()
+{
+	currentProject->Render();
+
+	ChangeState();
+}
+
+void TextureMain::HandleInput(GLFWwindow* window)
+{
+}
+
+void TextureMain::Exit()
+{
+	currentProject->Exit();
+}
+
+TextureMain* TextureMain::GetInstance()
+{
+	if (instance == nullptr)
+		instance = new TextureMain();
+
+	return instance;
+}
+
+void TextureMain::DeleteInstance()
+{
+	std::cout << "Texture destructor called" << std::endl;
+	if (instance != nullptr)
+	{
+		std::cout << "Deleting Texture instance" << std::endl;
+		delete instance;
+		instance = nullptr;
+	}
+}
+
+void TextureMain::SetNextState(TextureMain* nextState)
+{
+	this->nextProject = nextState;
+
+}
+
+std::string TextureMain::SceneToString(SubScene scene)
+{
+	auto it = sceneNames.find(scene);
+	if (it != sceneNames.end())//Checks if we found something
+	{
+		return it->second;//If we found something then get the second value as the first value is the key and second value is the value
+	}
+	return "Unknown";
+}
+
+void TextureMain::ChangeState()
+{
+	if (nextProject != currentProject)
+	{
+		currentProject->Exit();
+		currentProject = nextProject;
+		currentProject->Start();
+	}
+}
+
+void TextureMain::ChangeScene()
+{
+	auto it = sceneFactories.find(current_SubScene);
+	if (it != sceneFactories.end())//Checks if we found something
+	{
+		SetNextState(it->second());//If we found something then get the second value as the first value is the key and second value is the value
+	}
+}
+
+void TextureMain::RenderText(SubScene sceneName)
+{
+	if (sceneName == SubScene::IntroTexture)
+	{
+		ImGui::TextWrapped("Intro Tex");
+	}
+}

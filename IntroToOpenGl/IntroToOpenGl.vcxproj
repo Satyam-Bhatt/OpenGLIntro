@@ -153,6 +153,7 @@
     <ClCompile Include="Imgui\imgui_tables.cpp" />
     <ClCompile Include="Imgui\imgui_widgets.cpp" />
     <ClCompile Include="Intro.cpp" />
+    <ClCompile Include="IntroTexture.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="SecondTriangle.cpp" />
@@ -160,6 +161,7 @@
     <ClCompile Include="ShaderClass.cpp" />
     <ClCompile Include="Shaders.cpp" />
     <ClCompile Include="Temp.cpp" />
+    <ClCompile Include="TextureMain.cpp" />
     <ClCompile Include="TriangleWithVertexDataManipulation.cpp" />
     <ClCompile Include="TwoTriangles.cpp" />
     <ClCompile Include="UniformsInShader.cpp" />
@@ -181,11 +183,13 @@
     <ClInclude Include="Imgui\imstb_textedit.h" />
     <ClInclude Include="Imgui\imstb_truetype.h" />
     <ClInclude Include="Intro.h" />
+    <ClInclude Include="IntroTexture.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="SecondTriangle.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderClass.h" />
     <ClInclude Include="Shaders.h" />
+    <ClInclude Include="TextureMain.h" />
     <ClInclude Include="TriangleWithVertexDataManipulation.h" />
     <ClInclude Include="TwoTriangles.h" />
     <ClInclude Include="UniformsInShader.h" />

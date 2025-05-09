@@ -3,6 +3,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <functional>
 #include <glad.h>
 #include <GLFW/glfw3.h>
 //Imgui

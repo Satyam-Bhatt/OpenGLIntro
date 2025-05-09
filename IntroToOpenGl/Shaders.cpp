@@ -43,8 +43,8 @@ void Shaders::Update()
 
 void Shaders::ImGuiLeftPanel()
 {
-	ImGui::SeparatorText("What is a triangle");
-	ImGui::Text("More about triangle render");
+	ImGui::SeparatorText("Shaders");
+	ImGui::Text("a lot of shaders");
 
 	for (int i = 0; i < SubScene::COUNT; i++)
 	{
