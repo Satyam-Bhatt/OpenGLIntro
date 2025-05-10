@@ -17,5 +17,7 @@ public:
 
 private:
     static IntroTexture instance;
+
+    Shader shader;
 };
 

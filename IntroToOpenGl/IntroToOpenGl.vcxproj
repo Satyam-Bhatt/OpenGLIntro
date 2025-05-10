@@ -198,6 +198,7 @@
     <ClInclude Include="VertexPosToFrag.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="IntroTexture.shader" />
     <None Include="ShaderClass.shader" />
     <None Include="VertexToPos.shader" />
   </ItemGroup>

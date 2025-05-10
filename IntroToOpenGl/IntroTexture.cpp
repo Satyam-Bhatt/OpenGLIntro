@@ -12,6 +12,7 @@ IntroTexture::~IntroTexture()
 
 void IntroTexture::Start()
 {
+	shader = Shader("IntroTexture.shader");
 }
 
 void IntroTexture::Update()

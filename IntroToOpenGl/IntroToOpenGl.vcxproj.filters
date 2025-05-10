@@ -40,6 +40,9 @@
     <Filter Include="Header Files\Texture">
       <UniqueIdentifier>{eeaf2c29-1f42-4509-86b7-3f111518ec53}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shader\Textures">
+      <UniqueIdentifier>{977ce806-5ec7-4211-9d66-2fa69855f8f3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -210,6 +213,9 @@
     </None>
     <None Include="VertexToPos.shader">
       <Filter>Shader\Shader</Filter>
+    </None>
+    <None Include="IntroTexture.shader">
+      <Filter>Shader\Textures</Filter>
     </None>
   </ItemGroup>
 </Project>
