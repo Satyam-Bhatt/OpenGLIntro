@@ -19,5 +19,6 @@ private:
     static IntroTexture instance;
 
     Shader shader;
+    unsigned int VAO, VBO;
 };
 
