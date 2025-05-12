@@ -160,6 +160,7 @@
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="ShaderClass.cpp" />
     <ClCompile Include="Shaders.cpp" />
+    <ClCompile Include="stb_image.cpp" />
     <ClCompile Include="Temp.cpp" />
     <ClCompile Include="TextureMain.cpp" />
     <ClCompile Include="TriangleWithVertexDataManipulation.cpp" />
@@ -189,6 +190,7 @@
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderClass.h" />
     <ClInclude Include="Shaders.h" />
+    <ClInclude Include="stb_image.h" />
     <ClInclude Include="TextureMain.h" />
     <ClInclude Include="TriangleWithVertexDataManipulation.h" />
     <ClInclude Include="TwoTriangles.h" />
