@@ -20,5 +20,11 @@ private:
 
     Shader shader;
     unsigned int VAO, VBO;
+
+    int width, height, nChannels;
+    unsigned char* data;
+
+    // Textures also have ID
+    unsigned int texture;
 };
 

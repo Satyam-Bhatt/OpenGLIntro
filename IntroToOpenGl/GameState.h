@@ -13,6 +13,7 @@
 //General
 #include "Shader.h"
 #include "Vector.h"
+#include "stb_image.h"
 
 class GameState
 {
