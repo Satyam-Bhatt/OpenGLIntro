@@ -6,6 +6,10 @@ IntroTexture::IntroTexture()
 {
 	VAO=0;
 	VBO=0;
+	texture=0;
+	width=0;
+	height=0;
+	nChannels=0;
 	data = nullptr;
 }
 
@@ -15,7 +19,7 @@ IntroTexture::~IntroTexture()
 
 void IntroTexture::Start()
 {
-	data = stbi_load("container.jpg", &width, &height, &nChannels, 0);
+	data = stbi_load("Images/container.jpg", &width, &height, &nChannels, 0);
 
 	shader = Shader("IntroTexture.shader");
 
