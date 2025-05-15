@@ -163,6 +163,12 @@ void Shader::SetVec2(const std::string& name, float x, float y)
 	glUniform2f(GetUniformLocation(name), x, y);
 }
 
+// Set texture uniform
+void Shader::SetTexture(const std::string& name, int slot)
+{
+	glUniform1i(GetUniformLocation(name), slot);
+}
+
 // Responsible for caching the uniform location and returning it
 int Shader::GetUniformLocation(const std::string& name)
 {

@@ -6,6 +6,8 @@ IntroTexture::IntroTexture()
 {
 	VAO = 0;
 	VBO = 0;
+	EBO = 0;
+	texture = 0;
 }
 
 IntroTexture::~IntroTexture()
@@ -16,25 +18,8 @@ void IntroTexture::Start()
 {
 	shader = Shader("IntroTexture.shader");
 
-	float vertices[] =
-	{
-		-0.5f, -0.5f, 0.0f,
-		0.5f, -0.5f, 0.0f,
-		0.0f, 0.5f, 0.0f
-	};
-
-	glGenVertexArrays(1, &VAO);
-	glBindVertexArray(VAO);
-	glGenBuffers(1, &VBO);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindVertexArray(0);
-
 	// Generating a texture
-	unsigned int texture;
+	texture;
 	// Generates texture IDs for as many textures we want
 	// 1 -> How many textures we want to generate and sotres them in a unsigned int array
 	// 2 -> Unsigned int array to store the texture ID
@@ -116,6 +101,55 @@ void IntroTexture::Start()
 
 	// Free the image memory
 	stbi_image_free(data);
+
+	// Rectangle
+	float vertices[] =
+	{
+		// Positions       // Colors          // TexCoords
+		 0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // Top Right
+		 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // Bottom Right
+		-0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // Bottom Left 
+		-0.5f,  0.5f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f  // Top Left
+	};
+
+	//float vertices[] =
+	//{
+	//	//Poisitions        //Colors
+	//	0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f,
+	//	0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f,
+	//	-0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f,
+	//	-0.5f, 0.5f, 0.0f, 1.0f, 1.0f, 1.0f
+	//};
+
+	int indices[] =
+	{
+		0, 1, 3,
+		1, 2, 3
+	};
+
+	glGenVertexArrays(1, &VAO);
+	glBindVertexArray(VAO);
+
+	glGenBuffers(1, &VBO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+	glGenBuffers(1, &EBO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
+
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+	glEnableVertexAttribArray(2);
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
 void IntroTexture::Update()
@@ -142,14 +176,24 @@ void IntroTexture::ImGuiRender(GLFWwindow* window)
 
 void IntroTexture::Render()
 {
+	// If we have only one texture we can just bind it directly
+	// We don't need to set the uniform here as we only have one texture
+	// It just finds the first sampler and binds it
+	glBindTexture(GL_TEXTURE_2D, texture);
 	shader.Use();
 	glBindVertexArray(VAO);
-	glDrawArrays(GL_TRIANGLES, 0, 3);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
+	// Unbind the texture
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void IntroTexture::Exit()
 {
+	glDeleteVertexArrays(1, &VAO);
+	glDeleteBuffers(1, &VBO);
+	glDeleteBuffers(1, &EBO);
+	glDeleteTextures(1, &texture);
 }
 
 IntroTexture* IntroTexture::GetInstance()
