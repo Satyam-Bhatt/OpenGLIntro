@@ -18,6 +18,8 @@ public:
 private:
     static IntroTexture instance;
 
+    bool  wireframeMode = false;
+
     Shader shader;
     unsigned int VAO, VBO, EBO, texture;
 };

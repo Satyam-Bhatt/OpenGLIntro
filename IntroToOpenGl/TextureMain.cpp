@@ -1,5 +1,6 @@
 #include "TextureMain.h"
 #include "IntroTexture.h"
+#include "TwoTextures.h"
 
 TextureMain* TextureMain::instance = nullptr;
 
@@ -7,6 +8,9 @@ TextureMain::TextureMain()
 {
 	sceneNames[SubScene::IntroTexture] = "IntroTexture";
 	sceneFactories[SubScene::IntroTexture] = []() -> TextureMain* { return IntroTexture::GetInstance(); };
+
+	sceneNames[SubScene::TwoTextures] = "TwoTextures";
+	sceneFactories[SubScene::TwoTextures] = []() -> TextureMain* { return TwoTextures::GetInstance(); };
 }
 
 TextureMain::~TextureMain()
@@ -151,6 +155,24 @@ void TextureMain::RenderText(SubScene sceneName)
 {
 	if (sceneName == SubScene::IntroTexture)
 	{
-		ImGui::TextWrapped("Intro Tex");
+		ImGui::TextWrapped("Rendering a texture on the screen.");
+		ImGui::Spacing();
+		
+		ImGui::Bullet();
+		ImGui::TextWrapped("PNG is loaded using the stb_image library and then converted to opengl texture.");
+		
+		ImGui::Bullet();
+		ImGui::TextWrapped("Generated a texture object and bound it to a target.");
+
+		ImGui::Bullet();
+		ImGui::TextWrapped("Paased appropriate texture parameters for texture wrapping, mipmapping and filtering. Then generated a texture using those parameters.");
+		
+		ImGui::Bullet();
+		ImGui::TextWrapped("Created a shader that samples a texture and renders it on the screen.");
+
+	}
+	else if (sceneName == SubScene::TwoTextures)
+	{
+		ImGui::TextWrapped("Rendering two textures on the screen.");
 	}
 }

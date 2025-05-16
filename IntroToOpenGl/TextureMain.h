@@ -26,6 +26,7 @@ private:
 	enum SubScene
 	{
 		IntroTexture,
+		TwoTextures,
 		COUNT
 	};
 
@@ -37,7 +38,7 @@ private:
 	SubScene current_SubScene = IntroTexture;
 	SubScene previous_SubScene = IntroTexture;
 
-	bool openScene[SubScene::COUNT] = { true };
+	bool openScene[SubScene::COUNT] = { true, false };
 
 	std::unordered_map<int, std::string> sceneNames;
 	std::unordered_map<int, std::function<TextureMain*()>> sceneFactories;

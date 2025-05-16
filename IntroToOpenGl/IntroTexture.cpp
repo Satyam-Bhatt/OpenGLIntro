@@ -169,13 +169,16 @@ void IntroTexture::ImGuiRender(GLFWwindow* window)
 
 	ImGui::Begin("Level Specific", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
 
-	ImGui::Text("CHECk chajsek");
+	ImGui::Checkbox("Wireframe mode", &wireframeMode);
 
 	ImGui::End();
 }
 
 void IntroTexture::Render()
 {
+	if(wireframeMode) glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	else glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
 	// If we have only one texture we can just bind it directly
 	// We don't need to set the uniform here as we only have one texture
 	// It just finds the first sampler and binds it
