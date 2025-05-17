@@ -21,14 +21,11 @@ void main()
 in vec3 ourColor;
 in vec2 TexCoord;
 
-uniform sampler2D texture1;
-uniform sampler2D texture2;
-uniform float _LerpValue;
-
 out vec4 FragColor;
+uniform sampler2D texture3;
 
 void main()
 {
-	// Lerp between textures
-	FragColor = mix(texture(texture1, TexCoord), texture(texture2, TexCoord), _LerpValue);
+	vec4 colTex = texture(texture3, TexCoord);
+	FragColor = (vec4(ourColor, colTex.a) - 0.3) * colTex;
 }

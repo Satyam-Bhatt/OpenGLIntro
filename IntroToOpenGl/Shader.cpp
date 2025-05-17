@@ -166,6 +166,9 @@ void Shader::SetVec2(const std::string& name, float x, float y)
 // Set texture uniform
 void Shader::SetTexture(const std::string& name, int slot)
 {
+	// To set multiple textures in a fragment shader we set the location value to the texture sampler.
+	// This location is known as a texture unit
+	// This is used to assign texture units to samplers that are defined as uniform variables
 	glUniform1i(GetUniformLocation(name), slot);
 }
 

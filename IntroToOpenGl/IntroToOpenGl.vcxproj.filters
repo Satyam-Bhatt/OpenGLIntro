@@ -232,5 +232,8 @@
     <None Include="TwoTextures.shader">
       <Filter>Shader\Textures</Filter>
     </None>
+    <None Include="TwoTextureSecondShader.shader">
+      <Filter>Shader\Textures</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -12,6 +12,7 @@ IntroTexture::IntroTexture()
 
 IntroTexture::~IntroTexture()
 {
+	Exit();
 }
 
 void IntroTexture::Start()
@@ -21,7 +22,7 @@ void IntroTexture::Start()
 	// Generating a texture
 	texture;
 	// Generates texture IDs for as many textures we want
-	// 1 -> How many textures we want to generate and sotres them in a unsigned int array
+	// 1 -> How many textures we want to generate and stores them in a unsigned int array
 	// 2 -> Unsigned int array to store the texture ID
 	glGenTextures(1, &texture);
 

@@ -93,8 +93,9 @@ void TextureMain::HandleInput(GLFWwindow* window)
 }
 
 void TextureMain::Exit()
-{
-	currentProject->Exit();
+{ 
+	// TODO: There is some bug here
+    if(currentProject != nullptr)	currentProject->Exit();
 }
 
 TextureMain* TextureMain::GetInstance()
