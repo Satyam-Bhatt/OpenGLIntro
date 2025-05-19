@@ -35,8 +35,8 @@ void TwoTextures::Start()
 	}
 
 	glBindTexture(GL_TEXTURE_2D, textures[1]);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
@@ -69,10 +69,10 @@ void TwoTextures::Start()
 	float vertices2[] =
 	{
 		// Positions       // Colors          // TexCoords
-		 0.9f,  0.4f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, // Top Right
-		 0.9f, -0.4f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, // Bottom Right
-		 0.1f, -0.4f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, // Bottom Left 
-		 0.1f,  0.4f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f  // Top Left
+		 0.9f,  0.4f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // Top Right
+		 0.9f, -0.4f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // Bottom Right
+		 0.1f, -0.4f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // Bottom Left 
+		 0.1f,  0.4f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f  // Top Left
 	};
 
 	int indices[] =
@@ -125,6 +125,18 @@ void TwoTextures::Start()
 
 void TwoTextures::Update()
 {
+	float vertices2[] =
+	{
+		// Positions       // Colors          // TexCoords
+		 0.9f,  0.4f, 0.0f, 1.0f, 0.0f, 0.0f, texCoords[0].x, texCoords[0].y, // Top Right
+		 0.9f, -0.4f, 0.0f, 0.0f, 1.0f, 0.0f, texCoords[1].x, texCoords[1].y, // Bottom Right
+		 0.1f, -0.4f, 0.0f, 0.0f, 0.0f, 1.0f, texCoords[2].x, texCoords[2].y, // Bottom Left 
+		 0.1f,  0.4f, 0.0f, 1.0f, 1.0f, 1.0f, texCoords[3].x, texCoords[3].y  // Top Left
+	};
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO[1]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices2), vertices2, GL_DYNAMIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
 void TwoTextures::ImGuiRender(GLFWwindow* window)
@@ -142,6 +154,10 @@ void TwoTextures::ImGuiRender(GLFWwindow* window)
 
 	ImGui::Checkbox("Wireframe mode Check Check", &wireframeMode);
 	ImGui::SliderFloat("Lerp Value", &lerpValue, 0.0f, 1.0f);
+	ImGui::SliderFloat2("Tex Coord 1", &texCoords[0].x, 0.0f, 1.0f);
+	ImGui::SliderFloat2("Tex Coord 2", &texCoords[1].x, 0.0f, 1.0f);
+	ImGui::SliderFloat2("Tex Coord 3", &texCoords[2].x, 0.0f, 1.0f);
+	ImGui::SliderFloat2("Tex Coord 4", &texCoords[3].x, 0.0f, 1.0f);
 
 	ImGui::End();
 }
