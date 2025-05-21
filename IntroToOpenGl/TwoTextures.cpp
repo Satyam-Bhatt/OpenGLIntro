@@ -35,8 +35,8 @@ void TwoTextures::Start()
 	}
 
 	glBindTexture(GL_TEXTURE_2D, textures[1]);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
@@ -145,21 +145,30 @@ void TwoTextures::ImGuiRender(GLFWwindow* window)
 	glGetIntegerv(GL_VIEWPORT, viewport);
 
 	ImGui::SetNextWindowPos(
-		ImVec2(viewport[0] + viewport[2] / 2, viewport[3]),
+		ImVec2(viewport[0] + viewport[2] / 4, viewport[3]),
 		ImGuiCond_Always,
 		ImVec2(0.5f, 1.0f)
 	);
 
-	ImGui::Begin("Level Specific", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
-
-	ImGui::Checkbox("Wireframe mode Check Check", &wireframeMode);
+	ImGui::Begin("Texture 1", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
+	ImGui::Text("Use this to manipulate the blending of two textures");
 	ImGui::SliderFloat("Lerp Value", &lerpValue, 0.0f, 1.0f);
-	ImGui::SliderFloat2("Tex Coord 1", &texCoords[0].x, 0.0f, 1.0f);
-	ImGui::SliderFloat2("Tex Coord 2", &texCoords[1].x, 0.0f, 1.0f);
-	ImGui::SliderFloat2("Tex Coord 3", &texCoords[2].x, 0.0f, 1.0f);
-	ImGui::SliderFloat2("Tex Coord 4", &texCoords[3].x, 0.0f, 1.0f);
-
 	ImGui::End();
+
+	ImGui::SetNextWindowPos(
+		ImVec2(viewport[0] + 3 * viewport[2] / 4, viewport[3]),
+		ImGuiCond_Always,
+		ImVec2(0.5f, 1.0f)
+	);
+
+	ImGui::Begin("Texture 2", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
+	ImGui::Text("Use this to change the texture mapping.\nAlso this can flip the image.");
+	ImGui::SliderFloat2("Top Right", &texCoords[0].x, 0.0f, 1.0f);
+	ImGui::SliderFloat2("Bottom Right", &texCoords[1].x, 0.0f, 1.0f);
+	ImGui::SliderFloat2("Bottom Left", &texCoords[2].x, 0.0f, 1.0f);
+	ImGui::SliderFloat2("Top Left", &texCoords[3].x, 0.0f, 1.0f);
+	ImGui::End();
+
 }
 
 void TwoTextures::Render()

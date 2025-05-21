@@ -174,6 +174,7 @@ void TextureMain::RenderText(SubScene sceneName)
 	}
 	else if (sceneName == SubScene::TwoTextures)
 	{
-		ImGui::TextWrapped("Rendering two textures on the screen.");
+		ImGui::TextWrapped("Rendering two textures in one shader.");
+		ImGui::TextWrapped("Texture 2 can be flipped by changing the texture coordindates.");
 	}
 }
