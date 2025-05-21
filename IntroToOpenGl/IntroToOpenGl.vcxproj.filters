@@ -129,6 +129,9 @@
     <ClCompile Include="TwoTextures.cpp">
       <Filter>Source Files\Textures</Filter>
     </ClCompile>
+    <ClCompile Include="MipmapOptions.cpp">
+      <Filter>Source Files\Textures</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameState.h">
@@ -218,6 +221,9 @@
     <ClInclude Include="TwoTextures.h">
       <Filter>Header Files\Texture</Filter>
     </ClInclude>
+    <ClInclude Include="MipmapOptions.h">
+      <Filter>Header Files\Texture</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ShaderClass.shader">
@@ -233,6 +239,9 @@
       <Filter>Shader\Textures</Filter>
     </None>
     <None Include="TwoTextureSecondShader.shader">
+      <Filter>Shader\Textures</Filter>
+    </None>
+    <None Include="MipmapOptions.shader">
       <Filter>Shader\Textures</Filter>
     </None>
   </ItemGroup>

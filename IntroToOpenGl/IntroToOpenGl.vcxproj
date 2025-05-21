@@ -155,6 +155,7 @@
     <ClCompile Include="Intro.cpp" />
     <ClCompile Include="IntroTexture.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MipmapOptions.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="SecondTriangle.cpp" />
     <ClCompile Include="Shader.cpp" />
@@ -186,6 +187,7 @@
     <ClInclude Include="Imgui\imstb_truetype.h" />
     <ClInclude Include="Intro.h" />
     <ClInclude Include="IntroTexture.h" />
+    <ClInclude Include="MipmapOptions.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="SecondTriangle.h" />
     <ClInclude Include="Shader.h" />
@@ -203,6 +205,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="IntroTexture.shader" />
+    <None Include="MipmapOptions.shader" />
     <None Include="ShaderClass.shader" />
     <None Include="TwoTextures.shader" />
     <None Include="TwoTextureSecondShader.shader" />
