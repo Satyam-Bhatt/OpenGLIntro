@@ -92,7 +92,10 @@ void IntroTexture::Start()
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
 		// If we want to generate mipmaps we can either call the above function and specify width and height for each image.
 		// Or we can call glGenerateMipmap(GL_TEXTURE_2D) after calling glTexImage2D.
-		glGenerateMipmap(GL_TEXTURE_2D);// If we don't generate mipmaps then we get a black texture
+		// If we don't generate mipmaps then we get a black texture only when we are using mipmaps when filtering 
+		// (line 67 - glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);) if we change GL_LINEAR_MIPMAP_LINEAR to GL_LINEAR then we
+		// don't need to generate mipmaps
+		glGenerateMipmap(GL_TEXTURE_2D);
 	}
 	else
 	{
