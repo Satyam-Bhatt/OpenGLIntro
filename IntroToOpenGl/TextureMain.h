@@ -27,6 +27,7 @@ private:
 	{
 		IntroTexture,
 		TwoTextures,
+		MipmapOptions,
 		COUNT
 	};
 

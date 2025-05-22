@@ -20,7 +20,6 @@ void IntroTexture::Start()
 	shader = Shader("IntroTexture.shader");
 
 	// Generating a texture
-	texture;
 	// Generates texture IDs for as many textures we want
 	// 1 -> How many textures we want to generate and stores them in a unsigned int array
 	// 2 -> Unsigned int array to store the texture ID
@@ -93,7 +92,7 @@ void IntroTexture::Start()
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
 		// If we want to generate mipmaps we can either call the above function and specify width and height for each image.
 		// Or we can call glGenerateMipmap(GL_TEXTURE_2D) after calling glTexImage2D.
-		glGenerateMipmap(GL_TEXTURE_2D);// Try without it and scaling the image (EXPERIMENT)
+		glGenerateMipmap(GL_TEXTURE_2D);// If we don't generate mipmaps then we get a black texture
 	}
 	else
 	{
@@ -112,15 +111,6 @@ void IntroTexture::Start()
 		-0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // Bottom Left 
 		-0.5f,  0.5f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f  // Top Left
 	};
-
-	//float vertices[] =
-	//{
-	//	//Poisitions        //Colors
-	//	0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f,
-	//	0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f,
-	//	-0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f,
-	//	-0.5f, 0.5f, 0.0f, 1.0f, 1.0f, 1.0f
-	//};
 
 	int indices[] =
 	{

@@ -7,6 +7,7 @@ TwoTextures::TwoTextures()
 
 TwoTextures::~TwoTextures()
 {
+	Exit();
 }
 
 void TwoTextures::Start()
@@ -192,10 +193,20 @@ void TwoTextures::Render()
 	glBindVertexArray(VAO[1]);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
+
+	// Unbind the texture
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void TwoTextures::Exit()
 {
+	glDeleteVertexArrays(2, VAO);
+	glDeleteBuffers(2, VBO);
+	glDeleteBuffers(2, EBO);
+	glDeleteTextures(2, textures);
 }
 
 TwoTextures* TwoTextures::GetInstance()

@@ -1,6 +1,7 @@
 #include "TextureMain.h"
 #include "IntroTexture.h"
 #include "TwoTextures.h"
+#include "MipmapOptions.h"
 
 TextureMain* TextureMain::instance = nullptr;
 
@@ -11,6 +12,9 @@ TextureMain::TextureMain()
 
 	sceneNames[SubScene::TwoTextures] = "TwoTextures";
 	sceneFactories[SubScene::TwoTextures] = []() -> TextureMain* { return TwoTextures::GetInstance(); };
+
+	sceneNames[SubScene::MipmapOptions] = "MipmapOptions";
+	sceneFactories[SubScene::MipmapOptions] = []() -> TextureMain* { return MipmapOptions::GetInstance(); };
 }
 
 TextureMain::~TextureMain()
@@ -176,5 +180,9 @@ void TextureMain::RenderText(SubScene sceneName)
 	{
 		ImGui::TextWrapped("Rendering two textures in one shader.");
 		ImGui::TextWrapped("Texture 2 can be flipped by changing the texture coordindates.");
+	}
+	else if (sceneName == SubScene::MipmapOptions)
+	{
+		ImGui::TextWrapped("MipMap");
 	}
 }
