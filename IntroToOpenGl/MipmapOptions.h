@@ -18,6 +18,8 @@ public:
 private:
 	static MipmapOptions instance;
 	Shader shader;
-	unsigned int VAO, VBO, EBO, texture, VAO2, VBO2;
+	unsigned int VAO, VBO, EBO, texture, VAO2, VBO2, texture2;
+
+	bool updateVertices = false;
 };
 
