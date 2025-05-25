@@ -28,6 +28,7 @@ private:
 		IntroTexture,
 		TwoTextures,
 		MipmapOptions,
+		TriangleTexture,
 		COUNT
 	};
 

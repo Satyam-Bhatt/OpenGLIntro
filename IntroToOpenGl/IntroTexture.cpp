@@ -145,6 +145,7 @@ void IntroTexture::Start()
 	glBindVertexArray(0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
+	// Always set it manually as sometimes opengl renders it black
 	shader.Use();
 	shader.SetTexture("ourTexture", 0);
 }

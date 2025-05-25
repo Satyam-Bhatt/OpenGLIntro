@@ -2,6 +2,7 @@
 #include "IntroTexture.h"
 #include "TwoTextures.h"
 #include "MipmapOptions.h"
+#include "TriangleTexture.h"
 
 TextureMain* TextureMain::instance = nullptr;
 
@@ -15,6 +16,9 @@ TextureMain::TextureMain()
 
 	sceneNames[SubScene::MipmapOptions] = "MipmapOptions";
 	sceneFactories[SubScene::MipmapOptions] = []() -> TextureMain* { return MipmapOptions::GetInstance(); };
+
+	sceneNames[SubScene::TriangleTexture] = "TriangleTexture";
+	sceneFactories[SubScene::TriangleTexture] = []() -> TextureMain* { return TriangleTexture::GetInstance(); };
 }
 
 TextureMain::~TextureMain()
@@ -173,7 +177,7 @@ void TextureMain::RenderText(SubScene sceneName)
 		ImGui::TextWrapped("Paased appropriate texture parameters for texture wrapping, mipmapping and filtering. Then generated a texture using those parameters.");
 		
 		ImGui::Bullet();
-		ImGui::TextWrapped("Created a shader that samples a texture and renders it on the screen.");
+		ImGui::TextWrapped("Created a shader that samples a texLture and renders it on the screen.");
 
 	}
 	else if (sceneName == SubScene::TwoTextures)
@@ -192,5 +196,9 @@ void TextureMain::RenderText(SubScene sceneName)
 
 		ImGui::Bullet();
 		ImGui::TextWrapped("Wrapping is used when the texture coordinates are outside the range of 0 to 1.");
+	}
+	else if (sceneName == SubScene::TriangleTexture)
+	{
+		ImGui::TextWrapped("BlA BLA BLA");
 	}
 }
