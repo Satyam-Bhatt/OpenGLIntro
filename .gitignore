@@ -80,7 +80,7 @@ glfw/docs/
 *.a
 *.lib
 # Keep any specific libraries you need to include with your repo
-# !libs/glfw3.lib
+!glfw3.lib
 
 # Executables
 *.exe
