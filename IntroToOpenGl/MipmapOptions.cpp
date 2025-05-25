@@ -186,41 +186,96 @@ void MipmapOptions::ImGuiRender(GLFWwindow* window)
 {
 	GLint viewport[4];
 	glGetIntegerv(GL_VIEWPORT, viewport);
-
 	ImGui::SetNextWindowPos(
 		ImVec2(viewport[0] + viewport[2] / 2, viewport[3]),
 		ImGuiCond_Always,
 		ImVec2(0.5f, 1.0f)
 	);
+	ImGui::Begin("Level Specific", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_AlwaysAutoResize);
 
-	ImGui::Begin("Level Specific", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
-
-	//TODO: Add that info pop up
-
-	ImGui::DragFloat("Scale", &scaleMultiplier, 0.005f, 0.0f);
-	ImGui::Combo("TEXTURE_MIN_FILTERS", &minFilterIndex, TEXTURE_MIN_FILTERS, IM_ARRAYSIZE(TEXTURE_MIN_FILTERS));
-	ImGui::Combo("TEXTURE_MAG_FILTERS", &magFilterIndex, TEXTURE_MAG_FILTERS, IM_ARRAYSIZE(TEXTURE_MAG_FILTERS));
-
-	ImGui::DragFloat2("Top Right", &texCoords[0][0], 0.005f);
-	ImGui::DragFloat2("Bottom Right", &texCoords[1][0], 0.005f);
-	ImGui::DragFloat2("Bottom Left", &texCoords[2][0], 0.005f);
-	ImGui::DragFloat2("Top Left", &texCoords[3][0], 0.005f);
-
-	ImGui::Combo("TEXTURE_WRAP_S", &wrapSIndex, TEXTURE_WRAP_S, IM_ARRAYSIZE(TEXTURE_WRAP_S));
-	ImGui::SameLine();
-	ImGui::TextDisabled("(?)");
-	if (ImGui::BeginItemTooltip())
+	// Create two-column layout
+	if (ImGui::BeginTable("TextureSettings", 2, ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_PadOuterX))
 	{
-		ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
-		ImGui::TextUnformatted("Only works when the texture coordinates are changed");
-		ImGui::PopTextWrapPos();
-		ImGui::EndTooltip();
+		// Column headers
+		ImGui::TableSetupColumn("Filtering", ImGuiTableColumnFlags_WidthFixed, 280.0f);
+		ImGui::TableSetupColumn("Wrapping", ImGuiTableColumnFlags_WidthFixed, 400.0f);
+		ImGui::TableHeadersRow();
+
+		ImGui::TableNextRow();
+
+		// Left column - Filtering techniques and Scale
+		ImGui::TableSetColumnIndex(0);
+
+		ImGui::DragFloat("Scale", &scaleMultiplier, 0.005f, 0.0f);
+
+		ImGui::PushItemWidth(200.0f);
+		ImGui::Combo("##MinFilter", &minFilterIndex, TEXTURE_MIN_FILTERS, IM_ARRAYSIZE(TEXTURE_MIN_FILTERS));
+		ImGui::SameLine();
+		ImGui::TextDisabled("Min (?)");
+		if (ImGui::BeginItemTooltip())
+		{
+			ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
+			ImGui::TextUnformatted("When the texture is minified or scaled down.");
+			ImGui::PopTextWrapPos();
+			ImGui::EndTooltip();
+		}
+
+		ImGui::Combo("##MagFilter", &magFilterIndex, TEXTURE_MAG_FILTERS, IM_ARRAYSIZE(TEXTURE_MAG_FILTERS));
+		ImGui::SameLine();
+		ImGui::TextDisabled("Mag (?)");
+		if (ImGui::BeginItemTooltip())
+		{
+			ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
+			ImGui::TextUnformatted("When the texture is magnified or scaled up.");
+			ImGui::PopTextWrapPos();
+			ImGui::EndTooltip();
+		}
+		ImGui::PopItemWidth();
+
+		// Right column - Wrapping techniques and Texture Coordinates
+		ImGui::TableSetColumnIndex(1);
+
+		ImGui::Combo("##WrapS", &wrapSIndex, TEXTURE_WRAP_S, IM_ARRAYSIZE(TEXTURE_WRAP_S));
+		ImGui::SameLine();
+		ImGui::TextDisabled("S-Axis (?)");
+		if (ImGui::BeginItemTooltip())
+		{
+			ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
+			ImGui::TextUnformatted("Only works when the texture coordinates are changed. Responsible for X axis");
+			ImGui::PopTextWrapPos();
+			ImGui::EndTooltip();
+		}
+
+		ImGui::Combo("##WrapT", &wrapTIndex, TEXTURE_WRAP_T, IM_ARRAYSIZE(TEXTURE_WRAP_T));
+		ImGui::SameLine();
+		ImGui::TextDisabled("T-Axis (?)");
+		if (ImGui::BeginItemTooltip())
+		{
+			ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
+			ImGui::TextUnformatted("Only works when the texture coordinates are changed. Responsible for Y axis");
+			ImGui::PopTextWrapPos();
+			ImGui::EndTooltip();
+		}
+
+		// Border color (only show when needed, in wrapping column)
+		if (wrapSIndex == 3 || wrapTIndex == 3)
+			ImGui::ColorEdit3("Border Color", &borderColor[0]);
+
+		ImGui::Text("Texture Coordinates");
+
+		// Texture coordinates in a 2x2 grid layout
+		ImGui::PushItemWidth(120.0f);
+		ImGui::DragFloat2("Top Right", &texCoords[0][0], 0.005f);
+		ImGui::SameLine();
+		ImGui::DragFloat2("Top Left", &texCoords[3][0], 0.005f);
+
+		ImGui::DragFloat2("Bottom Right", &texCoords[1][0], 0.005f);
+		ImGui::SameLine();
+		ImGui::DragFloat2("Bottom Left", &texCoords[2][0], 0.005f);
+		ImGui::PopItemWidth();
+
+		ImGui::EndTable();
 	}
-
-	ImGui::Combo("TEXTURE_WRAP_T", &wrapTIndex, TEXTURE_WRAP_T, IM_ARRAYSIZE(TEXTURE_WRAP_T));
-
-	if(wrapSIndex == 3 || wrapTIndex == 3)
-		ImGui::ColorEdit3("Border Color", &borderColor[0]);
 
 	ImGui::End();
 }
