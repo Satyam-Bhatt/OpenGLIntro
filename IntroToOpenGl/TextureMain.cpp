@@ -186,8 +186,8 @@ void TextureMain::RenderText(SubScene sceneName)
 		ImGui::TextWrapped("Play around with all the texture wrapping and filtering options to see how they affect the texture.");
 
 		ImGui::Bullet();
-		ImGui::TextWrapped("Filtering refers to how the texture is sampled when it is rendered on the screen.\n",
-		"Filtering can be different for scaling up and scaling down the texture.\n",
+		ImGui::TextWrapped("Filtering refers to how the texture is sampled when it is rendered on the screen.\n"
+		"Filtering can be different for scaling up and scaling down the texture.\n"
 		"Mipmaps are used when the texture is scaled down. There are smaller textures as it makes it easier for OpenGL to map colors.");
 
 		ImGui::Bullet();
