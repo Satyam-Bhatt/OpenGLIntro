@@ -144,6 +144,9 @@ void IntroTexture::Start()
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+	shader.Use();
+	shader.SetTexture("ourTexture", 0);
 }
 
 void IntroTexture::Update()
@@ -173,9 +176,11 @@ void IntroTexture::Render()
 	if(wireframeMode) glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	else glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
+	glActiveTexture(GL_TEXTURE0);
 	// If we have only one texture we can just bind it directly
 	// We don't need to set the uniform here as we only have one texture
 	// It just finds the first sampler and binds it
+	// But we should always bind the texture manually. Sometimes while changing scenes the texture might turn black
 	glBindTexture(GL_TEXTURE_2D, texture);
 	shader.Use();
 	glBindVertexArray(VAO);

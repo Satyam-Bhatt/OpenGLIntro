@@ -38,4 +38,6 @@ void main()
 	// texture paramenters (Filtering, Wrapping) we set earlier. 
 	// The output of this fragment shader is the color of the texture at the texture coordinate
 	FragColor = texture(ourTexture, TexCoord);
+
+	///FragColor = vec4(ourColor, 1.0f);
 }

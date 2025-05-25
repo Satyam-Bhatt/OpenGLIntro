@@ -83,7 +83,7 @@ void MipmapOptions::Start()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 	shader.Use();
-	shader.SetTexture("ourTexture", 0);
+	shader.SetTexture("mipMapTexture", 0);
 }
 
 void MipmapOptions::Update()
