@@ -135,6 +135,9 @@
     <ClCompile Include="TriangleTexture.cpp">
       <Filter>Source Files\Textures</Filter>
     </ClCompile>
+    <ClCompile Include="TexelViewer.cpp">
+      <Filter>Source Files\Textures</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameState.h">
@@ -230,6 +233,9 @@
     <ClInclude Include="TriangleTexture.h">
       <Filter>Header Files\Texture</Filter>
     </ClInclude>
+    <ClInclude Include="TexelViewer.h">
+      <Filter>Header Files\Texture</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ShaderClass.shader">
@@ -250,6 +256,11 @@
     <None Include="MipmapOptions.shader">
       <Filter>Shader\Textures</Filter>
     </None>
-    <None Include="TriangleTexture.shader" />
+    <None Include="TriangleTexture.shader">
+      <Filter>Shader\Textures</Filter>
+    </None>
+    <None Include="TexelViewer.shader">
+      <Filter>Shader\Textures</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -54,7 +54,7 @@ void TriangleTexture::Start()
 
 	glGenBuffers(1, &VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
@@ -74,6 +74,28 @@ void TriangleTexture::Start()
 
 void TriangleTexture::Update()
 {
+	if (TextureCoordinateChanged())
+	{
+		float vertices[] =
+		{
+			-0.5f, -0.5f, 0.0f, 1.0f, 1.0f, 0.0f, textureCoords[0][0], textureCoords[0][1],
+			 0.0f,  0.5f, 0.0f, 1.0f, 0.0f, 1.0f, textureCoords[1][0], textureCoords[1][1],
+			 0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, textureCoords[2][0], textureCoords[2][1]
+		};
+
+		glBindBuffer(GL_ARRAY_BUFFER, VBO);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+		// Update the texture coordinate stored
+		for (int i = 0; i < 3; i++)
+		{
+			for (int j = 0; j < 2; j++)
+			{
+				textureCoordsStored[i][j] = textureCoords[i][j];
+			}
+		}
+	}
 }
 
 void TriangleTexture::ImGuiRender(GLFWwindow* window)
@@ -87,9 +109,11 @@ void TriangleTexture::ImGuiRender(GLFWwindow* window)
 		ImVec2(0.5f, 1.0f)
 	);
 
-	ImGui::Begin("Level Specific", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
+	ImGui::Begin("Texture Coordinates", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
 
-	ImGui::Checkbox("Wireframe mode", &wireframeMode);
+	ImGui::DragFloat2("Top", &textureCoords[1][0], 0.005f);
+	ImGui::DragFloat2("Bottom Left", &textureCoords[0][0], 0.005f);
+	ImGui::DragFloat2("Bottom Right", &textureCoords[2][0], 0.005f);
 
 	ImGui::End();
 }
@@ -116,4 +140,17 @@ void TriangleTexture::Exit()
 TriangleTexture* TriangleTexture::GetInstance()
 {
 	return &instance;
+}
+
+bool TriangleTexture::TextureCoordinateChanged()
+{
+	for (int i = 0; i < 3; i++)
+	{
+		for (int j = 0; j < 2; j++)
+		{
+			if(textureCoordsStored[i][j] != textureCoords[i][j]) return true;
+		}
+	}
+
+	return false;
 }

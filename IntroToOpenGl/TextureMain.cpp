@@ -199,6 +199,6 @@ void TextureMain::RenderText(SubScene sceneName)
 	}
 	else if (sceneName == SubScene::TriangleTexture)
 	{
-		ImGui::TextWrapped("BlA BLA BLA");
+		ImGui::TextWrapped("Render a triangle with a texture on it. It similar to a rectangle only just the top texture coordinate is different.");
 	}
 }

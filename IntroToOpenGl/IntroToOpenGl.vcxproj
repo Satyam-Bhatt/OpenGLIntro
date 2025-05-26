@@ -163,6 +163,7 @@
     <ClCompile Include="Shaders.cpp" />
     <ClCompile Include="stb_image.cpp" />
     <ClCompile Include="Temp.cpp" />
+    <ClCompile Include="TexelViewer.cpp" />
     <ClCompile Include="TextureMain.cpp" />
     <ClCompile Include="TriangleTexture.cpp" />
     <ClCompile Include="TriangleWithVertexDataManipulation.cpp" />
@@ -195,6 +196,7 @@
     <ClInclude Include="ShaderClass.h" />
     <ClInclude Include="Shaders.h" />
     <ClInclude Include="stb_image.h" />
+    <ClInclude Include="TexelViewer.h" />
     <ClInclude Include="TextureMain.h" />
     <ClInclude Include="TriangleTexture.h" />
     <ClInclude Include="TriangleWithVertexDataManipulation.h" />
@@ -209,6 +211,7 @@
     <None Include="IntroTexture.shader" />
     <None Include="MipmapOptions.shader" />
     <None Include="ShaderClass.shader" />
+    <None Include="TexelViewer.shader" />
     <None Include="TriangleTexture.shader" />
     <None Include="TwoTextures.shader" />
     <None Include="TwoTextureSecondShader.shader" />
