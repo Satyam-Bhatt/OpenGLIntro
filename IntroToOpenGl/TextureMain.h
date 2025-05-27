@@ -29,6 +29,7 @@ private:
 		TwoTextures,
 		MipmapOptions,
 		TriangleTexture,
+		TexelViewer,
 		COUNT
 	};
 

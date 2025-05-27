@@ -3,6 +3,7 @@
 #include "TwoTextures.h"
 #include "MipmapOptions.h"
 #include "TriangleTexture.h"
+#include "TexelViewer.h"
 
 TextureMain* TextureMain::instance = nullptr;
 
@@ -19,6 +20,9 @@ TextureMain::TextureMain()
 
 	sceneNames[SubScene::TriangleTexture] = "TriangleTexture";
 	sceneFactories[SubScene::TriangleTexture] = []() -> TextureMain* { return TriangleTexture::GetInstance(); };
+
+	sceneNames[SubScene::TexelViewer] = "TexelViewer";
+	sceneFactories[SubScene::TexelViewer] = []() -> TextureMain* { return TexelViewer::GetInstance(); };
 }
 
 TextureMain::~TextureMain()
@@ -200,5 +204,9 @@ void TextureMain::RenderText(SubScene sceneName)
 	else if (sceneName == SubScene::TriangleTexture)
 	{
 		ImGui::TextWrapped("Render a triangle with a texture on it. It similar to a rectangle only just the top texture coordinate is different.");
+	}
+	else if (sceneName == SubScene::TexelViewer)
+	{
+		ImGui::TextWrapped("View Texel grid and interpolation");
 	}
 }

@@ -1,4 +1,6 @@
-﻿  TriangleTexture.cpp
-C:\Users\satya\OneDrive\Desktop\SDL&OpenGL\OpenGLIntro\IntroToOpenGl\TriangleTexture.cpp(109,51): warning C4244: 'argument': conversion from 'GLint' to 'float', possible loss of data
-C:\Users\satya\OneDrive\Desktop\SDL&OpenGL\OpenGLIntro\IntroToOpenGl\TriangleTexture.cpp(109,22): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+﻿  TexelViewer.cpp
+C:\Users\satya\OneDrive\Desktop\SDL&OpenGL\OpenGLIntro\IntroToOpenGl\TexelViewer.cpp(117,51): warning C4244: 'argument': conversion from 'GLint' to 'float', possible loss of data
+C:\Users\satya\OneDrive\Desktop\SDL&OpenGL\OpenGLIntro\IntroToOpenGl\TexelViewer.cpp(117,22): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+  TextureMain.cpp
+  Generating Code...
   IntroToOpenGl.vcxproj -> C:\Users\satya\OneDrive\Desktop\SDL&OpenGL\OpenGLIntro\x64\Debug\IntroToOpenGl.exe
