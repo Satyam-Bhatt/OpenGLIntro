@@ -45,10 +45,10 @@ void TexelViewer::Start()
 	float vertices[] =
 	{
 		// Position        // Tex Coord
-		-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
-		 0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
-		-0.5f,  0.5f, 0.0f, 0.0f, 1.0f,
-		 0.5f,  0.5f, 0.0f, 1.0f, 1.0f
+		-0.9f, -0.9f, 0.0f, 0.5f + offset.x - scale, 0.5f + offset.y - scale,
+		 0.9f, -0.9f, 0.0f, 0.5f + offset.x + scale, 0.5f + offset.y - scale,
+		-0.9f,  0.9f, 0.0f, 0.5f + offset.x - scale, 0.5f + offset.y + scale,
+		 0.9f,  0.9f, 0.0f, 0.5f + offset.x + scale, 0.5f + offset.y + scale
 	};
 
 	// Counter Clockwise
@@ -85,27 +85,42 @@ void TexelViewer::Start()
 
 void TexelViewer::Update()
 {
-	//float vertices[] =
-	//{
-	//	// Position        // Tex Coord
-	//	-0.5f, -0.5f, 0.0f, textureCoords[0][0], textureCoords[0][1],
-	//	 0.5f, -0.5f, 0.0f, textureCoords[1][0], textureCoords[1][1],
-	//	-0.5f,  0.5f, 0.0f, textureCoords[2][0], textureCoords[2][1],
-	//	 0.5f,  0.5f, 0.0f, textureCoords[3][0], textureCoords[3][1]
-	//};
-
-	float vertices[] =
+	if (CompareChanges())
 	{
-		// Position        // Tex Coord
-		-0.5f, -0.5f, 0.0f, 0.4f + xOffset, 0.4f + yOffset,
-		 0.5f, -0.5f, 0.0f, 0.6f + xOffset, 0.4f + yOffset,
-		-0.5f,  0.5f, 0.0f, 0.4f + xOffset, 0.6f + yOffset,
-		 0.5f,  0.5f, 0.0f, 0.6f + xOffset, 0.6f + yOffset
-	};
+		float vertices[] =
+		{
+			// Position        // Tex Coord
+			-0.9f, -0.9f, 0.0f, 0.5f + offset.x - scale, 0.5f + offset.y - scale,
+			 0.9f, -0.9f, 0.0f, 0.5f + offset.x + scale, 0.5f + offset.y - scale,
+			-0.9f,  0.9f, 0.0f, 0.5f + offset.x - scale, 0.5f + offset.y + scale,
+			 0.9f,  0.9f, 0.0f, 0.5f + offset.x + scale, 0.5f + offset.y + scale
+		};
 
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glBindBuffer(GL_ARRAY_BUFFER, VBO);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+		currentOffset = offset;
+		currentScale = scale;
+	}
+
+	if (currentMagFilter != magFilterIndex || currentMinFilter != minFilterIndex)
+	{
+		glBindTexture(GL_TEXTURE_2D, texture);
+		if(minFilterIndex == 0) glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		else if(minFilterIndex == 1) glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		else if(minFilterIndex == 2) glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
+		else if(minFilterIndex == 3) glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+		else if(minFilterIndex == 4) glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
+		else if(minFilterIndex == 5) glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+
+		if(magFilterIndex == 0) glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		else if(magFilterIndex == 1) glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glBindTexture(GL_TEXTURE_2D, 0);
+
+		currentMagFilter = magFilterIndex;
+		currentMinFilter = minFilterIndex;
+	}
 }
 
 void TexelViewer::ImGuiRender(GLFWwindow* window)
@@ -119,10 +134,28 @@ void TexelViewer::ImGuiRender(GLFWwindow* window)
 		ImVec2(0.5f, 1.0f)
 	);
 
-	ImGui::Begin("Texture Coordinates", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
+	ImGui::Begin("Texture Coordinates", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_AlwaysAutoResize);
 
-	ImGui::DragFloat("Top", &xOffset, 0.005f);
-	ImGui::DragFloat("Bottom Left", &yOffset, 0.005f);
+	if (ImGui::BeginTable("Texure Settings", 2))
+	{
+		ImGui::TableSetupColumn("Filtering");
+		ImGui::TableSetupColumn("Wrapping");
+		ImGui::TableHeadersRow();
+
+		ImGui::TableNextRow();
+		ImGui::PushItemWidth(250.0f);
+
+		ImGui::TableSetColumnIndex(0);
+		ImGui::DragFloat2("Offset", &offset.x, 0.005f);
+		ImGui::DragFloat("Scale", &scale, 0.001f);
+
+		ImGui::TableSetColumnIndex(1);
+		ImGui::Combo("MinFilter", &minFilterIndex, TEXTURE_MIN_FILTERS, IM_ARRAYSIZE(TEXTURE_MIN_FILTERS));
+		ImGui::Combo("MagFilter", &magFilterIndex, TEXTURE_MAG_FILTERS, IM_ARRAYSIZE(TEXTURE_MAG_FILTERS));
+		ImGui::PopItemWidth();
+
+		ImGui::EndTable();
+	}
 
 	ImGui::End();
 }
@@ -150,4 +183,12 @@ void TexelViewer::Exit()
 TexelViewer* TexelViewer::GetInstance()
 {
 	return &instance;
+}
+
+bool TexelViewer::CompareChanges()
+{
+	if(currentOffset.x != offset.x || currentOffset.y != offset.y || currentScale != scale)
+		return true;
+	else
+		return false;
 }
