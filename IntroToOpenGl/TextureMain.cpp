@@ -207,6 +207,8 @@ void TextureMain::RenderText(SubScene sceneName)
 	}
 	else if (sceneName == SubScene::TexelViewer)
 	{
-		ImGui::TextWrapped("View Texel grid and interpolation");
+		ImGui::TextWrapped("Texture is being magnified and minified using texture coordinates. This helps us to see how filtering works up close.\n"
+		"Try changing the MAG_FILTER when the image is zoomed in.\n"
+		"Change the scale to -20 and try changing the MIN_FILTER.");
 	}
 }
