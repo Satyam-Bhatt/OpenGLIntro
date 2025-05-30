@@ -132,9 +132,9 @@ void TriangleTexture::Render()
 
 void TriangleTexture::Exit()
 {
-	glDeleteVertexArrays(1, &VAO);
-	glDeleteBuffers(1, &VBO);
-	glDeleteTextures(1, &texture);
+	if (VAO != 0) glDeleteVertexArrays(1, &VAO);
+	if (VBO != 0) glDeleteBuffers(1, &VBO);
+	if (texture != 0) glDeleteTextures(1, &texture);
 }
 
 TriangleTexture* TriangleTexture::GetInstance()

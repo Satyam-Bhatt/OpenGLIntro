@@ -171,10 +171,10 @@ void SecondTriangle::Render()
 
 void SecondTriangle::Exit()
 {
-	glDeleteVertexArrays(1, &VAO);
-	glDeleteBuffers(1, &VBO);
-	glDeleteBuffers(1, &EBO);
-	glDeleteProgram(shaderProgram);
+	if (VAO != 0) glDeleteVertexArrays(1, &VAO);
+	if (VBO != 0) glDeleteBuffers(1, &VBO);
+	if (EBO != 0) glDeleteBuffers(1, &EBO);
+	if (shaderProgram != 0) glDeleteProgram(shaderProgram);
 }
 
 SecondTriangle* SecondTriangle::GetInstance()

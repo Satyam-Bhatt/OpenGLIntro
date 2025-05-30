@@ -172,9 +172,9 @@ void TwoTriangles::Render()
 
 void TwoTriangles::Exit()
 {
-	glDeleteVertexArrays(2, VAO);
-	glDeleteBuffers(2, VBO);
-	glDeleteProgram(shaderProgram);
+	if(VAO[0] != 0) glDeleteVertexArrays(2, VAO);
+	if(VBO[0] != 0) glDeleteBuffers(2, VBO);
+	if(shaderProgram != 0) glDeleteProgram(shaderProgram);
 }
 
 TwoTriangles* TwoTriangles::GetInstance()

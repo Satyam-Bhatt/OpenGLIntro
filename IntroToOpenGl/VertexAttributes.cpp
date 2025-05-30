@@ -249,9 +249,9 @@ void VertexAttributes::Render()
 
 void VertexAttributes::Exit()
 {
-	glDeleteVertexArrays(1, &VAO);
-	glDeleteBuffers(1, &VBO);
-	glDeleteProgram(shaderProgram);
+	if(VAO != 0) glDeleteVertexArrays(1, &VAO);
+	if(VBO != 0) glDeleteBuffers(1, &VBO);
+	if(shaderProgram != 0) glDeleteProgram(shaderProgram);
 }
 
 VertexAttributes* VertexAttributes::GetInstance()

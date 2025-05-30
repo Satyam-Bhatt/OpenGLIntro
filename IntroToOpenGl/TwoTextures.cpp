@@ -203,10 +203,10 @@ void TwoTextures::Render()
 
 void TwoTextures::Exit()
 {
-	glDeleteVertexArrays(2, VAO);
-	glDeleteBuffers(2, VBO);
-	glDeleteBuffers(2, EBO);
-	glDeleteTextures(2, textures);
+	if (VAO[0] != 0) glDeleteVertexArrays(2, VAO);
+	if (VBO[0] != 0) glDeleteBuffers(2, VBO);
+	if (EBO[0] != 0) glDeleteBuffers(2, EBO);
+	if (textures[0] != 0) glDeleteTextures(2, textures);
 }
 
 TwoTextures* TwoTextures::GetInstance()

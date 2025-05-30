@@ -157,9 +157,9 @@ void FirstTriangle::Render()
 void FirstTriangle::Exit()
 {
 	// Deallocate all resources once they have outlived their purpose
-	glDeleteVertexArrays(1, &VAO);
-	glDeleteBuffers(1, &VBO);
-	glDeleteProgram(shaderProgram);
+	if (VAO != 0) glDeleteVertexArrays(1, &VAO);
+	if (VBO != 0) glDeleteBuffers(1, &VBO);
+	if (shaderProgram != 0) glDeleteProgram(shaderProgram);
 }
 
 FirstTriangle* FirstTriangle::GetInstance()

@@ -193,10 +193,10 @@ void IntroTexture::Render()
 
 void IntroTexture::Exit()
 {
-	glDeleteVertexArrays(1, &VAO);
-	glDeleteBuffers(1, &VBO);
-	glDeleteBuffers(1, &EBO);
-	glDeleteTextures(1, &texture);
+	if (VAO != 0) glDeleteVertexArrays(1, &VAO);
+	if (VBO != 0) glDeleteBuffers(1, &VBO);
+	if (EBO != 0) glDeleteBuffers(1, &EBO);
+	if (texture != 0) glDeleteTextures(1, &texture);
 }
 
 IntroTexture* IntroTexture::GetInstance()

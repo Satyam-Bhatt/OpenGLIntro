@@ -104,8 +104,8 @@ void ShaderClass::Render()
 
 void ShaderClass::Exit()
 {
-	glDeleteVertexArrays(1, &VAO);
-	glDeleteBuffers(1, &VBO);
+	if (VAO != 0) glDeleteVertexArrays(1, &VAO);
+	if (VBO != 0) glDeleteBuffers(1, &VBO);
 }
 
 ShaderClass* ShaderClass::GetInstance()
