@@ -1,2 +1,17 @@
 ﻿  TestMain.cpp
+  main.cpp
+C:\Users\satya\OneDrive\Desktop\SDL&OpenGL\OpenGLIntro\IntroToOpenGl\main.cpp(31,26): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\satya\OneDrive\Desktop\SDL&OpenGL\OpenGLIntro\IntroToOpenGl\main.cpp(33,35): warning C4244: 'argument': conversion from 'float' to 'GLsizei', possible loss of data
+C:\Users\satya\OneDrive\Desktop\SDL&OpenGL\OpenGLIntro\IntroToOpenGl\main.cpp(33,14): warning C4244: 'argument': conversion from 'float' to 'GLint', possible loss of data
+C:\Users\satya\OneDrive\Desktop\SDL&OpenGL\OpenGLIntro\IntroToOpenGl\main.cpp(41,36): warning C4244: 'argument': conversion from 'float' to 'GLsizei', possible loss of data
+C:\Users\satya\OneDrive\Desktop\SDL&OpenGL\OpenGLIntro\IntroToOpenGl\main.cpp(41,15): warning C4244: 'argument': conversion from 'float' to 'GLint', possible loss of data
+C:\Users\satya\OneDrive\Desktop\SDL&OpenGL\OpenGLIntro\IntroToOpenGl\main.cpp(47,36): warning C4244: 'argument': conversion from 'float' to 'GLsizei', possible loss of data
+C:\Users\satya\OneDrive\Desktop\SDL&OpenGL\OpenGLIntro\IntroToOpenGl\main.cpp(47,15): warning C4244: 'argument': conversion from 'float' to 'GLint', possible loss of data
+C:\Users\satya\OneDrive\Desktop\SDL&OpenGL\OpenGLIntro\IntroToOpenGl\main.cpp(84,25): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\satya\OneDrive\Desktop\SDL&OpenGL\OpenGLIntro\IntroToOpenGl\main.cpp(86,34): warning C4244: 'argument': conversion from 'float' to 'GLsizei', possible loss of data
+C:\Users\satya\OneDrive\Desktop\SDL&OpenGL\OpenGLIntro\IntroToOpenGl\main.cpp(86,13): warning C4244: 'argument': conversion from 'float' to 'GLint', possible loss of data
+C:\Users\satya\OneDrive\Desktop\SDL&OpenGL\OpenGLIntro\IntroToOpenGl\main.cpp(169,17): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\satya\OneDrive\Desktop\SDL&OpenGL\OpenGLIntro\IntroToOpenGl\main.cpp(175,21): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  Generating Code...
+LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
   IntroToOpenGl.vcxproj -> C:\Users\satya\OneDrive\Desktop\SDL&OpenGL\OpenGLIntro\x64\Debug\IntroToOpenGl.exe
