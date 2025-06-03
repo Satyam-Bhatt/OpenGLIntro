@@ -143,13 +143,15 @@ void TexelViewer::ImGuiRender(GLFWwindow* window)
 		ImGui::TableHeadersRow();
 
 		ImGui::TableNextRow();
-		ImGui::PushItemWidth(250.0f);
 
 		ImGui::TableSetColumnIndex(0);
+		ImGui::PushItemWidth(100.0f);
 		ImGui::DragFloat2("Offset", &offset.x, 0.005f);
 		ImGui::DragFloat("Scale", &scale, 0.001f);
+		ImGui::PopItemWidth();
 
 		ImGui::TableSetColumnIndex(1);
+		ImGui::PushItemWidth(200.0f);
 		ImGui::Combo("MinFilter", &minFilterIndex, TEXTURE_MIN_FILTERS, IM_ARRAYSIZE(TEXTURE_MIN_FILTERS));
 		ImGui::Combo("MagFilter", &magFilterIndex, TEXTURE_MAG_FILTERS, IM_ARRAYSIZE(TEXTURE_MAG_FILTERS));
 		ImGui::PopItemWidth();
