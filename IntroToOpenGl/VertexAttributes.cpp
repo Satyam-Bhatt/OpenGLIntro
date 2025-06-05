@@ -251,6 +251,7 @@ void VertexAttributes::Exit()
 {
 	if(VAO != 0) glDeleteVertexArrays(1, &VAO);
 	if(VBO != 0) glDeleteBuffers(1, &VBO);
+	if(EBO != 0) glDeleteBuffers(1, &EBO);
 	if(shaderProgram != 0) glDeleteProgram(shaderProgram);
 }
 

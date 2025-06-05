@@ -17,6 +17,10 @@ TexelViewer::~TexelViewer()
 
 void TexelViewer::Start()
 {
+	// Enable alpha blending
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 	shader = Shader("TexelViewer.shader");
 
 	glGenTextures(1, &texture);
@@ -31,7 +35,7 @@ void TexelViewer::Start()
 
 	if (data)
 	{
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
 		glGenerateMipmap(GL_TEXTURE_2D);
 	}
 	else
@@ -176,10 +180,12 @@ void TexelViewer::Render()
 
 void TexelViewer::Exit()
 {
-	if(VAO != 0) glDeleteBuffers(1, &VAO);
+	std::cout << "TexelViewer destructor called" << std::endl;
+	if(VAO != 0) glDeleteVertexArrays(1, &VAO);
 	if(VBO != 0) glDeleteBuffers(1, &VBO);
 	if(EBO != 0) glDeleteBuffers(1, &EBO);
 	if(texture != 0) glDeleteTextures(1, &texture);
+	glDeleteProgram(shader.ID);
 }
 
 TexelViewer* TexelViewer::GetInstance()

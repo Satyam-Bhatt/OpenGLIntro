@@ -27,7 +27,7 @@ TextureMain::TextureMain()
 
 TextureMain::~TextureMain()
 {
-	Exit();
+	//Exit();
 }
 
 void TextureMain::Start()

@@ -85,7 +85,7 @@ void IntroTexture::Start()
 		// 4-> Specifies the width of the texture image
 		// 5-> Specifies the height of the texture image or the layers in the texture array
 		// 6-> Specifies the border of the texture object. Must be 0 (Some legacy stuff) (EXPERIMENT)
-		// 7-> Specifies the format of the pixel data
+		// 7-> Specifies the format of the pixel data. Should be similar to internal format (argument 3)
 		// 8-> Specifies the type of the pixel data
 		// 9-> Specifies a pointer to the image data in memory
 		// Once this is called the currently bound texture object now has the texture imagge attached to it.

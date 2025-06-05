@@ -106,6 +106,7 @@ void ShaderClass::Exit()
 {
 	if (VAO != 0) glDeleteVertexArrays(1, &VAO);
 	if (VBO != 0) glDeleteBuffers(1, &VBO);
+	glDeleteProgram(shaderCode.ID);
 }
 
 ShaderClass* ShaderClass::GetInstance()
