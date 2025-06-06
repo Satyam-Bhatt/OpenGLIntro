@@ -186,6 +186,7 @@ void TexelViewer::Exit()
 	if(EBO != 0) glDeleteBuffers(1, &EBO);
 	if(texture != 0) glDeleteTextures(1, &texture);
 	glDeleteProgram(shader.ID);
+	glDisable(GL_BLEND);
 }
 
 TexelViewer* TexelViewer::GetInstance()
