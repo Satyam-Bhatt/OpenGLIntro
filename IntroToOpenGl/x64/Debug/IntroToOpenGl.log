@@ -1,20 +1,4 @@
 ﻿  IntroTexture.cpp
 C:\Users\satya\OneDrive\Desktop\SDL&OpenGL\OpenGLIntro\IntroToOpenGl\IntroTexture.cpp(163,51): warning C4244: 'argument': conversion from 'GLint' to 'float', possible loss of data
 C:\Users\satya\OneDrive\Desktop\SDL&OpenGL\OpenGLIntro\IntroToOpenGl\IntroTexture.cpp(163,22): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-  MipmapOptions.cpp
-C:\Users\satya\OneDrive\Desktop\SDL&OpenGL\OpenGLIntro\IntroToOpenGl\MipmapOptions.cpp(155,95): warning C5056: operator '!=': deprecated for array types
-C:\Users\satya\OneDrive\Desktop\SDL&OpenGL\OpenGLIntro\IntroToOpenGl\MipmapOptions.cpp(190,51): warning C4244: 'argument': conversion from 'GLint' to 'float', possible loss of data
-C:\Users\satya\OneDrive\Desktop\SDL&OpenGL\OpenGLIntro\IntroToOpenGl\MipmapOptions.cpp(190,22): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-  TexelViewer.cpp
-C:\Users\satya\OneDrive\Desktop\SDL&OpenGL\OpenGLIntro\IntroToOpenGl\TexelViewer.cpp(136,51): warning C4244: 'argument': conversion from 'GLint' to 'float', possible loss of data
-C:\Users\satya\OneDrive\Desktop\SDL&OpenGL\OpenGLIntro\IntroToOpenGl\TexelViewer.cpp(136,22): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-  TriangleTexture.cpp
-C:\Users\satya\OneDrive\Desktop\SDL&OpenGL\OpenGLIntro\IntroToOpenGl\TriangleTexture.cpp(107,51): warning C4244: 'argument': conversion from 'GLint' to 'float', possible loss of data
-C:\Users\satya\OneDrive\Desktop\SDL&OpenGL\OpenGLIntro\IntroToOpenGl\TriangleTexture.cpp(107,22): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-  TwoTextures.cpp
-C:\Users\satya\OneDrive\Desktop\SDL&OpenGL\OpenGLIntro\IntroToOpenGl\TwoTextures.cpp(149,51): warning C4244: 'argument': conversion from 'GLint' to 'float', possible loss of data
-C:\Users\satya\OneDrive\Desktop\SDL&OpenGL\OpenGLIntro\IntroToOpenGl\TwoTextures.cpp(149,22): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\satya\OneDrive\Desktop\SDL&OpenGL\OpenGLIntro\IntroToOpenGl\TwoTextures.cpp(160,55): warning C4244: 'argument': conversion from 'GLint' to 'float', possible loss of data
-C:\Users\satya\OneDrive\Desktop\SDL&OpenGL\OpenGLIntro\IntroToOpenGl\TwoTextures.cpp(160,22): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-  Generating Code...
   IntroToOpenGl.vcxproj -> C:\Users\satya\OneDrive\Desktop\SDL&OpenGL\OpenGLIntro\x64\Debug\IntroToOpenGl.exe

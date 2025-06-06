@@ -30,7 +30,7 @@ void IntroTexture::Start()
 	// 2 -> Specifies the texture ID
 	glBindTexture(GL_TEXTURE_2D, texture);
 
-	// == Texture Wrapping == (EXPERIMENT WITH HIGHER RANGE)
+	// == Texture Wrapping ==
 	// When a texture is sampled outside of 0 to 1 range we have to decide how to handle it
 	// Options that OpenGL provides
 	// -> GL_REPEAT: The default behavior for textures.Repeats the texture image. (DEFAULT)
@@ -84,7 +84,7 @@ void IntroTexture::Start()
 		// store the texture
 		// 4-> Specifies the width of the texture image
 		// 5-> Specifies the height of the texture image or the layers in the texture array
-		// 6-> Specifies the border of the texture object. Must be 0 (Some legacy stuff) (EXPERIMENT)
+		// 6-> Specifies the border of the texture object. Must be 0 (Some legacy stuff) any other value makes the texture black
 		// 7-> Specifies the format of the pixel data. Should be similar to internal format (argument 3)
 		// 8-> Specifies the type of the pixel data
 		// 9-> Specifies a pointer to the image data in memory

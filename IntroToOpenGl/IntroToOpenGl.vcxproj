@@ -168,6 +168,7 @@
     <ClCompile Include="TestMain.cpp" />
     <ClCompile Include="TexelViewer.cpp" />
     <ClCompile Include="TextureMain.cpp" />
+    <ClCompile Include="TransformationsMain.cpp" />
     <ClCompile Include="TriangleTexture.cpp" />
     <ClCompile Include="TriangleWithVertexDataManipulation.cpp" />
     <ClCompile Include="TwoTextures.cpp" />
@@ -201,6 +202,7 @@
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="TexelViewer.h" />
     <ClInclude Include="TextureMain.h" />
+    <ClInclude Include="TransformationMain.h" />
     <ClInclude Include="TriangleTexture.h" />
     <ClInclude Include="TriangleWithVertexDataManipulation.h" />
     <ClInclude Include="TwoTextures.h" />

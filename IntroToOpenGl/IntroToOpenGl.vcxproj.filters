@@ -43,6 +43,12 @@
     <Filter Include="Shader\Textures">
       <UniqueIdentifier>{977ce806-5ec7-4211-9d66-2fa69855f8f3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Transformations">
+      <UniqueIdentifier>{b57d3825-cfad-4bcc-aed1-3ef4ee1ba446}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\TransformationsMain">
+      <UniqueIdentifier>{cdbdd2e4-6fbb-4d5a-a677-526a3a0bd79a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -141,6 +147,9 @@
     <ClCompile Include="TestMain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="TransformationsMain.cpp">
+      <Filter>Source Files\Transformations</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameState.h">
@@ -238,6 +247,9 @@
     </ClInclude>
     <ClInclude Include="TexelViewer.h">
       <Filter>Header Files\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="TransformationMain.h">
+      <Filter>Header Files\TransformationsMain</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
