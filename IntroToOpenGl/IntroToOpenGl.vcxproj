@@ -156,6 +156,7 @@
     <ClCompile Include="Imgui\imgui_widgets.cpp" />
     <ClCompile Include="Intro.cpp" />
     <ClCompile Include="IntroTexture.cpp" />
+    <ClCompile Include="IntroTransformation.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MipmapOptions.cpp" />
     <ClCompile Include="SceneManager.cpp" />
@@ -168,7 +169,7 @@
     <ClCompile Include="TestMain.cpp" />
     <ClCompile Include="TexelViewer.cpp" />
     <ClCompile Include="TextureMain.cpp" />
-    <ClCompile Include="TransformationsMain.cpp" />
+    <ClCompile Include="TransformationMain.cpp" />
     <ClCompile Include="TriangleTexture.cpp" />
     <ClCompile Include="TriangleWithVertexDataManipulation.cpp" />
     <ClCompile Include="TwoTextures.cpp" />
@@ -193,6 +194,7 @@
     <ClInclude Include="Imgui\imstb_truetype.h" />
     <ClInclude Include="Intro.h" />
     <ClInclude Include="IntroTexture.h" />
+    <ClInclude Include="IntroTransformation.h" />
     <ClInclude Include="MipmapOptions.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="SecondTriangle.h" />

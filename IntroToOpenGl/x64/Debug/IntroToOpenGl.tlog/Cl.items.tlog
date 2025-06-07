@@ -11,6 +11,7 @@ C:\Users\sharm\Desktop\IntroToOpenGL\IntroToOpenGl\Imgui\imgui_tables.cpp;C:\Use
 C:\Users\sharm\Desktop\IntroToOpenGL\IntroToOpenGl\Imgui\imgui_widgets.cpp;C:\Users\sharm\Desktop\IntroToOpenGL\IntroToOpenGl\x64\Debug\imgui_widgets.obj
 C:\Users\sharm\Desktop\IntroToOpenGL\IntroToOpenGl\Intro.cpp;C:\Users\sharm\Desktop\IntroToOpenGL\IntroToOpenGl\x64\Debug\Intro.obj
 C:\Users\sharm\Desktop\IntroToOpenGL\IntroToOpenGl\IntroTexture.cpp;C:\Users\sharm\Desktop\IntroToOpenGL\IntroToOpenGl\x64\Debug\IntroTexture.obj
+C:\Users\sharm\Desktop\IntroToOpenGL\IntroToOpenGl\IntroTransformation.cpp;C:\Users\sharm\Desktop\IntroToOpenGL\IntroToOpenGl\x64\Debug\IntroTransformation.obj
 C:\Users\sharm\Desktop\IntroToOpenGL\IntroToOpenGl\main.cpp;C:\Users\sharm\Desktop\IntroToOpenGL\IntroToOpenGl\x64\Debug\main.obj
 C:\Users\sharm\Desktop\IntroToOpenGL\IntroToOpenGl\MipmapOptions.cpp;C:\Users\sharm\Desktop\IntroToOpenGL\IntroToOpenGl\x64\Debug\MipmapOptions.obj
 C:\Users\sharm\Desktop\IntroToOpenGL\IntroToOpenGl\SceneManager.cpp;C:\Users\sharm\Desktop\IntroToOpenGL\IntroToOpenGl\x64\Debug\SceneManager.obj
@@ -23,7 +24,7 @@ C:\Users\sharm\Desktop\IntroToOpenGL\IntroToOpenGl\Temp.cpp;C:\Users\sharm\Deskt
 C:\Users\sharm\Desktop\IntroToOpenGL\IntroToOpenGl\TestMain.cpp;C:\Users\sharm\Desktop\IntroToOpenGL\IntroToOpenGl\x64\Debug\TestMain.obj
 C:\Users\sharm\Desktop\IntroToOpenGL\IntroToOpenGl\TexelViewer.cpp;C:\Users\sharm\Desktop\IntroToOpenGL\IntroToOpenGl\x64\Debug\TexelViewer.obj
 C:\Users\sharm\Desktop\IntroToOpenGL\IntroToOpenGl\TextureMain.cpp;C:\Users\sharm\Desktop\IntroToOpenGL\IntroToOpenGl\x64\Debug\TextureMain.obj
-C:\Users\sharm\Desktop\IntroToOpenGL\IntroToOpenGl\TransformationsMain.cpp;C:\Users\sharm\Desktop\IntroToOpenGL\IntroToOpenGl\x64\Debug\TransformationsMain.obj
+C:\Users\sharm\Desktop\IntroToOpenGL\IntroToOpenGl\TransformationMain.cpp;C:\Users\sharm\Desktop\IntroToOpenGL\IntroToOpenGl\x64\Debug\TransformationMain.obj
 C:\Users\sharm\Desktop\IntroToOpenGL\IntroToOpenGl\TriangleTexture.cpp;C:\Users\sharm\Desktop\IntroToOpenGL\IntroToOpenGl\x64\Debug\TriangleTexture.obj
 C:\Users\sharm\Desktop\IntroToOpenGL\IntroToOpenGl\TriangleWithVertexDataManipulation.cpp;C:\Users\sharm\Desktop\IntroToOpenGL\IntroToOpenGl\x64\Debug\TriangleWithVertexDataManipulation.obj
 C:\Users\sharm\Desktop\IntroToOpenGL\IntroToOpenGl\TwoTextures.cpp;C:\Users\sharm\Desktop\IntroToOpenGL\IntroToOpenGl\x64\Debug\TwoTextures.obj
