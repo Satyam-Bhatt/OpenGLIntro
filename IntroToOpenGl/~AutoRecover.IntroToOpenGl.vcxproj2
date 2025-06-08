@@ -113,6 +113,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(ProjectDir)glad\KHR;$(ProjectDir)glad\glad;$(ProjectDir)OpenGLLibrary\glfw-3.4.bin.WIN64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -130,6 +131,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(ProjectDir)glad\KHR;$(ProjectDir)glad\glad;$(ProjectDir)OpenGLLibrary\glfw-3.4.bin.WIN64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -154,6 +156,7 @@
     <ClCompile Include="Imgui\imgui_widgets.cpp" />
     <ClCompile Include="Intro.cpp" />
     <ClCompile Include="IntroTexture.cpp" />
+    <ClCompile Include="IntroTransformation.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MipmapOptions.cpp" />
     <ClCompile Include="SceneManager.cpp" />
@@ -162,9 +165,10 @@
     <ClCompile Include="ShaderClass.cpp" />
     <ClCompile Include="Shaders.cpp" />
     <ClCompile Include="stb_image.cpp" />
-    <ClCompile Include="Temp.cpp" />
+    <ClCompile Include="TestMain.cpp" />
     <ClCompile Include="TexelViewer.cpp" />
     <ClCompile Include="TextureMain.cpp" />
+    <ClCompile Include="TransformationMain.cpp" />
     <ClCompile Include="TriangleTexture.cpp" />
     <ClCompile Include="TriangleWithVertexDataManipulation.cpp" />
     <ClCompile Include="TwoTextures.cpp" />
@@ -189,6 +193,7 @@
     <ClInclude Include="Imgui\imstb_truetype.h" />
     <ClInclude Include="Intro.h" />
     <ClInclude Include="IntroTexture.h" />
+    <ClInclude Include="IntroTransformation.h" />
     <ClInclude Include="MipmapOptions.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="SecondTriangle.h" />
@@ -198,6 +203,7 @@
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="TexelViewer.h" />
     <ClInclude Include="TextureMain.h" />
+    <ClInclude Include="TransformationMain.h" />
     <ClInclude Include="TriangleTexture.h" />
     <ClInclude Include="TriangleWithVertexDataManipulation.h" />
     <ClInclude Include="TwoTextures.h" />
@@ -209,6 +215,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="IntroTexture.shader" />
+    <None Include="IntroTransformation.shader" />
     <None Include="MipmapOptions.shader" />
     <None Include="ShaderClass.shader" />
     <None Include="TexelViewer.shader" />

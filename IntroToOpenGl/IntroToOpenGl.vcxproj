@@ -165,7 +165,6 @@
     <ClCompile Include="ShaderClass.cpp" />
     <ClCompile Include="Shaders.cpp" />
     <ClCompile Include="stb_image.cpp" />
-    <ClCompile Include="Temp.cpp" />
     <ClCompile Include="TestMain.cpp" />
     <ClCompile Include="TexelViewer.cpp" />
     <ClCompile Include="TextureMain.cpp" />
@@ -216,6 +215,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="IntroTexture.shader" />
+    <None Include="IntroTransformation.shader" />
     <None Include="MipmapOptions.shader" />
     <None Include="ShaderClass.shader" />
     <None Include="TexelViewer.shader" />

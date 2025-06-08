@@ -49,18 +49,15 @@
     <Filter Include="Header Files\TransformationsMain">
       <UniqueIdentifier>{cdbdd2e4-6fbb-4d5a-a677-526a3a0bd79a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Libraries">
+      <UniqueIdentifier>{585319c3-9ed3-4f95-9583-451294de5cfb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shader\Transformations">
+      <UniqueIdentifier>{0c2ff212-e5d0-49b6-acb0-ecbf9a4a6057}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="glad.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Imgui\imgui_impl_glfw.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Imgui\imgui_impl_opengl3.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Imgui\imgui.cpp">
@@ -114,9 +111,6 @@
     <ClCompile Include="ShaderClass.cpp">
       <Filter>Source Files\Shader</Filter>
     </ClCompile>
-    <ClCompile Include="Temp.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Shader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -128,9 +122,6 @@
     </ClCompile>
     <ClCompile Include="IntroTexture.cpp">
       <Filter>Source Files\Textures</Filter>
-    </ClCompile>
-    <ClCompile Include="stb_image.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="TwoTextures.cpp">
       <Filter>Source Files\Textures</Filter>
@@ -147,22 +138,28 @@
     <ClCompile Include="TestMain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TransformationsMain.cpp">
+    <ClCompile Include="TransformationMain.cpp">
       <Filter>Source Files\Transformations</Filter>
+    </ClCompile>
+    <ClCompile Include="IntroTransformation.cpp">
+      <Filter>Source Files\Transformations</Filter>
+    </ClCompile>
+    <ClCompile Include="glad.c">
+      <Filter>Source Files\Libraries</Filter>
+    </ClCompile>
+    <ClCompile Include="Imgui\imgui_impl_glfw.cpp">
+      <Filter>Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="Imgui\imgui_impl_opengl3.cpp">
+      <Filter>Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="stb_image.cpp">
+      <Filter>Source Files\Libraries</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameState.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Imgui\imgui_impl_glfw.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Imgui\imgui_impl_opengl3.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Imgui\imgui_impl_opengl3_loader.h">
-      <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="Imgui\imconfig.h">
       <Filter>Imgui</Filter>
@@ -251,6 +248,18 @@
     <ClInclude Include="TransformationMain.h">
       <Filter>Header Files\TransformationsMain</Filter>
     </ClInclude>
+    <ClInclude Include="Imgui\imgui_impl_glfw.h">
+      <Filter>Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Imgui\imgui_impl_opengl3.h">
+      <Filter>Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Imgui\imgui_impl_opengl3_loader.h">
+      <Filter>Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="IntroTransformation.h">
+      <Filter>Header Files\TransformationsMain</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ShaderClass.shader">
@@ -277,5 +286,6 @@
     <None Include="TexelViewer.shader">
       <Filter>Shader\Textures</Filter>
     </None>
+    <None Include="IntroTransformation.shader" />
   </ItemGroup>
 </Project>
