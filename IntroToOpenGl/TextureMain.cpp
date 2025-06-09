@@ -45,7 +45,7 @@ void TextureMain::Update()
 void TextureMain::ImGuiLeftPanel()
 {
 	ImGui::SeparatorText("Render Texture");
-	ImGui::Text("More about Textuire");
+	ImGui::Text("More about Texture");
 
 	for (int i = 0; i < SubScene::COUNT; i++)
 	{

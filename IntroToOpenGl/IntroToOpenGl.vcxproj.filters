@@ -286,6 +286,8 @@
     <None Include="TexelViewer.shader">
       <Filter>Shader\Textures</Filter>
     </None>
-    <None Include="IntroTransformation.shader" />
+    <None Include="IntroTransformation.shader">
+      <Filter>Shader\Transformations</Filter>
+    </None>
   </ItemGroup>
 </Project>

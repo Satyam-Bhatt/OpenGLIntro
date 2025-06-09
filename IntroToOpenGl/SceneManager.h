@@ -14,6 +14,7 @@
 #include "HelloTriangle.h"
 #include "Shaders.h"
 #include "TextureMain.h"
+#include "TransformationMain.h"
 
 // STL
 #include <unordered_map>
