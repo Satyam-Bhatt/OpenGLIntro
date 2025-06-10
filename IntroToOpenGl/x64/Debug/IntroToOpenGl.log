@@ -1,7 +1,5 @@
 ﻿  IntroTransformation.cpp
 C:\Users\satya\OneDrive\Desktop\SDL&OpenGL\OpenGLIntro\IntroToOpenGl\IntroTransformation.cpp(61,51): warning C4244: 'argument': conversion from 'GLint' to 'float', possible loss of data
 C:\Users\satya\OneDrive\Desktop\SDL&OpenGL\OpenGLIntro\IntroToOpenGl\IntroTransformation.cpp(61,22): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-  TextureMain.cpp
-  TransformationMain.cpp
-  Generating Code...
+LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
   IntroToOpenGl.vcxproj -> C:\Users\satya\OneDrive\Desktop\SDL&OpenGL\OpenGLIntro\x64\Debug\IntroToOpenGl.exe

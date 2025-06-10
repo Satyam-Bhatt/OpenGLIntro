@@ -44,6 +44,7 @@ private:
 		HelloTriangle,
 		Shaders,
 		TextureMain,
+		TransformationMain,
 		COUNT
 	};
 
@@ -54,7 +55,7 @@ private:
 	static std::string SceneToString(Scenes scene);
 	static void ChangeScene();
 
-	bool openStates[Scenes::COUNT] = { false };
+	bool openStates[Scenes::COUNT] = { true, false };
 	static Scenes current_scene;
 	static Scenes previous_scene;
 };

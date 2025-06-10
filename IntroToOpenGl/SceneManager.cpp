@@ -30,6 +30,11 @@ SceneManager::SceneManager()
 	sceneNames[Scenes::TextureMain] = "Texture";
 	sceneFactories[Scenes::TextureMain] = []() -> GameState* { return TextureMain::GetInstance(); };
 	sceneDestructors[Scenes::TextureMain] = []() -> void { TextureMain::DeleteInstance(); };
+
+	// Transformation scne
+	sceneNames[Scenes::TransformationMain] = "Transformations";
+	sceneFactories[Scenes::TransformationMain] = []() -> GameState* { return TransformationMain::GetInstance(); };
+	sceneDestructors[Scenes::TransformationMain] = []() -> void { TransformationMain::DeleteInstance(); };
 }
 
 void SceneManager::ImGuiRender(GLFWwindow* window)

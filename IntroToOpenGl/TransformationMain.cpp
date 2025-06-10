@@ -27,8 +27,8 @@ void TransformationMain::Update()
 
 void TransformationMain::ImGuiLeftPanel()
 {
-	ImGui::SeparatorText("Render Texture");
-	ImGui::Text("More about Texture");
+	ImGui::SeparatorText("Transformations in OpenGL");
+	ImGui::Text("Rotate Scale and Move stuff using cool matricies");
 
 	for (int i = 0; i < SubScene::COUNT; i++)
 	{
