@@ -17,10 +17,10 @@ void IntroTransformation::Start()
 
 	float vertices[] =
 	{
-		-0.5f, -0.5f, 0.0f,
-		 0.5f, -0.5f, 0.0f,
-		-0.5f,  0.5f, 0.0f,
-		 0.5f,  0.5f, 0.0f
+		-0.5f, -0.5f, 0.0f, 1.0f,
+		 0.5f, -0.5f, 0.0f, 1.0f,
+		-0.5f,  0.5f, 0.0f, 1.0f,
+		 0.5f,  0.5f, 0.0f, 1.0f
 	};
 
 	unsigned int indices[] =
@@ -35,12 +35,12 @@ void IntroTransformation::Start()
 
 	glBindVertexArray(VAO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -50,6 +50,38 @@ void IntroTransformation::Start()
 
 void IntroTransformation::Update()
 {
+	float vertices[] =
+	{
+		 0.0f, -0.5f, 0.0f, 1.0f,
+		 0.5f, -0.5f, 0.0f, 1.0f,
+		 0.0f,  0.5f, 0.0f, 1.0f,
+		 0.5f,  0.5f, 0.0f, 1.0f
+	};
+
+	float scaleMatrix[4][4] =
+	{
+		{scaleFactor,     0.0f   ,     0.0f   , 0.0f},
+		{    0.0f   , scaleFactor,     0.0f   , 0.0f},
+		{    0.0f   ,     0.0f   , scaleFactor, 0.0f},
+		{    0.0f   ,     0.0f   ,     0.0f   , 1.0f}
+	};
+
+	for (int i = 0; i < sizeof(vertices) / sizeof(vertices[0]); i += 4)
+	{
+		float x = vertices[i];
+		float y = vertices[i + 1];
+		float z = vertices[i + 2];
+		float w = vertices[i + 3];
+		
+		for (int j = 0; j < 4; j++)
+		{
+			vertices[i+j] = x * scaleMatrix[j][0] + y * scaleMatrix[j][1] + z * scaleMatrix[j][2] + w * scaleMatrix[j][3];
+		}
+	}
+
+	glBindBuffer( GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
 void IntroTransformation::ImGuiRender(GLFWwindow* window)
@@ -65,7 +97,7 @@ void IntroTransformation::ImGuiRender(GLFWwindow* window)
 
 	ImGui::Begin("Level Specific", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
 
-	ImGui::Checkbox("Wireframe mode", &wireframeMode);
+	ImGui::DragFloat("Scale", &scaleFactor, 0.005f);
 
 	ImGui::End();
 }
