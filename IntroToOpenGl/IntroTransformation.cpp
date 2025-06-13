@@ -91,13 +91,12 @@ void IntroTransformation::Update()
 	//  -> scaleFactorX * xmid - xmid;
 	// As we need to subtract this change from the vertices we add a negative sign
 	//  -> -(scaleFactorX * xmid - xmid);
-	printf("%f %f \n", xmid, ymid);
 	float translationMatrix[4][4] =
 	{
-		{1.0f, 0.0f, 0.0f, -(scaleFactorX-1)*xmid},
+		{1.0f, 0.0f, 0.0f, -(scaleFactorX - 1) * xmid},
 		{0.0f, 1.0f, 0.0f, -(scaleFactorY - 1) * ymid},
-		{0.0f, 0.0f, 1.0f, 0.0f},
-		{0.0f, 0.0f, 0.0f, 1.0f}
+		{0.0f, 0.0f, 1.0f,             0.0f          },
+		{0.0f, 0.0f, 0.0f,             1.0f          }
 	};
 
 	// Subtracting each vertex from the change in the pivot
