@@ -22,5 +22,6 @@ private:
 	uint32_t VAO = 0, VBO = 0, EBO = 0;
 	float scaleFactorX = 1.0f;
 	float scaleFactorY = 1.0f;
+	float scaleFactor = 1.0f;
 };
 

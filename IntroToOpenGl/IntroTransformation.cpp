@@ -52,20 +52,23 @@ void IntroTransformation::Update()
 {
 	float vertices[] =
 	{
-		 0.0f, -0.5f, 0.0f, 1.0f,
-		 0.5f, -0.5f, 0.0f, 1.0f,
+		 0.0f,  0.0f, 0.0f, 1.0f,
+		 0.5f,  0.0f, 0.0f, 1.0f,
 		 0.0f,  0.5f, 0.0f, 1.0f,
 		 0.5f,  0.5f, 0.0f, 1.0f
 	};
 	float xmid = (vertices[0] + vertices[12]) / 2.0f;
 	float ymid = (vertices[1] + vertices[13]) / 2.0f;
 
+	float combinedScaleFactor_X = scaleFactorX * scaleFactor;
+	float combinedScaleFactor_Y = scaleFactorY * scaleFactor;
+
 	float scaleMatrix[4][4] =
 	{
-		{scaleFactorX,     0.0f    ,     0.0f   , 0.0f},
-		{    0.0f    , scaleFactorY,     0.0f   , 0.0f},
-		{    0.0f    ,     0.0f    ,     1.0f   , 0.0f},
-		{    0.0f    ,     0.0f    ,     0.0f   , 1.0f}
+		{combinedScaleFactor_X,         0.0f         , 0.0f , 0.0f},
+		{        0.0f         , combinedScaleFactor_Y, 0.0f , 0.0f},
+		{        0.0f         ,         0.0f         , 1.0f , 0.0f},
+		{        0.0f         ,         0.0f         , 0.0f , 1.0f}
 	};
 
 	for (int i = 0; i < sizeof(vertices) / sizeof(vertices[0]); i += 4)
@@ -93,10 +96,10 @@ void IntroTransformation::Update()
 	//  -> -(scaleFactorX * xmid - xmid);
 	float translationMatrix[4][4] =
 	{
-		{1.0f, 0.0f, 0.0f, -(scaleFactorX - 1) * xmid},
-		{0.0f, 1.0f, 0.0f, -(scaleFactorY - 1) * ymid},
-		{0.0f, 0.0f, 1.0f,             0.0f          },
-		{0.0f, 0.0f, 0.0f,             1.0f          }
+		{1.0f, 0.0f, 0.0f, -(combinedScaleFactor_X - 1) * xmid},
+		{0.0f, 1.0f, 0.0f, -(combinedScaleFactor_Y - 1) * ymid},
+		{0.0f, 0.0f, 1.0f,                   0.0f             },
+		{0.0f, 0.0f, 0.0f,                   1.0f             }
 	};
 
 	// Subtracting each vertex from the change in the pivot
@@ -133,6 +136,7 @@ void IntroTransformation::ImGuiRender(GLFWwindow* window)
 
 	ImGui::DragFloat("ScaleX", &scaleFactorX, 0.005f);
 	ImGui::DragFloat("ScaleY", &scaleFactorY, 0.005f);
+	ImGui::DragFloat("Scale", &scaleFactor, 0.005f);
 
 	ImGui::End();
 }
