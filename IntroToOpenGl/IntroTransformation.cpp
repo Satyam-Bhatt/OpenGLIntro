@@ -48,6 +48,9 @@ void IntroTransformation::Start()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
+// TODO: Don't multiply the vector with the matricies, first multiply the matrices and then multiply the vector with that
+// matrix
+// TODO: X and Y scaling are not working properly when rotated because we need them to scale as per their own coordinate system
 void IntroTransformation::Update()
 {
 	float vertices[] =
@@ -57,6 +60,32 @@ void IntroTransformation::Update()
 		 0.0f,  0.5f, 0.0f, 1.0f,
 		 0.5f,  0.5f, 0.0f, 1.0f
 	};
+
+	// Rotation
+	// Roll
+	float rollMatrix[4][4] =
+	{
+		{cos(rotation.z), -sin(rotation.z), 0.0f, 0.0f},
+		{sin(rotation.z),  cos(rotation.z), 0.0f, 0.0f},
+		{        0.0f   ,       0.0f      , 1.0f, 0.0f},
+		{        0.0f   ,       0.0f      , 0.0f, 1.0f}
+	};
+
+	// Rotating each point
+	for (int i = 0; i < sizeof(vertices) / sizeof(vertices[0]); i += 4)
+	{
+		float x = vertices[i];
+		float y = vertices[i + 1];
+		float z = vertices[i + 2];
+		float w = vertices[i + 3];
+
+		for (int j = 0; j < 4; j++)
+		{
+			vertices[i + j] = x * rollMatrix[j][0] + y * rollMatrix[j][1] + z * rollMatrix[j][2] + w * rollMatrix[j][3];
+		}
+	}
+
+	//Scaling
 	float xmid = (vertices[0] + vertices[12]) / 2.0f;
 	float ymid = (vertices[1] + vertices[13]) / 2.0f;
 
@@ -77,10 +106,10 @@ void IntroTransformation::Update()
 		float y = vertices[i + 1];
 		float z = vertices[i + 2];
 		float w = vertices[i + 3];
-		
+
 		for (int j = 0; j < 4; j++)
 		{
-			vertices[i+j] = x * scaleMatrix[j][0] + y * scaleMatrix[j][1] + z * scaleMatrix[j][2] + w * scaleMatrix[j][3];
+			vertices[i + j] = x * scaleMatrix[j][0] + y * scaleMatrix[j][1] + z * scaleMatrix[j][2] + w * scaleMatrix[j][3];
 		}
 	}
 
@@ -96,8 +125,8 @@ void IntroTransformation::Update()
 	//  -> -(scaleFactorX * xmid - xmid);
 	float translationMatrix[4][4] =
 	{
-		{1.0f, 0.0f, 0.0f, -(combinedScaleFactor_X - 1) * xmid + translate.x},
-		{0.0f, 1.0f, 0.0f, -(combinedScaleFactor_Y - 1) * ymid + translate.y},
+		{1.0f, 0.0f, 0.0f, -(combinedScaleFactor_X - 1) * xmid},
+		{0.0f, 1.0f, 0.0f, -(combinedScaleFactor_Y - 1) * ymid},
 		{0.0f, 0.0f, 1.0f,                          0.0f                    },
 		{0.0f, 0.0f, 0.0f,                          1.0f                    }
 	};
@@ -116,7 +145,30 @@ void IntroTransformation::Update()
 		}
 	}
 
-	glBindBuffer( GL_ARRAY_BUFFER, VBO);
+	float translationMatrix1[4][4] =
+	{
+		{1.0f, 0.0f, 0.0f, translate.x},
+		{0.0f, 1.0f, 0.0f, translate.y},
+		{0.0f, 0.0f, 1.0f,    0.0f    },
+		{0.0f, 0.0f, 0.0f,    1.0f    }
+	};
+
+	// Subtracting each vertex from the change in the pivot
+	for (int i = 0; i < sizeof(vertices) / sizeof(vertices[0]); i += 4)
+	{
+		float x = vertices[i];
+		float y = vertices[i + 1];
+		float z = vertices[i + 2];
+		float w = vertices[i + 3];
+
+		for (int j = 0; j < 4; j++)
+		{
+			vertices[i + j] = x * translationMatrix1[j][0] + y * translationMatrix1[j][1] + z * translationMatrix1[j][2] + w * translationMatrix1[j][3];
+		}
+	}
+
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
@@ -138,6 +190,7 @@ void IntroTransformation::ImGuiRender(GLFWwindow* window)
 	ImGui::DragFloat("ScaleY", &scaleFactorY, 0.005f);
 	ImGui::DragFloat("Scale", &scaleFactor, 0.005f);
 	ImGui::DragFloat2("Translate", &translate.x, 0.005f);
+	ImGui::DragFloat3("Rotation", &rotation.x, 0.005f);
 
 	ImGui::End();
 }
@@ -152,7 +205,7 @@ void IntroTransformation::Render()
 
 void IntroTransformation::Exit()
 {
-	if(VAO != 0) glDeleteVertexArrays(1, &VAO);
+	if (VAO != 0) glDeleteVertexArrays(1, &VAO);
 	if (VBO != 0) glDeleteBuffers(1, &VBO);
 	if (EBO != 0) glDeleteBuffers(1, &EBO);
 }
