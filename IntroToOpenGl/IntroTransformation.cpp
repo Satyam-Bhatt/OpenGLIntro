@@ -96,10 +96,10 @@ void IntroTransformation::Update()
 	//  -> -(scaleFactorX * xmid - xmid);
 	float translationMatrix[4][4] =
 	{
-		{1.0f, 0.0f, 0.0f, -(combinedScaleFactor_X - 1) * xmid},
-		{0.0f, 1.0f, 0.0f, -(combinedScaleFactor_Y - 1) * ymid},
-		{0.0f, 0.0f, 1.0f,                   0.0f             },
-		{0.0f, 0.0f, 0.0f,                   1.0f             }
+		{1.0f, 0.0f, 0.0f, -(combinedScaleFactor_X - 1) * xmid + translate.x},
+		{0.0f, 1.0f, 0.0f, -(combinedScaleFactor_Y - 1) * ymid + translate.y},
+		{0.0f, 0.0f, 1.0f,                          0.0f                    },
+		{0.0f, 0.0f, 0.0f,                          1.0f                    }
 	};
 
 	// Subtracting each vertex from the change in the pivot
@@ -137,6 +137,7 @@ void IntroTransformation::ImGuiRender(GLFWwindow* window)
 	ImGui::DragFloat("ScaleX", &scaleFactorX, 0.005f);
 	ImGui::DragFloat("ScaleY", &scaleFactorY, 0.005f);
 	ImGui::DragFloat("Scale", &scaleFactor, 0.005f);
+	ImGui::DragFloat2("Translate", &translate.x, 0.005f);
 
 	ImGui::End();
 }
