@@ -51,6 +51,7 @@ void IntroTransformation::Start()
 // TODO: Don't multiply the vector with the matricies, first multiply the matrices and then multiply the vector with that
 // matrix
 // TODO: X and Y scaling are not working properly when rotated because we need them to scale as per their own coordinate system
+// TODO: Need to work on the math
 void IntroTransformation::Update()
 {
 	float vertices[] =

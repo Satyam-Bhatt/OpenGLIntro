@@ -1,4 +1,1 @@
-﻿  IntroTransformation.cpp
-C:\Users\sharm\Desktop\IntroToOpenGL\IntroToOpenGl\IntroTransformation.cpp(182,51): warning C4244: 'argument': conversion from 'GLint' to 'float', possible loss of data
-C:\Users\sharm\Desktop\IntroToOpenGL\IntroToOpenGl\IntroTransformation.cpp(182,22): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-  IntroToOpenGl.vcxproj -> C:\Users\sharm\Desktop\IntroToOpenGL\x64\Debug\IntroToOpenGl.exe
+﻿  IntroToOpenGl.vcxproj -> C:\Users\sharm\Desktop\IntroToOpenGL\x64\Debug\IntroToOpenGl.exe
