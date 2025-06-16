@@ -2,6 +2,8 @@
 #include "TransformationMain.h"
 
 using namespace Vector;
+using Matrix4x4 = float[4][4];
+
 class IntroTransformation : public TransformationMain
 {
 public:
@@ -28,6 +30,10 @@ private:
 	Vector3 rotation = Vector3(0.0f, 0.0f, 0.0f);
 
 	Vector2 translate = Vector2(0.0f, 0.0f);
+
+	// We return the refrence of the array or we can return the pointer of the array
+	// If we don't use & or * then we will return the copy of the array and that is not allowed as arrays decay to pointers when passed around
+	Matrix4x4& MultiplyMatrices(Matrix4x4 a, Matrix4x4 b);
 };
 
 // z roll
@@ -48,4 +54,11 @@ private:
 //ZYX : Famous
 //XYZ : Graphics
 //YXZ : Unity
+
+//static float matrix[4][4] = {
+//	{00, 01, 02, 03},  // Row 0
+//	{10, 11, 12, 13},  // Row 1
+//	{20, 21, 22, 23},  // Row 2
+//	{30, 31, 32, 33}   // Row 3
+//};
 

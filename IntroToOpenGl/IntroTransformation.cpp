@@ -215,3 +215,29 @@ IntroTransformation* IntroTransformation::GetInstance()
 {
 	return &instance;
 }
+
+Matrix4x4& IntroTransformation::MultiplyMatrices(Matrix4x4 a, Matrix4x4 b)  
+{  
+   // Use static matrix to make the matrix persistent  
+   float matrix[4][4] = {  
+       {1.0f, 0.0f, 0.0f, 0.0f},  
+       {0.0f, 1.0f, 0.0f, 0.0f},  
+       {0.0f, 0.0f, 1.0f, 0.0f},  
+       {0.0f, 0.0f, 0.0f, 1.0f}  
+   };  
+
+   for (int i = 0; i < 4; i++)  
+   {  
+       float v1 = a[i][0];  
+       float v2 = a[i][1];  
+       float v3 = a[i][2];  
+       float v4 = a[i][3];  
+
+       for (int j = 0; j < 4; j++)  
+       {  
+           matrix[i][j] = v1 * b[0][j] + v2 * b[1][j] + v3 * b[2][j] + v4 * b[3][j];  
+       }  
+   }  
+
+   return matrix;  
+}
