@@ -156,6 +156,9 @@
     <ClCompile Include="stb_image.cpp">
       <Filter>Source Files\Libraries</Filter>
     </ClCompile>
+    <ClCompile Include="Translate_Rotate_Scale.cpp">
+      <Filter>Source Files\Transformations</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameState.h">
@@ -260,6 +263,9 @@
     <ClInclude Include="IntroTransformation.h">
       <Filter>Header Files\TransformationsMain</Filter>
     </ClInclude>
+    <ClInclude Include="Translate_Rotate_Scale.h">
+      <Filter>Header Files\TransformationsMain</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ShaderClass.shader">
@@ -289,5 +295,6 @@
     <None Include="IntroTransformation.shader">
       <Filter>Shader\Transformations</Filter>
     </None>
+    <None Include="Translate_Rotate_Scale.shader" />
   </ItemGroup>
 </Project>

@@ -148,6 +148,6 @@ void TransformationMain::RenderText(SubScene sceneName)
 {
 	if (sceneName == SubScene::IntroTransformations)
 	{
-		ImGui::TextWrapped("This is a demo of how to use transformations in OpenGL. ");
+		ImGui::TextWrapped("Scale and move the rectangel using matricies");
 	}
 }

@@ -169,6 +169,7 @@
     <ClCompile Include="TexelViewer.cpp" />
     <ClCompile Include="TextureMain.cpp" />
     <ClCompile Include="TransformationMain.cpp" />
+    <ClCompile Include="Translate_Rotate_Scale.cpp" />
     <ClCompile Include="TriangleTexture.cpp" />
     <ClCompile Include="TriangleWithVertexDataManipulation.cpp" />
     <ClCompile Include="TwoTextures.cpp" />
@@ -204,6 +205,7 @@
     <ClInclude Include="TexelViewer.h" />
     <ClInclude Include="TextureMain.h" />
     <ClInclude Include="TransformationMain.h" />
+    <ClInclude Include="Translate_Rotate_Scale.h" />
     <ClInclude Include="TriangleTexture.h" />
     <ClInclude Include="TriangleWithVertexDataManipulation.h" />
     <ClInclude Include="TwoTextures.h" />
@@ -219,6 +221,7 @@
     <None Include="MipmapOptions.shader" />
     <None Include="ShaderClass.shader" />
     <None Include="TexelViewer.shader" />
+    <None Include="Translate_Rotate_Scale.shader" />
     <None Include="TriangleTexture.shader" />
     <None Include="TwoTextures.shader" />
     <None Include="TwoTextureSecondShader.shader" />

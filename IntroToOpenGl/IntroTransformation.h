@@ -27,13 +27,19 @@ private:
 	float scaleFactorY = 1.0f;
 	float scaleFactor = 1.0f;
 
-	Vector3 rotation = Vector3(0.0f, 0.0f, 0.0f);
-
 	Vector2 translate = Vector2(0.0f, 0.0f);
+	
+	float scaleFactorX_Stored = 1.0f;
+	float scaleFactorY_Stored = 1.0f;
+	float scaleFactor_Stored = 1.0f;
+
+	Vector2 translate_Stored = Vector2(0.0f, 0.0f);
 
 	// We return the refrence of the array or we can return the pointer of the array
 	// If we don't use & or * then we will return the copy of the array and that is not allowed as arrays decay to pointers when passed around
-	Matrix4x4& MultiplyMatrices(Matrix4x4 a, Matrix4x4 b);
+	Matrix4x4& MultiplyMatrices(Matrix4x4 a, Matrix4x4 b, Matrix4x4& result);
+
+	bool ValueChanged();
 };
 
 // z roll

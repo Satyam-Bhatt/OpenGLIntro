@@ -48,12 +48,13 @@ void IntroTransformation::Start()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-// TODO: Don't multiply the vector with the matricies, first multiply the matrices and then multiply the vector with that
-// matrix
-// TODO: X and Y scaling are not working properly when rotated because we need them to scale as per their own coordinate system
-// TODO: Need to work on the math
+// TODO: Clean it up
 void IntroTransformation::Update()
 {
+	if(!ValueChanged()) return;
+
+	std::cout << "Rotation: " << std::endl;
+
 	float vertices[] =
 	{
 		 0.0f,  0.0f, 0.0f, 1.0f,
@@ -62,29 +63,29 @@ void IntroTransformation::Update()
 		 0.5f,  0.5f, 0.0f, 1.0f
 	};
 
-	// Rotation
-	// Roll
-	float rollMatrix[4][4] =
-	{
-		{cos(rotation.z), -sin(rotation.z), 0.0f, 0.0f},
-		{sin(rotation.z),  cos(rotation.z), 0.0f, 0.0f},
-		{        0.0f   ,       0.0f      , 1.0f, 0.0f},
-		{        0.0f   ,       0.0f      , 0.0f, 1.0f}
-	};
+	//// Rotation
+	//// Roll
+	//float rollMatrix[4][4] =
+	//{
+	//	{cos(rotation.z), -sin(rotation.z), 0.0f, 0.0f},
+	//	{sin(rotation.z),  cos(rotation.z), 0.0f, 0.0f},
+	//	{        0.0f   ,       0.0f      , 1.0f, 0.0f},
+	//	{        0.0f   ,       0.0f      , 0.0f, 1.0f}
+	//};
 
-	// Rotating each point
-	for (int i = 0; i < sizeof(vertices) / sizeof(vertices[0]); i += 4)
-	{
-		float x = vertices[i];
-		float y = vertices[i + 1];
-		float z = vertices[i + 2];
-		float w = vertices[i + 3];
+	//// Rotating each point
+	//for (int i = 0; i < sizeof(vertices) / sizeof(vertices[0]); i += 4)
+	//{
+	//	float x = vertices[i];
+	//	float y = vertices[i + 1];
+	//	float z = vertices[i + 2];
+	//	float w = vertices[i + 3];
 
-		for (int j = 0; j < 4; j++)
-		{
-			vertices[i + j] = x * rollMatrix[j][0] + y * rollMatrix[j][1] + z * rollMatrix[j][2] + w * rollMatrix[j][3];
-		}
-	}
+	//	for (int j = 0; j < 4; j++)
+	//	{
+	//		vertices[i + j] = x * rollMatrix[j][0] + y * rollMatrix[j][1] + z * rollMatrix[j][2] + w * rollMatrix[j][3];
+	//	}
+	//}
 
 	//Scaling
 	float xmid = (vertices[0] + vertices[12]) / 2.0f;
@@ -126,8 +127,8 @@ void IntroTransformation::Update()
 	//  -> -(scaleFactorX * xmid - xmid);
 	float translationMatrix[4][4] =
 	{
-		{1.0f, 0.0f, 0.0f, -(combinedScaleFactor_X - 1) * xmid},
-		{0.0f, 1.0f, 0.0f, -(combinedScaleFactor_Y - 1) * ymid},
+		{1.0f, 0.0f, 0.0f, -(combinedScaleFactor_X - 1) * xmid + translate.x},
+		{0.0f, 1.0f, 0.0f, -(combinedScaleFactor_Y - 1) * ymid + translate.y},
 		{0.0f, 0.0f, 1.0f,                          0.0f                    },
 		{0.0f, 0.0f, 0.0f,                          1.0f                    }
 	};
@@ -145,29 +146,6 @@ void IntroTransformation::Update()
 			vertices[i + j] = x * translationMatrix[j][0] + y * translationMatrix[j][1] + z * translationMatrix[j][2] + w * translationMatrix[j][3];
 		}
 	}
-
-	float translationMatrix1[4][4] =
-	{
-		{1.0f, 0.0f, 0.0f, translate.x},
-		{0.0f, 1.0f, 0.0f, translate.y},
-		{0.0f, 0.0f, 1.0f,    0.0f    },
-		{0.0f, 0.0f, 0.0f,    1.0f    }
-	};
-
-	// Subtracting each vertex from the change in the pivot
-	for (int i = 0; i < sizeof(vertices) / sizeof(vertices[0]); i += 4)
-	{
-		float x = vertices[i];
-		float y = vertices[i + 1];
-		float z = vertices[i + 2];
-		float w = vertices[i + 3];
-
-		for (int j = 0; j < 4; j++)
-		{
-			vertices[i + j] = x * translationMatrix1[j][0] + y * translationMatrix1[j][1] + z * translationMatrix1[j][2] + w * translationMatrix1[j][3];
-		}
-	}
-
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
@@ -191,7 +169,6 @@ void IntroTransformation::ImGuiRender(GLFWwindow* window)
 	ImGui::DragFloat("ScaleY", &scaleFactorY, 0.005f);
 	ImGui::DragFloat("Scale", &scaleFactor, 0.005f);
 	ImGui::DragFloat2("Translate", &translate.x, 0.005f);
-	ImGui::DragFloat3("Rotation", &rotation.x, 0.005f);
 
 	ImGui::End();
 }
@@ -216,15 +193,15 @@ IntroTransformation* IntroTransformation::GetInstance()
 	return &instance;
 }
 
-Matrix4x4& IntroTransformation::MultiplyMatrices(Matrix4x4 a, Matrix4x4 b)  
+Matrix4x4& IntroTransformation::MultiplyMatrices(Matrix4x4 a, Matrix4x4 b, Matrix4x4& result)
 {  
    // Use static matrix to make the matrix persistent  
-   float matrix[4][4] = {  
-       {1.0f, 0.0f, 0.0f, 0.0f},  
-       {0.0f, 1.0f, 0.0f, 0.0f},  
-       {0.0f, 0.0f, 1.0f, 0.0f},  
-       {0.0f, 0.0f, 0.0f, 1.0f}  
-   };  
+   //float matrix[4][4] = {
+   //    {1.0f, 0.0f, 0.0f, 0.0f},  
+   //    {0.0f, 1.0f, 0.0f, 0.0f},  
+   //    {0.0f, 0.0f, 1.0f, 0.0f},  
+   //    {0.0f, 0.0f, 0.0f, 1.0f}  
+   //};  
 
    for (int i = 0; i < 4; i++)  
    {  
@@ -235,9 +212,25 @@ Matrix4x4& IntroTransformation::MultiplyMatrices(Matrix4x4 a, Matrix4x4 b)
 
        for (int j = 0; j < 4; j++)  
        {  
-           matrix[i][j] = v1 * b[0][j] + v2 * b[1][j] + v3 * b[2][j] + v4 * b[3][j];  
+           result[i][j] = v1 * b[0][j] + v2 * b[1][j] + v3 * b[2][j] + v4 * b[3][j];  
        }  
    }  
 
-   return matrix;  
+   return result;  
+}
+
+bool IntroTransformation::ValueChanged()
+{
+	if (scaleFactor != scaleFactor_Stored || scaleFactorX != scaleFactorX_Stored || scaleFactorY != scaleFactorY_Stored
+		|| translate != translate_Stored)
+	{
+		scaleFactor_Stored = scaleFactor;
+		scaleFactorX_Stored = scaleFactorX;
+		scaleFactorY_Stored = scaleFactorY;
+		translate_Stored = translate;
+
+		return true;
+	}
+
+	return false;
 }

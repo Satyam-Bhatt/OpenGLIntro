@@ -25,6 +25,7 @@ private:
 	enum SubScene
 	{
 		IntroTransformations,
+		Translate_Rotate_Scale,
 		COUNT
 	};
 
@@ -36,7 +37,7 @@ private:
 	SubScene current_SubScene = IntroTransformations;
 	SubScene previous_SubScene = IntroTransformations;
 
-	bool openScene[SubScene::COUNT] = { true };
+	bool openScene[SubScene::COUNT] = { true, false };
 
 	std::unordered_map<int, std::string> sceneNames;
 	std::unordered_map<int, std::function<TransformationMain* ()>> sceneFactories;
