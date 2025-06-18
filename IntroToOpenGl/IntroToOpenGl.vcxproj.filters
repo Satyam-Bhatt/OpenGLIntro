@@ -295,6 +295,8 @@
     <None Include="IntroTransformation.shader">
       <Filter>Shader\Transformations</Filter>
     </None>
-    <None Include="Translate_Rotate_Scale.shader" />
+    <None Include="Translate_Rotate_Scale.shader">
+      <Filter>Shader\Transformations</Filter>
+    </None>
   </ItemGroup>
 </Project>

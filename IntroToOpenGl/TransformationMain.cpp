@@ -1,5 +1,6 @@
 #include "TransformationMain.h"
 #include "IntroTransformation.h"
+#include "Translate_Rotate_Scale.h"
 
 TransformationMain* TransformationMain::instance = nullptr;
 
@@ -7,6 +8,9 @@ TransformationMain::TransformationMain()
 {
 	sceneNames[SubScene::IntroTransformations] = "Intro Transformations";
 	sceneFactories[SubScene::IntroTransformations] = []() -> TransformationMain* { return IntroTransformation::GetInstance(); };
+
+	sceneNames[SubScene::Translate_Rotate_Scale] = "Translate Rotate Scale";
+	sceneFactories[SubScene::Translate_Rotate_Scale] = []() -> TransformationMain* { return Translate_Rotate_Scale::GetInstance(); };
 }
 
 TransformationMain::~TransformationMain()
@@ -147,6 +151,10 @@ void TransformationMain::ChangeScene()
 void TransformationMain::RenderText(SubScene sceneName)
 {
 	if (sceneName == SubScene::IntroTransformations)
+	{
+		ImGui::TextWrapped("Scale and move the rectangel using matricies");
+	}
+	else if(sceneName == SubScene::Translate_Rotate_Scale)
 	{
 		ImGui::TextWrapped("Scale and move the rectangel using matricies");
 	}

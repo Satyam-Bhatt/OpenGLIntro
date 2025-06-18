@@ -1,7 +1,8 @@
 #pragma once
+#include "IntroTransformation.h"
 
 using namespace Vector;
-#include "IntroTransformation.h"
+using Matrix4x4 = float[4][4];
 class Translate_Rotate_Scale : public IntroTransformation
 {
 public:
@@ -20,5 +21,12 @@ private:
 	static Translate_Rotate_Scale instance;
 	Shader shader;
 	Vector3 rotation{ 0.0f, 0.0f, 0.0f };
+	Vector2 translate{ 0.0f, 0.0f };
+	Vector2 scale = Vector2(1.0f, 1.0f);
+	float scaleCombined = 1.0f;
+
+	uint32_t VAO, VBO, EBO;
+
+	Matrix4x4& MultiplyMatrices(Matrix4x4 a, Matrix4x4 b, Matrix4x4& result);
 };
 

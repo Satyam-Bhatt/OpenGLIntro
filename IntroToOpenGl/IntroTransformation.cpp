@@ -53,8 +53,6 @@ void IntroTransformation::Update()
 {
 	if(!ValueChanged()) return;
 
-	std::cout << "Rotation: " << std::endl;
-
 	float vertices[] =
 	{
 		 0.0f,  0.0f, 0.0f, 1.0f,
@@ -186,6 +184,7 @@ void IntroTransformation::Exit()
 	if (VAO != 0) glDeleteVertexArrays(1, &VAO);
 	if (VBO != 0) glDeleteBuffers(1, &VBO);
 	if (EBO != 0) glDeleteBuffers(1, &EBO);
+	glDeleteProgram(shader.ID);
 }
 
 IntroTransformation* IntroTransformation::GetInstance()
