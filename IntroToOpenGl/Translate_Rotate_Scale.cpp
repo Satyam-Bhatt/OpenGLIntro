@@ -4,6 +4,9 @@ Translate_Rotate_Scale Translate_Rotate_Scale::instance;
 
 Translate_Rotate_Scale::Translate_Rotate_Scale()
 {
+	VAO = 0;
+	VBO = 0;
+	EBO = 0;
 }
 
 Translate_Rotate_Scale::~Translate_Rotate_Scale()
@@ -50,20 +53,20 @@ void Translate_Rotate_Scale::Start()
 
 void Translate_Rotate_Scale::Update()
 {
-	//float vertices[] =
-	//{
-	//	-0.5f, -0.5f, 0.0f, 1.0f,
-	//	 0.5f, -0.5f, 0.0f, 1.0f,
-	//	-0.5f,  0.5f, 0.0f, 1.0f,
-	//	 0.5f,  0.5f, 0.0f, 1.0f
-	//};
 	float vertices[] =
 	{
-		 0.0f,  0.0f, 0.0f, 1.0f,
-		 0.5f,  0.0f, 0.0f, 1.0f,
-		 0.0f,  0.5f, 0.0f, 1.0f,
+		-0.5f, -0.5f, 0.0f, 1.0f,
+		 0.5f, -0.5f, 0.0f, 1.0f,
+		-0.5f,  0.5f, 0.0f, 1.0f,
 		 0.5f,  0.5f, 0.0f, 1.0f
 	};
+	//float vertices[] =
+	//{
+	//	 0.0f,  0.0f, 0.0f, 1.0f,
+	//	 0.5f,  0.0f, 0.0f, 1.0f,
+	//	 0.0f,  0.5f, 0.0f, 1.0f,
+	//	 0.5f,  0.5f, 0.0f, 1.0f
+	//};
 
 	// Translation
 	float translationMatrix[4][4] =
