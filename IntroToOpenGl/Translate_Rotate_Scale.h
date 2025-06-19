@@ -23,6 +23,7 @@ private:
 	Vector3 rotation{ 0.0f, 0.0f, 0.0f };
 	Vector2 translate{ 0.0f, 0.0f };
 	Vector2 scale = Vector2(1.0f, 1.0f);
+	Vector2 pivot{ 0.0f, 0.0f };
 	float scaleCombined = 1.0f;
 
 	uint32_t VAO, VBO, EBO;
