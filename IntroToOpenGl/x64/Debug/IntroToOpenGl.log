@@ -1,8 +1,4 @@
-﻿  TransformationMain.cpp
-  Translate_Rotate_Scale.cpp
-C:\Users\satya\OneDrive\Desktop\SDL&OpenGL\OpenGLIntro\IntroToOpenGl\Translate_Rotate_Scale.cpp(145,51): warning C4244: 'argument': conversion from 'GLint' to 'float', possible loss of data
-C:\Users\satya\OneDrive\Desktop\SDL&OpenGL\OpenGLIntro\IntroToOpenGl\Translate_Rotate_Scale.cpp(145,22): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-  Generating Code...
-  LINK : C:\Users\satya\OneDrive\Desktop\SDL&OpenGL\OpenGLIntro\x64\Debug\IntroToOpenGl.exe not found or not built by the last incremental link; performing full link
-LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
+﻿  Translate_Rotate_Scale.cpp
+C:\Users\satya\OneDrive\Desktop\SDL&OpenGL\OpenGLIntro\IntroToOpenGl\Translate_Rotate_Scale.cpp(150,51): warning C4244: 'argument': conversion from 'GLint' to 'float', possible loss of data
+C:\Users\satya\OneDrive\Desktop\SDL&OpenGL\OpenGLIntro\IntroToOpenGl\Translate_Rotate_Scale.cpp(150,22): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
   IntroToOpenGl.vcxproj -> C:\Users\satya\OneDrive\Desktop\SDL&OpenGL\OpenGLIntro\x64\Debug\IntroToOpenGl.exe
