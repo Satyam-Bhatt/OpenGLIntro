@@ -60,19 +60,39 @@ void Translate_Rotate_Scale::Update()
 		-0.5f,  0.5f, 0.0f, 1.0f,
 		 0.5f,  0.5f, 0.0f, 1.0f
 	};
-	//float vertices[] =
-	//{
-	//	 0.0f,  0.0f, 0.0f, 1.0f,
-	//	 0.5f,  0.0f, 0.0f, 1.0f,
-	//	 0.0f,  0.5f, 0.0f, 1.0f,
-	//	 0.5f,  0.5f, 0.0f, 1.0f
-	//};
+	
+	// Pivot
+	float pivotMatrix[4][4] =
+	{
+		{1.0f, 0.0f, 0.0f, pivot.x},
+		{0.0f, 1.0f, 0.0f, pivot.y},
+		{0.0f, 0.0f, 1.0f, 0.0f},
+		{0.0f, 0.0f, 0.0f, 1.0f}
+	};
+
+	// Applies the pivot to the vertices
+	for (int i = 0; i < sizeof(vertices) / sizeof(vertices[0]); i += 4)
+	{
+		float x = vertices[i];
+		float y = vertices[i + 1];
+		float z = vertices[i + 2];
+		float w = vertices[i + 3];
+
+		for (int j = 0; j < 4; j++)
+		{
+			vertices[i + j] = x * pivotMatrix[j][0] + y * pivotMatrix[j][1] + z * pivotMatrix[j][2]
+				+ w * pivotMatrix[j][3];
+		}
+	}
 
 	// Translation
+	// This is also responsible for moving back the vertices by the amount they were translated by the pivot matrix.
+	// As all the operations are performed on the vertices and verticies are already manipulated by the pivot matrix we are able to rotate
+	// and scale as per the pivot
 	float translationMatrix[4][4] =
 	{
-		{1.0f, 0.0f, 0.0f, translate.x},
-		{0.0f, 1.0f, 0.0f, translate.y},
+		{1.0f, 0.0f, 0.0f, translate.x - pivot.x},
+		{0.0f, 1.0f, 0.0f, translate.y - pivot.y},
 		{0.0f, 0.0f, 1.0f, 0.0f},
 		{0.0f, 0.0f, 0.0f, 1.0f}
 	};
@@ -134,6 +154,7 @@ void Translate_Rotate_Scale::ImGuiRender(GLFWwindow* window)
 
 	ImGui::Begin("Level Specific", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
 
+	ImGui::DragFloat2("Pivot", &pivot.x, 0.005f);
 	ImGui::DragFloat2("Scale XY", &scale.x, 0.005f);
 	ImGui::DragFloat("Scale", &scaleCombined, 0.005f);
 	ImGui::DragFloat2("Translate", &translate.x, 0.005f);
