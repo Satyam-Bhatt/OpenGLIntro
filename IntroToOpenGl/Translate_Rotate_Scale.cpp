@@ -64,8 +64,8 @@ void Translate_Rotate_Scale::Update()
 	// Pivot
 	float pivotMatrix[4][4] =
 	{
-		{1.0f, 0.0f, 0.0f, pivot.x},
-		{0.0f, 1.0f, 0.0f, pivot.y},
+		{1.0f, 0.0f, 0.0f, -pivot.x},
+		{0.0f, 1.0f, 0.0f, -pivot.y},
 		{0.0f, 0.0f, 1.0f, 0.0f},
 		{0.0f, 0.0f, 0.0f, 1.0f}
 	};
@@ -91,8 +91,8 @@ void Translate_Rotate_Scale::Update()
 	// and scale as per the pivot
 	float translationMatrix[4][4] =
 	{
-		{1.0f, 0.0f, 0.0f, translate.x - pivot.x},
-		{0.0f, 1.0f, 0.0f, translate.y - pivot.y},
+		{1.0f, 0.0f, 0.0f, translate.x + pivot.x},
+		{0.0f, 1.0f, 0.0f, translate.y + pivot.y},
 		{0.0f, 0.0f, 1.0f, 0.0f},
 		{0.0f, 0.0f, 0.0f, 1.0f}
 	};
@@ -100,10 +100,10 @@ void Translate_Rotate_Scale::Update()
 	// Scaling
 	float scalingMatrix[4][4] =
 	{
-		{scale.x * scaleCombined, 0.0f, 0.0f, 0.0f},
-		{0.0f, scale.y * scaleCombined, 0.0f, 0.0f},
-		{0.0f, 0.0f, 1.0f, 0.0f},
-		{0.0f, 0.0f, 0.0f, 1.0f}
+		{scale.x * scaleCombined,          0.0f          , 0.0f, 0.0f},
+		{         0.0f          , scale.y * scaleCombined, 0.0f, 0.0f},
+		{         0.0f          ,          0.0f          , 1.0f, 0.0f},
+		{         0.0f          ,          0.0f          , 0.0f, 1.0f}
 	};
 
 	// Rotation
@@ -159,6 +159,14 @@ void Translate_Rotate_Scale::ImGuiRender(GLFWwindow* window)
 	ImGui::DragFloat("Scale", &scaleCombined, 0.005f);
 	ImGui::DragFloat2("Translate", &translate.x, 0.005f);
 	ImGui::DragFloat3("Rotation", &rotation.x, 0.005f);
+	if (ImGui::Button("Reset", ImVec2(100, 0)))
+	{
+		pivot = Vector2(0.0f, 0.0f);
+		scale = Vector2(1.0f, 1.0f);
+		scaleCombined = 1.0f;
+		translate = Vector2(0.0f, 0.0f);
+		rotation = Vector3(0.0f, 0.0f, 0.0f);
+	}
 
 	ImGui::End();
 }
