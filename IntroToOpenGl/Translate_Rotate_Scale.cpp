@@ -82,6 +82,8 @@ void Translate_Rotate_Scale::Update()
 		{
 			vertices[i + j] = x * pivotMatrix[j][0] + y * pivotMatrix[j][1] + z * pivotMatrix[j][2]
 				+ w * pivotMatrix[j][3];
+
+			std::cout << i+j << " coord: " << vertices[i + j] << std::endl;
 		}
 	}
 
