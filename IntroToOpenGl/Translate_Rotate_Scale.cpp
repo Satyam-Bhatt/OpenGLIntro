@@ -7,6 +7,9 @@ Translate_Rotate_Scale::Translate_Rotate_Scale()
 	VAO = 0;
 	VBO = 0;
 	EBO = 0;
+	VAO2 = 0;
+	VBO2 = 0;
+	EBO2 = 0;
 }
 
 Translate_Rotate_Scale::~Translate_Rotate_Scale()
@@ -17,10 +20,19 @@ Translate_Rotate_Scale::~Translate_Rotate_Scale()
 void Translate_Rotate_Scale::Start()
 {
 	shader = Shader("Translate_Rotate_Scale.shader");
+	shader2 = Shader("Translate_Rotate_Scale_Pivot.shader");
 
 	float vertices[] =
 	{
 		-0.5f, -0.5f, 0.0f, 1.0f,
+		 0.5f, -0.5f, 0.0f, 1.0f,
+		-0.5f,  0.5f, 0.0f, 1.0f,
+		 0.5f,  0.5f, 0.0f, 1.0f
+	};
+
+	float vertices2[] =
+	{
+	    -0.5f, -0.5f, 0.0f, 1.0f,
 		 0.5f, -0.5f, 0.0f, 1.0f,
 		-0.5f,  0.5f, 0.0f, 1.0f,
 		 0.5f,  0.5f, 0.0f, 1.0f

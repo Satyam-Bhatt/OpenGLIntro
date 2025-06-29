@@ -222,6 +222,7 @@
     <None Include="ShaderClass.shader" />
     <None Include="TexelViewer.shader" />
     <None Include="Translate_Rotate_Scale.shader" />
+    <None Include="Translate_Scale_Rotate_Pivot.shader" />
     <None Include="TriangleTexture.shader" />
     <None Include="TwoTextures.shader" />
     <None Include="TwoTextureSecondShader.shader" />

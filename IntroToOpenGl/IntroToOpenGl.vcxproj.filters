@@ -298,5 +298,8 @@
     <None Include="Translate_Rotate_Scale.shader">
       <Filter>Shader\Transformations</Filter>
     </None>
+    <None Include="Translate_Scale_Rotate_Pivot.shader">
+      <Filter>Shader\Transformations</Filter>
+    </None>
   </ItemGroup>
 </Project>
