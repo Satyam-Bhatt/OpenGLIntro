@@ -50,7 +50,8 @@ void Translate_Rotate_Scale::Start()
 	glBindVertexArray(0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
-
+ 
+// Step by step 
 void Translate_Rotate_Scale::Update()
 {
 	float vertices[] =
