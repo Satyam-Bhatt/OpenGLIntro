@@ -27,7 +27,7 @@ private:
 	float scaleCombined = 1.0f;
 
 	uint32_t VAO, VBO, EBO;
-	uint32_t VAO2, VBO2, EBO2;
+	uint32_t VAO2, VBO2;
 
 	Matrix4x4& MultiplyMatrices(Matrix4x4 a, Matrix4x4 b, Matrix4x4& result);
 };
