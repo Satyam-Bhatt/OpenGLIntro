@@ -30,14 +30,6 @@ void Translate_Rotate_Scale::Start()
 		 0.5f,  0.5f, 0.0f, 1.0f
 	};
 
-	float vertices2[] =
-	{
-	    -0.5f, -0.5f, 0.0f, 1.0f,
-		 0.5f, -0.5f, 0.0f, 1.0f,
-		-0.5f,  0.5f, 0.0f, 1.0f,
-		 0.5f,  0.5f, 0.0f, 1.0f
-	};
-
 	unsigned int indices[] =
 	{
 		0, 1, 2,
@@ -61,6 +53,22 @@ void Translate_Rotate_Scale::Start()
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+	float vertices2[] =
+	{
+		-0.5f, -0.5f, 0.0f, 1.0f,
+		 0.5f, -0.5f, 0.0f, 1.0f,
+		-0.5f,  0.5f, 0.0f, 1.0f,
+		 0.5f,  0.5f, 0.0f, 1.0f
+	};
+
+	glGenVertexArrays(1, &VAO2);
+	glGenBuffers(1, &VBO2);
+	glGenBuffers(1, &EBO2);
+
+	glBindVertexArray(VAO2);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO2);
+
 }
  
 // Step by step 
