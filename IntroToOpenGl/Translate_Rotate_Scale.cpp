@@ -18,6 +18,10 @@ Translate_Rotate_Scale::~Translate_Rotate_Scale()
 
 void Translate_Rotate_Scale::Start()
 {
+	// Enable alpha blending
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 	shader = Shader("Translate_Rotate_Scale.shader");
 	shader2 = Shader("Translate_Scale_Rotate_Pivot.shader");
 
@@ -54,10 +58,10 @@ void Translate_Rotate_Scale::Start()
 
 	float vertices2[] =
 	{
-		-0.5f, -0.5f, 0.0f, 1.0f,
-		 0.5f, -0.5f, 0.0f, 1.0f,
-		-0.5f,  0.5f, 0.0f, 1.0f,
-		 0.5f,  0.5f, 0.0f, 1.0f
+		-0.1f, -0.1f, 0.0f, 1.0f, 0, 0,
+		 0.1f, -0.1f, 0.0f, 1.0f, 1, 0,
+		-0.1f,  0.1f, 0.0f, 1.0f, 0, 1,
+		 0.1f,  0.1f, 0.0f, 1.0f, 1, 1
 	};
 
 	glGenVertexArrays(1, &VAO2);
@@ -70,8 +74,11 @@ void Translate_Rotate_Scale::Start()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
-	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
+
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(4 * sizeof(float)));
+	glEnableVertexAttribArray(1);
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
@@ -166,9 +173,15 @@ void Translate_Rotate_Scale::Update()
 		}
 	}
 
+	storeRotation = rotation;
+	storeScale = scale;
+	storeTranslate = translate;
+
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	// Set 
 }
 
 void Translate_Rotate_Scale::ImGuiRender(GLFWwindow* window)
@@ -222,11 +235,26 @@ void Translate_Rotate_Scale::Exit()
 	if (VBO2 != 0) glDeleteBuffers(1, &VBO2);
 	glDeleteProgram(shader.ID);
 	glDeleteProgram(shader2.ID);
+	glDisable(GL_BLEND);
 }
 
 Translate_Rotate_Scale* Translate_Rotate_Scale::GetInstance()
 {
 	return &instance;
+}
+
+bool Translate_Rotate_Scale::ValueChanged()
+{
+	if (scale != storeScale)
+		return true;
+
+	if(translate != storeTranslate)
+		return true;
+
+	if (rotation != storeRotation)
+		return true;
+
+	return false;
 }
 
 Matrix4x4& Translate_Rotate_Scale::MultiplyMatrices(Matrix4x4 a, Matrix4x4 b, Matrix4x4& result)
