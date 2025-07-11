@@ -88,6 +88,26 @@ void Translate_Rotate_Scale::Start()
 // Step by step 
 void Translate_Rotate_Scale::Update()
 {
+	Matrix4x4 localMatrix;
+	LocalSpaceTransformation(localMatrix);
+	std::cout << "Local Matrix: " << std::endl;
+	
+	for (int i = 0; i < 4; i++)
+	{
+		for(int j = 0; j < 4; j++)
+		{
+			std::cout << localMatrix[i][j] << " ";
+		}
+		std::cout << std::endl;
+	}
+
+	float px = pivot.x, py = pivot.y, pz = 0.0f, pw = 1.0f;
+
+	float nPX = localMatrix[0][0] * px + localMatrix[0][1] * py + localMatrix[0][2] * pz + localMatrix[0][3] * pw;
+	float nPY = localMatrix[1][0] * px + localMatrix[1][1] * py + localMatrix[1][2] * pz + localMatrix[1][3] * pw;
+	float nPZ = localMatrix[2][0] * px + localMatrix[2][1] * py + localMatrix[2][2] * pz + localMatrix[2][3] * pw;
+	float nPW = localMatrix[3][0] * px + localMatrix[3][1] * py + localMatrix[3][2] * pz + localMatrix[3][3] * pw;
+
 	float vertices[] =
 	{
 		-0.5f, -0.5f, 0.0f, 1.0f,
@@ -181,7 +201,26 @@ void Translate_Rotate_Scale::Update()
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-	// Set 
+	// Set pivot position
+	//float vertices2[] =
+	//{
+	//	-0.05f + pivot.x, -0.05f + pivot.y, 0.0f, 1.0f, 0, 0,
+	//	 0.05f + pivot.x, -0.05f + pivot.y, 0.0f, 1.0f, 1, 0,
+	//	-0.05f + pivot.x,  0.05f + pivot.y, 0.0f, 1.0f, 0, 1,
+	//	 0.05f + pivot.x,  0.05f + pivot.y, 0.0f, 1.0f, 1, 1
+	//};
+
+	float vertices2[] =
+	{
+		-0.05f + nPX, -0.05f + nPY, 0.0f, 1.0f, 0, 0,
+		 0.05f + nPX, -0.05f + nPY, 0.0f, 1.0f, 1, 0,
+		-0.05f + nPX,  0.05f + nPY, 0.0f, 1.0f, 0, 1,
+		 0.05f + nPX,  0.05f + nPY, 0.0f, 1.0f, 1, 1
+	};
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO2);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices2), vertices2, GL_DYNAMIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
 void Translate_Rotate_Scale::ImGuiRender(GLFWwindow* window)
@@ -273,4 +312,42 @@ Matrix4x4& Translate_Rotate_Scale::MultiplyMatrices(Matrix4x4 a, Matrix4x4 b, Ma
 	}
 
 	return result;
+}
+
+void Translate_Rotate_Scale::LocalSpaceTransformation(Matrix4x4& result)
+{
+	float translationMatrix[4][4] =
+	{
+		{1.0f, 0.0f, 0.0f, translate.x + pivot.x},
+		{0.0f, 1.0f, 0.0f, translate.y + pivot.y},
+		{0.0f, 0.0f, 1.0f, 0.0f},
+		{0.0f, 0.0f, 0.0f, 1.0f}
+	};
+
+	// Scaling
+	float scalingMatrix[4][4] =
+	{
+		{scale.x * scaleCombined,          0.0f          , 0.0f, 0.0f},
+		{         0.0f          , scale.y * scaleCombined, 0.0f, 0.0f},
+		{         0.0f          ,          0.0f          , 1.0f, 0.0f},
+		{         0.0f          ,          0.0f          , 0.0f, 1.0f}
+	};
+
+	// Rotation
+	// Roll
+	float rollMatrix[4][4] =
+	{
+		{cos(rotation.z), -sin(rotation.z), 0.0f, 0.0f},
+		{sin(rotation.z),  cos(rotation.z), 0.0f, 0.0f},
+		{        0.0f   ,       0.0f      , 1.0f, 0.0f},
+		{        0.0f   ,       0.0f      , 0.0f, 1.0f}
+	};
+
+	Matrix4x4 translate_Rotate;
+	MultiplyMatrices(translationMatrix, rollMatrix, translate_Rotate);
+	Matrix4x4 translate_Rotate_Scale;
+	MultiplyMatrices(translate_Rotate, scalingMatrix, translate_Rotate_Scale);
+
+    // Update the line causing the error  
+    memcpy(result, translate_Rotate_Scale, sizeof(Matrix4x4));
 }

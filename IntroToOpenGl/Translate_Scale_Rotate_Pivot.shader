@@ -33,7 +33,7 @@ void main()
 	float dist = length(uv2);
 	dist = 1 - dist;
 	dist = clamp(dist,0,1);
-    dist = pow(dist, 1.5f);
+    dist = pow(dist, 1);
 	col = col * dist;
 	FragColor = vec4(col, len);
 
