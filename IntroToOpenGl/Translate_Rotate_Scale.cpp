@@ -192,7 +192,7 @@ void Translate_Rotate_Scale::Update()
 								+ w * translate_Rotate_Scale[j][3];
 		}
 	}
-
+	//Dummy
 	storeRotation = rotation;
 	storeScale = scale;
 	storeTranslate = translate;
