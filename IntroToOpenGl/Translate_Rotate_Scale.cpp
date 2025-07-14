@@ -88,6 +88,7 @@ void Translate_Rotate_Scale::Start()
 // Step by step 
 void Translate_Rotate_Scale::Update()
 {
+	// This does not give me a matrix that converts world space to local space
 	Matrix4x4 localMatrix;
 	LocalSpaceTransformation(localMatrix);
 	std::cout << "Local Matrix: " << std::endl;
