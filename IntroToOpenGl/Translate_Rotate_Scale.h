@@ -26,6 +26,8 @@ private:
 	Vector2 pivot{ 0.0f, 0.0f };
 	float scaleCombined = 1.0f;
 
+	Vector2 testMove = Vector2(0.0f, 0.0f);
+
 	// Storing the values
 	Vector3 storeRotation = Vector3(0.0f, 0.0f, 0.0f);
 	Vector2 storeTranslate = Vector2(0.0f, 0.0f);
@@ -38,5 +40,6 @@ private:
 
 	Matrix4x4& MultiplyMatrices(Matrix4x4 a, Matrix4x4 b, Matrix4x4& result);
 	void LocalSpaceTransformation(Matrix4x4& result);
+	bool InverseMatrix(Matrix4x4 matrix, Matrix4x4& result);
 };
 

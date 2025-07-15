@@ -102,7 +102,7 @@ void Translate_Rotate_Scale::Update()
 		std::cout << std::endl;
 	}
 
-	float px = pivot.x, py = pivot.y, pz = 0.0f, pw = 1.0f;
+	float px = testMove.x, py = testMove.y, pz = 0.0f, pw = 1.0f;
 
 	float nPX = localMatrix[0][0] * px + localMatrix[0][1] * py + localMatrix[0][2] * pz + localMatrix[0][3] * pw;
 	float nPY = localMatrix[1][0] * px + localMatrix[1][1] * py + localMatrix[1][2] * pz + localMatrix[1][3] * pw;
@@ -242,6 +242,7 @@ void Translate_Rotate_Scale::ImGuiRender(GLFWwindow* window)
 	ImGui::DragFloat("Scale", &scaleCombined, 0.005f);
 	ImGui::DragFloat2("Translate", &translate.x, 0.005f);
 	ImGui::DragFloat3("Rotation", &rotation.x, 0.005f);
+	ImGui::DragFloat3("Test Move", &testMove.x, 0.005f);
 	if (ImGui::Button("Reset", ImVec2(100, 0)))
 	{
 		pivot = Vector2(0.0f, 0.0f);
