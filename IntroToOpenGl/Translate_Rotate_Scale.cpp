@@ -91,19 +91,20 @@ void Translate_Rotate_Scale::Update()
 	// This does not give me a matrix that converts world space to local space
 	Matrix4x4 localMatrix;
 	LocalSpaceTransformation(localMatrix);
-	std::cout << "Local Matrix: " << std::endl;
+	//std::cout << "Local Matrix: " << std::endl;
 	
-	for (int i = 0; i < 4; i++)
-	{
-		for(int j = 0; j < 4; j++)
-		{
-			std::cout << localMatrix[i][j] << " ";
-		}
-		std::cout << std::endl;
-	}
+	//for (int i = 0; i < 4; i++)
+	//{
+	//	for(int j = 0; j < 4; j++)
+	//	{
+	//		std::cout << localMatrix[i][j] << " ";
+	//	}
+	//	std::cout << std::endl;
+	//}
 
 	float px = testMove.x, py = testMove.y, pz = 0.0f, pw = 1.0f;
 
+	// These values are in world space but px and py are in local space
 	float nPX = localMatrix[0][0] * px + localMatrix[0][1] * py + localMatrix[0][2] * pz + localMatrix[0][3] * pw;
 	float nPY = localMatrix[1][0] * px + localMatrix[1][1] * py + localMatrix[1][2] * pz + localMatrix[1][3] * pw;
 	float nPZ = localMatrix[2][0] * px + localMatrix[2][1] * py + localMatrix[2][2] * pz + localMatrix[2][3] * pw;
@@ -120,8 +121,8 @@ void Translate_Rotate_Scale::Update()
 	// Pivot
 	float pivotMatrix[4][4] =
 	{
-		{1.0f, 0.0f, 0.0f, -pivot.x},
-		{0.0f, 1.0f, 0.0f, -pivot.y},
+		{1.0f, 0.0f, 0.0f, -testMove.x},
+		{0.0f, 1.0f, 0.0f, -testMove.y},
 		{0.0f, 0.0f, 1.0f, 0.0f},
 		{0.0f, 0.0f, 0.0f, 1.0f}
 	};
@@ -149,8 +150,8 @@ void Translate_Rotate_Scale::Update()
 	// and scale as per the pivot
 	float translationMatrix[4][4] =
 	{
-		{1.0f, 0.0f, 0.0f, translate.x + pivot.x},
-		{0.0f, 1.0f, 0.0f, translate.y + pivot.y},
+		{1.0f, 0.0f, 0.0f, nPX},
+		{0.0f, 1.0f, 0.0f, nPY},
 		{0.0f, 0.0f, 1.0f, 0.0f},
 		{0.0f, 0.0f, 0.0f, 1.0f}
 	};
@@ -201,15 +202,6 @@ void Translate_Rotate_Scale::Update()
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-	// Set pivot position
-	//float vertices2[] =
-	//{
-	//	-0.05f + pivot.x, -0.05f + pivot.y, 0.0f, 1.0f, 0, 0,
-	//	 0.05f + pivot.x, -0.05f + pivot.y, 0.0f, 1.0f, 1, 0,
-	//	-0.05f + pivot.x,  0.05f + pivot.y, 0.0f, 1.0f, 0, 1,
-	//	 0.05f + pivot.x,  0.05f + pivot.y, 0.0f, 1.0f, 1, 1
-	//};
 
 	float vertices2[] =
 	{
@@ -320,8 +312,8 @@ void Translate_Rotate_Scale::LocalSpaceTransformation(Matrix4x4& result)
 {
 	float translationMatrix[4][4] =
 	{
-		{1.0f, 0.0f, 0.0f, translate.x + pivot.x},
-		{0.0f, 1.0f, 0.0f, translate.y + pivot.y},
+		{1.0f, 0.0f, 0.0f, translate.x},
+		{0.0f, 1.0f, 0.0f, translate.y},
 		{0.0f, 0.0f, 1.0f, 0.0f},
 		{0.0f, 0.0f, 0.0f, 1.0f}
 	};
