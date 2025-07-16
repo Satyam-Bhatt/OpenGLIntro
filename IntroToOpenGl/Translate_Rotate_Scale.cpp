@@ -84,31 +84,27 @@ void Translate_Rotate_Scale::Start()
 	glBindVertexArray(0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
- 
+
 // Step by step 
 void Translate_Rotate_Scale::Update()
 {
-	// This does not give me a matrix that converts world space to local space
-	Matrix4x4 localMatrix;
-	LocalSpaceTransformation(localMatrix);
-	//std::cout << "Local Matrix: " << std::endl;
-	
-	//for (int i = 0; i < 4; i++)
-	//{
-	//	for(int j = 0; j < 4; j++)
-	//	{
-	//		std::cout << localMatrix[i][j] << " ";
-	//	}
-	//	std::cout << std::endl;
-	//}
+	Matrix4x4 worldMatrix;
+	LocalSpaceTransformation(worldMatrix);
 
-	float px = testMove.x, py = testMove.y, pz = 0.0f, pw = 1.0f;
+	float nPX = worldMatrix[0][0] * testMove.x/2 + worldMatrix[0][1] * testMove.y/2 + worldMatrix[0][2] * 0 + worldMatrix[0][3] * 1;
+	float nPY = worldMatrix[1][0] * testMove.x/2 + worldMatrix[1][1] * testMove.y/2 + worldMatrix[1][2] * 0 + worldMatrix[1][3] * 1;
 
-	// These values are in world space but px and py are in local space
-	float nPX = localMatrix[0][0] * px + localMatrix[0][1] * py + localMatrix[0][2] * pz + localMatrix[0][3] * pw;
-	float nPY = localMatrix[1][0] * px + localMatrix[1][1] * py + localMatrix[1][2] * pz + localMatrix[1][3] * pw;
-	float nPZ = localMatrix[2][0] * px + localMatrix[2][1] * py + localMatrix[2][2] * pz + localMatrix[2][3] * pw;
-	float nPW = localMatrix[3][0] * px + localMatrix[3][1] * py + localMatrix[3][2] * pz + localMatrix[3][3] * pw;
+	float vertices2[] =
+	{
+		-0.05f + nPX, -0.05f + nPY, 0.0f, 1.0f, 0, 0,
+		 0.05f + nPX, -0.05f + nPY, 0.0f, 1.0f, 1, 0,
+		-0.05f + nPX,  0.05f + nPY, 0.0f, 1.0f, 0, 1,
+		 0.05f + nPX,  0.05f + nPY, 0.0f, 1.0f, 1, 1
+	};
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO2);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices2), vertices2, GL_DYNAMIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	float vertices[] =
 	{
@@ -117,12 +113,12 @@ void Translate_Rotate_Scale::Update()
 		-0.5f,  0.5f, 0.0f, 1.0f,
 		 0.5f,  0.5f, 0.0f, 1.0f
 	};
-	
+
 	// Pivot
 	float pivotMatrix[4][4] =
 	{
-		{1.0f, 0.0f, 0.0f, -testMove.x},
-		{0.0f, 1.0f, 0.0f, -testMove.y},
+		{1.0f, 0.0f, 0.0f, -pivot.x},
+		{0.0f, 1.0f, 0.0f, -pivot.y},
 		{0.0f, 0.0f, 1.0f, 0.0f},
 		{0.0f, 0.0f, 0.0f, 1.0f}
 	};
@@ -150,8 +146,8 @@ void Translate_Rotate_Scale::Update()
 	// and scale as per the pivot
 	float translationMatrix[4][4] =
 	{
-		{1.0f, 0.0f, 0.0f, nPX},
-		{0.0f, 1.0f, 0.0f, nPY},
+		{1.0f, 0.0f, 0.0f, translate.x},
+		{0.0f, 1.0f, 0.0f, translate.y},
 		{0.0f, 0.0f, 1.0f, 0.0f},
 		{0.0f, 0.0f, 0.0f, 1.0f}
 	};
@@ -190,10 +186,33 @@ void Translate_Rotate_Scale::Update()
 
 		for (int j = 0; j < 4; j++)
 		{
-			vertices[i + j] = x * translate_Rotate_Scale[j][0] + y * translate_Rotate_Scale[j][1] + z * translate_Rotate_Scale[j][2] 
-								+ w * translate_Rotate_Scale[j][3];
+			vertices[i + j] = x * translate_Rotate_Scale[j][0] + y * translate_Rotate_Scale[j][1] + z * translate_Rotate_Scale[j][2]
+				+ w * translate_Rotate_Scale[j][3];
 		}
 	}
+
+	//float translationMatrix_END[4][4] =
+	//{
+	//	{1.0f, 0.0f, 0.0f, pivot.x},
+	//	{0.0f, 1.0f, 0.0f, pivot.y},
+	//	{0.0f, 0.0f, 1.0f, 0.0f},
+	//	{0.0f, 0.0f, 0.0f, 1.0f}
+	//};
+
+	//for (int i = 0; i < sizeof(vertices) / sizeof(vertices[0]); i += 4)
+	//{
+	//	float x = vertices[i];
+	//	float y = vertices[i + 1];
+	//	float z = vertices[i + 2];
+	//	float w = vertices[i + 3];
+
+	//	for (int j = 0; j < 4; j++)
+	//	{
+	//		vertices[i + j] = x * translationMatrix_END[j][0] + y * translationMatrix_END[j][1] + z * translationMatrix_END[j][2]
+	//			+ w * translationMatrix_END[j][3];
+	//	}
+	//}
+
 	//Dummy
 	storeRotation = rotation;
 	storeScale = scale;
@@ -201,18 +220,6 @@ void Translate_Rotate_Scale::Update()
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-	float vertices2[] =
-	{
-		-0.05f + nPX, -0.05f + nPY, 0.0f, 1.0f, 0, 0,
-		 0.05f + nPX, -0.05f + nPY, 0.0f, 1.0f, 1, 0,
-		-0.05f + nPX,  0.05f + nPY, 0.0f, 1.0f, 0, 1,
-		 0.05f + nPX,  0.05f + nPY, 0.0f, 1.0f, 1, 1
-	};
-
-	glBindBuffer(GL_ARRAY_BUFFER, VBO2);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices2), vertices2, GL_DYNAMIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
@@ -234,7 +241,7 @@ void Translate_Rotate_Scale::ImGuiRender(GLFWwindow* window)
 	ImGui::DragFloat("Scale", &scaleCombined, 0.005f);
 	ImGui::DragFloat2("Translate", &translate.x, 0.005f);
 	ImGui::DragFloat3("Rotation", &rotation.x, 0.005f);
-	ImGui::DragFloat3("Test Move", &testMove.x, 0.005f);
+	ImGui::DragFloat2("Test Move", &testMove.x, 0.005f);
 	if (ImGui::Button("Reset", ImVec2(100, 0)))
 	{
 		pivot = Vector2(0.0f, 0.0f);
@@ -281,7 +288,7 @@ bool Translate_Rotate_Scale::ValueChanged()
 	if (scale != storeScale)
 		return true;
 
-	if(translate != storeTranslate)
+	if (translate != storeTranslate)
 		return true;
 
 	if (rotation != storeRotation)
@@ -342,8 +349,8 @@ void Translate_Rotate_Scale::LocalSpaceTransformation(Matrix4x4& result)
 	Matrix4x4 translate_Rotate_Scale;
 	MultiplyMatrices(translate_Rotate, scalingMatrix, translate_Rotate_Scale);
 
-    // Update the line causing the error  
-    memcpy(result, translate_Rotate_Scale, sizeof(Matrix4x4));
+	// Update the line causing the error  
+	memcpy(result, translate_Rotate_Scale, sizeof(Matrix4x4));
 }
 
 bool Translate_Rotate_Scale::InverseMatrix(Matrix4x4 matrix, Matrix4x4& result)
