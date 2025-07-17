@@ -27,6 +27,7 @@ private:
 	float scaleCombined = 1.0f;
 
 	Vector2 testMove = Vector2(0.0f, 0.0f);
+	Vector2 storeTestMove = Vector2(0.0f, 0.0f);
 
 	// Storing the values
 	Vector3 storeRotation = Vector3(0.0f, 0.0f, 0.0f);
@@ -36,10 +37,17 @@ private:
 	uint32_t VAO, VBO, EBO;
 	uint32_t VAO2, VBO2;
 
+	Matrix4x4 oldMatrix = { {1.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 1.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 1.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 1.0f} };
+
 	bool ValueChanged();
+	bool ScaleChanged();
+	bool RotateChanged();
+	bool TestValueChanged();
 
 	Matrix4x4& MultiplyMatrices(Matrix4x4 a, Matrix4x4 b, Matrix4x4& result);
 	void LocalSpaceTransformation(Matrix4x4& result);
 	bool InverseMatrix(Matrix4x4 matrix, Matrix4x4& result);
+
+	uint32_t slowPrint = 0;
 };
 

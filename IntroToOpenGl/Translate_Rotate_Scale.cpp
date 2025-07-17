@@ -88,13 +88,21 @@ void Translate_Rotate_Scale::Start()
 // Step by step 
 void Translate_Rotate_Scale::Update()
 {
-	if(!ValueChanged()) return;
+
+	slowPrint++;
 
 	Matrix4x4 worldMatrix;
 	LocalSpaceTransformation(worldMatrix);
 
-	float nPX = worldMatrix[0][0] * testMove.x/2 + worldMatrix[0][1] * testMove.y/2 + worldMatrix[0][2] * 0 + worldMatrix[0][3] * 1;
-	float nPY = worldMatrix[1][0] * testMove.x/2 + worldMatrix[1][1] * testMove.y/2 + worldMatrix[1][2] * 0 + worldMatrix[1][3] * 1;
+	float nPX = worldMatrix[0][0] * pivot.x + worldMatrix[0][1] * pivot.y + worldMatrix[0][2] * 0 + worldMatrix[0][3] * 1;
+	float nPY = worldMatrix[1][0] * pivot.x + worldMatrix[1][1] * pivot.y + worldMatrix[1][2] * 0 + worldMatrix[1][3] * 1;
+
+	float oPX = oldMatrix[0][0] * pivot.x + oldMatrix[0][1] * pivot.y + oldMatrix[0][2] * 0 + oldMatrix[0][3] * 1;
+	float oPY = oldMatrix[1][0] * pivot.x + oldMatrix[1][1] * pivot.y + oldMatrix[1][2] * 0 + oldMatrix[1][3] * 1;
+
+	if(slowPrint % 1000 == 0) printf("Pivot %f %f\n", pivot.x, pivot.y);
+	if(slowPrint % 1000 == 0) printf("World Pivot %f %f\n", nPX, nPY);
+	if(slowPrint % 1000 == 0) printf("Old Pivot %f %f\n", oPX, oPY);
 
 	float vertices2[] =
 	{
@@ -107,6 +115,8 @@ void Translate_Rotate_Scale::Update()
 	glBindBuffer(GL_ARRAY_BUFFER, VBO2);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices2), vertices2, GL_DYNAMIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	if (!ValueChanged()) return;
 
 	float vertices[] =
 	{
@@ -148,17 +158,16 @@ void Translate_Rotate_Scale::Update()
 	// and scale as per the pivot
 	float translationMatrix[4][4] =
 	{
-		{1.0f, 0.0f, 0.0f, translate.x},
-		{0.0f, 1.0f, 0.0f, translate.y},
+		{1.0f, 0.0f, 0.0f, translate.x + pivot.x},
+		{0.0f, 1.0f, 0.0f, translate.y + pivot.y},
 		{0.0f, 0.0f, 1.0f, 0.0f},
 		{0.0f, 0.0f, 0.0f, 1.0f}
 	};
 
-	// Scaling
 	float scalingMatrix[4][4] =
 	{
-		{scale.x * scaleCombined,          0.0f          , 0.0f, 0.0f},
-		{         0.0f          , scale.y * scaleCombined, 0.0f, 0.0f},
+		{scale.x * scaleCombined,          0.0f          , 0.0f, 0},
+		{         0.0f          , scale.y * scaleCombined, 0.0f, 0},
 		{         0.0f          ,          0.0f          , 1.0f, 0.0f},
 		{         0.0f          ,          0.0f          , 0.0f, 1.0f}
 	};
@@ -167,8 +176,8 @@ void Translate_Rotate_Scale::Update()
 	// Roll
 	float rollMatrix[4][4] =
 	{
-		{cos(rotation.z), -sin(rotation.z), 0.0f, 0.0f},
-		{sin(rotation.z),  cos(rotation.z), 0.0f, 0.0f},
+		{cos(rotation.z), -sin(rotation.z), 0.0f, 0},
+		{sin(rotation.z),  cos(rotation.z), 0.0f, 0},
 		{        0.0f   ,       0.0f      , 1.0f, 0.0f},
 		{        0.0f   ,       0.0f      , 0.0f, 1.0f}
 	};
@@ -193,27 +202,14 @@ void Translate_Rotate_Scale::Update()
 		}
 	}
 
-	//float translationMatrix_END[4][4] =
-	//{
-	//	{1.0f, 0.0f, 0.0f, pivot.x},
-	//	{0.0f, 1.0f, 0.0f, pivot.y},
-	//	{0.0f, 0.0f, 1.0f, 0.0f},
-	//	{0.0f, 0.0f, 0.0f, 1.0f}
-	//};
 
-	//for (int i = 0; i < sizeof(vertices) / sizeof(vertices[0]); i += 4)
-	//{
-	//	float x = vertices[i];
-	//	float y = vertices[i + 1];
-	//	float z = vertices[i + 2];
-	//	float w = vertices[i + 3];
+	Matrix4x4 scaleTransform;
+	MultiplyMatrices(scalingMatrix, pivotMatrix, scaleTransform);
 
-	//	for (int j = 0; j < 4; j++)
-	//	{
-	//		vertices[i + j] = x * translationMatrix_END[j][0] + y * translationMatrix_END[j][1] + z * translationMatrix_END[j][2]
-	//			+ w * translationMatrix_END[j][3];
-	//	}
-	//}
+	Matrix4x4 rotateScaleTransform;
+	MultiplyMatrices(rollMatrix, scaleTransform, rotateScaleTransform);
+
+	MultiplyMatrices(translationMatrix, rotateScaleTransform, oldMatrix);
 
 	//Dummy
 	storeRotation = rotation;
@@ -296,7 +292,23 @@ bool Translate_Rotate_Scale::ValueChanged()
 	if (rotation != storeRotation)
 		return true;
 
-	if (testMove != storeTestMove)
+	//if (testMove != storeTestMove)
+	//	return true;
+
+	return false;
+}
+
+bool Translate_Rotate_Scale::ScaleChanged()
+{
+	if (scale != storeScale)
+		return true;
+
+	return false;
+}
+
+bool Translate_Rotate_Scale::RotateChanged()
+{
+	if (rotation != storeRotation)
 		return true;
 
 	return false;
@@ -304,7 +316,7 @@ bool Translate_Rotate_Scale::ValueChanged()
 
 bool Translate_Rotate_Scale::TestValueChanged()
 {
-	if(testMove != storeTestMove)
+	if (testMove != storeTestMove)
 		return true;
 
 	return false;
@@ -330,40 +342,50 @@ Matrix4x4& Translate_Rotate_Scale::MultiplyMatrices(Matrix4x4 a, Matrix4x4 b, Ma
 
 void Translate_Rotate_Scale::LocalSpaceTransformation(Matrix4x4& result)
 {
-	float translationMatrix[4][4] =
+	// Step 1: Translate to pivot (move pivot to origin)
+	float translateToPivotMatrix[4][4] =
 	{
-		{1.0f, 0.0f, 0.0f, translate.x},
-		{0.0f, 1.0f, 0.0f, translate.y},
+		{1.0f, 0.0f, 0.0f, -pivot.x},
+		{0.0f, 1.0f, 0.0f, -pivot.y},
 		{0.0f, 0.0f, 1.0f, 0.0f},
 		{0.0f, 0.0f, 0.0f, 1.0f}
 	};
 
-	// Scaling
+	// Step 2: Scale around origin (now the pivot point)
 	float scalingMatrix[4][4] =
 	{
-		{scale.x * scaleCombined,          0.0f          , 0.0f, 0.0f},
-		{         0.0f          , scale.y * scaleCombined, 0.0f, 0.0f},
-		{         0.0f          ,          0.0f          , 1.0f, 0.0f},
-		{         0.0f          ,          0.0f          , 0.0f, 1.0f}
+		{scale.x * scaleCombined, 0.0f, 0.0f, 0.0f},
+		{0.0f, scale.y * scaleCombined, 0.0f, 0.0f},
+		{0.0f, 0.0f, 1.0f, 0.0f},
+		{0.0f, 0.0f, 0.0f, 1.0f}
 	};
 
-	// Rotation
-	// Roll
+	// Step 3: Rotate around origin (still the pivot point)
 	float rollMatrix[4][4] =
 	{
 		{cos(rotation.z), -sin(rotation.z), 0.0f, 0.0f},
 		{sin(rotation.z),  cos(rotation.z), 0.0f, 0.0f},
-		{        0.0f   ,       0.0f      , 1.0f, 0.0f},
-		{        0.0f   ,       0.0f      , 0.0f, 1.0f}
+		{0.0f, 0.0f, 1.0f, 0.0f},
+		{0.0f, 0.0f, 0.0f, 1.0f}
 	};
 
-	Matrix4x4 translate_Rotate;
-	MultiplyMatrices(translationMatrix, rollMatrix, translate_Rotate);
-	Matrix4x4 translate_Rotate_Scale;
-	MultiplyMatrices(translate_Rotate, scalingMatrix, translate_Rotate_Scale);
+	// Step 4: Translate back from pivot + final translation
+	float translateBackMatrix[4][4] =
+	{
+		{1.0f, 0.0f, 0.0f, pivot.x + translate.x},
+		{0.0f, 1.0f, 0.0f, pivot.y + translate.y},
+		{0.0f, 0.0f, 1.0f, 0.0f},
+		{0.0f, 0.0f, 0.0f, 1.0f}
+	};
 
-	// Update the line causing the error  
-	memcpy(result, translate_Rotate_Scale, sizeof(Matrix4x4));
+	// Combine transformations: Final = TranslateBack * Rotate * Scale * TranslateToPivot
+	Matrix4x4 scaleTransform;
+	MultiplyMatrices(scalingMatrix, translateToPivotMatrix, scaleTransform);
+
+	Matrix4x4 rotateScaleTransform;
+	MultiplyMatrices(rollMatrix, scaleTransform, rotateScaleTransform);
+
+	MultiplyMatrices(translateBackMatrix, rotateScaleTransform, result);
 }
 
 bool Translate_Rotate_Scale::InverseMatrix(Matrix4x4 matrix, Matrix4x4& result)
