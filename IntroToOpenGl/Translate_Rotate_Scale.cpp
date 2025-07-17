@@ -88,6 +88,8 @@ void Translate_Rotate_Scale::Start()
 // Step by step 
 void Translate_Rotate_Scale::Update()
 {
+	if(!ValueChanged()) return;
+
 	Matrix4x4 worldMatrix;
 	LocalSpaceTransformation(worldMatrix);
 
@@ -292,6 +294,17 @@ bool Translate_Rotate_Scale::ValueChanged()
 		return true;
 
 	if (rotation != storeRotation)
+		return true;
+
+	if (testMove != storeTestMove)
+		return true;
+
+	return false;
+}
+
+bool Translate_Rotate_Scale::TestValueChanged()
+{
+	if(testMove != storeTestMove)
 		return true;
 
 	return false;
