@@ -91,7 +91,7 @@ void Translate_Rotate_Scale::Update()
 	slowPrint++;
 
 	Matrix4x4 worldMatrix;
-	LocalSpaceTransformation(worldMatrix);
+	LocalSpaceTransformation(worldMatrix, pivot);
 
 	float nPX = worldMatrix[0][0] * pivot.x + worldMatrix[0][1] * pivot.y + worldMatrix[0][2] * 0 + worldMatrix[0][3] * 1;
 	float nPY = worldMatrix[1][0] * pivot.x + worldMatrix[1][1] * pivot.y + worldMatrix[1][2] * 0 + worldMatrix[1][3] * 1;
@@ -115,7 +115,6 @@ void Translate_Rotate_Scale::Update()
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices2), vertices2, GL_DYNAMIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-	if (!ValueChanged()) return;
 
 	float vertices[] =
 	{
@@ -125,87 +124,38 @@ void Translate_Rotate_Scale::Update()
 		 0.5f,  0.5f, 0.0f, 1.0f
 	};
 
-	// Applies the pivot to the vertices
-	if (oldMatrixMul)
-	{
-		for (int i = 0; i < sizeof(vertices) / sizeof(vertices[0]); i += 4)
-		{
-			float x = vertices[i];
-			float y = vertices[i + 1];
-			float z = vertices[i + 2];
-			float w = vertices[i + 3];
+	// UPDATES THE Vertices and sets it to the previous one CRAZY
+	//for (int i = 0; i < sizeof(vertices) / sizeof(vertices[0]); i++)
+	//{
+	//	vertices[i] = previousVertices[i];
+	//}
+	
+	//// Applies the pivot to the vertices
+	//if (oldMatrixMul)
+	//{
+	//	for (int i = 0; i < sizeof(vertices) / sizeof(vertices[0]); i += 4)
+	//	{
+	//		float x = vertices[i];
+	//		float y = vertices[i + 1];
+	//		float z = vertices[i + 2];
+	//		float w = vertices[i + 3];
 
-			for (int j = 0; j < 4; j++)
-			{
-				vertices[i + j] = x * oldMatrix[j][0] + y * oldMatrix[j][1] + z * oldMatrix[j][2]
-					+ w * oldMatrix[j][3];
+	//		for (int j = 0; j < 4; j++)
+	//		{
+	//			vertices[i + j] = x * oldMatrix[j][0] + y * oldMatrix[j][1] + z * oldMatrix[j][2]
+	//				+ w * oldMatrix[j][3];
 
-				//std::cout << i+j << " coord: " << vertices[i + j] << std::endl;
-			}
-		}
-	}
+	//			//std::cout << i+j << " coord: " << vertices[i + j] << std::endl;
+	//		}
+	//	}
+	//}
 
-	// Pivot
-	float pivotMatrix[4][4] =
-	{
-		{1.0f, 0.0f, 0.0f, -oPX},
-		{0.0f, 1.0f, 0.0f, -oPY},
-		{0.0f, 0.0f, 1.0f, 0.0f},
-		{0.0f, 0.0f, 0.0f, 1.0f}
-	};
-
-	// Applies the pivot to the vertices
-	for (int i = 0; i < sizeof(vertices) / sizeof(vertices[0]); i += 4)
-	{
-		float x = vertices[i];
-		float y = vertices[i + 1];
-		float z = vertices[i + 2];
-		float w = vertices[i + 3];
-
-		for (int j = 0; j < 4; j++)
-		{
-			vertices[i + j] = x * pivotMatrix[j][0] + y * pivotMatrix[j][1] + z * pivotMatrix[j][2]
-				+ w * pivotMatrix[j][3];
-
-			//std::cout << i+j << " coord: " << vertices[i + j] << std::endl;
-		}
-	}
-
-	// Translation
-	// This is also responsible for moving back the vertices by the amount they were translated by the pivot matrix.
-	// As all the operations are performed on the vertices and verticies are already manipulated by the pivot matrix we are able to rotate
-	// and scale as per the pivot
-	float translationMatrix[4][4] =
-	{
-		{1.0f, 0.0f, 0.0f, translate.x + oPX},
-		{0.0f, 1.0f, 0.0f, translate.y + oPY},
-		{0.0f, 0.0f, 1.0f, 0.0f},
-		{0.0f, 0.0f, 0.0f, 1.0f}
-	};
-
-	float scalingMatrix[4][4] =
-	{
-		{scale.x * scaleCombined,          0.0f          , 0.0f, 0},
-		{         0.0f          , scale.y * scaleCombined, 0.0f, 0},
-		{         0.0f          ,          0.0f          , 1.0f, 0.0f},
-		{         0.0f          ,          0.0f          , 0.0f, 1.0f}
-	};
-
-	// Rotation
-	// Roll
-	float rollMatrix[4][4] =
-	{
-		{cos(rotation.z), -sin(rotation.z), 0.0f, 0},
-		{sin(rotation.z),  cos(rotation.z), 0.0f, 0},
-		{        0.0f   ,       0.0f      , 1.0f, 0.0f},
-		{        0.0f   ,       0.0f      , 0.0f, 1.0f}
-	};
+	if (!ValueChanged()) return;
 
 	// First we scale then we rotate then we translate
-	Matrix4x4 translate_Rotate;
-	MultiplyMatrices(translationMatrix, rollMatrix, translate_Rotate);
 	Matrix4x4 translate_Rotate_Scale;
-	MultiplyMatrices(translate_Rotate, scalingMatrix, translate_Rotate_Scale);
+	Vector2 o = Vector2(oPX, oPY);
+	LocalSpaceTransformation(translate_Rotate_Scale, o);
 
 	for (int i = 0; i < sizeof(vertices) / sizeof(vertices[0]); i += 4)
 	{
@@ -218,18 +168,14 @@ void Translate_Rotate_Scale::Update()
 		{
 			vertices[i + j] = x * translate_Rotate_Scale[j][0] + y * translate_Rotate_Scale[j][1] + z * translate_Rotate_Scale[j][2]
 				+ w * translate_Rotate_Scale[j][3];
+
+			previousVertices[i + j] = vertices[i + j];
 		}
 	}
 
 	if (updateMatrix)
 	{
-		Matrix4x4 scaleTransform;
-		MultiplyMatrices(scalingMatrix, pivotMatrix, scaleTransform);
-
-		Matrix4x4 rotateScaleTransform;
-		MultiplyMatrices(rollMatrix, scaleTransform, rotateScaleTransform);
-
-		MultiplyMatrices(translationMatrix, rotateScaleTransform, oldMatrix);
+		LocalSpaceTransformation(oldMatrix, o);
 	}
 
 	//Dummy
@@ -260,7 +206,6 @@ void Translate_Rotate_Scale::ImGuiRender(GLFWwindow* window)
 	ImGui::DragFloat("Scale", &scaleCombined, 0.005f);
 	ImGui::DragFloat2("Translate", &translate.x, 0.005f);
 	ImGui::DragFloat3("Rotation", &rotation.x, 0.005f);
-	ImGui::DragFloat2("Test Move", &testMove.x, 0.005f);
 	ImGui::Checkbox("Update Old Matrix", &updateMatrix);
 	ImGui::Checkbox("Old Matrix", &oldMatrixMul);
 	if (ImGui::Button("Reset", ImVec2(100, 0)))
@@ -337,9 +282,9 @@ bool Translate_Rotate_Scale::RotateChanged()
 	return false;
 }
 
-bool Translate_Rotate_Scale::TestValueChanged()
+bool Translate_Rotate_Scale::PivotValueChanged()
 {
-	if (testMove != storeTestMove)
+	if (pivot != storePivot)
 		return true;
 
 	return false;
@@ -363,7 +308,7 @@ Matrix4x4& Translate_Rotate_Scale::MultiplyMatrices(Matrix4x4 a, Matrix4x4 b, Ma
 	return result;
 }
 
-void Translate_Rotate_Scale::LocalSpaceTransformation(Matrix4x4& result)
+void Translate_Rotate_Scale::LocalSpaceTransformation(Matrix4x4& result, Vector2 pivot)
 {
 	// Step 1: Translate to pivot (move pivot to origin)
 	float translateToPivotMatrix[4][4] =
