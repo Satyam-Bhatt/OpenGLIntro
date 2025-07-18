@@ -88,7 +88,6 @@ void Translate_Rotate_Scale::Start()
 // Step by step 
 void Translate_Rotate_Scale::Update()
 {
-
 	slowPrint++;
 
 	Matrix4x4 worldMatrix;
@@ -106,10 +105,10 @@ void Translate_Rotate_Scale::Update()
 
 	float vertices2[] =
 	{
-		-0.05f + nPX, -0.05f + nPY, 0.0f, 1.0f, 0, 0,
-		 0.05f + nPX, -0.05f + nPY, 0.0f, 1.0f, 1, 0,
-		-0.05f + nPX,  0.05f + nPY, 0.0f, 1.0f, 0, 1,
-		 0.05f + nPX,  0.05f + nPY, 0.0f, 1.0f, 1, 1
+		-0.05f + oPX, -0.05f + oPY, 0.0f, 1.0f, 0, 0,
+		 0.05f + oPX, -0.05f + oPY, 0.0f, 1.0f, 1, 0,
+		-0.05f + oPX,  0.05f + oPY, 0.0f, 1.0f, 0, 1,
+		 0.05f + oPX,  0.05f + oPY, 0.0f, 1.0f, 1, 1
 	};
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO2);
@@ -126,11 +125,31 @@ void Translate_Rotate_Scale::Update()
 		 0.5f,  0.5f, 0.0f, 1.0f
 	};
 
+	// Applies the pivot to the vertices
+	if (oldMatrixMul)
+	{
+		for (int i = 0; i < sizeof(vertices) / sizeof(vertices[0]); i += 4)
+		{
+			float x = vertices[i];
+			float y = vertices[i + 1];
+			float z = vertices[i + 2];
+			float w = vertices[i + 3];
+
+			for (int j = 0; j < 4; j++)
+			{
+				vertices[i + j] = x * oldMatrix[j][0] + y * oldMatrix[j][1] + z * oldMatrix[j][2]
+					+ w * oldMatrix[j][3];
+
+				//std::cout << i+j << " coord: " << vertices[i + j] << std::endl;
+			}
+		}
+	}
+
 	// Pivot
 	float pivotMatrix[4][4] =
 	{
-		{1.0f, 0.0f, 0.0f, -pivot.x},
-		{0.0f, 1.0f, 0.0f, -pivot.y},
+		{1.0f, 0.0f, 0.0f, -oPX},
+		{0.0f, 1.0f, 0.0f, -oPY},
 		{0.0f, 0.0f, 1.0f, 0.0f},
 		{0.0f, 0.0f, 0.0f, 1.0f}
 	};
@@ -158,8 +177,8 @@ void Translate_Rotate_Scale::Update()
 	// and scale as per the pivot
 	float translationMatrix[4][4] =
 	{
-		{1.0f, 0.0f, 0.0f, translate.x + pivot.x},
-		{0.0f, 1.0f, 0.0f, translate.y + pivot.y},
+		{1.0f, 0.0f, 0.0f, translate.x + oPX},
+		{0.0f, 1.0f, 0.0f, translate.y + oPY},
 		{0.0f, 0.0f, 1.0f, 0.0f},
 		{0.0f, 0.0f, 0.0f, 1.0f}
 	};
@@ -202,14 +221,16 @@ void Translate_Rotate_Scale::Update()
 		}
 	}
 
+	if (updateMatrix)
+	{
+		Matrix4x4 scaleTransform;
+		MultiplyMatrices(scalingMatrix, pivotMatrix, scaleTransform);
 
-	Matrix4x4 scaleTransform;
-	MultiplyMatrices(scalingMatrix, pivotMatrix, scaleTransform);
+		Matrix4x4 rotateScaleTransform;
+		MultiplyMatrices(rollMatrix, scaleTransform, rotateScaleTransform);
 
-	Matrix4x4 rotateScaleTransform;
-	MultiplyMatrices(rollMatrix, scaleTransform, rotateScaleTransform);
-
-	MultiplyMatrices(translationMatrix, rotateScaleTransform, oldMatrix);
+		MultiplyMatrices(translationMatrix, rotateScaleTransform, oldMatrix);
+	}
 
 	//Dummy
 	storeRotation = rotation;
@@ -240,6 +261,8 @@ void Translate_Rotate_Scale::ImGuiRender(GLFWwindow* window)
 	ImGui::DragFloat2("Translate", &translate.x, 0.005f);
 	ImGui::DragFloat3("Rotation", &rotation.x, 0.005f);
 	ImGui::DragFloat2("Test Move", &testMove.x, 0.005f);
+	ImGui::Checkbox("Update Old Matrix", &updateMatrix);
+	ImGui::Checkbox("Old Matrix", &oldMatrixMul);
 	if (ImGui::Button("Reset", ImVec2(100, 0)))
 	{
 		pivot = Vector2(0.0f, 0.0f);
