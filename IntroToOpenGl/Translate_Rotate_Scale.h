@@ -55,6 +55,7 @@ private:
 
 	Matrix4x4& MultiplyMatrices(Matrix4x4 a, Matrix4x4 b, Matrix4x4& result);
 	void LocalSpaceTransformation(Matrix4x4& result, Vector2 pivot);
+	void LocalSpaceTransformation2(Matrix4x4& result, Vector2 pivoto);
 	bool InverseMatrix(Matrix4x4 matrix, Matrix4x4& result);
 
 	uint32_t slowPrint = 0;

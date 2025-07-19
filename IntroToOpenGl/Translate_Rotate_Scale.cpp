@@ -1,5 +1,7 @@
 #include "Translate_Rotate_Scale.h"
 
+#define PI 3.14159265358979323846
+
 Translate_Rotate_Scale Translate_Rotate_Scale::instance;
 
 Translate_Rotate_Scale::Translate_Rotate_Scale()
@@ -130,32 +132,38 @@ void Translate_Rotate_Scale::Update()
 	//	vertices[i] = previousVertices[i];
 	//}
 	
-	//// Applies the pivot to the vertices
-	//if (oldMatrixMul)
-	//{
-	//	for (int i = 0; i < sizeof(vertices) / sizeof(vertices[0]); i += 4)
-	//	{
-	//		float x = vertices[i];
-	//		float y = vertices[i + 1];
-	//		float z = vertices[i + 2];
-	//		float w = vertices[i + 3];
+	// Applies the pivot to the vertices
+	if (oldMatrixMul)
+	{
+		for (int i = 0; i < sizeof(vertices) / sizeof(vertices[0]); i += 4)
+		{
+			float x = vertices[i];
+			float y = vertices[i + 1];
+			float z = vertices[i + 2];
+			float w = vertices[i + 3];
 
-	//		for (int j = 0; j < 4; j++)
-	//		{
-	//			vertices[i + j] = x * oldMatrix[j][0] + y * oldMatrix[j][1] + z * oldMatrix[j][2]
-	//				+ w * oldMatrix[j][3];
+			for (int j = 0; j < 4; j++)
+			{
+				vertices[i + j] = x * oldMatrix[j][0] + y * oldMatrix[j][1] + z * oldMatrix[j][2]
+					+ w * oldMatrix[j][3];
 
-	//			//std::cout << i+j << " coord: " << vertices[i + j] << std::endl;
-	//		}
-	//	}
-	//}
+				//std::cout << i+j << " coord: " << vertices[i + j] << std::endl;
+			}
+		}
+	}
 
-	if (!ValueChanged()) return;
 
 	// First we scale then we rotate then we translate
 	Matrix4x4 translate_Rotate_Scale;
 	Vector2 o = Vector2(oPX, oPY);
-	LocalSpaceTransformation(translate_Rotate_Scale, o);
+	LocalSpaceTransformation(translate_Rotate_Scale, Vector2(pivot.y, pivot.y));
+
+	if (!ValueChanged()) return;
+
+	if (updateMatrix)
+	{
+		LocalSpaceTransformation(oldMatrix, Vector2(pivot.y, pivot.y));
+	}
 
 	for (int i = 0; i < sizeof(vertices) / sizeof(vertices[0]); i += 4)
 	{
@@ -173,10 +181,32 @@ void Translate_Rotate_Scale::Update()
 		}
 	}
 
-	if (updateMatrix)
+	if (oPX != pivot.x || oPY != pivot.y)
 	{
-		LocalSpaceTransformation(oldMatrix, o);
+		float pivotMatrix[4][4] = 
+		{
+			{1.0f, 0.0f, 0.0f, oPX},
+			{0.0f, 1.0f, 0.0f, oPY},
+			{0.0f, 0.0f, 1.0f, 0.0f},
+			{0.0f, 0.0f, 0.0f, 1.0f}
+		};
+
+		for (int i = 0; i < sizeof(vertices) / sizeof(vertices[0]); i += 4)
+		{
+			float x = vertices[i];
+			float y = vertices[i + 1];
+			float z = vertices[i + 2];
+			float w = vertices[i + 3];
+
+			for (int j = 0; j < 4; j++)
+			{
+				vertices[i + j] = x * pivotMatrix[j][0] + y * pivotMatrix[j][1] + z * pivotMatrix[j][2]
+					+ w * pivotMatrix[j][3];
+			}
+		}
 	}
+
+
 
 	//Dummy
 	storeRotation = rotation;
@@ -331,8 +361,8 @@ void Translate_Rotate_Scale::LocalSpaceTransformation(Matrix4x4& result, Vector2
 	// Step 3: Rotate around origin (still the pivot point)
 	float rollMatrix[4][4] =
 	{
-		{cos(rotation.z), -sin(rotation.z), 0.0f, 0.0f},
-		{sin(rotation.z),  cos(rotation.z), 0.0f, 0.0f},
+		{cos(rotation.z * (PI / 180)), -sin(rotation.z * (PI / 180)), 0.0f, 0.0f},
+		{sin(rotation.z * (PI / 180)),  cos(rotation.z * (PI / 180)), 0.0f, 0.0f},
 		{0.0f, 0.0f, 1.0f, 0.0f},
 		{0.0f, 0.0f, 0.0f, 1.0f}
 	};
@@ -342,6 +372,54 @@ void Translate_Rotate_Scale::LocalSpaceTransformation(Matrix4x4& result, Vector2
 	{
 		{1.0f, 0.0f, 0.0f, pivot.x + translate.x},
 		{0.0f, 1.0f, 0.0f, pivot.y + translate.y},
+		{0.0f, 0.0f, 1.0f, 0.0f},
+		{0.0f, 0.0f, 0.0f, 1.0f}
+	};
+
+	// Combine transformations: Final = TranslateBack * Rotate * Scale * TranslateToPivot
+	Matrix4x4 scaleTransform;
+	MultiplyMatrices(scalingMatrix, translateToPivotMatrix, scaleTransform);
+
+	Matrix4x4 rotateScaleTransform;
+	MultiplyMatrices(rollMatrix, scaleTransform, rotateScaleTransform);
+
+	MultiplyMatrices(translateBackMatrix, rotateScaleTransform, result);
+}
+
+void Translate_Rotate_Scale::LocalSpaceTransformation2(Matrix4x4& result, Vector2 pivoto)
+{
+	// Step 1: Translate to pivot (move pivot to origin)
+	float translateToPivotMatrix[4][4] =
+	{
+		{1.0f, 0.0f, 0.0f, -pivot.x},
+		{0.0f, 1.0f, 0.0f, -pivot.y},
+		{0.0f, 0.0f, 1.0f, 0.0f},
+		{0.0f, 0.0f, 0.0f, 1.0f}
+	};
+
+	// Step 2: Scale around origin (now the pivot point)
+	float scalingMatrix[4][4] =
+	{
+		{scale.x * scaleCombined, 0.0f, 0.0f, 0.0f},
+		{0.0f, scale.y * scaleCombined, 0.0f, 0.0f},
+		{0.0f, 0.0f, 1.0f, 0.0f},
+		{0.0f, 0.0f, 0.0f, 1.0f}
+	};
+
+	// Step 3: Rotate around origin (still the pivot point)
+	float rollMatrix[4][4] =
+	{
+		{cos(rotation.z), -sin(rotation.z), 0.0f, 0.0f},
+		{sin(rotation.z),  cos(rotation.z), 0.0f, 0.0f},
+		{0.0f, 0.0f, 1.0f, 0.0f},
+		{0.0f, 0.0f, 0.0f, 1.0f}
+	};
+
+	// Step 4: Translate back from pivot + final translation
+	float translateBackMatrix[4][4] =
+	{
+		{1.0f, 0.0f, 0.0f, pivoto.x + pivot.x},
+		{0.0f, 1.0f, 0.0f, pivoto.y + pivot.y},
 		{0.0f, 0.0f, 1.0f, 0.0f},
 		{0.0f, 0.0f, 0.0f, 1.0f}
 	};
