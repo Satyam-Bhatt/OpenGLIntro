@@ -98,9 +98,12 @@ void Translate_Rotate_Scale::Update()
 	float nPX = worldMatrix[0][0] * pivot.x + worldMatrix[0][1] * pivot.y + worldMatrix[0][2] * 0 + worldMatrix[0][3] * 1;
 	float nPY = worldMatrix[1][0] * pivot.x + worldMatrix[1][1] * pivot.y + worldMatrix[1][2] * 0 + worldMatrix[1][3] * 1;
 
-	float oPX = oldMatrix[0][0] * pivot.x + oldMatrix[0][1] * pivot.y + oldMatrix[0][2] * 0 + oldMatrix[0][3] * 1;
-	float oPY = oldMatrix[1][0] * pivot.x + oldMatrix[1][1] * pivot.y + oldMatrix[1][2] * 0 + oldMatrix[1][3] * 1;
-
+	//if (PivotValueChanged())
+	//{
+		oPX = oldMatrix[0][0] * pivot.x + oldMatrix[0][1] * pivot.y + oldMatrix[0][2] * 0 + oldMatrix[0][3] * 1;
+		oPY = oldMatrix[1][0] * pivot.x + oldMatrix[1][1] * pivot.y + oldMatrix[1][2] * 0 + oldMatrix[1][3] * 1;
+	//}
+	
 	if(slowPrint % 1000 == 0) printf("Pivot %f %f\n", pivot.x, pivot.y);
 	if(slowPrint % 1000 == 0) printf("World Pivot %f %f\n", nPX, nPY);
 	if(slowPrint % 1000 == 0) printf("Old Pivot %f %f\n", oPX, oPY);
@@ -155,14 +158,14 @@ void Translate_Rotate_Scale::Update()
 
 	// First we scale then we rotate then we translate
 	Matrix4x4 translate_Rotate_Scale;
-	Vector2 o = Vector2(oPX, oPY);
-	LocalSpaceTransformation(translate_Rotate_Scale, Vector2(pivot.y, pivot.y));
+	//Vector2 o = Vector2(oPX, oPY);
+	LocalSpaceTransformation(translate_Rotate_Scale, Vector2(pivot.x, pivot.y));
 
 	if (!ValueChanged()) return;
 
 	if (updateMatrix)
 	{
-		LocalSpaceTransformation(oldMatrix, Vector2(pivot.y, pivot.y));
+		LocalSpaceTransformation(oldMatrix, Vector2(pivot.x, pivot.y));
 	}
 
 	for (int i = 0; i < sizeof(vertices) / sizeof(vertices[0]); i += 4)
@@ -204,8 +207,9 @@ void Translate_Rotate_Scale::Update()
 					+ w * pivotMatrix[j][3];
 			}
 		}
-	}
 
+		MultiplyMatrices(pivotMatrix, translate_Rotate_Scale, oldMatrix);
+	}
 
 
 	//Dummy
@@ -575,3 +579,5 @@ bool Translate_Rotate_Scale::InverseMatrix(Matrix4x4 matrix, Matrix4x4& result)
 
 	return true;
 }
+
+

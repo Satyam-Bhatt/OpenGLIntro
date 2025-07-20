@@ -59,5 +59,7 @@ private:
 	bool InverseMatrix(Matrix4x4 matrix, Matrix4x4& result);
 
 	uint32_t slowPrint = 0;
+
+	float oPX = 0.0f, oPY = 0.0f;
 };
 
