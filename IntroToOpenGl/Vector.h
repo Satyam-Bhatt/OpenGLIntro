@@ -49,6 +49,15 @@ namespace Vector {
             std::cerr << "Warning: Division by zero!" << std::endl;
             return *this;
         }
+        
+        // Vector division - Does not exist in Math BUT SO WHAT !!!!
+        Vector2 operator/(const Vector2& other) const {
+            if (other.x != 0.0f and other.y !=0) {
+                return Vector2(x / other.x, y / other.y);
+            }
+            std::cerr << "Warning: Division by zero!" << std::endl;
+            return *this;
+        }
 
         // Compound assignment operators
         Vector2& operator+=(const Vector2& other) {
