@@ -25,18 +25,16 @@ void Translate_Rotate_Scale::Start()
 	shader = Shader("Translate_Rotate_Scale.shader");
 	shader2 = Shader("Translate_Scale_Rotate_Pivot.shader");
 
-	float vertices[] =
-	{
-		-0.5f, -0.5f, 0.0f, 1.0f,
-		 0.5f, -0.5f, 0.0f, 1.0f,
-		-0.5f,  0.5f, 0.0f, 1.0f,
-		 0.5f,  0.5f, 0.0f, 1.0f
-	};
-
 	unsigned int indices[] =
 	{
 		0, 1, 2,
 		1, 3, 2
+	};
+	float vertices[16] = {
+		-0.5f, -0.5f, 0.0f, 1.0f,
+		 0.5f, -0.5f, 0.0f, 1.0f,
+		-0.5f,  0.5f, 0.0f, 1.0f,
+		 0.5f,  0.5f, 0.0f, 1.0f
 	};
 
 	glGenVertexArrays(1, &VAO);
@@ -86,7 +84,175 @@ void Translate_Rotate_Scale::Start()
 }
 
 // Step by step 
+
 void Translate_Rotate_Scale::Update()
+{
+	
+
+	
+}
+
+void Translate_Rotate_Scale::Navanya() {
+	static Vector2 o;
+
+	float oPX = oldMatrix[0][0] * pivot.x * 0.5 + oldMatrix[0][1] * pivot.y * 0.5 + oldMatrix[0][2] * 0 + oldMatrix[0][3] * 1;
+	float oPY = oldMatrix[1][0] * pivot.x * 0.5 + oldMatrix[1][1] * pivot.y * 0.5 + oldMatrix[1][2] * 0 + oldMatrix[1][3] * 1;
+	
+	printf("Navanya Start local %f %f\n", pivot.x, pivot.y);
+	printf("World %f %f\n", oPX,oPY);
+	o = Vector2(oPX, oPY);
+	//printf("World %f %f\n", oPX, oPY);
+
+	
+
+	float vertices[16] = {
+		-0.5f, -0.5f, 0.0f, 1.0f,
+		 0.5f, -0.5f, 0.0f, 1.0f,
+		-0.5f,  0.5f, 0.0f, 1.0f,
+		 0.5f,  0.5f, 0.0f, 1.0f
+	};
+	for (int i = 0; i < sizeof(vertices) / sizeof(vertices[0]); i += 4)
+	{
+		float x = vertices[i];
+		float y = vertices[i + 1];
+		float z = vertices[i + 2];
+		float w = vertices[i + 3];
+
+		for (int j = 0; j < 4; j++)
+		{
+			vertices[i + j] = x * oldMatrix[j][0] + y * oldMatrix[j][1] + z * oldMatrix[j][2]
+				+ w * oldMatrix[j][3];
+
+
+		}
+	}
+	printf("Old Matrix - Truly Old\n");
+	for (int i = 0; i < 4; i++)
+	{
+
+		for (int j = 0; j < 4; j++)
+		{
+			printf(" %f ", oldMatrix[i][j]);
+		}
+		printf("\n");
+	}
+	printf("\n");
+
+	printf("old Vertices\n");
+	for (int i = 0; i < 4; i++)
+	{
+
+		for (int j = 0; j < 4; j++)
+		{
+			printf(" %f ", vertices[4 * i + j]);
+		}
+		printf("\n");
+	}
+	printf("\n");
+
+	Matrix4x4 translate_Rotate_Scale;
+	LocalSpaceTransformation(translate_Rotate_Scale, o);
+
+	//Print TRS
+	printf("TRS\n");
+	for (int i = 0; i < 4; i++)
+	{
+
+		for (int j = 0; j < 4; j++)
+		{
+			printf(" %f ", translate_Rotate_Scale[i][j]);
+		}
+		printf("\n");
+	}
+	printf("\n");
+
+
+	for (int i = 0; i < sizeof(vertices) / sizeof(vertices[0]); i += 4)
+	{
+		float x = vertices[i];
+		float y = vertices[i + 1];
+		float z = vertices[i + 2];
+		float w = vertices[i + 3];
+
+		for (int j = 0; j < 4; j++)
+		{
+			vertices[i + j] = x * translate_Rotate_Scale[j][0] + y * translate_Rotate_Scale[j][1] + z * translate_Rotate_Scale[j][2]
+				+ w * translate_Rotate_Scale[j][3];
+
+		}
+	}
+
+	printf("New Vertices\n");
+	for (int i = 0; i < 4; i++)
+	{
+		
+		for (int j = 0; j < 4; j++)
+		{
+			printf(" %f ", vertices[4*i+j]);
+		}
+		printf("\n");
+	}
+	printf("\n");
+
+	MultiplyMatrices(translate_Rotate_Scale, oldMatrix, oldMatrix);
+
+	printf("Old Matrix - Updated\n");
+	for (int i = 0; i < 4; i++)
+	{
+		
+		for (int j = 0; j < 4; j++)
+		{
+			printf(" %f ",oldMatrix[i][j]);
+		}
+		printf("\n");
+	}
+	printf("\n");
+
+	printf("Navanya Finish\n");
+	rotation.x = 0;
+	rotation.y = 0;
+	rotation.z = 0;
+	scale.x = 1;
+	scale.y = 1;
+	translate.x = 0;
+	translate.y = 0;
+
+
+	/*Matrix4x4 InvOld;
+	InverseMatrix(oldMatrix, InvOld);
+
+	pivot.x = InvOld[0][0] * pivot.x + InvOld[0][1] * pivot.y + InvOld[0][2] * 0 + InvOld[0][3] * 1;//BUG use oPX and oPY
+	pivot.y = InvOld[1][0] * pivot.x + InvOld[1][1] * pivot.y + InvOld[1][2] * 0 + InvOld[1][3] * 1;
+	*/
+
+
+	//Dummy
+	storeRotation = rotation;
+	storeScale = scale;
+	storeTranslate = translate;
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, 16 * sizeof(float), vertices, GL_DYNAMIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	oPX = oldMatrix[0][0] * pivot.x * 0.5 + oldMatrix[0][1] * pivot.y * 0.5 + oldMatrix[0][2] * 0 + oldMatrix[0][3] * 1;
+	oPY = oldMatrix[1][0] * pivot.x * 0.5 + oldMatrix[1][1] * pivot.y * 0.5 + oldMatrix[1][2] * 0 + oldMatrix[1][3] * 1;
+
+
+	float vertices2[] =
+	{
+		-0.05f + oPX, -0.05f + oPY, 0.0f, 1.0f, 0, 0,
+		 0.05f + oPX, -0.05f + oPY, 0.0f, 1.0f, 1, 0,
+		-0.05f + oPX,  0.05f + oPY, 0.0f, 1.0f, 0, 1,
+		 0.05f + oPX,  0.05f + oPY, 0.0f, 1.0f, 1, 1
+	};
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO2);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices2), vertices2, GL_DYNAMIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+/*
+void Translate_Rotate_Scale::DUpdate()
 {
 	slowPrint++;
 
@@ -187,7 +353,7 @@ void Translate_Rotate_Scale::Update()
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
-
+*/
 void Translate_Rotate_Scale::ImGuiRender(GLFWwindow* window)
 {
 	GLint viewport[4];
@@ -201,21 +367,18 @@ void Translate_Rotate_Scale::ImGuiRender(GLFWwindow* window)
 
 	ImGui::Begin("Level Specific", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
 
-	ImGui::DragFloat2("Pivot", &pivot.x, 0.005f);
+	if (ImGui::DragFloat2("Pivot", &pivot.x, 0.005f)) {
+		PivotChangeImGui = true;
+	}
+	else PivotChangeImGui = false;
 	ImGui::DragFloat2("Scale XY", &scale.x, 0.005f);
 	ImGui::DragFloat("Scale", &scaleCombined, 0.005f);
 	ImGui::DragFloat2("Translate", &translate.x, 0.005f);
 	ImGui::DragFloat3("Rotation", &rotation.x, 0.005f);
-	ImGui::Checkbox("Update Old Matrix", &updateMatrix);
-	ImGui::Checkbox("Old Matrix", &oldMatrixMul);
-	if (ImGui::Button("Reset", ImVec2(100, 0)))
-	{
-		pivot = Vector2(0.0f, 0.0f);
-		scale = Vector2(1.0f, 1.0f);
-		scaleCombined = 1.0f;
-		translate = Vector2(0.0f, 0.0f);
-		rotation = Vector3(0.0f, 0.0f, 0.0f);
+	if (ImGui::Button("Navanya", ImVec2(100, 0))) {
+		Navanya();
 	}
+	
 
 	ImGui::End();
 }
@@ -292,6 +455,7 @@ bool Translate_Rotate_Scale::PivotValueChanged()
 
 Matrix4x4& Translate_Rotate_Scale::MultiplyMatrices(Matrix4x4 a, Matrix4x4 b, Matrix4x4& result)
 {
+	Matrix4x4 res;
 	for (int i = 0; i < 4; i++)
 	{
 		float v1 = a[i][0];
@@ -301,7 +465,14 @@ Matrix4x4& Translate_Rotate_Scale::MultiplyMatrices(Matrix4x4 a, Matrix4x4 b, Ma
 
 		for (int j = 0; j < 4; j++)
 		{
-			result[i][j] = v1 * b[0][j] + v2 * b[1][j] + v3 * b[2][j] + v4 * b[3][j];
+			res[i][j] = v1 * b[0][j] + v2 * b[1][j] + v3 * b[2][j] + v4 * b[3][j];
+		}
+	}
+	for (int i = 0; i < 4; i++)
+	{
+		for (int j = 0; j < 4; j++)
+		{
+			result[i][j] = res[i][j];
 		}
 	}
 
@@ -310,6 +481,7 @@ Matrix4x4& Translate_Rotate_Scale::MultiplyMatrices(Matrix4x4 a, Matrix4x4 b, Ma
 
 void Translate_Rotate_Scale::LocalSpaceTransformation(Matrix4x4& result, Vector2 pivot)
 {
+	//printf("INSIDE TRS");
 	// Step 1: Translate to pivot (move pivot to origin)
 	float translateToPivotMatrix[4][4] =
 	{
@@ -318,6 +490,18 @@ void Translate_Rotate_Scale::LocalSpaceTransformation(Matrix4x4& result, Vector2
 		{0.0f, 0.0f, 1.0f, 0.0f},
 		{0.0f, 0.0f, 0.0f, 1.0f}
 	};
+	/*Printf("translateToPivotMatrix\n");
+	for (int i = 0; i < 4; i++)
+	{
+
+		for (int j = 0; j < 4; j++)
+		{
+			printf(" %f ", translateToPivotMatrix[i][j]);
+		}
+		printf("\n");
+	}
+	printf("\n");*/
+
 
 	// Step 2: Scale around origin (now the pivot point)
 	float scalingMatrix[4][4] =
@@ -327,6 +511,18 @@ void Translate_Rotate_Scale::LocalSpaceTransformation(Matrix4x4& result, Vector2
 		{0.0f, 0.0f, 1.0f, 0.0f},
 		{0.0f, 0.0f, 0.0f, 1.0f}
 	};
+	/*printf("scalingMatrix\n");
+	for (int i = 0; i < 4; i++)
+	{
+
+		for (int j = 0; j < 4; j++)
+		{
+			printf(" %f ", scalingMatrix[i][j]);
+		}
+		printf("\n");
+	}
+	printf("\n");*/
+
 
 	// Step 3: Rotate around origin (still the pivot point)
 	float rollMatrix[4][4] =
@@ -336,6 +532,18 @@ void Translate_Rotate_Scale::LocalSpaceTransformation(Matrix4x4& result, Vector2
 		{0.0f, 0.0f, 1.0f, 0.0f},
 		{0.0f, 0.0f, 0.0f, 1.0f}
 	};
+	/*printf("rollMatrix\n");
+	for (int i = 0; i < 4; i++)
+	{
+
+		for (int j = 0; j < 4; j++)
+		{
+			printf(" %f ", rollMatrix[i][j]);
+		}
+		printf("\n");
+	}
+	printf("\n");*/
+
 
 	// Step 4: Translate back from pivot + final translation
 	float translateBackMatrix[4][4] =
@@ -345,15 +553,61 @@ void Translate_Rotate_Scale::LocalSpaceTransformation(Matrix4x4& result, Vector2
 		{0.0f, 0.0f, 1.0f, 0.0f},
 		{0.0f, 0.0f, 0.0f, 1.0f}
 	};
+	/*printf("translateBackMatrix\n");
+	for (int i = 0; i < 4; i++)
+	{
+
+		for (int j = 0; j < 4; j++)
+		{
+			printf(" %f ", translateBackMatrix[i][j]);
+		}
+		printf("\n");
+	}
+	printf("\n");*/
 
 	// Combine transformations: Final = TranslateBack * Rotate * Scale * TranslateToPivot
 	Matrix4x4 scaleTransform;
 	MultiplyMatrices(scalingMatrix, translateToPivotMatrix, scaleTransform);
+	/*printf("SP'\n");
+	for (int i = 0; i < 4; i++)
+	{
 
+		for (int j = 0; j < 4; j++)
+		{
+			printf(" %f ", scaleTransform[i][j]);
+		}
+		printf("\n");
+	}
+	printf("\n");
+	*/
 	Matrix4x4 rotateScaleTransform;
 	MultiplyMatrices(rollMatrix, scaleTransform, rotateScaleTransform);
+	/*printf("RSP'\n");
+	for (int i = 0; i < 4; i++)
+	{
 
+		for (int j = 0; j < 4; j++)
+		{
+			printf(" %f ", rotateScaleTransform[i][j]);
+		}
+		printf("\n");
+	}
+	printf("\n");
+	*/
 	MultiplyMatrices(translateBackMatrix, rotateScaleTransform, result);
+	/*printf("PRSP'\n");
+	for (int i = 0; i < 4; i++)
+	{
+
+		for (int j = 0; j < 4; j++)
+		{
+			printf(" %f ", result[i][j]);
+		}
+		printf("\n");
+	}
+	printf("\n");
+	
+	printf("OUTSIDE TRS");*/
 }
 
 bool Translate_Rotate_Scale::InverseMatrix(Matrix4x4 matrix, Matrix4x4& result)
