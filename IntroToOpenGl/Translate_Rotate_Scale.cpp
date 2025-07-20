@@ -1,5 +1,7 @@
 #include "Translate_Rotate_Scale.h"
 
+#define PI 3.14159265358979323846
+
 Translate_Rotate_Scale Translate_Rotate_Scale::instance;
 
 Translate_Rotate_Scale::Translate_Rotate_Scale()
@@ -87,11 +89,22 @@ void Translate_Rotate_Scale::Start()
 
 void Translate_Rotate_Scale::Update()
 {
-	static Vector2 o;
+	Vector2 o;
 
 	float oPX = oldMatrix[0][0] * pivot.x * 0.5 + oldMatrix[0][1] * pivot.y * 0.5 + oldMatrix[0][2] * 0 + oldMatrix[0][3] * 1;
 	float oPY = oldMatrix[1][0] * pivot.x * 0.5 + oldMatrix[1][1] * pivot.y * 0.5 + oldMatrix[1][2] * 0 + oldMatrix[1][3] * 1;
 
+	float vertices2[] =
+	{
+		-0.05f + oPX, -0.05f + oPY, 0.0f, 1.0f, 0, 0,
+		 0.05f + oPX, -0.05f + oPY, 0.0f, 1.0f, 1, 0,
+		-0.05f + oPX,  0.05f + oPY, 0.0f, 1.0f, 0, 1,
+		 0.05f + oPX,  0.05f + oPY, 0.0f, 1.0f, 1, 1
+	};
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO2);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices2), vertices2, GL_DYNAMIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 		
 	o = Vector2(oPX, oPY);
 
@@ -208,21 +221,6 @@ void Translate_Rotate_Scale::Update()
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, 16 * sizeof(float), vertices, GL_DYNAMIC_DRAW);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-	oPX = oldMatrix[0][0] * pivot.x * 0.5 + oldMatrix[0][1] * pivot.y * 0.5 + oldMatrix[0][2] * 0 + oldMatrix[0][3] * 1;
-	oPY = oldMatrix[1][0] * pivot.x * 0.5 + oldMatrix[1][1] * pivot.y * 0.5 + oldMatrix[1][2] * 0 + oldMatrix[1][3] * 1;
-
-	float vertices2[] =
-	{
-		-0.05f + oPX, -0.05f + oPY, 0.0f, 1.0f, 0, 0,
-		 0.05f + oPX, -0.05f + oPY, 0.0f, 1.0f, 1, 0,
-		-0.05f + oPX,  0.05f + oPY, 0.0f, 1.0f, 0, 1,
-		 0.05f + oPX,  0.05f + oPY, 0.0f, 1.0f, 1, 1
-	};
-
-	glBindBuffer(GL_ARRAY_BUFFER, VBO2);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices2), vertices2, GL_DYNAMIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
@@ -508,7 +506,7 @@ void Translate_Rotate_Scale::ImGuiRender(GLFWwindow* window)
 	ImGui::DragFloat2("Scale XY", &scale.x, 0.005f);
 	ImGui::DragFloat("Scale", &scaleCombined, 0.005f);
 	ImGui::DragFloat2("Translate", &translate.x, 0.005f);
-	ImGui::DragFloat3("Rotation", &rotation.x, 0.005f);
+	ImGui::DragFloat3("Rotation", &rotation.x, 0.1f);
 	if (ImGui::Button("Navanya", ImVec2(100, 0))) {
 		Navanya();
 	}
@@ -625,6 +623,24 @@ void Translate_Rotate_Scale::LocalSpaceTransformation(Matrix4x4& result, Vector2
 	storeScale = scale;
 	storeTranslate = translate;
 	StoreScaleCombined = scaleCombined;
+
+	float rollBack[4][4] =
+	{
+		{1, 0, 0.0f, 0.0f},
+		{0,  1, 0.0f, 0.0f},
+		{0.0f, 0.0f, 1.0f, 0.0f},
+		{0.0f, 0.0f, 0.0f, 1.0f}
+	};
+
+	if (ScaleFactor != Vector2(1.0f, 1.0f))
+	{
+		DeltaRotation = storeRotation;
+
+		rollBack[0][0] = cos(DeltaRotation.z * (PI / 180)) * ScaleFactor.x;
+		rollBack[0][1] = sin(DeltaRotation.z * (PI / 180)) * ScaleFactor.x;
+		rollBack[1][0] = -sin(DeltaRotation.z * (PI / 180)) * ScaleFactor.y;
+		rollBack[1][1] = cos(DeltaRotation.z * (PI / 180)) * ScaleFactor.y;
+	}
 	
 	//printf("INSIDE TRS");
 	// Step 1: Translate to pivot (move pivot to origin)
@@ -672,11 +688,13 @@ void Translate_Rotate_Scale::LocalSpaceTransformation(Matrix4x4& result, Vector2
 	// Step 3: Rotate around origin (still the pivot point)
 	float rollMatrix[4][4] =
 	{
-		{cos(DeltaRotation.z), -sin(DeltaRotation.z), 0.0f, 0.0f},
-		{sin(DeltaRotation.z),  cos(DeltaRotation.z), 0.0f, 0.0f},
-		{0.0f, 0.0f, 1.0f, 0.0f},
+		{cos(DeltaRotation.z * (PI/180)), -sin(DeltaRotation.z * (PI/180)), 0.0f, 0.0f},
+		{sin(DeltaRotation.z * (PI/180)),  cos(DeltaRotation.z * (PI/180)), 0.0f, 0.0f},
+		{0.0f, 0.0f, 1.0f, 0.0f}, 
 		{0.0f, 0.0f, 0.0f, 1.0f}
 	};
+
+
 	/*printf("rollMatrix\n");
 	for (int i = 0; i < 4; i++)
 	{
@@ -711,8 +729,10 @@ void Translate_Rotate_Scale::LocalSpaceTransformation(Matrix4x4& result, Vector2
 	printf("\n");*/
 
 	// Combine transformations: Final = TranslateBack * Rotate * Scale * TranslateToPivot
+	Matrix4x4 rollBackMatrix;
+	MultiplyMatrices(translateToPivotMatrix, rollBack, rollBackMatrix);
 	Matrix4x4 scaleTransform;
-	MultiplyMatrices(scalingMatrix, translateToPivotMatrix, scaleTransform);
+	MultiplyMatrices(scalingMatrix, rollBackMatrix, scaleTransform);
 	/*printf("SP'\n");
 	for (int i = 0; i < 4; i++)
 	{

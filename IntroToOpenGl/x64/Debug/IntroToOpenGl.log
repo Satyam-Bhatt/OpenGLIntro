@@ -1,29 +1,22 @@
-<<<<<<< HEAD
 ﻿  Translate_Rotate_Scale.cpp
-C:\Users\satya\OneDrive\Desktop\SDL&OpenGL\OpenGLIntro\IntroToOpenGl\Translate_Rotate_Scale.cpp(231,51): warning C4244: 'argument': conversion from 'GLint' to 'float', possible loss of data
-C:\Users\satya\OneDrive\Desktop\SDL&OpenGL\OpenGLIntro\IntroToOpenGl\Translate_Rotate_Scale.cpp(231,22): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\satya\OneDrive\Desktop\SDL&OpenGL\OpenGLIntro\IntroToOpenGl\Translate_Rotate_Scale.cpp(368,7): warning C4838: conversion from 'double' to 'float' requires a narrowing conversion
-C:\Users\satya\OneDrive\Desktop\SDL&OpenGL\OpenGLIntro\IntroToOpenGl\Translate_Rotate_Scale.cpp(368,7): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\satya\OneDrive\Desktop\SDL&OpenGL\OpenGLIntro\IntroToOpenGl\Translate_Rotate_Scale.cpp(368,34): warning C4838: conversion from 'double' to 'float' requires a narrowing conversion
-C:\Users\satya\OneDrive\Desktop\SDL&OpenGL\OpenGLIntro\IntroToOpenGl\Translate_Rotate_Scale.cpp(368,34): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\satya\OneDrive\Desktop\SDL&OpenGL\OpenGLIntro\IntroToOpenGl\Translate_Rotate_Scale.cpp(369,7): warning C4838: conversion from 'double' to 'float' requires a narrowing conversion
-C:\Users\satya\OneDrive\Desktop\SDL&OpenGL\OpenGLIntro\IntroToOpenGl\Translate_Rotate_Scale.cpp(369,7): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\satya\OneDrive\Desktop\SDL&OpenGL\OpenGLIntro\IntroToOpenGl\Translate_Rotate_Scale.cpp(369,38): warning C4838: conversion from 'double' to 'float' requires a narrowing conversion
-C:\Users\satya\OneDrive\Desktop\SDL&OpenGL\OpenGLIntro\IntroToOpenGl\Translate_Rotate_Scale.cpp(369,38): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\satya\OneDrive\Desktop\SDL&OpenGL\OpenGLIntro\IntroToOpenGl\Translate_Rotate_Scale.cpp(94,12): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\satya\OneDrive\Desktop\SDL&OpenGL\OpenGLIntro\IntroToOpenGl\Translate_Rotate_Scale.cpp(95,12): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\satya\OneDrive\Desktop\SDL&OpenGL\OpenGLIntro\IntroToOpenGl\Translate_Rotate_Scale.cpp(235,12): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\satya\OneDrive\Desktop\SDL&OpenGL\OpenGLIntro\IntroToOpenGl\Translate_Rotate_Scale.cpp(236,12): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\satya\OneDrive\Desktop\SDL&OpenGL\OpenGLIntro\IntroToOpenGl\Translate_Rotate_Scale.cpp(375,96): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\satya\OneDrive\Desktop\SDL&OpenGL\OpenGLIntro\IntroToOpenGl\Translate_Rotate_Scale.cpp(376,96): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\satya\OneDrive\Desktop\SDL&OpenGL\OpenGLIntro\IntroToOpenGl\Translate_Rotate_Scale.cpp(500,51): warning C4244: 'argument': conversion from 'GLint' to 'float', possible loss of data
+C:\Users\satya\OneDrive\Desktop\SDL&OpenGL\OpenGLIntro\IntroToOpenGl\Translate_Rotate_Scale.cpp(500,22): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\satya\OneDrive\Desktop\SDL&OpenGL\OpenGLIntro\IntroToOpenGl\Translate_Rotate_Scale.cpp(644,54): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\satya\OneDrive\Desktop\SDL&OpenGL\OpenGLIntro\IntroToOpenGl\Translate_Rotate_Scale.cpp(645,54): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\satya\OneDrive\Desktop\SDL&OpenGL\OpenGLIntro\IntroToOpenGl\Translate_Rotate_Scale.cpp(646,55): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\satya\OneDrive\Desktop\SDL&OpenGL\OpenGLIntro\IntroToOpenGl\Translate_Rotate_Scale.cpp(647,54): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\satya\OneDrive\Desktop\SDL&OpenGL\OpenGLIntro\IntroToOpenGl\Translate_Rotate_Scale.cpp(696,7): warning C4838: conversion from 'double' to 'float' requires a narrowing conversion
+C:\Users\satya\OneDrive\Desktop\SDL&OpenGL\OpenGLIntro\IntroToOpenGl\Translate_Rotate_Scale.cpp(696,7): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\satya\OneDrive\Desktop\SDL&OpenGL\OpenGLIntro\IntroToOpenGl\Translate_Rotate_Scale.cpp(696,37): warning C4838: conversion from 'double' to 'float' requires a narrowing conversion
+C:\Users\satya\OneDrive\Desktop\SDL&OpenGL\OpenGLIntro\IntroToOpenGl\Translate_Rotate_Scale.cpp(696,37): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\satya\OneDrive\Desktop\SDL&OpenGL\OpenGLIntro\IntroToOpenGl\Translate_Rotate_Scale.cpp(697,7): warning C4838: conversion from 'double' to 'float' requires a narrowing conversion
+C:\Users\satya\OneDrive\Desktop\SDL&OpenGL\OpenGLIntro\IntroToOpenGl\Translate_Rotate_Scale.cpp(697,7): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\satya\OneDrive\Desktop\SDL&OpenGL\OpenGLIntro\IntroToOpenGl\Translate_Rotate_Scale.cpp(697,41): warning C4838: conversion from 'double' to 'float' requires a narrowing conversion
+C:\Users\satya\OneDrive\Desktop\SDL&OpenGL\OpenGLIntro\IntroToOpenGl\Translate_Rotate_Scale.cpp(697,41): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
   IntroToOpenGl.vcxproj -> C:\Users\satya\OneDrive\Desktop\SDL&OpenGL\OpenGLIntro\x64\Debug\IntroToOpenGl.exe
-=======
-﻿  TransformationMain.cpp
-  Translate_Rotate_Scale.cpp
-C:\Users\sharm\Desktop\IntroToOpenGL\IntroToOpenGl\Translate_Rotate_Scale.cpp(92,12): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\sharm\Desktop\IntroToOpenGL\IntroToOpenGl\Translate_Rotate_Scale.cpp(93,12): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\sharm\Desktop\IntroToOpenGL\IntroToOpenGl\Translate_Rotate_Scale.cpp(213,96): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\sharm\Desktop\IntroToOpenGL\IntroToOpenGl\Translate_Rotate_Scale.cpp(214,96): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\sharm\Desktop\IntroToOpenGL\IntroToOpenGl\Translate_Rotate_Scale.cpp(232,12): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\sharm\Desktop\IntroToOpenGL\IntroToOpenGl\Translate_Rotate_Scale.cpp(233,12): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\sharm\Desktop\IntroToOpenGL\IntroToOpenGl\Translate_Rotate_Scale.cpp(372,96): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\sharm\Desktop\IntroToOpenGL\IntroToOpenGl\Translate_Rotate_Scale.cpp(373,96): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\sharm\Desktop\IntroToOpenGL\IntroToOpenGl\Translate_Rotate_Scale.cpp(497,51): warning C4244: 'argument': conversion from 'GLint' to 'float', possible loss of data
-C:\Users\sharm\Desktop\IntroToOpenGL\IntroToOpenGl\Translate_Rotate_Scale.cpp(497,22): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-  Generating Code...
-  IntroToOpenGl.vcxproj -> C:\Users\sharm\Desktop\IntroToOpenGL\x64\Debug\IntroToOpenGl.exe
->>>>>>> CuteSister

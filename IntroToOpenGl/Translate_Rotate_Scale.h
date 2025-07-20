@@ -42,7 +42,7 @@ private:
 
 	Matrix4x4 oldMatrix = { {1.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 1.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 1.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 1.0f} };
 
-	bool updateMatrix = true, oldMatrixMul = false;
+	bool update = false;
 
 	float previousVertices[16] =
 	{
