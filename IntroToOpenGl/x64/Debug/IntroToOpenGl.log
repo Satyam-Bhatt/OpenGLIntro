@@ -1,1 +1,14 @@
-﻿  IntroToOpenGl.vcxproj -> C:\Users\sharm\Desktop\IntroToOpenGL\x64\Debug\IntroToOpenGl.exe
+﻿  TransformationMain.cpp
+  Translate_Rotate_Scale.cpp
+C:\Users\sharm\Desktop\IntroToOpenGL\IntroToOpenGl\Translate_Rotate_Scale.cpp(92,12): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\sharm\Desktop\IntroToOpenGL\IntroToOpenGl\Translate_Rotate_Scale.cpp(93,12): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\sharm\Desktop\IntroToOpenGL\IntroToOpenGl\Translate_Rotate_Scale.cpp(213,96): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\sharm\Desktop\IntroToOpenGL\IntroToOpenGl\Translate_Rotate_Scale.cpp(214,96): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\sharm\Desktop\IntroToOpenGL\IntroToOpenGl\Translate_Rotate_Scale.cpp(232,12): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\sharm\Desktop\IntroToOpenGL\IntroToOpenGl\Translate_Rotate_Scale.cpp(233,12): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\sharm\Desktop\IntroToOpenGL\IntroToOpenGl\Translate_Rotate_Scale.cpp(372,96): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\sharm\Desktop\IntroToOpenGL\IntroToOpenGl\Translate_Rotate_Scale.cpp(373,96): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\sharm\Desktop\IntroToOpenGL\IntroToOpenGl\Translate_Rotate_Scale.cpp(497,51): warning C4244: 'argument': conversion from 'GLint' to 'float', possible loss of data
+C:\Users\sharm\Desktop\IntroToOpenGL\IntroToOpenGl\Translate_Rotate_Scale.cpp(497,22): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+  Generating Code...
+  IntroToOpenGl.vcxproj -> C:\Users\sharm\Desktop\IntroToOpenGL\x64\Debug\IntroToOpenGl.exe

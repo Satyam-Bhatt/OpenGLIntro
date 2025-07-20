@@ -34,6 +34,9 @@ private:
 	Vector2 storeScale = Vector2(1.0f, 1.0f);
 	Vector2 storePivot = Vector2(0.0f, 0.0f);
 
+	float StoreScaleCombined = 1.0f;
+
+
 	uint32_t VAO, VBO, EBO;
 	uint32_t VAO2, VBO2;
 
