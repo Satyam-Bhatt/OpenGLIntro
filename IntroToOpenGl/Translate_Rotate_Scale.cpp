@@ -89,6 +89,8 @@ void Translate_Rotate_Scale::Start()
 
 void Translate_Rotate_Scale::Update()
 {
+	if (!update) return;
+
 	Vector2 o;
 
 	float oPX = oldMatrix[0][0] * pivot.x * 0.5 + oldMatrix[0][1] * pivot.y * 0.5 + oldMatrix[0][2] * 0 + oldMatrix[0][3] * 1;
@@ -507,6 +509,7 @@ void Translate_Rotate_Scale::ImGuiRender(GLFWwindow* window)
 	ImGui::DragFloat("Scale", &scaleCombined, 0.005f);
 	ImGui::DragFloat2("Translate", &translate.x, 0.005f);
 	ImGui::DragFloat3("Rotation", &rotation.x, 0.1f);
+	ImGui::Checkbox("Update", &update);
 	if (ImGui::Button("Navanya", ImVec2(100, 0))) {
 		Navanya();
 	}
@@ -636,10 +639,10 @@ void Translate_Rotate_Scale::LocalSpaceTransformation(Matrix4x4& result, Vector2
 	{
 		DeltaRotation = storeRotation;
 
-		rollBack[0][0] = cos(DeltaRotation.z * (PI / 180)) * ScaleFactor.x;
-		rollBack[0][1] = sin(DeltaRotation.z * (PI / 180)) * ScaleFactor.x;
-		rollBack[1][0] = -sin(DeltaRotation.z * (PI / 180)) * ScaleFactor.y;
-		rollBack[1][1] = cos(DeltaRotation.z * (PI / 180)) * ScaleFactor.y;
+		rollBack[0][0] = cos(DeltaRotation.z * (PI / 180));
+		rollBack[0][1] = sin(DeltaRotation.z * (PI / 180));
+		rollBack[1][0] = -sin(DeltaRotation.z * (PI / 180));
+		rollBack[1][1] = cos(DeltaRotation.z * (PI / 180));
 	}
 	
 	//printf("INSIDE TRS");
@@ -728,9 +731,9 @@ void Translate_Rotate_Scale::LocalSpaceTransformation(Matrix4x4& result, Vector2
 	}
 	printf("\n");*/
 
-	// Combine transformations: Final = TranslateBack * Rotate * Scale * TranslateToPivot
+	// Combine transformations: Final = TranslateBack * Rotate * Scale * rotate back (if scale changed) * TranslateToPivot
 	Matrix4x4 rollBackMatrix;
-	MultiplyMatrices(translateToPivotMatrix, rollBack, rollBackMatrix);
+	MultiplyMatrices(rollBack, translateToPivotMatrix, rollBackMatrix);
 	Matrix4x4 scaleTransform;
 	MultiplyMatrices(scalingMatrix, rollBackMatrix, scaleTransform);
 	/*printf("SP'\n");
