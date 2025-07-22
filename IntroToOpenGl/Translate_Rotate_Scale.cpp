@@ -92,9 +92,14 @@ void Translate_Rotate_Scale::Update()
 
 	Vector2 worldSpacePivot = Vector2(0, 0);
 
+	// Convert the pivot from local space to world space
+	// oldMatrix stores the previous transformation matrix
+	// Multiplying the pivot with the oldMatrix will give the world space pivot
+	// We multiply by 0.5 so that the pivot is between -1 and 1
 	worldSpacePivot.x = oldMatrix[0][0] * pivot.x * 0.5 + oldMatrix[0][1] * pivot.y * 0.5 + oldMatrix[0][2] * 0 + oldMatrix[0][3] * 1;
 	worldSpacePivot.y = oldMatrix[1][0] * pivot.x * 0.5 + oldMatrix[1][1] * pivot.y * 0.5 + oldMatrix[1][2] * 0 + oldMatrix[1][3] * 1;
 
+	// To render pivot
 	float vertices2[] =
 	{
 		-0.05f + worldSpacePivot.x, -0.05f + worldSpacePivot.y, 0.0f, 1.0f, 0, 0,
@@ -107,12 +112,15 @@ void Translate_Rotate_Scale::Update()
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices2), vertices2, GL_DYNAMIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-	float vertices[16] = {
+	// To render the square
+	float vertices[] = {
 		-0.5f, -0.5f, 0.0f, 1.0f,
 		 0.5f, -0.5f, 0.0f, 1.0f,
 		-0.5f,  0.5f, 0.0f, 1.0f,
 		 0.5f,  0.5f, 0.0f, 1.0f
 	};
+
+	// Sets the square to previous transformation by multiplying vertices with the oldMatrix
 	for (int i = 0; i < sizeof(vertices) / sizeof(vertices[0]); i += 4)
 	{
 		float x = vertices[i];
@@ -127,10 +135,11 @@ void Translate_Rotate_Scale::Update()
 		}
 	}
 
-
+	// New transformation matrix
 	Matrix4x4 translate_Rotate_Scale;
 	LocalSpaceTransformation(translate_Rotate_Scale, worldSpacePivot);
 
+	// Sets the square to the new transformation.
 	for (int i = 0; i < sizeof(vertices) / sizeof(vertices[0]); i += 4)
 	{
 		float x = vertices[i];
@@ -175,8 +184,7 @@ void Translate_Rotate_Scale::ImGuiRender(GLFWwindow* window)
 	ImGui::DragFloat2("Scale XY", &scale.x, 0.005f);
 	ImGui::DragFloat("Scale", &scaleCombined, 0.005f);
 	ImGui::DragFloat2("Translate", &translate.x, 0.005f);
-	ImGui::DragFloat3("Rotation", &rotation.x, 0.1f);
-	
+	ImGui::DragFloat("Rotation", &rotation, 0.1f);
 
 	ImGui::End();
 }
@@ -193,17 +201,6 @@ void Translate_Rotate_Scale::Render()
 	glBindVertexArray(0);
 }
 
-void Translate_Rotate_Scale::Exit()
-{
-	if (VAO != 0) glDeleteVertexArrays(1, &VAO);
-	if (VBO != 0) glDeleteBuffers(1, &VBO);
-	if (EBO != 0) glDeleteBuffers(1, &EBO);
-	if (VAO2 != 0) glDeleteVertexArrays(1, &VAO2);
-	if (VBO2 != 0) glDeleteBuffers(1, &VBO2);
-	glDeleteProgram(shader.ID);
-	glDeleteProgram(shader2.ID);
-	glDisable(GL_BLEND);
-}
 
 Translate_Rotate_Scale* Translate_Rotate_Scale::GetInstance()
 {
@@ -212,31 +209,38 @@ Translate_Rotate_Scale* Translate_Rotate_Scale::GetInstance()
 
 void Translate_Rotate_Scale::LocalSpaceTransformation(Matrix4x4& result, Vector2 pivot)
 {
-	Vector3 deltaRotation = rotation - storeRotation;
+	// As we have already manipulated the square with the previous transformation we just need to change it by the small amount that it changed
+	// within the last frame so we take the delta values and multiply it with the vertices
 	Vector2 deltaTranslate = translate - storeTranslate;
+	float deltaRotation = rotation - storeRotation;
+	// To take the change in scale we need to divide the new scale by the old scale as it does not add up but multiply (diagonal in a matrix)
 	Vector2 deltaScaleFactor = scale / storeScale;
 	float deltaScaleCombined = scaleCombined / storeScaleCombined;
 
+	// We need to roll back the square to the original rotation so that we can scale it in x and y axis in local space
+	// If we don't do this then the square will be scaled in world space and would shear
 	float rollBack[4][4] =
 	{
-		{1, 0, 0.0f, 0.0f},
-		{0,  1, 0.0f, 0.0f},
+		{1.0f, 0.0f, 0.0f, 0.0f},
+		{0.0f, 1.0f, 0.0f, 0.0f},
 		{0.0f, 0.0f, 1.0f, 0.0f},
 		{0.0f, 0.0f, 0.0f, 1.0f}
 	};
 
+	// Populate the roll back matrix if the scale has changed
 	if (deltaScaleFactor != Vector2(1.0f, 1.0f))
 	{
 		deltaRotation = storeRotation;
 
-		rollBack[0][0] = cos(deltaRotation.z * (PI / 180));
-		rollBack[0][1] = sin(deltaRotation.z * (PI / 180));
-		rollBack[1][0] = -sin(deltaRotation.z * (PI / 180));
-		rollBack[1][1] = cos(deltaRotation.z * (PI / 180));
+		// roll back matrix should rotate the suqre in the opposite direction so we change the sign
+		// Identity = cos(-theta) = cos(theta) and sin(-theta) = -sin(theta)
+		rollBack[0][0] = cos(deltaRotation * (PI / 180));
+		rollBack[0][1] = sin(deltaRotation * (PI / 180));
+		rollBack[1][0] = -sin(deltaRotation * (PI / 180));
+		rollBack[1][1] = cos(deltaRotation * (PI / 180));
 	}
 	
-	//printf("INSIDE TRS");
-	// Step 1: Translate to pivot (move pivot to origin)
+	// Step 1: Translate to pivot (move pivot to origin). Also translate the square
 	float translateToPivotMatrix[4][4] =
 	{
 		{1.0f, 0.0f, 0.0f, -pivot.x},
@@ -244,62 +248,24 @@ void Translate_Rotate_Scale::LocalSpaceTransformation(Matrix4x4& result, Vector2
 		{0.0f, 0.0f, 1.0f, 0.0f},
 		{0.0f, 0.0f, 0.0f, 1.0f}
 	};
-	/*Printf("translateToPivotMatrix\n");
-	for (int i = 0; i < 4; i++)
-	{
 
-		for (int j = 0; j < 4; j++)
-		{
-			printf(" %f ", translateToPivotMatrix[i][j]);
-		}
-		printf("\n");
-	}
-	printf("\n");*/
-
-
-	// Step 2: Scale around origin (now the pivot point)
+	// Step 2: Scale around origin
 	float scalingMatrix[4][4] =
 	{
-		{deltaScaleFactor.x * deltaScaleCombined, 0.0f, 0.0f, 0.0f},
-		{0.0f, deltaScaleFactor.y * deltaScaleCombined, 0.0f, 0.0f},
-		{0.0f, 0.0f, 1.0f, 0.0f},
-		{0.0f, 0.0f, 0.0f, 1.0f}
+		{deltaScaleFactor.x * deltaScaleCombined,                   0.0f                 , 0.0f, 0.0f},
+		{                 0.0f                  , deltaScaleFactor.y * deltaScaleCombined, 0.0f, 0.0f},
+		{                 0.0f                  ,                   0.0f                 , 1.0f, 0.0f},
+		{                 0.0f                  ,                   0.0f                 , 0.0f, 1.0f}
 	};
-	/*printf("scalingMatrix\n");
-	for (int i = 0; i < 4; i++)
-	{
 
-		for (int j = 0; j < 4; j++)
-		{
-			printf(" %f ", scalingMatrix[i][j]);
-		}
-		printf("\n");
-	}
-	printf("\n");*/
-
-
-	// Step 3: Rotate around origin (still the pivot point)
+	// Step 3: Rotate around origin
 	float rollMatrix[4][4] =
 	{
-		{cos(deltaRotation.z * (PI/180)), -sin(deltaRotation.z * (PI/180)), 0.0f, 0.0f},
-		{sin(deltaRotation.z * (PI/180)),  cos(deltaRotation.z * (PI/180)), 0.0f, 0.0f},
+		{cos(deltaRotation * (PI/180)), -sin(deltaRotation * (PI/180)), 0.0f, 0.0f},
+		{sin(deltaRotation * (PI/180)),  cos(deltaRotation * (PI/180)), 0.0f, 0.0f},
 		{0.0f, 0.0f, 1.0f, 0.0f}, 
 		{0.0f, 0.0f, 0.0f, 1.0f}
 	};
-
-
-	/*printf("rollMatrix\n");
-	for (int i = 0; i < 4; i++)
-	{
-
-		for (int j = 0; j < 4; j++)
-		{
-			printf(" %f ", rollMatrix[i][j]);
-		}
-		printf("\n");
-	}
-	printf("\n");*/
-
 
 	// Step 4: Translate back from pivot + final translation
 	float translateBackMatrix[4][4] =
@@ -309,65 +275,20 @@ void Translate_Rotate_Scale::LocalSpaceTransformation(Matrix4x4& result, Vector2
 		{0.0f, 0.0f, 1.0f, 0.0f},
 		{0.0f, 0.0f, 0.0f, 1.0f}
 	};
-	/*printf("translateBackMatrix\n");
-	for (int i = 0; i < 4; i++)
-	{
-
-		for (int j = 0; j < 4; j++)
-		{
-			printf(" %f ", translateBackMatrix[i][j]);
-		}
-		printf("\n");
-	}
-	printf("\n");*/
 
 	// Combine transformations: Final = TranslateBack * Rotate * Scale * rotate back (if scale changed) * TranslateToPivot
+	// First we take the square back to the origin with respect to the pivot
+	// Then we rotate it back only if the scale is changed
+	// Then we Scale it
+	// Then we Rotate it
+	// At last we translate it to the pivot + final translation
 	Matrix4x4 rollBackMatrix;
 	MultiplyMatrices(rollBack, translateToPivotMatrix, rollBackMatrix);
 	Matrix4x4 scaleTransform;
 	MultiplyMatrices(scalingMatrix, rollBackMatrix, scaleTransform);
-	/*printf("SP'\n");
-	for (int i = 0; i < 4; i++)
-	{
-
-		for (int j = 0; j < 4; j++)
-		{
-			printf(" %f ", scaleTransform[i][j]);
-		}
-		printf("\n");
-	}
-	printf("\n");
-	*/
 	Matrix4x4 rotateScaleTransform;
 	MultiplyMatrices(rollMatrix, scaleTransform, rotateScaleTransform);
-	/*printf("RSP'\n");
-	for (int i = 0; i < 4; i++)
-	{
-
-		for (int j = 0; j < 4; j++)
-		{
-			printf(" %f ", rotateScaleTransform[i][j]);
-		}
-		printf("\n");
-	}
-	printf("\n");
-	*/
 	MultiplyMatrices(translateBackMatrix, rotateScaleTransform, result);
-	/*printf("PRSP'\n");
-	for (int i = 0; i < 4; i++)
-	{
-
-		for (int j = 0; j < 4; j++)
-		{
-			printf(" %f ", result[i][j]);
-		}
-		printf("\n");
-	}
-	printf("\n");
-	
-	printf("OUTSIDE TRS");*/
-
-	
 }
 
 bool Translate_Rotate_Scale::ValueChanged()
@@ -416,3 +337,14 @@ Matrix4x4& Translate_Rotate_Scale::MultiplyMatrices(Matrix4x4 a, Matrix4x4 b, Ma
 	return result;
 }
 
+void Translate_Rotate_Scale::Exit()
+{
+	if (VAO != 0) glDeleteVertexArrays(1, &VAO);
+	if (VBO != 0) glDeleteBuffers(1, &VBO);
+	if (EBO != 0) glDeleteBuffers(1, &EBO);
+	if (VAO2 != 0) glDeleteVertexArrays(1, &VAO2);
+	if (VBO2 != 0) glDeleteBuffers(1, &VBO2);
+	glDeleteProgram(shader.ID);
+	glDeleteProgram(shader2.ID);
+	glDisable(GL_BLEND);
+}
