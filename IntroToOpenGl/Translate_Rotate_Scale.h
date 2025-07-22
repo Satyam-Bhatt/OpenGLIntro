@@ -20,52 +20,30 @@ public:
 private:
 	static Translate_Rotate_Scale instance;
 	Shader shader, shader2;
+
+	// Values
 	Vector3 rotation{ 0.0f, 0.0f, 0.0f };
 	Vector2 translate{ 0.0f, 0.0f };
 	Vector2 scale = Vector2(1.0f, 1.0f);
 	Vector2 pivot{ 0.0f, 0.0f };
-	
 	float scaleCombined = 1.0f;
-
 
 	// Storing the values
 	Vector3 storeRotation = Vector3(0.0f, 0.0f, 0.0f);
 	Vector2 storeTranslate = Vector2(0.0f, 0.0f);
 	Vector2 storeScale = Vector2(1.0f, 1.0f);
 	Vector2 storePivot = Vector2(0.0f, 0.0f);
-
-	float StoreScaleCombined = 1.0f;
-
+	float storeScaleCombined = 1.0f;
 
 	uint32_t VAO, VBO, EBO;
 	uint32_t VAO2, VBO2;
+	uint32_t slowPrint = 0;
 
 	Matrix4x4 oldMatrix = { {1.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 1.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 1.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 1.0f} };
 
-	bool update = false;
-
-	float previousVertices[16] =
-	{
-		-0.5f, -0.5f, 0.0f, 1.0f,
-		 0.5f, -0.5f, 0.0f, 1.0f,
-		-0.5f,  0.5f, 0.0f, 1.0f,
-		 0.5f,  0.5f, 0.0f, 1.0f
-	};
-
 	bool ValueChanged();
-	bool ScaleChanged();
-	bool RotateChanged();
-	bool PivotValueChanged();
-	void Navanya();
-	bool PivotChangeImGui;
 
 	Matrix4x4& MultiplyMatrices(Matrix4x4 a, Matrix4x4 b, Matrix4x4& result);
 	void LocalSpaceTransformation(Matrix4x4& result, Vector2 pivot);
-	void LocalSpaceTransformation2(Matrix4x4& result, Vector2 pivoto);
-	bool InverseMatrix(Matrix4x4 matrix, Matrix4x4& result);
-
-	uint32_t slowPrint = 0;
-
-	float oPX = 0.0f, oPY = 0.0f;
 };
 
