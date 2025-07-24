@@ -343,6 +343,30 @@ Matrix4x4& Translate_Rotate_Scale::MultiplyMatrices(Matrix4x4 a, Matrix4x4 b, Ma
 
 void Translate_Rotate_Scale::Exit()
 {
+	translate = Vector2(0, 0);
+	scale = Vector2(1, 1);
+	rotation = 0;
+	scaleCombined = 1;
+	pivot = Vector2(0, 0);
+	storeScale = Vector2(1, 1);
+	storeTranslate = Vector2(0, 0);
+	storeRotation = 0;
+	storeScaleCombined = 1;
+	storePivot = Vector2(0, 0);
+
+	for (int i = 0; i < 4; i++)
+	{
+		for (int j = 0; j < 4; j++)
+		{
+			oldMatrix[i][j] = 0.0f;
+
+			if(i == j)
+			{
+				oldMatrix[i][j] = 1.0f;
+			}
+		}
+	}
+
 	if (VAO != 0) glDeleteVertexArrays(1, &VAO);
 	if (VBO != 0) glDeleteBuffers(1, &VBO);
 	if (EBO != 0) glDeleteBuffers(1, &EBO);
