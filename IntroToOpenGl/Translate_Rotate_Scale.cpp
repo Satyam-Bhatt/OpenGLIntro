@@ -107,6 +107,12 @@ void Translate_Rotate_Scale::Update()
 		 0.5f,  0.5f, 0.0f, 1.0f
 	};
 
+	// New transformation matrix
+	Matrix4x4 translate_Rotate_Scale;
+	LocalSpaceTransformation(translate_Rotate_Scale, worldSpacePivot);
+
+	MultiplyMatrices(translate_Rotate_Scale, oldMatrix, oldMatrix);
+
 	// Sets the square to previous transformation by multiplying vertices with the oldMatrix
 	for (int i = 0; i < sizeof(vertices) / sizeof(vertices[0]); i += 4)
 	{
@@ -122,26 +128,7 @@ void Translate_Rotate_Scale::Update()
 		}
 	}
 
-	// New transformation matrix
-	Matrix4x4 translate_Rotate_Scale;
-	LocalSpaceTransformation(translate_Rotate_Scale, worldSpacePivot);
 
-	// Sets the square to the new transformation.
-	for (int i = 0; i < sizeof(vertices) / sizeof(vertices[0]); i += 4)
-	{
-		float x = vertices[i];
-		float y = vertices[i + 1];
-		float z = vertices[i + 2];
-		float w = vertices[i + 3];
-
-		for (int j = 0; j < 4; j++)
-		{
-			vertices[i + j] = x * translate_Rotate_Scale[j][0] + y * translate_Rotate_Scale[j][1] + z * translate_Rotate_Scale[j][2]
-				+ w * translate_Rotate_Scale[j][3];
-		}
-	}
-
-	MultiplyMatrices(translate_Rotate_Scale, oldMatrix, oldMatrix);
 
 	storeRotation = rotation;
 	storeScale = scale;
