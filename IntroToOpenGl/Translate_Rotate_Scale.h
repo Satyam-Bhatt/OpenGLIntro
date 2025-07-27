@@ -3,6 +3,7 @@
 
 using namespace Vector;
 using Matrix4x4 = float[4][4];
+
 class Translate_Rotate_Scale : public IntroTransformation
 {
 public:
