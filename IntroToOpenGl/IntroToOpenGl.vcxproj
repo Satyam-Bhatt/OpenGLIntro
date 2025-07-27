@@ -146,6 +146,7 @@
     <ClCompile Include="FirstShader.cpp" />
     <ClCompile Include="FirstTriangle.cpp" />
     <ClCompile Include="glad.c" />
+    <ClCompile Include="glmTest.cpp" />
     <ClCompile Include="HelloTriangle.cpp" />
     <ClCompile Include="Imgui\imgui.cpp" />
     <ClCompile Include="Imgui\imgui_demo.cpp" />
@@ -182,6 +183,7 @@
     <ClInclude Include="FirstShader.h" />
     <ClInclude Include="FirstTriangle.h" />
     <ClInclude Include="GameState.h" />
+    <ClInclude Include="glmTest.h" />
     <ClInclude Include="HelloTriangle.h" />
     <ClInclude Include="Imgui\imconfig.h" />
     <ClInclude Include="Imgui\imgui.h" />
@@ -216,6 +218,7 @@
     <ClInclude Include="VertexPosToFrag.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="glmTest.shader" />
     <None Include="IntroTexture.shader" />
     <None Include="IntroTransformation.shader" />
     <None Include="MipmapOptions.shader" />

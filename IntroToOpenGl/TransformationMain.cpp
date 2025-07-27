@@ -1,6 +1,7 @@
 #include "TransformationMain.h"
 #include "IntroTransformation.h"
 #include "Translate_Rotate_Scale.h"
+#include "glmTest.h"
 
 TransformationMain* TransformationMain::instance = nullptr;
 
@@ -11,6 +12,9 @@ TransformationMain::TransformationMain()
 
 	sceneNames[SubScene::Translate_Rotate_Scale] = "Translate Rotate Scale";
 	sceneFactories[SubScene::Translate_Rotate_Scale] = []() -> TransformationMain* { return Translate_Rotate_Scale::GetInstance(); };
+
+	sceneNames[SubScene::glmTest] = "Glm Test";
+	sceneFactories[SubScene::glmTest] = []() -> TransformationMain* { return glmTest::GetInstance(); };
 }
 
 TransformationMain::~TransformationMain()
@@ -155,6 +159,11 @@ void TransformationMain::RenderText(SubScene sceneName)
 		ImGui::TextWrapped("Scale and move the rectangel using matricies");
 	}
 	else if(sceneName == SubScene::Translate_Rotate_Scale)
+	{
+		ImGui::TextWrapped("Scale, Rotate and Translate the rectangle aroung a pivot");
+		ImGui::TextWrapped("The pivot moves in local space and all the transformations are applied around the pivot with the help of matricies");
+	}
+	else if(sceneName == SubScene::glmTest)
 	{
 		ImGui::TextWrapped("Scale, Rotate and Translate the rectangle aroung a pivot");
 		ImGui::TextWrapped("The pivot moves in local space and all the transformations are applied around the pivot with the help of matricies");
