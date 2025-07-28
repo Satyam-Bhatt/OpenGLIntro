@@ -25,5 +25,6 @@ private:
 	bool wireframeMode = false;
 
 	uint32_t VAO = 0, VBO = 0, EBO = 0;
+	uint32_t textures[2];
 };
 

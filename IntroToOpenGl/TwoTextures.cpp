@@ -180,6 +180,7 @@ void TwoTextures::Render()
 	glActiveTexture(GL_TEXTURE0);// Active by default
 	// This call will bind the texture to currently active texture unit defined above GL_TEXTURE0
 	glBindTexture(GL_TEXTURE_2D, textures[0]);
+	// Activate texture unit 1
 	glActiveTexture(GL_TEXTURE1);
 	// This call will bind the texture to currently active texture unit defined above GL_TEXTURE1
 	glBindTexture(GL_TEXTURE_2D, textures[1]);
