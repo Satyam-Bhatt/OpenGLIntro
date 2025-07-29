@@ -76,7 +76,7 @@ void glmTest::Start()
 
 	glBindVertexArray(VAO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
@@ -94,10 +94,33 @@ void glmTest::Start()
 	shader.Use();
 	shader.SetTexture("texture1", 0);
 	shader.SetTexture("texture2", 1);
+
+	// Testing out glm
+	// Define a vector named vec
+	glm::vec4 vec = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
+	// Defining an identity matrix
+	// If we do not initialize it, it will be all 0s hence a null matrix
+	glm::mat4 trans = glm::mat4(1.0f);
+	// Then we create a translation matrix and pass in a vector by which we want to translate
+	// Here we pass in identity matrix and multiply with a translation matrix that translates by 1 unit in x axis and 1 unit in y axis
+	// it looks like
+	// {1, 0, 0, 0}   {1, 0, 0, 1}   {1, 0, 0, 1}
+	// {0, 1, 0, 0} x {0, 1, 0, 1} = {0, 1, 0, 1}
+	// {0, 0, 1, 0}   {0, 0, 1, 0}   {0, 0, 1, 0}
+	// {0, 0, 0, 1}   {0, 0, 0, 1}   {0, 0, 0, 1}
+	trans = glm::translate(trans, glm::vec3(1.0f, 1.0f, 0.0f));
+	// Then we multiply the vector with the translation matrix
+	vec = trans * vec;
+	std::cout << vec.x << vec.y << std::endl;
+
 }
 
 void glmTest::Update()
 {
+	glm::mat4 trans = glm::mat4(1.0f);
+	trans = glm::rotate(trans, glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+	trans = glm::scale(trans, glm::vec3(1.5f, 1.5f, 1.5f));
+	//trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
 }
 
 void glmTest::ImGuiRender(GLFWwindow* window)
@@ -120,7 +143,7 @@ void glmTest::ImGuiRender(GLFWwindow* window)
 
 void glmTest::Render()
 {
-	if(wireframeMode)
+	if (wireframeMode)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	else
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
