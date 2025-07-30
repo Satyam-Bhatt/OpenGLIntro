@@ -142,6 +142,7 @@ void glmTest::Update()
 	// 2. Rotation
 	// 3. Translation
 	// and in matrix multiplication the order is from right to left
+	// trans matrix combines all the transformations we did earlier
 
 	// We multiply our vertices with the transformation matrix
 	for (int i = 0; i < sizeof(vertices) / sizeof(vertices[0]); i += 6)

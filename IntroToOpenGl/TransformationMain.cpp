@@ -165,7 +165,6 @@ void TransformationMain::RenderText(SubScene sceneName)
 	}
 	else if(sceneName == SubScene::glmTest)
 	{
-		ImGui::TextWrapped("Scale, Rotate and Translate the rectangle aroung a pivot");
-		ImGui::TextWrapped("The pivot moves in local space and all the transformations are applied around the pivot with the help of matricies");
+		ImGui::TextWrapped("Used glm to create transformation matricies");
 	}
 }

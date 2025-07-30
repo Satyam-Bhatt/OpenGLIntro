@@ -26,6 +26,6 @@ private:
 	bool rotateAroundX = false, rotateAroundY = false, rotateAroundZ = true;
 
 	uint32_t VAO = 0, VBO = 0, EBO = 0;
-	uint32_t textures[2];
+	uint32_t textures[2] = { 0, 0 };
 };
 
