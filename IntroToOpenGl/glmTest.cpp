@@ -117,10 +117,50 @@ void glmTest::Start()
 
 void glmTest::Update()
 {
+	float vertices[] = {
+	-0.5f, -0.5f, 0.0f, 1.0f, 0, 0,
+	 0.5f, -0.5f, 0.0f, 1.0f, 1, 0,
+	-0.5f,  0.5f, 0.0f, 1.0f, 0, 1,
+	 0.5f,  0.5f, 0.0f, 1.0f, 1, 1
+	};
+
+	float axisX = 0.0f, axisY = 0.0f, axisZ = 0.0f;
+
+	if(rotateAroundX) axisX = 1.0f;
+	if(rotateAroundY) axisY = 1.0f;
+	if(rotateAroundZ) axisZ = 1.0f;
+
 	glm::mat4 trans = glm::mat4(1.0f);
-	trans = glm::rotate(trans, glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+	//trans = glm::rotate(trans, glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+	// Multiply our matrix with the rotation matrix. Here the rotation matrix rotates the object with value of time around z axis.
+	// the rotational axis that we pass in should be a unit vector.
+	trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(axisX, axisY , axisZ));
+	// Multiply our matrix with the scaling matrix
 	trans = glm::scale(trans, glm::vec3(1.5f, 1.5f, 1.5f));
-	//trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
+	// The order should be
+	// 1. Scaling
+	// 2. Rotation
+	// 3. Translation
+	// and in matrix multiplication the order is from right to left
+
+	// We multiply our vertices with the transformation matrix
+	for (int i = 0; i < sizeof(vertices) / sizeof(vertices[0]); i += 6)
+	{
+		float x = vertices[i];
+		float y = vertices[i + 1];
+		float z = vertices[i + 2];
+		float w = vertices[i + 3];
+
+		for (int j = 0; j < 4; j++)
+		{
+			vertices[i + j] = x * trans[j][0] + y * trans[j][1] + z * trans[j][2]
+				+ w * trans[j][3];
+		}
+	}
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
 void glmTest::ImGuiRender(GLFWwindow* window)
@@ -137,6 +177,13 @@ void glmTest::ImGuiRender(GLFWwindow* window)
 	ImGui::Begin("Level Specific", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
 
 	ImGui::Checkbox("Wireframe mode", &wireframeMode);
+
+	ImGui::Text("Rotate Around Axis");
+	ImGui::Checkbox("X", &rotateAroundX);
+	ImGui::SameLine(0, 20);
+	ImGui::Checkbox("Y", &rotateAroundY);
+	ImGui::SameLine(0, 20);
+	ImGui::Checkbox("Z", &rotateAroundZ);
 
 	ImGui::End();
 }

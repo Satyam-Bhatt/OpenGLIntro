@@ -23,6 +23,7 @@ private:
 	Shader shader;
 
 	bool wireframeMode = false;
+	bool rotateAroundX = false, rotateAroundY = false, rotateAroundZ = true;
 
 	uint32_t VAO = 0, VBO = 0, EBO = 0;
 	uint32_t textures[2];
