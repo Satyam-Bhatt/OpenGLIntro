@@ -159,6 +159,7 @@
     <ClCompile Include="IntroTexture.cpp" />
     <ClCompile Include="IntroTransformation.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MatrixUniform.cpp" />
     <ClCompile Include="MipmapOptions.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="SecondTriangle.cpp" />
@@ -197,6 +198,7 @@
     <ClInclude Include="Intro.h" />
     <ClInclude Include="IntroTexture.h" />
     <ClInclude Include="IntroTransformation.h" />
+    <ClInclude Include="MatrixUniform.h" />
     <ClInclude Include="MipmapOptions.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="SecondTriangle.h" />
@@ -221,6 +223,7 @@
     <None Include="glmTest.shader" />
     <None Include="IntroTexture.shader" />
     <None Include="IntroTransformation.shader" />
+    <None Include="MatrixUniform.shader" />
     <None Include="MipmapOptions.shader" />
     <None Include="ShaderClass.shader" />
     <None Include="TexelViewer.shader" />

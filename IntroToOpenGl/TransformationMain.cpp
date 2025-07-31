@@ -2,6 +2,7 @@
 #include "IntroTransformation.h"
 #include "Translate_Rotate_Scale.h"
 #include "glmTest.h"
+#include "MatrixUniform.h"
 
 TransformationMain* TransformationMain::instance = nullptr;
 
@@ -15,6 +16,9 @@ TransformationMain::TransformationMain()
 
 	sceneNames[SubScene::glmTest] = "Glm Test";
 	sceneFactories[SubScene::glmTest] = []() -> TransformationMain* { return glmTest::GetInstance(); };
+
+	sceneNames[SubScene::MatrixUniform] = "Matrix Uniform";
+	sceneFactories[SubScene::MatrixUniform] = []() -> TransformationMain* { return MatrixUniform::GetInstance(); };
 }
 
 TransformationMain::~TransformationMain()
@@ -166,5 +170,9 @@ void TransformationMain::RenderText(SubScene sceneName)
 	else if(sceneName == SubScene::glmTest)
 	{
 		ImGui::TextWrapped("Used glm to create transformation matricies");
+	}
+	else if(sceneName == SubScene::MatrixUniform)
+	{
+		ImGui::TextWrapped("Used uniform matricies to create transformation matricies");
 	}
 }

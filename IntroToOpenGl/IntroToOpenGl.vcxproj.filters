@@ -162,6 +162,9 @@
     <ClCompile Include="glmTest.cpp">
       <Filter>Source Files\Transformations</Filter>
     </ClCompile>
+    <ClCompile Include="MatrixUniform.cpp">
+      <Filter>Source Files\Transformations</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameState.h">
@@ -272,6 +275,9 @@
     <ClInclude Include="glmTest.h">
       <Filter>Header Files\TransformationsMain</Filter>
     </ClInclude>
+    <ClInclude Include="MatrixUniform.h">
+      <Filter>Header Files\TransformationsMain</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ShaderClass.shader">
@@ -308,6 +314,9 @@
       <Filter>Shader\Transformations</Filter>
     </None>
     <None Include="glmTest.shader">
+      <Filter>Shader\Transformations</Filter>
+    </None>
+    <None Include="MatrixUniform.shader">
       <Filter>Shader\Transformations</Filter>
     </None>
   </ItemGroup>

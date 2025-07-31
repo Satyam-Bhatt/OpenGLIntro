@@ -27,6 +27,7 @@ private:
 		IntroTransformations,
 		Translate_Rotate_Scale,
 		glmTest,
+		MatrixUniform,
 		COUNT
 	};
 
