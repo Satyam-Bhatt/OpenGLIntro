@@ -5,11 +5,16 @@
 layout(location = 0) in vec4 aPos;
 layout(location = 1) in vec2 aTexCoord;
 
+// Get the transformation matrix
+uniform mat4 transform;
+
 out vec2 TexCoord;
 
 void main()
 {
-	gl_Position = aPos;
+	// Apply the transformation to the vertex postiom
+	vec4 pos = transform * aPos;
+	gl_Position = pos;
 	TexCoord = aTexCoord;
 }
 

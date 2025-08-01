@@ -87,9 +87,6 @@ void MatrixUniform::Start()
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
-	shader.Use();
-	shader.SetTexture("texture1", 0);
 }
 
 void MatrixUniform::Update()
@@ -110,6 +107,37 @@ void MatrixUniform::ImGuiRender(GLFWwindow* window)
 	ImGui::Begin("Level Specific", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
 
 	ImGui::Checkbox("Wireframe mode", &wireframeMode);
+	ImGui::Checkbox("Manipulate", &manualManipulation);
+
+	if (manualManipulation)
+	{
+		if (ImGui::BeginTable("Texure Settings", 2))
+		{
+			ImGui::TableSetupColumn("object 1");
+			ImGui::TableSetupColumn("Object 2");
+			ImGui::TableHeadersRow();
+
+			ImGui::TableNextRow();
+
+			ImGui::TableSetColumnIndex(0);
+			ImGui::DragFloat2("Position 1", &position1.x, 0.005f);
+			ImGui::DragFloat3("Rotation 1", &rotation1.x, 0.005f);
+			ImGui::DragFloat2("Scale 1", &scale1.x, 0.005f);
+			if (ImGui::Button("Reset"))
+			{
+				position1 = Vector2(0.5f, 0.0f);
+				rotation1 = Vector3(0.0f, 0.0f, 0.0f);
+				scale1 = Vector2(0.5f, 0.5f);
+			}
+
+			ImGui::TableSetColumnIndex(1);
+			ImGui::DragFloat2("Position 2", &position2.x, 0.005f);
+			ImGui::DragFloat3("Rotation 2", &rotation2.x, 0.005f);
+			ImGui::DragFloat2("Scale 2", &scale2.x, 0.005f);
+
+			ImGui::EndTable();
+		}
+	}
 
 	ImGui::End();
 }
@@ -127,8 +155,48 @@ void MatrixUniform::Render()
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, textures[1]);
 
+	// Calculate the transformation matrix
+	glm::mat4 trans = glm::mat4(1.0f);
+	float valY = sin(glfwGetTime()) * 0.7f;
+	float valX = cos(glfwGetTime()) * 0.7f;
+	if (!manualManipulation)
+	{
+		trans = glm::translate(trans, glm::vec3(valX, valY, 0.0f));
+		trans = glm::rotate(trans, - 2 * (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
+	}
+	else
+	{
+		trans = glm::translate(trans, glm::vec3(position1.x, position1.y, 0.0f));
+		trans = glm::rotate(trans, rotation1.z, glm::vec3(0.0f, 0.0f, 1.0f));
+		trans = glm::rotate(trans, rotation1.y, glm::vec3(0.0f, 1.0f, 0.0f));
+		trans = glm::rotate(trans, rotation1.x, glm::vec3(1.0f, 0.0f, 0.0f));
+	}
+	valX = cos(glfwGetTime()) * 0.1f + 0.5f;
+	if (!manualManipulation)
+	{
+		trans = glm::scale(trans, glm::vec3(valX, valX, 0.0f));
+	}
+	else
+	{
+		trans = glm::scale(trans, glm::vec3(scale1.x, scale1.y, 1.0f));
+	}
+
 	shader.Use();
+	// Pass the matrix to the shader as a uniform. Always set the matrix after the shader is activated
+	shader.SetMat4("transform", trans);
+	shader.SetTexture("texture1", 0);
 	glBindVertexArray(VAO);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+	// Use the same data but with different transformation matrix
+	trans = glm::mat4(1.0f);
+	valY = sin(glfwGetTime()) * 0.7f;
+	valX = cos(glfwGetTime()) * 0.7f;
+	trans = glm::translate(trans, glm::vec3(-valX, -valY, 0.0f));
+	trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
+	trans = glm::scale(trans, glm::vec3(0.5f, 0.5f, 0.5f));
+	shader.SetMat4("transform", trans);
+	shader.SetTexture("texture1", 1);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
 }

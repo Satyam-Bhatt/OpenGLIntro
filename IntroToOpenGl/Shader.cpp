@@ -172,6 +172,15 @@ void Shader::SetTexture(const std::string& name, int slot)
 	glUniform1i(GetUniformLocation(name), slot);
 }
 
+void Shader::SetMat4(const std::string& name, glm::mat4 matrix)
+{
+	// First parameter is the location of the uniform variable
+	// Second parameter is the number of matrices to be passed
+	// Third parameter is whether the matrices are transposed or not. OpenGl expects the matrices to be in column major form default in GLM
+	// Fourth parameter is the matrix data. As the glm matrix does not match the opengl matrix we have to use glm::value_ptr
+	glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, glm::value_ptr(matrix));
+}
+
 // Responsible for caching the uniform location and returning it
 int Shader::GetUniformLocation(const std::string& name)
 {

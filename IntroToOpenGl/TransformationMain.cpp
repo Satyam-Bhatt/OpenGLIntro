@@ -173,6 +173,6 @@ void TransformationMain::RenderText(SubScene sceneName)
 	}
 	else if(sceneName == SubScene::MatrixUniform)
 	{
-		ImGui::TextWrapped("Used uniform matricies to create transformation matricies");
+		ImGui::TextWrapped("Uniform matrix passed to the shader to do transformations. Both the objects use the same VAO and Shader but different matrix and texture is passed to the shader");
 	}
 }
