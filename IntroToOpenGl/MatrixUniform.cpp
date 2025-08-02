@@ -120,20 +120,27 @@ void MatrixUniform::ImGuiRender(GLFWwindow* window)
 			ImGui::TableNextRow();
 
 			ImGui::TableSetColumnIndex(0);
+			ImGui::DragFloat2("Position 2", &position2.x, 0.005f);
+			ImGui::DragFloat3("Rotation 2", &rotation2.x, 0.005f);
+			ImGui::DragFloat2("Scale 2", &scale2.x, 0.005f);
+			if (ImGui::Button("Reset 2"))
+			{
+				position2 = Vector2(-0.5f, 0.0f);
+				rotation2 = Vector3(0.0f, 0.0f, 0.0f);
+				scale2 = Vector2(0.5f, 0.5f);
+			}
+
+			ImGui::TableSetColumnIndex(1);
 			ImGui::DragFloat2("Position 1", &position1.x, 0.005f);
 			ImGui::DragFloat3("Rotation 1", &rotation1.x, 0.005f);
 			ImGui::DragFloat2("Scale 1", &scale1.x, 0.005f);
-			if (ImGui::Button("Reset"))
+			if (ImGui::Button("Reset 1"))
 			{
 				position1 = Vector2(0.5f, 0.0f);
 				rotation1 = Vector3(0.0f, 0.0f, 0.0f);
 				scale1 = Vector2(0.5f, 0.5f);
 			}
 
-			ImGui::TableSetColumnIndex(1);
-			ImGui::DragFloat2("Position 2", &position2.x, 0.005f);
-			ImGui::DragFloat3("Rotation 2", &rotation2.x, 0.005f);
-			ImGui::DragFloat2("Scale 2", &scale2.x, 0.005f);
 
 			ImGui::EndTable();
 		}
@@ -192,9 +199,21 @@ void MatrixUniform::Render()
 	trans = glm::mat4(1.0f);
 	valY = sin(glfwGetTime()) * 0.7f;
 	valX = cos(glfwGetTime()) * 0.7f;
-	trans = glm::translate(trans, glm::vec3(-valX, -valY, 0.0f));
-	trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
-	trans = glm::scale(trans, glm::vec3(0.5f, 0.5f, 0.5f));
+	if (!manualManipulation)
+	{
+		trans = glm::translate(trans, glm::vec3(-valX, -valY, 0.0f));
+		trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
+		trans = glm::scale(trans, glm::vec3(0.5f, 0.5f, 0.5f));
+	}
+	else
+	{
+		trans = glm::translate(trans, glm::vec3(position2.x, position2.y, 0.0f));
+		trans = glm::rotate(trans, rotation2.z, glm::vec3(0.0f, 0.0f, 1.0f));
+		trans = glm::rotate(trans, rotation2.y, glm::vec3(0.0f, 1.0f, 0.0f));
+		trans = glm::rotate(trans, rotation2.x, glm::vec3(1.0f, 0.0f, 0.0f));
+		trans = glm::scale(trans, glm::vec3(scale2.x, scale2.y, 1.0f));
+	}
+
 	shader.SetMat4("transform", trans);
 	shader.SetTexture("texture1", 1);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);

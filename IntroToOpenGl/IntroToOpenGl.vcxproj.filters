@@ -165,6 +165,9 @@
     <ClCompile Include="MatrixUniform.cpp">
       <Filter>Source Files\Transformations</Filter>
     </ClCompile>
+    <ClCompile Include="MyMatrixClass.cpp">
+      <Filter>Source Files\Transformations</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameState.h">
@@ -278,6 +281,9 @@
     <ClInclude Include="MatrixUniform.h">
       <Filter>Header Files\TransformationsMain</Filter>
     </ClInclude>
+    <ClInclude Include="MyMatrixClass.h">
+      <Filter>Header Files\TransformationsMain</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ShaderClass.shader">
@@ -317,6 +323,9 @@
       <Filter>Shader\Transformations</Filter>
     </None>
     <None Include="MatrixUniform.shader">
+      <Filter>Shader\Transformations</Filter>
+    </None>
+    <None Include="MyMatrixClass.shader">
       <Filter>Shader\Transformations</Filter>
     </None>
   </ItemGroup>

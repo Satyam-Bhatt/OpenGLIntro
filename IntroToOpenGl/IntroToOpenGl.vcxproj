@@ -161,6 +161,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MatrixUniform.cpp" />
     <ClCompile Include="MipmapOptions.cpp" />
+    <ClCompile Include="MyMatrixClass.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="SecondTriangle.cpp" />
     <ClCompile Include="Shader.cpp" />
@@ -200,6 +201,7 @@
     <ClInclude Include="IntroTransformation.h" />
     <ClInclude Include="MatrixUniform.h" />
     <ClInclude Include="MipmapOptions.h" />
+    <ClInclude Include="MyMatrixClass.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="SecondTriangle.h" />
     <ClInclude Include="Shader.h" />
@@ -225,6 +227,7 @@
     <None Include="IntroTransformation.shader" />
     <None Include="MatrixUniform.shader" />
     <None Include="MipmapOptions.shader" />
+    <None Include="MyMatrixClass.shader" />
     <None Include="ShaderClass.shader" />
     <None Include="TexelViewer.shader" />
     <None Include="Translate_Rotate_Scale.shader" />
