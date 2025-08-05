@@ -17,6 +17,8 @@ public:
 private:
 	static MyMatrixClass instance;
 
+	bool wireframeMode = false;
+
 	Shader shader;
 	uint32_t VAO = 0 , VBO = 0, EBO = 0;
 

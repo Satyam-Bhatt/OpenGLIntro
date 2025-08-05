@@ -3,6 +3,7 @@
 #include "Translate_Rotate_Scale.h"
 #include "glmTest.h"
 #include "MatrixUniform.h"
+#include "MyMatrixClass.h"
 
 TransformationMain* TransformationMain::instance = nullptr;
 
@@ -19,6 +20,9 @@ TransformationMain::TransformationMain()
 
 	sceneNames[SubScene::MatrixUniform] = "Matrix Uniform";
 	sceneFactories[SubScene::MatrixUniform] = []() -> TransformationMain* { return MatrixUniform::GetInstance(); };
+
+	sceneNames[SubScene::MyMatrixClass] = "My Matrix Class";
+	sceneFactories[SubScene::MyMatrixClass] = []() -> TransformationMain* { return MyMatrixClass::GetInstance(); };
 }
 
 TransformationMain::~TransformationMain()
@@ -174,5 +178,9 @@ void TransformationMain::RenderText(SubScene sceneName)
 	else if(sceneName == SubScene::MatrixUniform)
 	{
 		ImGui::TextWrapped("Uniform matrix passed to the shader to do transformations. Both the objects use the same VAO and Shader but different matrix and texture is passed to the shader");
+	}
+	else if(sceneName == SubScene::MyMatrixClass)
+	{
+		ImGui::TextWrapped("Used MyMatrix class to create transformation matricies");
 	}
 }

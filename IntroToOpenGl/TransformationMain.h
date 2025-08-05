@@ -28,6 +28,7 @@ private:
 		Translate_Rotate_Scale,
 		glmTest,
 		MatrixUniform,
+		MyMatrixClass,
 		COUNT
 	};
 
