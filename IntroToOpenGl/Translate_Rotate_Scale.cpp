@@ -302,7 +302,7 @@ bool Translate_Rotate_Scale::ValueChanged()
 	return false;
 }
 
-Matrix4x4& Translate_Rotate_Scale::MultiplyMatrices(Matrix4x4 a, Matrix4x4 b, Matrix4x4& result)
+Matrix4x4& Translate_Rotate_Scale::MultiplyMatrices(const Matrix4x4 a, const Matrix4x4 b, Matrix4x4& result)
 {
 	Matrix4x4 res;
 	for (int i = 0; i < 4; i++)

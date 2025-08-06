@@ -88,3 +88,4 @@ MyMatrixClass* MyMatrixClass::GetInstance()
 {
 	return &instance;
 }
+
