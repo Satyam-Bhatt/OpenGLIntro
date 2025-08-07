@@ -20,10 +20,12 @@ public:
 private:
 	static MyMatrixClass instance;
 
-	void MultiplyMatrices_1(const float(*a) [4], const float(*b) [4], float& result);
-	void MultiplyMatrices_2(const float(a)[4][4], const float(b)[4][4], float(&result)[4][4]);
-	void MultiplyMatrices_3(const Matrix4x4 a, const Matrix4x4 b, Matrix4x4 & result);
+	// Alternative ways to define a function that accepts a matrix
+	// void MultiplyMatrices(const float(*a), const float(*b), float& result);
+	// void MultiplyMatrices_2(const float(a)[4][4], const float(b)[4][4], float(&result)[4][4]);
+	// void MultiplyMatrices_3(const Matrix4x4 a, const Matrix4x4 b, Matrix4x4 & result); // Best most readable
 
+	void MultiplyMatrices(const float(*a) [4], const float(*b) [4], float (&result)[4][4]);
 
 	bool wireframeMode = false;
 

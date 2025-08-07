@@ -1,5 +1,7 @@
 #include "MyMatrixClass.h"
 
+#define PI 3.14159265358979323846
+
 MyMatrixClass MyMatrixClass::instance;
 
 MyMatrixClass::MyMatrixClass()
@@ -48,6 +50,7 @@ void MyMatrixClass::Start()
 
 void MyMatrixClass::Update()
 {
+	
 }
 
 void MyMatrixClass::ImGuiRender(GLFWwindow* window)
@@ -70,7 +73,16 @@ void MyMatrixClass::ImGuiRender(GLFWwindow* window)
 
 void MyMatrixClass::Render()
 {
+	float rollMatrix[4][4] =
+	{
+		{cos(glfwGetTime() * (PI / 180)), -sin(glfwGetTime() * (PI / 180)), 0.0f, 0.0f},
+		{sin(glfwGetTime() * (PI / 180)),  cos(glfwGetTime() * (PI / 180)), 0.0f, 0.0f},
+		{0.0f, 0.0f, 1.0f, 0.0f},
+		{0.0f, 0.0f, 0.0f, 1.0f}
+	};
+
 	shader.Use();
+	shader.SetMat4_Custom("uModel", rollMatrix);
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
@@ -87,5 +99,30 @@ void MyMatrixClass::Exit()
 MyMatrixClass* MyMatrixClass::GetInstance()
 {
 	return &instance;
+}
+
+void MyMatrixClass::MultiplyMatrices(const float(*a)[4], const float(*b)[4], float(&result)[4][4])
+{
+	float res[4][4];
+
+	for (int i = 0; i < 4; i++)
+	{
+		float v1 = a[i][0];
+		float v2 = a[i][1];
+		float v3 = a[i][2];
+		float v4 = a[i][3];
+
+		for(int j = 0; j < 4; j++)
+		{
+			res[i][j] = v1 * b[0][j] + v2 * b[1][j] + v3 * b[2][j] + v4 * b[3][j];
+		}
+	}
+	for (int i = 0; i < 4; i++)
+	{
+		for (int j = 0; j < 4; j++)
+		{
+			result[i][j] += res[i][j];
+		}
+	}
 }
 

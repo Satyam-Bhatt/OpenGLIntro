@@ -181,6 +181,11 @@ void Shader::SetMat4(const std::string& name, glm::mat4 matrix)
 	glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, glm::value_ptr(matrix));
 }
 
+void Shader::SetMat4_Custom(const std::string& name, float(&a)[4][4])
+{
+	glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, a);
+}
+
 // Responsible for caching the uniform location and returning it
 int Shader::GetUniformLocation(const std::string& name)
 {

@@ -39,6 +39,7 @@ public:
     void SetVec2(const std::string& name, float x, float y);
     void SetTexture(const std::string& name, int slot);
     void SetMat4(const std::string& name, glm::mat4 matrix);
+    void SetMat4_Custom(const std::string& name, float (&a)[4][4]);
 
 private:
 
