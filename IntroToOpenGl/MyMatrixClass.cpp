@@ -75,14 +75,14 @@ void MyMatrixClass::Render()
 {
 	float rollMatrix[4][4] =
 	{
-		{cos(glfwGetTime() * (PI / 180)), -sin(glfwGetTime() * (PI / 180)), 0.0f, 0.0f},
-		{sin(glfwGetTime() * (PI / 180)),  cos(glfwGetTime() * (PI / 180)), 0.0f, 0.0f},
+		{cos(glfwGetTime()), -sin(glfwGetTime()), 0.0f, 0.0f},
+		{sin(glfwGetTime()),  cos(glfwGetTime()), 0.0f, 0.0f},
 		{0.0f, 0.0f, 1.0f, 0.0f},
 		{0.0f, 0.0f, 0.0f, 1.0f}
 	};
 
 	shader.Use();
-	shader.SetMat4_Custom("uModel", rollMatrix);
+	shader.SetMat4_Custom("transform", rollMatrix);
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
@@ -121,7 +121,7 @@ void MyMatrixClass::MultiplyMatrices(const float(*a)[4], const float(*b)[4], flo
 	{
 		for (int j = 0; j < 4; j++)
 		{
-			result[i][j] += res[i][j];
+			result[i][j] = res[i][j];
 		}
 	}
 }

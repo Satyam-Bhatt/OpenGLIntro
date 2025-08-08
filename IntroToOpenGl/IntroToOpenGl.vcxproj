@@ -199,6 +199,7 @@
     <ClInclude Include="Intro.h" />
     <ClInclude Include="IntroTexture.h" />
     <ClInclude Include="IntroTransformation.h" />
+    <ClInclude Include="Matrix.h" />
     <ClInclude Include="MatrixUniform.h" />
     <ClInclude Include="MipmapOptions.h" />
     <ClInclude Include="MyMatrixClass.h" />

@@ -14,9 +14,12 @@
 #include "Shader.h"
 #include "Vector.h"
 #include "stb_image.h"
+#include "Matrix.h"
 
 class GameState
 {
+	Matrix::Matrix4x4 matrix;
+
 public:
 	virtual void Start() = 0;
 	virtual void Update() = 0;
