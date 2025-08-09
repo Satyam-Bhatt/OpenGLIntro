@@ -18,8 +18,6 @@
 
 class GameState
 {
-	Matrix::Matrix4x4 matrix;
-
 public:
 	virtual void Start() = 0;
 	virtual void Update() = 0;

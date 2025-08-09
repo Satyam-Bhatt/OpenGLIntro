@@ -112,7 +112,6 @@ void glmTest::Start()
 	// Then we multiply the vector with the translation matrix
 	vec = trans * vec;
 	std::cout << vec.x << vec.y << std::endl;
-
 }
 
 void glmTest::Update()
