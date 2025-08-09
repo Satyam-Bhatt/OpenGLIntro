@@ -163,58 +163,58 @@ void MatrixUniform::Render()
 	glBindTexture(GL_TEXTURE_2D, textures[1]);
 
 	// Calculate the transformation matrix
-	glm::mat4 trans = glm::mat4(1.0f);
+	glm::mat4 transformationMatrix = glm::mat4(1.0f);
 	float valY = sin(glfwGetTime()) * 0.7f;
 	float valX = cos(glfwGetTime()) * 0.7f;
 	if (!manualManipulation)
 	{
-		trans = glm::translate(trans, glm::vec3(valX, valY, 0.0f));
-		trans = glm::rotate(trans, - 2 * (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
+		transformationMatrix = glm::translate(transformationMatrix, glm::vec3(valX, valY, 0.0f));
+		transformationMatrix = glm::rotate(transformationMatrix, - 2 * (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
 	}
 	else
 	{
-		trans = glm::translate(trans, glm::vec3(position1.x, position1.y, 0.0f));
-		trans = glm::rotate(trans, rotation1.z, glm::vec3(0.0f, 0.0f, 1.0f));
-		trans = glm::rotate(trans, rotation1.y, glm::vec3(0.0f, 1.0f, 0.0f));
-		trans = glm::rotate(trans, rotation1.x, glm::vec3(1.0f, 0.0f, 0.0f));
+		transformationMatrix = glm::translate(transformationMatrix, glm::vec3(position1.x, position1.y, 0.0f));
+		transformationMatrix = glm::rotate(transformationMatrix, rotation1.z, glm::vec3(0.0f, 0.0f, 1.0f));
+		transformationMatrix = glm::rotate(transformationMatrix, rotation1.y, glm::vec3(0.0f, 1.0f, 0.0f));
+		transformationMatrix = glm::rotate(transformationMatrix, rotation1.x, glm::vec3(1.0f, 0.0f, 0.0f));
 	}
 	valX = cos(glfwGetTime()) * 0.1f + 0.5f;
 	if (!manualManipulation)
 	{
-		trans = glm::scale(trans, glm::vec3(valX, valX, 0.0f));
+		transformationMatrix = glm::scale(transformationMatrix, glm::vec3(valX, valX, 0.0f));
 	}
 	else
 	{
-		trans = glm::scale(trans, glm::vec3(scale1.x, scale1.y, 1.0f));
+		transformationMatrix = glm::scale(transformationMatrix, glm::vec3(scale1.x, scale1.y, 1.0f));
 	}
 
 	shader.Use();
 	// Pass the matrix to the shader as a uniform. Always set the matrix after the shader is activated
-	shader.SetMat4("transform", trans);
+	shader.SetMat4("transform", transformationMatrix);
 	shader.SetTexture("texture1", 0);
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 	// Use the same data but with different transformation matrix
-	trans = glm::mat4(1.0f);
+	transformationMatrix = glm::mat4(1.0f);
 	valY = sin(glfwGetTime()) * 0.7f;
 	valX = cos(glfwGetTime()) * 0.7f;
 	if (!manualManipulation)
 	{
-		trans = glm::translate(trans, glm::vec3(-valX, -valY, 0.0f));
-		trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
-		trans = glm::scale(trans, glm::vec3(0.5f, 0.5f, 0.5f));
+		transformationMatrix = glm::translate(transformationMatrix, glm::vec3(-valX, -valY, 0.0f));
+		transformationMatrix = glm::rotate(transformationMatrix, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
+		transformationMatrix = glm::scale(transformationMatrix, glm::vec3(0.5f, 0.5f, 0.5f));
 	}
 	else
 	{
-		trans = glm::translate(trans, glm::vec3(position2.x, position2.y, 0.0f));
-		trans = glm::rotate(trans, rotation2.z, glm::vec3(0.0f, 0.0f, 1.0f));
-		trans = glm::rotate(trans, rotation2.y, glm::vec3(0.0f, 1.0f, 0.0f));
-		trans = glm::rotate(trans, rotation2.x, glm::vec3(1.0f, 0.0f, 0.0f));
-		trans = glm::scale(trans, glm::vec3(scale2.x, scale2.y, 1.0f));
+		transformationMatrix = glm::translate(transformationMatrix, glm::vec3(position2.x, position2.y, 0.0f));
+		transformationMatrix = glm::rotate(transformationMatrix, rotation2.z, glm::vec3(0.0f, 0.0f, 1.0f));
+		transformationMatrix = glm::rotate(transformationMatrix, rotation2.y, glm::vec3(0.0f, 1.0f, 0.0f));
+		transformationMatrix = glm::rotate(transformationMatrix, rotation2.x, glm::vec3(1.0f, 0.0f, 0.0f));
+		transformationMatrix = glm::scale(transformationMatrix, glm::vec3(scale2.x, scale2.y, 1.0f));
 	}
 
-	shader.SetMat4("transform", trans);
+	shader.SetMat4("transform", transformationMatrix);
 	shader.SetTexture("texture1", 1);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
