@@ -167,6 +167,7 @@
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="ShaderClass.cpp" />
     <ClCompile Include="Shaders.cpp" />
+    <ClCompile Include="SierpinskiTriangle.cpp" />
     <ClCompile Include="stb_image.cpp" />
     <ClCompile Include="TestMain.cpp" />
     <ClCompile Include="TexelViewer.cpp" />
@@ -208,6 +209,7 @@
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderClass.h" />
     <ClInclude Include="Shaders.h" />
+    <ClInclude Include="SierpinskiTriangle.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="TexelViewer.h" />
     <ClInclude Include="TextureMain.h" />

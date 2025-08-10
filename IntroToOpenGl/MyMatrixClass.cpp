@@ -104,6 +104,10 @@ void MyMatrixClass::Exit()
 	if (VBO != 0) glDeleteBuffers(1, &VBO);
 	if (EBO != 0) glDeleteBuffers(1, &EBO);
 	glDeleteProgram(shader.ID);
+
+	position = Vector2(0.0f, 0.0f);
+	rotation = Vector3(0.0f, 0.0f, 0.0f);
+	scale = Vector2(1.f, 1.f);
 }
 
 MyMatrixClass* MyMatrixClass::GetInstance()
