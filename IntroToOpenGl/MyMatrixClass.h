@@ -1,8 +1,6 @@
 #pragma once
 #include "TransformationMain.h"
 
-using Matrix4x4 = float[4][4];
-
 class MyMatrixClass : public TransformationMain
 {
 public:
@@ -32,12 +30,6 @@ private:
 	Shader shader;
 	uint32_t VAO = 0 , VBO = 0, EBO = 0;
 
-	Matrix4x4 transMatrix =
-	{
-		{1.0f, 0.0f, 0.0f, 0.0f},
-		{0.0f, 1.0f, 0.0f, 0.0f},
-		{0.0f, 0.0f, 1.0f, 0.0f},
-		{0.0f, 0.0f, 0.0f, 1.0f}
-	};
+	Matrix::Matrix4x4 transformationMatrix;
 };
 
