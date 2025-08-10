@@ -2,7 +2,7 @@
 #include "IntroTransformation.h"
 
 using namespace Vector;
-using Matrix4x4 = float[4][4];
+using Matrix4x4Alias = float[4][4];
 
 class Translate_Rotate_Scale : public IntroTransformation
 {
@@ -40,11 +40,11 @@ private:
 	uint32_t VAO2, VBO2;
 	uint32_t slowPrint = 0;
 
-	Matrix4x4 oldMatrix = { {1.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 1.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 1.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 1.0f} };
+	Matrix4x4Alias oldMatrix = { {1.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 1.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 1.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 1.0f} };
 
 	bool ValueChanged();
 
-	Matrix4x4& MultiplyMatrices(const Matrix4x4 a, const Matrix4x4 b, Matrix4x4& result);
-	void LocalSpaceTransformation(Matrix4x4& result, Vector2 pivot);
+	Matrix4x4Alias& MultiplyMatrices(const Matrix4x4Alias a, const Matrix4x4Alias b, Matrix4x4Alias& result);
+	void LocalSpaceTransformation(Matrix4x4Alias& result, Vector2 pivot);
 };
 

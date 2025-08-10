@@ -192,7 +192,7 @@ IntroTransformation* IntroTransformation::GetInstance()
 	return &instance;
 }
 
-Matrix4x4& IntroTransformation::MultiplyMatrices(Matrix4x4 a, Matrix4x4 b, Matrix4x4& result)
+Matrix4x4Alias& IntroTransformation::MultiplyMatrices(Matrix4x4Alias a, Matrix4x4Alias b, Matrix4x4Alias& result)
 {  
    // Use static matrix to make the matrix persistent  
    //float matrix[4][4] = {

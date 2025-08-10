@@ -108,7 +108,7 @@ void Translate_Rotate_Scale::Update()
 	};
 
 	// New transformation matrix
-	Matrix4x4 translate_Rotate_Scale;
+	Matrix4x4Alias translate_Rotate_Scale;
 	LocalSpaceTransformation(translate_Rotate_Scale, worldSpacePivot);
 
 	MultiplyMatrices(translate_Rotate_Scale, oldMatrix, oldMatrix);
@@ -198,7 +198,7 @@ Translate_Rotate_Scale* Translate_Rotate_Scale::GetInstance()
 	return &instance;
 }
 
-void Translate_Rotate_Scale::LocalSpaceTransformation(Matrix4x4& result, Vector2 pivot)
+void Translate_Rotate_Scale::LocalSpaceTransformation(Matrix4x4Alias& result, Vector2 pivot)
 {
 	// As we have already manipulated the square with the previous transformation we just need to change it by the small amount that it changed
 	// within the last frame so we take the delta values and multiply it with the vertices
@@ -273,11 +273,11 @@ void Translate_Rotate_Scale::LocalSpaceTransformation(Matrix4x4& result, Vector2
 	// Then we Scale it
 	// Then we Rotate it
 	// At last we translate it to the pivot + final translation
-	Matrix4x4 rollBackMatrix;
+	Matrix4x4Alias rollBackMatrix;
 	MultiplyMatrices(rollBack, translateToPivotMatrix, rollBackMatrix);
-	Matrix4x4 scaleTransform;
+	Matrix4x4Alias scaleTransform;
 	MultiplyMatrices(scalingMatrix, rollBackMatrix, scaleTransform);
-	Matrix4x4 rotateScaleTransform;
+	Matrix4x4Alias rotateScaleTransform;
 	MultiplyMatrices(rollMatrix, scaleTransform, rotateScaleTransform);
 	MultiplyMatrices(translateBackMatrix, rotateScaleTransform, result);
 }
@@ -302,9 +302,9 @@ bool Translate_Rotate_Scale::ValueChanged()
 	return false;
 }
 
-Matrix4x4& Translate_Rotate_Scale::MultiplyMatrices(const Matrix4x4 a, const Matrix4x4 b, Matrix4x4& result)
+Matrix4x4Alias& Translate_Rotate_Scale::MultiplyMatrices(const Matrix4x4Alias a, const Matrix4x4Alias b, Matrix4x4Alias& result)
 {
-	Matrix4x4 res;
+	Matrix4x4Alias res;
 	for (int i = 0; i < 4; i++)
 	{
 		float v1 = a[i][0];

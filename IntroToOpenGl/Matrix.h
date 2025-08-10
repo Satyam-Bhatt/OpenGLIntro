@@ -190,7 +190,7 @@ namespace Matrix
 			scaleMatrix[2][2] = scale.z;
 			scaleMatrix[3][3] = 1.0f;
 
-			return scaleMatrix * matrix;
+			return matrix * scaleMatrix;
 		}
 
 		static Matrix4x4 Translation(const Matrix4x4& matrix, Vector::Vector3 translation) {
@@ -201,7 +201,7 @@ namespace Matrix
 			translationMatrix[2][3] = translation.z;
 			translationMatrix[3][3] = 1.0f;
 
-			return translationMatrix * matrix;
+			return matrix * translationMatrix;
 		}
 
 
@@ -232,20 +232,20 @@ namespace Matrix
 			return result;
 		}
 
-		static Matrix4x4 Rotation(const Matrix4x4& matrix, Vector::Vector3 axis, Vector::Vector3 rotationAngle) {
+		static Matrix4x4 Rotation(const Matrix4x4& matrix, Vector::Vector3 axis, float rotationAngle) {
 			Matrix4x4 rotationMatrix;
 			
 			if (axis.x != 0.0f) {
-				rotationMatrix = rotationMatrix * CreateRotationX(rotationAngle.x);
+				rotationMatrix = rotationMatrix * CreateRotationX(rotationAngle);
 			}
 			if (axis.y != 0.0f) {
-				rotationMatrix = rotationMatrix * CreateRotationY(rotationAngle.y);
+				rotationMatrix = rotationMatrix * CreateRotationY(rotationAngle);
 			}
 			if (axis.z != 0.0f) {
-				rotationMatrix = rotationMatrix * CreateRotationZ(rotationAngle.z);
+				rotationMatrix = rotationMatrix * CreateRotationZ(rotationAngle);
 			}
 
-			return rotationMatrix * matrix;
+			return matrix * rotationMatrix;
 		}
 	};
 }

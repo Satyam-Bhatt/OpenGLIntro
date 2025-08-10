@@ -1,6 +1,8 @@
 #pragma once
 #include "TransformationMain.h"
 
+using namespace Matrix;
+using namespace Vector;
 class MyMatrixClass : public TransformationMain
 {
 public:
@@ -30,6 +32,8 @@ private:
 	Shader shader;
 	uint32_t VAO = 0 , VBO = 0, EBO = 0;
 
-	Matrix::Matrix4x4 transformationMatrix;
+	Vector2 position = { 0.0f, 0.0f };
+	Vector3 rotation = { 0.0f, 0.0f, 0.0f };
+	Vector2 scale = { 1.f, 1.f };
 };
 

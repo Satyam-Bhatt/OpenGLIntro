@@ -67,12 +67,22 @@ void MyMatrixClass::ImGuiRender(GLFWwindow* window)
 	ImGui::Begin("Level Specific", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
 
 	ImGui::Checkbox("Wireframe mode", &wireframeMode);
+	ImGui::DragFloat2("Position", &position.x, 0.005f);
+	ImGui::DragFloat3("Rotation", &rotation.x, 0.005f);
+	ImGui::DragFloat2("Scale", &scale.x, 0.005f);
 
 	ImGui::End();
 }
 
 void MyMatrixClass::Render()
 {
+	Matrix4x4 transformMatrix;
+	transformMatrix = Matrix4x4::Translation(transformMatrix, Vector3(position.x, position.y, 0.0f));
+	transformMatrix = Matrix4x4::Rotation(transformMatrix, Vector3(0.0f, 0.0f, 1.0f), rotation.z);
+	transformMatrix = Matrix4x4::Rotation(transformMatrix, Vector3(0.0f, 1.0f, 0.0f), rotation.y);
+	transformMatrix = Matrix4x4::Rotation(transformMatrix, Vector3(1.0f, 0.0f, 0.0f), rotation.x);
+	transformMatrix = Matrix4x4::Scale(transformMatrix, Vector3(scale.x, scale.y, 1.0f));
+
 	float rollMatrix[4][4] =
 	{
 		{cos(glfwGetTime()), -sin(glfwGetTime()), 0.0f, 0.0f},
@@ -82,7 +92,7 @@ void MyMatrixClass::Render()
 	};
 
 	shader.Use();
-	shader.SetMat4_Custom("transform", rollMatrix);
+	shader.SetMat4_Custom("transform", transformMatrix.m);
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);

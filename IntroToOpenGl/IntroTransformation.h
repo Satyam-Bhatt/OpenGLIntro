@@ -2,7 +2,7 @@
 #include "TransformationMain.h"
 
 using namespace Vector;
-using Matrix4x4 = float[4][4];
+using Matrix4x4Alias = float[4][4];
 
 class IntroTransformation : public TransformationMain
 {
@@ -37,7 +37,7 @@ private:
 
 	// We return the refrence of the array or we can return the pointer of the array
 	// If we don't use & or * then we will return the copy of the array and that is not allowed as arrays decay to pointers when passed around
-	Matrix4x4& MultiplyMatrices(Matrix4x4 a, Matrix4x4 b, Matrix4x4& result);
+	Matrix4x4Alias& MultiplyMatrices(Matrix4x4Alias a, Matrix4x4Alias b, Matrix4x4Alias& result);
 
 	bool ValueChanged();
 };

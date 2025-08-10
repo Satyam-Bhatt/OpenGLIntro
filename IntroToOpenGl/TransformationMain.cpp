@@ -181,6 +181,6 @@ void TransformationMain::RenderText(SubScene sceneName)
 	}
 	else if(sceneName == SubScene::MyMatrixClass)
 	{
-		ImGui::TextWrapped("Used MyMatrix class to create transformation matricies");
+		ImGui::TextWrapped("Used My Matrix class to create same transformation as glm.");
 	}
 }
