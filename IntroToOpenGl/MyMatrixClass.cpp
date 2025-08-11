@@ -83,14 +83,6 @@ void MyMatrixClass::Render()
 	transformMatrix = Matrix4x4::Rotation(transformMatrix, Vector3(1.0f, 0.0f, 0.0f), rotation.x);
 	transformMatrix = Matrix4x4::Scale(transformMatrix, Vector3(scale.x, scale.y, 1.0f));
 
-	float rollMatrix[4][4] =
-	{
-		{cos(glfwGetTime()), -sin(glfwGetTime()), 0.0f, 0.0f},
-		{sin(glfwGetTime()),  cos(glfwGetTime()), 0.0f, 0.0f},
-		{0.0f, 0.0f, 1.0f, 0.0f},
-		{0.0f, 0.0f, 0.0f, 1.0f}
-	};
-
 	shader.Use();
 	shader.SetMat4_Custom("transform", transformMatrix.m);
 	glBindVertexArray(VAO);

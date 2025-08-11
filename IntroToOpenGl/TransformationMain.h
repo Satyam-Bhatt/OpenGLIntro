@@ -29,6 +29,7 @@ private:
 		glmTest,
 		MatrixUniform,
 		MyMatrixClass,
+		SierpinskiTriangle,
 		COUNT
 	};
 

@@ -169,7 +169,7 @@
       <Filter>Source Files\Transformations</Filter>
     </ClCompile>
     <ClCompile Include="SierpinskiTriangle.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Transformations</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -291,7 +291,7 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SierpinskiTriangle.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\TransformationsMain</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -335,6 +335,9 @@
       <Filter>Shader\Transformations</Filter>
     </None>
     <None Include="MyMatrixClass.shader">
+      <Filter>Shader\Transformations</Filter>
+    </None>
+    <None Include="SierpinskiTriangle.shader">
       <Filter>Shader\Transformations</Filter>
     </None>
   </ItemGroup>

@@ -4,6 +4,7 @@
 #include "glmTest.h"
 #include "MatrixUniform.h"
 #include "MyMatrixClass.h"
+#include "SierpinskiTriangle.h"
 
 TransformationMain* TransformationMain::instance = nullptr;
 
@@ -23,6 +24,9 @@ TransformationMain::TransformationMain()
 
 	sceneNames[SubScene::MyMatrixClass] = "My Matrix Class";
 	sceneFactories[SubScene::MyMatrixClass] = []() -> TransformationMain* { return MyMatrixClass::GetInstance(); };
+
+	sceneNames[SubScene::SierpinskiTriangle] = "Sierpinski Triangle";
+	sceneFactories[SubScene::SierpinskiTriangle] = []() -> TransformationMain* { return SierpinskiTriangle::GetInstance(); };
 }
 
 TransformationMain::~TransformationMain()
@@ -182,5 +186,9 @@ void TransformationMain::RenderText(SubScene sceneName)
 	else if(sceneName == SubScene::MyMatrixClass)
 	{
 		ImGui::TextWrapped("Used My Matrix class to create same transformation as glm.");
+	}
+	else if (sceneName == SubScene::SierpinskiTriangle)
+	{
+		ImGui::TextWrapped("Created a sierpinski triangle using recursion");
 	}
 }
