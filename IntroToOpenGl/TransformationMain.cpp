@@ -189,6 +189,6 @@ void TransformationMain::RenderText(SubScene sceneName)
 	}
 	else if (sceneName == SubScene::SierpinskiTriangle)
 	{
-		ImGui::TextWrapped("Created a sierpinski triangle using recursion");
+		ImGui::TextWrapped("Created a sierpinski triangle using recursion ");
 	}
 }

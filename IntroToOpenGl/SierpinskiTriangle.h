@@ -1,6 +1,7 @@
 #pragma once
 #include "TransformationMain.h"
 
+using namespace Vector;
 class SierpinskiTriangle : public TransformationMain
 {
 public:
@@ -21,6 +22,8 @@ private:
 	bool wireframeMode = false;
 
 	Shader shader;
-	uint32_t VAO = 0, VBO = 0, EBO = 0;
+	uint32_t VAO = 0, VBO = 0;
+
+	void RenderSierpinskiTriangle(Vector3 point1, Vector3 point2, Vector3 point3 , int depth);
 };
 

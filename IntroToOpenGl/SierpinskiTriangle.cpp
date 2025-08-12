@@ -14,28 +14,25 @@ void SierpinskiTriangle::Start()
 {
 	shader = Shader("SierpinskiTriangle.shader");
 
-	uint32_t indices[] =
+	float vertices[] =
 	{
-		0, 1, 2,
-		1, 3, 2
+		-0.5f, -0.5f, 0.0f, 1.0f,
+		0.5f, -0.5f, 0.0f, 1.0f,
+		0.0f, 0.5f, 0.0f, 1.0f
 	};
 
-	float vertices[] = {
-	-0.5f, -0.5f, 0.0f, 1.0f,
-	 0.5f, -0.5f, 0.0f, 1.0f,
-	-0.5f,  0.5f, 0.0f, 1.0f,
-	 0.5f,  0.5f, 0.0f, 1.0f
-	};
+	Vector3 point1 = Vector3(-0.5f, -0.5f, 0.0f);
+	Vector3 point2 = Vector3(0.5f, -0.5f, 0.0f);
+	Vector3 point3 = Vector3(0.0f, 0.5f, 0.0f);
+
+	RenderSierpinskiTriangle(point1, point2, point3, 1);
 
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
-	glGenBuffers(1, &EBO);
 
 	glBindVertexArray(VAO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
 	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
@@ -70,7 +67,7 @@ void SierpinskiTriangle::Render()
 {
 	shader.Use();
 	glBindVertexArray(VAO);
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+	glDrawArrays(GL_TRIANGLES, 0, 3);
 	glBindVertexArray(0);
 }
 
@@ -78,7 +75,6 @@ void SierpinskiTriangle::Exit()
 {
 	if (VAO != 0) glDeleteVertexArrays(1, &VAO);
 	if (VBO != 0) glDeleteBuffers(1, &VBO);
-	if (EBO != 0) glDeleteBuffers(1, &EBO);
 	glDeleteProgram(shader.ID);
 }
 
@@ -86,3 +82,25 @@ SierpinskiTriangle* SierpinskiTriangle::GetInstance()
 {
 	return &instance;
 }
+
+void SierpinskiTriangle::RenderSierpinskiTriangle(Vector3 point1, Vector3 point2, Vector3 point3, int depth)
+{
+	std::cout << "==========================" << std::endl;
+	std::cout << point1.x << " " << point1.y << std::endl;
+	std::cout << point2.x << " " << point2.y << std::endl;
+	std::cout << point3.x << " " << point3.y << std::endl;
+	std::cout << "++++++++++++++++++++++++++" << std::endl;
+
+	if (depth > 0)
+	{
+		Vector3 mindPoint12 = (point1 + point2) / 2.0f;
+		Vector3 mindPoint23 = (point2 + point3) / 2.0f;
+		Vector3 mindPoint31 = (point3 + point1) / 2.0f;
+
+		RenderSierpinskiTriangle(point1, mindPoint12, mindPoint31, depth - 1);
+		RenderSierpinskiTriangle(mindPoint12, point2, mindPoint23, depth - 1);
+		RenderSierpinskiTriangle(mindPoint31, mindPoint23, point3, depth - 1);
+	}
+}
+
+
