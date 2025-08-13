@@ -163,6 +163,11 @@ void Shader::SetVec2(const std::string& name, float x, float y)
 	glUniform2f(GetUniformLocation(name), x, y);
 }
 
+void Shader::SetVec3(const std::string& name, Vector::Vector3 vector)
+{
+	glUniform3f(GetUniformLocation(name), vector.x, vector.y, vector.z);
+}
+
 // Set texture uniform
 void Shader::SetTexture(const std::string& name, int slot)
 {
@@ -171,6 +176,8 @@ void Shader::SetTexture(const std::string& name, int slot)
 	// This is used to assign texture units to samplers that are defined as uniform variables
 	glUniform1i(GetUniformLocation(name), slot);
 }
+
+
 
 void Shader::SetMat4(const std::string& name, glm::mat4 matrix)
 {
