@@ -25,7 +25,7 @@ void SierpinskiTriangle::Start()
 	Vector3 point2 = Vector3(0.5f, -0.5f, 0.0f);
 	Vector3 point3 = Vector3(0.0f, 0.5f, 0.0f);
 
-	RenderSierpinskiTriangle(point1, point2, point3, m_depth);
+	//RenderSierpinskiTriangle(point1, point2, point3, m_depth);
 
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
@@ -65,15 +65,6 @@ void SierpinskiTriangle::ImGuiRender(GLFWwindow* window)
 
 void SierpinskiTriangle::Render()
 {
-	glm::mat4 tt = glm::mat4(1.0f);
-
-	shader.Use();
-	shader.SetVec3("color", Vector3(1.0f, 0.0f, 0.0f));
-	shader.SetMat4("transform", tt);
-	glBindVertexArray(VAO);
-	glDrawArrays(GL_TRIANGLES, 0, 3);
-	glBindVertexArray(0);
-
 	Vector3 point1 = Vector3(-0.5f, -0.5f, 0.0f);
 	Vector3 point2 = Vector3(0.5f, -0.5f, 0.0f);
 	Vector3 point3 = Vector3(0.0f, 0.5f, 0.0f);
@@ -95,41 +86,41 @@ SierpinskiTriangle* SierpinskiTriangle::GetInstance()
 
 void SierpinskiTriangle::RenderSierpinskiTriangle(Vector3 point1, Vector3 point2, Vector3 point3, int depth)
 {
-	std::cout << "==========================" << std::endl;
-	std::cout << depth << std::endl;
-	std::cout << point1.x << " " << point1.y << std::endl;
-	std::cout << point2.x << " " << point2.y << std::endl;
-	std::cout << point3.x << " " << point3.y << std::endl;
-	Vector3 centerPoint = (point1 + point2 + point3)/3;
-	std::cout << "Center Point : " << centerPoint.x << " " << centerPoint.y << std::endl;
+	//std::cout << "==========================" << std::endl;
+	//std::cout << depth << std::endl;
+	//std::cout << point1.x << " " << point1.y << std::endl;
+	//std::cout << point2.x << " " << point2.y << std::endl;
+	//std::cout << point3.x << " " << point3.y << std::endl;
+	Vector3 centerPoint = (point1 + point2 + point3) / 3;
+	//std::cout << "Center Point : " << centerPoint.x << " " << centerPoint.y << std::endl;
 	float midX = (point1.x + point2.x) / 2;
 	float midY = (point2.y + point3.y) / 2;
-	std::cout << "Mid Point : " << midX << " " << midY << std::endl;
-	std::cout << "++++++++++++++++++++++++++" << std::endl;
+	//std::cout << "Mid Point : " << midX << " " << midY << std::endl;
+	//std::cout << "++++++++++++++++++++++++++" << std::endl;
 
 
 	Matrix::Matrix4x4 translationMatrix;
 	//translationMatrix = Matrix::Matrix4x4::Translation(translationMatrix, Vector3(centerPoint.x, centerPoint.y, 0.0f));
 	translationMatrix = Matrix::Matrix4x4::Translation(translationMatrix, Vector3(midX, midY, 0.0f));
-	if(depth == 0)
-	{
-		translationMatrix = Matrix::Matrix4x4::Scale(translationMatrix, Vector3(0.5f, 0.5f, 0.0f));
-	}
-	else
-	{
-		translationMatrix = Matrix::Matrix4x4::Scale(translationMatrix, Vector3(0.5f, 0.5f, 0.0f));
-	}
-	translationMatrix.Print();
 
-	if (depth != m_depth)
-	{
-		shader.Use();
-		shader.SetVec3("color", Vector3(0.0f, depth / m_depth, 0.0f));
-		shader.SetMat4_Custom("transform", translationMatrix.m);
-		glBindVertexArray(VAO);
-		glDrawArrays(GL_TRIANGLES, 0, 3);
-		glBindVertexArray(0);
-	}
+	uint32_t diff = m_depth - depth;
+	uint32_t power = pow(2, diff);
+
+	translationMatrix = Matrix::Matrix4x4::Scale(translationMatrix, Vector3(1.f / power, 1.f / power, 0.0f));
+
+	//translationMatrix.Print();
+	shader.Use();
+
+	std::cout << "Depth: " << depth << std::endl;
+	std::cout << "Lerp: " << InverseLerp(0, m_depth, (float)depth) << std::endl;
+	std::cout << "===================" << std::endl;
+
+	shader.SetVec3("color", Vector3(0.0f, InverseLerp(0, m_depth, (float)depth), 0.0f));
+
+	shader.SetMat4_Custom("transform", translationMatrix.m);
+	glBindVertexArray(VAO);
+	glDrawArrays(GL_TRIANGLES, 0, 3);
+	glBindVertexArray(0);
 
 	if (depth > 0)
 	{
@@ -141,6 +132,16 @@ void SierpinskiTriangle::RenderSierpinskiTriangle(Vector3 point1, Vector3 point2
 		RenderSierpinskiTriangle(mindPoint12, point2, mindPoint23, depth - 1);
 		RenderSierpinskiTriangle(mindPoint31, mindPoint23, point3, depth - 1);
 	}
+}
+
+float SierpinskiTriangle::Lerp(float a, float b, float t)
+{
+	return a + t * (b - a);
+}
+
+float SierpinskiTriangle::InverseLerp(float a, float b, float v)
+{
+	return (v - a) / (b - a);
 }
 
 
