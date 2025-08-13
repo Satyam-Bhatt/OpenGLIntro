@@ -91,6 +91,8 @@ void SierpinskiTriangle::RenderSierpinskiTriangle(Vector3 point1, Vector3 point2
 	std::cout << point3.x << " " << point3.y << std::endl;
 	std::cout << "++++++++++++++++++++++++++" << std::endl;
 
+	Vector3 centerPoint = (point1 + point2 + point3) / 3.0f;
+
 	if (depth > 0)
 	{
 		Vector3 mindPoint12 = (point1 + point2) / 2.0f;
