@@ -23,9 +23,13 @@ private:
 
 	Shader shader;
 	uint32_t VAO = 0, VBO = 0;
-	uint32_t m_depth = 4;
+	int m_depth = 0;
 
-	void RenderSierpinskiTriangle(Vector3 point1, Vector3 point2, Vector3 point3 , int depth);
+	void RenderSierpinskiTriangle(Vector2 point1, Vector2 point2, Vector2 point3 , int depth);
+
+	Vector2 point1 = Vector2(-0.5f, -0.5f),
+		point2 = Vector2(0.5f, -0.5f),
+		point3 = Vector2(0.5f, 0.5f);
 
 	float Lerp(float a, float b, float t);
 	float InverseLerp(float a, float b, float v);
