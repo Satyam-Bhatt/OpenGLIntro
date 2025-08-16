@@ -31,8 +31,6 @@ private:
 		point2 = Vector2(0.5f, -0.5f),
 		point3 = Vector2(0.5f, 0.5f);
 
-	Vector3 storeTranslate = Vector3(0.0f, 0.0f, 0.0f);
-
 	float Lerp(float a, float b, float t);
 	float InverseLerp(float a, float b, float v);
 };
