@@ -29,7 +29,9 @@ private:
 
 	Vector2 point1 = Vector2(-0.5f, -0.5f),
 		point2 = Vector2(0.5f, -0.5f),
-		point3 = Vector2(0.5f, 0.5f);
+		point3 = Vector2(0.0f, 0.5f);
+
+	Vector2 centroidYoYo = (point1 + point2 + point3) / 3.0f;
 
 	float Lerp(float a, float b, float t);
 	float InverseLerp(float a, float b, float v);

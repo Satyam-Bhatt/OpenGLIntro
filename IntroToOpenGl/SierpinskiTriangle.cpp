@@ -46,6 +46,8 @@ void SierpinskiTriangle::Update()
 		point3.x, point3.y, 0.0f, 1.0f
 	};
 
+	centroidYoYo = (point1 + point2 + point3) / 3.0f;
+
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -94,16 +96,15 @@ SierpinskiTriangle* SierpinskiTriangle::GetInstance()
 void SierpinskiTriangle::RenderSierpinskiTriangle(Vector2 point1, Vector2 point2, Vector2 point3, int depth)
 {
 	Vector2 centerPoint = (point1 + point2 + point3) / 3;
-	float midX = (point1.x + point2.x) / 2;
-	float midY = (point2.y + point3.y) / 2;
 
 	Matrix::Matrix4x4 translationMatrix;
-	translationMatrix = Matrix::Matrix4x4::Translation(translationMatrix, Vector3(midX, midY, 0.0f));
 
 	uint32_t diff = m_depth - depth;
 	uint32_t power = pow(2, diff);
 
+	translationMatrix = Matrix::Matrix4x4::Translation(translationMatrix, Vector3(centerPoint.x, centerPoint.y, 0.0f));
 	translationMatrix = Matrix::Matrix4x4::Scale(translationMatrix, Vector3(1.f / power, 1.f / power, 0.0f));
+	translationMatrix = Matrix::Matrix4x4::Translation(translationMatrix, Vector3(-centroidYoYo.x, -centroidYoYo.y, 0.0f));
 
 	//translationMatrix.Print();
 
@@ -122,6 +123,7 @@ void SierpinskiTriangle::RenderSierpinskiTriangle(Vector2 point1, Vector2 point2
 		Vector2 mindPoint23 = (point2 + point3) / 2.0f;
 		Vector2 mindPoint31 = (point3 + point1) / 2.0f;
 
+		Vector2 centroid = (point1 + point2 + point3) / 3;
 		RenderSierpinskiTriangle(point1, mindPoint12, mindPoint31, depth - 1);
 		RenderSierpinskiTriangle(mindPoint12, point2, mindPoint23, depth - 1);
 		RenderSierpinskiTriangle(mindPoint31, mindPoint23, point3, depth - 1);
