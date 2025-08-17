@@ -39,6 +39,8 @@ void SierpinskiTriangle::Start()
 
 void SierpinskiTriangle::Update()
 {
+	if(!ValueChanged()) return;
+
 	float vertices[] =
 	{
 		point1.x, point1.y, 0.0f, 1.0f,
@@ -46,7 +48,7 @@ void SierpinskiTriangle::Update()
 		point3.x, point3.y, 0.0f, 1.0f
 	};
 
-	centroidYoYo = (point1 + point2 + point3) / 3.0f;
+	initialCentroid = (point1 + point2 + point3) / 3.0f;
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
@@ -95,18 +97,16 @@ SierpinskiTriangle* SierpinskiTriangle::GetInstance()
 
 void SierpinskiTriangle::RenderSierpinskiTriangle(Vector2 point1, Vector2 point2, Vector2 point3, int depth)
 {
-	Vector2 centerPoint = (point1 + point2 + point3) / 3;
+	Vector2 centroid = (point1 + point2 + point3) / 3;
 
 	Matrix::Matrix4x4 translationMatrix;
 
 	uint32_t diff = m_depth - depth;
 	uint32_t power = pow(2, diff);
 
-	translationMatrix = Matrix::Matrix4x4::Translation(translationMatrix, Vector3(centerPoint.x, centerPoint.y, 0.0f));
+	translationMatrix = Matrix::Matrix4x4::Translation(translationMatrix, Vector3(centroid.x, centroid.y, 0.0f));
 	translationMatrix = Matrix::Matrix4x4::Scale(translationMatrix, Vector3(1.f / power, 1.f / power, 0.0f));
-	translationMatrix = Matrix::Matrix4x4::Translation(translationMatrix, Vector3(-centroidYoYo.x, -centroidYoYo.y, 0.0f));
-
-	//translationMatrix.Print();
+	translationMatrix = Matrix::Matrix4x4::Translation(translationMatrix, Vector3(-initialCentroid.x, -initialCentroid.y, 0.0f));
 
 	shader.Use();
 
@@ -128,6 +128,21 @@ void SierpinskiTriangle::RenderSierpinskiTriangle(Vector2 point1, Vector2 point2
 		RenderSierpinskiTriangle(mindPoint12, point2, mindPoint23, depth - 1);
 		RenderSierpinskiTriangle(mindPoint31, mindPoint23, point3, depth - 1);
 	}
+}
+
+bool SierpinskiTriangle::ValueChanged()
+{
+	if(point1 != point1_Stored || point2 != point2_Stored || point3 != point3_Stored || m_depth != m_depth_Stored)
+	{
+		point1_Stored = point1;
+		point2_Stored = point2;
+		point3_Stored = point3;
+		m_depth_Stored = m_depth;
+
+		return true;
+	}
+
+	return false;
 }
 
 float SierpinskiTriangle::Lerp(float a, float b, float t)

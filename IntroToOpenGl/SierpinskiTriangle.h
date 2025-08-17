@@ -31,8 +31,15 @@ private:
 		point2 = Vector2(0.5f, -0.5f),
 		point3 = Vector2(0.0f, 0.5f);
 
-	Vector2 centroidYoYo = (point1 + point2 + point3) / 3.0f;
+	Vector2 initialCentroid = (point1 + point2 + point3) / 3.0f;
 
+	Vector2 point1_Stored = Vector2(-0.5f, -0.5f),
+		point2_Stored = Vector2(0.5f, -0.5f),
+		point3_Stored = Vector2(0.0f, 0.5f);
+	
+	int m_depth_Stored = 0;
+
+	bool ValueChanged();
 	float Lerp(float a, float b, float t);
 	float InverseLerp(float a, float b, float v);
 };
