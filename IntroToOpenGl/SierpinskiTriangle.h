@@ -39,6 +39,9 @@ private:
 	
 	int m_depth_Stored = 0;
 
+	std::vector<Matrix::Matrix4x4> matrices;
+
+	void PopulateMatrices(Vector2 point1, Vector2 point2, Vector2 point3, int depth);
 	bool ValueChanged();
 	float Lerp(float a, float b, float t);
 	float InverseLerp(float a, float b, float v);

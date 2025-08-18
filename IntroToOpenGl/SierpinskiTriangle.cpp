@@ -123,7 +123,33 @@ void SierpinskiTriangle::RenderSierpinskiTriangle(Vector2 point1, Vector2 point2
 		Vector2 mindPoint23 = (point2 + point3) / 2.0f;
 		Vector2 mindPoint31 = (point3 + point1) / 2.0f;
 
-		Vector2 centroid = (point1 + point2 + point3) / 3;
+		RenderSierpinskiTriangle(point1, mindPoint12, mindPoint31, depth - 1);
+		RenderSierpinskiTriangle(mindPoint12, point2, mindPoint23, depth - 1);
+		RenderSierpinskiTriangle(mindPoint31, mindPoint23, point3, depth - 1);
+	}
+}
+
+void SierpinskiTriangle::PopulateMatrices(Vector2 point1, Vector2 point2, Vector2 point3, int depth)
+{
+	Vector2 centroid = (point1 + point2 + point3) / 3;
+
+	Matrix::Matrix4x4 translationMatrix;
+
+	uint32_t diff = m_depth - depth;
+	uint32_t power = pow(2, diff);
+
+	translationMatrix = Matrix::Matrix4x4::Translation(translationMatrix, Vector3(centroid.x, centroid.y, 0.0f));
+	translationMatrix = Matrix::Matrix4x4::Scale(translationMatrix, Vector3(1.f / power, 1.f / power, 0.0f));
+	translationMatrix = Matrix::Matrix4x4::Translation(translationMatrix, Vector3(-initialCentroid.x, -initialCentroid.y, 0.0f));
+
+	matrices.push_back(translationMatrix);
+
+	if (depth > 0)
+	{
+		Vector2 mindPoint12 = (point1 + point2) / 2.0f;
+		Vector2 mindPoint23 = (point2 + point3) / 2.0f;
+		Vector2 mindPoint31 = (point3 + point1) / 2.0f;
+
 		RenderSierpinskiTriangle(point1, mindPoint12, mindPoint31, depth - 1);
 		RenderSierpinskiTriangle(mindPoint12, point2, mindPoint23, depth - 1);
 		RenderSierpinskiTriangle(mindPoint31, mindPoint23, point3, depth - 1);
