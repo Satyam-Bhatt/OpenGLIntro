@@ -25,8 +25,6 @@ private:
 	uint32_t VAO = 0, VBO = 0;
 	int m_depth = 0;
 
-	void RenderSierpinskiTriangle(Vector2 point1, Vector2 point2, Vector2 point3 , int depth);
-
 	Vector2 point1 = Vector2(-0.5f, -0.5f),
 		point2 = Vector2(0.5f, -0.5f),
 		point3 = Vector2(0.0f, 0.5f);
@@ -37,9 +35,13 @@ private:
 		point2_Stored = Vector2(0.5f, -0.5f),
 		point3_Stored = Vector2(0.0f, 0.5f);
 	
-	int m_depth_Stored = 0;
+	int m_depth_Stored = 3;
 
 	std::vector<Matrix::Matrix4x4> matrices;
+	std::vector<Vector3> colors;
+
+	double RandomValue(int input);
+	double RandomValue(const std::string& input);
 
 	void PopulateMatrices(Vector2 point1, Vector2 point2, Vector2 point3, int depth);
 	bool ValueChanged();

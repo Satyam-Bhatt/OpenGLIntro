@@ -22,7 +22,10 @@ in vec3 colorOut;
 
 out vec4 FragColor;
 
+uniform float time;
+
 void main()
 {
-	FragColor = vec4(colorOut, 1.0f);
+	vec3 colorOut2 = vec3(colorOut.r * (sin(time * 2) * 0.5 + 0.5), colorOut.g * (cos(time * 2) * 0.5 + 0.5), colorOut.b * (sin(time * 2) * 0.8 + 0.8));
+	FragColor = vec4(colorOut2, 1.0f);
 }

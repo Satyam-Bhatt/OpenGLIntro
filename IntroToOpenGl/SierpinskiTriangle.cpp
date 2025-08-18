@@ -4,6 +4,7 @@ SierpinskiTriangle SierpinskiTriangle::instance;
 
 SierpinskiTriangle::SierpinskiTriangle()
 {
+	m_depth = 4;
 }
 
 SierpinskiTriangle::~SierpinskiTriangle()
@@ -21,7 +22,9 @@ void SierpinskiTriangle::Start()
 		point3.x, point3.y, 0.0f, 1.0f
 	};
 
-	//RenderSierpinskiTriangle(point1, point2, point3, m_depth);
+	matrices.clear();
+	colors.clear();
+	PopulateMatrices(point1, point2, point3, m_depth);
 
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
@@ -39,7 +42,7 @@ void SierpinskiTriangle::Start()
 
 void SierpinskiTriangle::Update()
 {
-	if(!ValueChanged()) return;
+	if (!ValueChanged()) return;
 
 	float vertices[] =
 	{
@@ -53,6 +56,10 @@ void SierpinskiTriangle::Update()
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	matrices.clear();
+	colors.clear();
+	PopulateMatrices(point1, point2, point3, m_depth);
 
 }
 
@@ -73,14 +80,24 @@ void SierpinskiTriangle::ImGuiRender(GLFWwindow* window)
 	ImGui::DragFloat2("Point 1", &point1.x, 0.005f);
 	ImGui::DragFloat2("Point 2", &point2.x, 0.005f);
 	ImGui::DragFloat2("Point 3", &point3.x, 0.005f);
-	ImGui::SliderInt("Depth", &m_depth, 0, 4);
+	ImGui::SliderInt("Depth", &m_depth, 0, 6);
 
 	ImGui::End();
 }
 
 void SierpinskiTriangle::Render()
 {
-	RenderSierpinskiTriangle(point1, point2, point3, m_depth);
+	for (int i = 0; i < matrices.size(); i++)
+	{
+		shader.Use();
+
+		shader.SetVec3("color", colors[i]);
+		shader.SetMat4_Custom("transform", matrices[i].m);
+		shader.SetFloat("time", glfwGetTime());
+		glBindVertexArray(VAO);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+		glBindVertexArray(0);
+	}
 }
 
 void SierpinskiTriangle::Exit()
@@ -95,38 +112,29 @@ SierpinskiTriangle* SierpinskiTriangle::GetInstance()
 	return &instance;
 }
 
-void SierpinskiTriangle::RenderSierpinskiTriangle(Vector2 point1, Vector2 point2, Vector2 point3, int depth)
+double SierpinskiTriangle::RandomValue(int input)
 {
-	Vector2 centroid = (point1 + point2 + point3) / 3;
+	return RandomValue(std::to_string(input));
+}
 
-	Matrix::Matrix4x4 translationMatrix;
-
-	uint32_t diff = m_depth - depth;
-	uint32_t power = pow(2, diff);
-
-	translationMatrix = Matrix::Matrix4x4::Translation(translationMatrix, Vector3(centroid.x, centroid.y, 0.0f));
-	translationMatrix = Matrix::Matrix4x4::Scale(translationMatrix, Vector3(1.f / power, 1.f / power, 0.0f));
-	translationMatrix = Matrix::Matrix4x4::Translation(translationMatrix, Vector3(-initialCentroid.x, -initialCentroid.y, 0.0f));
-
-	shader.Use();
-
-	shader.SetVec3("color", Vector3(0.0f, InverseLerp(0, m_depth, (float)depth), 0.0f));
-
-	shader.SetMat4_Custom("transform", translationMatrix.m);
-	glBindVertexArray(VAO);
-	glDrawArrays(GL_TRIANGLES, 0, 3);
-	glBindVertexArray(0);
-
-	if (depth > 0)
-	{
-		Vector2 mindPoint12 = (point1 + point2) / 2.0f;
-		Vector2 mindPoint23 = (point2 + point3) / 2.0f;
-		Vector2 mindPoint31 = (point3 + point1) / 2.0f;
-
-		RenderSierpinskiTriangle(point1, mindPoint12, mindPoint31, depth - 1);
-		RenderSierpinskiTriangle(mindPoint12, point2, mindPoint23, depth - 1);
-		RenderSierpinskiTriangle(mindPoint31, mindPoint23, point3, depth - 1);
+double SierpinskiTriangle::RandomValue(const std::string& input)
+{
+	// Better hash function with good distribution
+	unsigned int hash = 2166136261u; // FNV offset basis
+	for (char c : input) {
+		hash ^= static_cast<unsigned char>(c);
+		hash *= 16777619u; // FNV prime
 	}
+
+	// Additional mixing to improve distribution
+	hash ^= hash >> 16;
+	hash *= 0x85ebca6b;
+	hash ^= hash >> 13;
+	hash *= 0xc2b2ae35;
+	hash ^= hash >> 16;
+
+	// Normalize to 0-1 range
+	return static_cast<double>(hash) / static_cast<double>(UINT32_MAX);
 }
 
 void SierpinskiTriangle::PopulateMatrices(Vector2 point1, Vector2 point2, Vector2 point3, int depth)
@@ -143,6 +151,10 @@ void SierpinskiTriangle::PopulateMatrices(Vector2 point1, Vector2 point2, Vector
 	translationMatrix = Matrix::Matrix4x4::Translation(translationMatrix, Vector3(-initialCentroid.x, -initialCentroid.y, 0.0f));
 
 	matrices.push_back(translationMatrix);
+	
+	Vector3 color = Vector3(InverseLerp(0, m_depth, (float)depth), InverseLerp(0, m_depth, (float)depth), InverseLerp(0, m_depth, (float)depth));
+	//Vector3 color = Vector3((float)RandomValue(depth), (float)RandomValue(depth * 31), (float)RandomValue(depth * 237));
+	colors.push_back(color);
 
 	if (depth > 0)
 	{
@@ -150,15 +162,15 @@ void SierpinskiTriangle::PopulateMatrices(Vector2 point1, Vector2 point2, Vector
 		Vector2 mindPoint23 = (point2 + point3) / 2.0f;
 		Vector2 mindPoint31 = (point3 + point1) / 2.0f;
 
-		RenderSierpinskiTriangle(point1, mindPoint12, mindPoint31, depth - 1);
-		RenderSierpinskiTriangle(mindPoint12, point2, mindPoint23, depth - 1);
-		RenderSierpinskiTriangle(mindPoint31, mindPoint23, point3, depth - 1);
+		PopulateMatrices(point1, mindPoint12, mindPoint31, depth - 1);
+		PopulateMatrices(mindPoint12, point2, mindPoint23, depth - 1);
+		PopulateMatrices(mindPoint31, mindPoint23, point3, depth - 1);
 	}
 }
 
 bool SierpinskiTriangle::ValueChanged()
 {
-	if(point1 != point1_Stored || point2 != point2_Stored || point3 != point3_Stored || m_depth != m_depth_Stored)
+	if (point1 != point1_Stored || point2 != point2_Stored || point3 != point3_Stored || m_depth != m_depth_Stored)
 	{
 		point1_Stored = point1;
 		point2_Stored = point2;
