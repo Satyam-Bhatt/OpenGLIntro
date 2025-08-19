@@ -87,6 +87,9 @@ void SierpinskiTriangle::ImGuiRender(GLFWwindow* window)
 
 void SierpinskiTriangle::Render()
 {
+	// These are a lot of draw calls
+	// Better approach is to populate a buffer in GPU and use that.
+	// Or just send all the vertices in one go but that would be a bit hard.
 	for (int i = 0; i < matrices.size(); i++)
 	{
 		shader.Use();
@@ -139,21 +142,30 @@ double SierpinskiTriangle::RandomValue(const std::string& input)
 
 void SierpinskiTriangle::PopulateMatrices(Vector2 point1, Vector2 point2, Vector2 point3, int depth)
 {
+	// Get centroid of triangle
 	Vector2 centroid = (point1 + point2 + point3) / 3;
 
 	Matrix::Matrix4x4 translationMatrix;
 
+	// Get the difference between the current depth and the max depth
 	uint32_t diff = m_depth - depth;
+	// Get the power of 2 of the difference and that will be the scaling factor
 	uint32_t power = pow(2, diff);
 
+	// In the first step we translate all the verticies such that the centroid of the original triangle becomes the origin
+	// Then we scale the triangle
+	// We translate all the points back to the centroid of the new triangle
 	translationMatrix = Matrix::Matrix4x4::Translation(translationMatrix, Vector3(centroid.x, centroid.y, 0.0f));
 	translationMatrix = Matrix::Matrix4x4::Scale(translationMatrix, Vector3(1.f / power, 1.f / power, 0.0f));
 	translationMatrix = Matrix::Matrix4x4::Translation(translationMatrix, Vector3(-initialCentroid.x, -initialCentroid.y, 0.0f));
 
+	// Populate Vector
 	matrices.push_back(translationMatrix);
 	
 	Vector3 color = Vector3(InverseLerp(0, m_depth, (float)depth), InverseLerp(0, m_depth, (float)depth), InverseLerp(0, m_depth, (float)depth));
 	//Vector3 color = Vector3((float)RandomValue(depth), (float)RandomValue(depth * 31), (float)RandomValue(depth * 237));
+	
+	// Populate Vector
 	colors.push_back(color);
 
 	if (depth > 0)
@@ -162,6 +174,7 @@ void SierpinskiTriangle::PopulateMatrices(Vector2 point1, Vector2 point2, Vector
 		Vector2 mindPoint23 = (point2 + point3) / 2.0f;
 		Vector2 mindPoint31 = (point3 + point1) / 2.0f;
 
+		// Recursively call with the new points
 		PopulateMatrices(point1, mindPoint12, mindPoint31, depth - 1);
 		PopulateMatrices(mindPoint12, point2, mindPoint23, depth - 1);
 		PopulateMatrices(mindPoint31, mindPoint23, point3, depth - 1);
