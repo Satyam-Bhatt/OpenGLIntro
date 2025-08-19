@@ -1,9 +1,58 @@
-//#include <iostream>
-//#include <map>
-//#include <unordered_map>
-//#include <vector>
-//#include <string>
+#include <iostream>
+#include <map>
+#include <unordered_map>
+#include <vector>
+#include <string>
+
+#pragma region  ARRAYS
+
+//int main()
+//{
+//	// Allocated a size for 5 integers
+//	int example[5];
 //
+//	// Initialize the values of the array
+//	example[0] = 1;
+//	example[1] = 2;
+//	example[2] = 3;
+//	example[3] = 4;
+//	example[4] = 5;
+//
+//	// Accessing and modifying/initializing the array using a loop
+//	// sizeof(exaple) gives us the memory size
+//	// sizeof(example[0]) gives us the memory size of a single element
+//	// we divide to get the number of elements
+//	for (int i = 0; i < sizeof(example) / sizeof(example[0]); i++)
+//	{
+//		example[i] = i;
+//		std::cout << "Example: " << example[i] << std::endl;
+//	}
+//
+//	int * ptr = example;
+//
+//	std::cout << "Pointer 1 to example: " << *(ptr) << std::endl;
+//	std::cout << "Pointer increment to example: " << *(ptr + 1) << std::endl;
+//
+//	// Prints the value of the array
+//	std::cout << "Example: " << example[0] << std::endl;
+//	// Prints the memory address of the array
+//	std::cout << "Example: " << example << std::endl;
+//
+//	// We can initialize the array in one line
+//	int example2[5] = { 1,2,3,4,5 };
+//
+//	// The array will be initialized with 0s as the rest of the elements are not initialized
+//	int example3[5] = { 1,2 };
+//
+//	std::cout << "Example3 Element 3: " << example3[2] << std::endl;
+//
+//	return 0;
+//}
+
+#pragma endregion
+
+
+#pragma region  MAPS
 //struct CityRecord
 //{
 //	std::string cityName;
@@ -122,3 +171,5 @@
 //
 //	return 0;
 //}
+
+#pragma endregion

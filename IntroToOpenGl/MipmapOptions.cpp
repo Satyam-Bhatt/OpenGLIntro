@@ -299,7 +299,7 @@ void MipmapOptions::Exit()
 	if (VBO != 0) glDeleteBuffers(1, &VBO);
 	if (EBO != 0) glDeleteBuffers(1, &EBO);
 	if (texture != 0) glDeleteTextures(1, &texture);
-	glDeleteProgram(shader.ID);
+	if (shader.ID != 0) glDeleteProgram(shader.ID);
 }
 
 MipmapOptions* MipmapOptions::GetInstance()

@@ -359,7 +359,7 @@ void Translate_Rotate_Scale::Exit()
 	if (EBO != 0) glDeleteBuffers(1, &EBO);
 	if (VAO2 != 0) glDeleteVertexArrays(1, &VAO2);
 	if (VBO2 != 0) glDeleteBuffers(1, &VBO2);
-	glDeleteProgram(shader.ID);
-	glDeleteProgram(shader2.ID);
-	glDisable(GL_BLEND);
+	if (shader.ID != 0) glDeleteProgram(shader.ID);
+	if (shader2.ID != 0) glDeleteProgram(shader2.ID);
+	if(shader.ID != 0) glDisable(GL_BLEND);
 }

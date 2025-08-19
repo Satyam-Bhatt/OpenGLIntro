@@ -208,8 +208,8 @@ void TwoTextures::Exit()
 	if (VBO[0] != 0) glDeleteBuffers(2, VBO);
 	if (EBO[0] != 0) glDeleteBuffers(2, EBO);
 	if (textures[0] != 0) glDeleteTextures(2, textures);
-	glDeleteProgram(shader.ID);
-	glDeleteProgram(shader2.ID);
+	if(shader.ID != 0) glDeleteProgram(shader.ID);
+	if(shader2.ID != 0) glDeleteProgram(shader2.ID);
 }
 
 TwoTextures* TwoTextures::GetInstance()
