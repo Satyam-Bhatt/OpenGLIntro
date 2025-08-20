@@ -3,51 +3,77 @@
 #include <unordered_map>
 #include <vector>
 #include <string>
+#include <array>
 
 #pragma region  ARRAYS
 
-//int main()
-//{
-//	// Allocated a size for 5 integers
-//	int example[5];
-//
-//	// Initialize the values of the array
-//	example[0] = 1;
-//	example[1] = 2;
-//	example[2] = 3;
-//	example[3] = 4;
-//	example[4] = 5;
-//
-//	// Accessing and modifying/initializing the array using a loop
-//	// sizeof(exaple) gives us the memory size
-//	// sizeof(example[0]) gives us the memory size of a single element
-//	// we divide to get the number of elements
-//	for (int i = 0; i < sizeof(example) / sizeof(example[0]); i++)
-//	{
-//		example[i] = i;
-//		std::cout << "Example: " << example[i] << std::endl;
-//	}
-//
-//	int * ptr = example;
-//
-//	std::cout << "Pointer 1 to example: " << *(ptr) << std::endl;
-//	std::cout << "Pointer increment to example: " << *(ptr + 1) << std::endl;
-//
-//	// Prints the value of the array
-//	std::cout << "Example: " << example[0] << std::endl;
-//	// Prints the memory address of the array
-//	std::cout << "Example: " << example << std::endl;
-//
-//	// We can initialize the array in one line
-//	int example2[5] = { 1,2,3,4,5 };
-//
-//	// The array will be initialized with 0s as the rest of the elements are not initialized
-//	int example3[5] = { 1,2 };
-//
-//	std::cout << "Example3 Element 3: " << example3[2] << std::endl;
-//
-//	return 0;
-//}
+int main()
+{
+	// Allocated a size for 5 integers
+	int example[5]; // Stack Allocated
+
+	int* anotherExample = new int[5]; // Heap Allocated
+	delete[] anotherExample; // Heap deallocation
+
+	// Initialize the values of the array
+	example[0] = 1;
+	example[1] = 2;
+	example[2] = 3;
+	example[3] = 4;
+	example[4] = 5;
+
+	// Accessing and modifying/initializing the array using a loop
+	// sizeof(exaple) gives us the memory size
+	// sizeof(example[0]) gives us the memory size of a single element
+	// we divide to get the number of elements
+	// THIS ONLY WORKS IF THE ARRAY IS ALLOCATED ON THE STACK
+	// When we pass it into a function it will be converted to a pointer so it will be hard to access the count
+	for (int i = 0; i < sizeof(example) / sizeof(example[0]); i++)
+	{
+		example[i] = i;
+		std::cout << "Example: " << example[i] << std::endl;
+	}
+
+	// Pointer to the array
+	int * ptr = example;
+
+	std::cout << "Pointer 1 to example: " << *(ptr) << std::endl;
+	// Pointer increment to traverse the array
+	std::cout << "Pointer increment to example: " << *(ptr + 1) << std::endl;
+	std::cout << "Pointer increment to example: " << *(ptr + 3) << std::endl;
+
+	// Change the value of the pointer makes changes to the array
+	*(ptr + 4) = 60;
+	std::cout << "Pointer value change to example: " << *(ptr + 4) << std::endl;
+
+	// Prints the value of the array
+	std::cout << "Example: " << example[0] << std::endl;
+	// Prints the memory address of the array
+	std::cout << "Example: " << example << std::endl;
+
+	// We can initialize the array in one line
+	int example2[5] = { 1,2,3,4,5 };
+
+	// The array will be initialized with 0s as the rest of the elements are not initialized
+	int example3[5] = { 1,2 };
+
+	std::cout << "Example3 Element 3: " << example3[2] << std::endl;
+
+	int example4[4][4] = { {1,2,3,4},{5,6,7,8},{9,10,11,12},{13,14,15,16} };
+	// This refers to n amount of rows but each row has 4 elements
+	int (*ptr2)[4] = example4;
+	// Adding to the pointer we increment the row and the [] use to access the column
+	std::cout << "LAST: " << *(ptr2[3] + 1) << std::endl;
+
+	// Standard array
+	std::array<int, 6> example5 = { 1,2,3,4,5, 10 };
+	// Accessing the array
+	std::cout << "Example5 Element 3: " << example5[2] << std::endl;
+	// Accessing the size of the array
+	std::cout << "Example5 Size: " << example5.size() << std::endl;
+
+	return 0;
+}
 
 #pragma endregion
 
