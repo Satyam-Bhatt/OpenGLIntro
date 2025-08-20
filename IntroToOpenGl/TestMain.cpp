@@ -7,8 +7,28 @@
 
 #pragma region  ARRAYS
 
+// int a[] is basically int *a, which is a pointer to the first element of the array
+// we only have the pointer to the array so we cannot access its length
+void PassArry(int a[], int length)
+{
+	float count = sizeof(a) / sizeof(a[0]);
+
+	std::cout << "size of a: " << sizeof(a) << std::endl; // Size of pointer that is 8 bytes
+	std::cout << "size of first element of a: " << sizeof(a[0]) << std::endl; // Size of int which is 4 bytes
+	std::cout << "INCORRECT COUNT: " << count << std::endl;
+
+	for (int i = 0; i < length; i++)
+	{
+		std::cout << a[i] << std::endl;
+	}
+}
+
 int main()
 {
+	int arr[5] = { 1, 2, 3, 4, 5 };
+	PassArry(arr, 5);
+
+
 	// Allocated a size for 5 integers
 	int example[5]; // Stack Allocated
 
