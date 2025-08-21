@@ -13,9 +13,9 @@ void PassArry(int a[], int length)
 {
 	float count = sizeof(a) / sizeof(a[0]);
 
-	std::cout << "size of a: " << sizeof(a) << std::endl; // Size of pointer that is 8 bytes
+	std::cout << "size of a: " << sizeof(a) << std::endl; // Size of pointer that is 8 bytes (64 bit machine)
 	std::cout << "size of first element of a: " << sizeof(a[0]) << std::endl; // Size of int which is 4 bytes
-	std::cout << "INCORRECT COUNT: " << count << std::endl;
+	std::cout << "INCORRECT COUNT: " << count << std::endl; // Count is 2 which is incorrect
 
 	for (int i = 0; i < length; i++)
 	{
@@ -23,11 +23,23 @@ void PassArry(int a[], int length)
 	}
 }
 
+// Basically the parameter looks like
+// As we are passing a pointer then we are passing by reference and not by value
+// So we will be working on the original array
+// Its a good practice to pass array as const so that we don't modify the actual array by mistake
+void PassArry_2(const int* a, int length) 
+{
+	for (int i = 0; i < length; i++)
+	{
+		std::cout << "Pass array 2: " << a[i] << std::endl;
+	}
+}
+
 int main()
 {
 	int arr[5] = { 1, 2, 3, 4, 5 };
 	PassArry(arr, 5);
-
+	PassArry_2(arr, 5);
 
 	// Allocated a size for 5 integers
 	int example[5]; // Stack Allocated
