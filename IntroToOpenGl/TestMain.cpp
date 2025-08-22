@@ -7,33 +7,8 @@
 
 #pragma region  ARRAYS
 
-// int a[] is basically int *a, which is a pointer to the first element of the array
-// we only have the pointer to the array so we cannot access its length
-void PassArry(int a[], int length)
-{
-	float count = sizeof(a) / sizeof(a[0]);
-
-	std::cout << "size of a: " << sizeof(a) << std::endl; // Size of pointer that is 8 bytes (64 bit machine)
-	std::cout << "size of first element of a: " << sizeof(a[0]) << std::endl; // Size of int which is 4 bytes
-	std::cout << "INCORRECT COUNT: " << count << std::endl; // Count is 2 which is incorrect
-
-	for (int i = 0; i < length; i++)
-	{
-		std::cout << a[i] << std::endl;
-	}
-}
-
-// Basically the parameter looks like
-// As we are passing a pointer then we are passing by reference and not by value
-// So we will be working on the original array
-// Its a good practice to pass array as const so that we don't modify the actual array by mistake
-void PassArry_2(const int* a, int length) 
-{
-	for (int i = 0; i < length; i++)
-	{
-		std::cout << "Pass array 2: " << a[i] << std::endl;
-	}
-}
+void PassArry(int a[], int length);
+void PassArry_2(const int* a, int length);
 
 int main()
 {
@@ -91,6 +66,11 @@ int main()
 
 	std::cout << "Example3 Element 3: " << example3[2] << std::endl;
 
+	// Multidimensional array
+	// X is the number of rows
+	// Y is the number of columns
+	// Multidimensional arrays are basically an array of pointers that points to the first element 
+	// of each array/row stored somewhere in memory
 	int example4[4][4] = { {1,2,3,4},{5,6,7,8},{9,10,11,12},{13,14,15,16} };
 	// This refers to n amount of rows but each row has 4 elements
 	int (*ptr2)[4] = example4;
@@ -105,6 +85,34 @@ int main()
 	std::cout << "Example5 Size: " << example5.size() << std::endl;
 
 	return 0;
+}
+
+// int a[] is basically int *a, which is a pointer to the first element of the array
+// we only have the pointer to the array so we cannot access its length
+void PassArry(int a[], int length)
+{
+	float count = sizeof(a) / sizeof(a[0]);
+
+	std::cout << "size of a: " << sizeof(a) << std::endl; // Size of pointer that is 8 bytes (64 bit machine)
+	std::cout << "size of first element of a: " << sizeof(a[0]) << std::endl; // Size of int which is 4 bytes
+	std::cout << "INCORRECT COUNT: " << count << std::endl; // Count is 2 which is incorrect
+
+	for (int i = 0; i < length; i++)
+	{
+		std::cout << a[i] << std::endl;
+	}
+}
+
+// Basically the parameter looks like
+// As we are passing a pointer then we are passing by reference and not by value
+// So we will be working on the original array
+// Its a good practice to pass array as const so that we don't modify the actual array by mistake
+void PassArry_2(const int* a, int length)
+{
+	for (int i = 0; i < length; i++)
+	{
+		std::cout << "Pass array 2: " << a[i] << std::endl;
+	}
 }
 
 #pragma endregion
