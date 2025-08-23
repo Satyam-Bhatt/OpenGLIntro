@@ -66,23 +66,143 @@ int main()
 
 	std::cout << "Example3 Element 3: " << example3[2] << std::endl;
 
-	// Multidimensional array
-	// X is the number of rows
-	// Y is the number of columns
-	// Multidimensional arrays are basically an array of pointers that points to the first element 
-	// of each array/row stored somewhere in memory
-	int example4[4][4] = { {1,2,3,4},{5,6,7,8},{9,10,11,12},{13,14,15,16} };
-	// This refers to n amount of rows but each row has 4 elements
-	int (*ptr2)[4] = example4;
-	// Adding to the pointer we increment the row and the [] use to access the column
-	std::cout << "LAST: " << *(ptr2[3] + 1) << std::endl;
-
 	// Standard array
 	std::array<int, 6> example5 = { 1,2,3,4,5, 10 };
 	// Accessing the array
 	std::cout << "Example5 Element 3: " << example5[2] << std::endl;
 	// Accessing the size of the array
 	std::cout << "Example5 Size: " << example5.size() << std::endl;
+
+	// Multidimensional array
+	// X is the number of rows
+	// Y is the number of columns
+	// Multidimensional arrays are basically an array of pointers that points to the first element 
+	// of each array/row stored somewhere in memory
+	// But in memory they are stored contiguously
+	// We access them like
+	// example4[row][column] and is converted to example4[row * width + column]
+	int example4[4][4] = { {1,2,3,4},{5,6,7,8},{9,10,11,12},{13,14,15,16} };
+	// This refers to n amount of rows but each row has 4 elements
+	int (*ptr2)[4] = example4;
+	// This is a pointer to the first element of the first row
+	int *ptr3 = example4[0];
+
+	// Adding to the pointer we increment the column and the [] use to access the row
+	// ptr2[3] -> Gets the row  (returns int* pointing to that row)
+	// and ptr2[3] + 1 -> + 1 Gets the second element in the row as it moves the pointer forward
+	std::cout << "Example 4[3][1]: " << *(ptr2[3] + 1) << std::endl;
+	// This is just a pointer that jumps by row * width + column
+	// You can write the above pointer like this
+	std::cout << "Example 4[3][1] different : " << *((int*)ptr2 + (3 * 4 + 1)) << std::endl;
+	// As it is contiguiously stored in memory so this should be the same as above
+	std::cout << "Example 4[3][1] pointer : " << *(ptr3 + (3 * 4 + 1)) << std::endl;
+
+    // Allocation of a 2D array on the heap
+    int (*heapArray)[3] = new int[4][3];
+	// Access heapArray[1][2] still converts to *(heapArray + 1*3 + 2)
+
+	// ========== ONLY FOR UNDERSTANDING ===========
+
+	// Below is a dynamic allocation of a 2D array
+	// It does not give good performance because of cache misses but has a few advantages
+	// 1. Variable Row Sizes
+	//     arr2d[0] = new int[3];     // Row 0: 3 elements
+	//	   arr2d[1] = new int[7];     // Row 1: 7 elements  
+	//	   arr2d[2] = new int[2];     // Row 2: 2 elements
+	//	   arr2d[3] = new int[10];    // Row 3: 10 elements
+	// 2. Dynamic Row Addition/Removal
+	// 3. Memory Efficiency for Sparse Data
+	//    If many rows are empty or very short, you don't waste memory:
+	// 4. Row Swapping Without Data Movement. Swap rows by just swapping pointers
+	
+	// Not actual implemntation in C++
+	
+	// Here we create an array of 5 pointers
+	// and arr2d is a pointer to the first element
+	// There is no integer or data as of now. There are just pointers pointing to nothing.
+	// This is an array that contains memory addresses of 5 other arrays
+	int ** arr2d = new int*[5]; // Allocating 8 * 5 = 40 bytes in the heap
+	// this is basically
+	arr2d[0] = nullptr; // Same for all the other elements
+
+	// Populating this with array of integers
+	// So now the first pointer points to an array of integers (basically the first element)
+	arr2d[0] = new int[5]; // All these can be of different sizes
+	// Same for the other pointers
+	arr2d[1] = new int[5]; // All these can be of different sizes
+	arr2d[2] = new int[5]; // All these can be of different sizes
+	arr2d[3] = new int[5]; // All these can be of different sizes
+	arr2d[4] = new int[5]; // All these can be of different sizes
+
+	// Accessing elements
+	// arr2d[row] gives us the pointer
+	// arr2d[row][column] gives us the value
+	arr2d[0][0] = 1; // First row, first column
+	arr2d[0][1] = 2; // First row, second column and so on
+	arr2d[0][2] = 3;
+	arr2d[0][3] = 4;
+	arr2d[0][4] = 5;
+	
+	arr2d[1][0] = 6; // Second row, first column
+	arr2d[1][1] = 7; // Second row, second column and so on
+	arr2d[1][2] = 8;
+	arr2d[1][3] = 9;
+	arr2d[1][4] = 10;
+
+	// Deleting the 2D array
+	for (int i = 0; i < 5; i++)
+	{
+		delete[] arr2d[i];
+	}
+	delete[] arr2d;
+
+	// 3D array
+	int *** arr3d = new int**[5];
+	for (int i = 0; i < 5; i++)
+	{
+		arr3d[i] = new int*[5];
+		for (int j = 0; j < 5; j++)
+		{
+			// arr3d[i] -> dereferencing the first part
+			// arr3d[i][j] -> dereferencing the second part
+			arr3d[i][j] = new int[5];
+		}
+	}
+	// Accessing Elements
+	arr3d[0][0][0] = 1;
+	arr3d[0][0][1] = 2;
+
+	// Deleting the 3D array
+	for (int i = 0; i < 5; i++)
+	{
+		for (int j = 0; j < 5; j++)
+		{
+			delete[] arr3d[i][j];
+		}
+		delete[] arr3d[i];
+	}
+	delete[] arr3d;
+
+	// Memory allocation of 2D array
+	// As 2D arrays are basically an array of pointers that points to the first element of each array/row stored somewhere in memory
+	// these are not stored together in a contiguos block
+	// So whenever we swtich a row or move to the next pointer to read/write data then it can lead to cache miss
+	// This is pretty slow use single dimensional array mostly
+
+	// Alertnative approach. Actually how it works in C++
+	// Stored contiguously so it is faster
+	int * arr2d_single = new int[5 * 5];
+	for(int i = 0; i < 5; i++)
+	{
+		for (int j = 0; j < 5; j++)
+		{
+			arr2d_single[i * 5 + j] = i * 5 + j;
+		}
+	}
+
+	delete[] arr2d_single;
+	
+	// =========================================
 
 	return 0;
 }
