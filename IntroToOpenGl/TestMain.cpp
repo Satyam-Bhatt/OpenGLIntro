@@ -96,6 +96,9 @@ int main()
 	std::cout << "Example 4[3][1] different : " << *((int*)ptr2 + (3 * 4 + 1)) << std::endl;
 	// As it is contiguiously stored in memory so this should be the same as above
 	std::cout << "Example 4[3][1] pointer : " << *(ptr3 + (3 * 4 + 1)) << std::endl;
+	// Pointer arithmetic to get to the element
+	std::cout << "Example 4[3][1] pointer by adding : " << *(*(ptr2 + 3) + 1) << std::endl;
+
 
     // Allocation of a 2D array on the heap
     int (*heapArray)[3] = new int[4][3];
