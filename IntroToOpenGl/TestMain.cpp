@@ -42,7 +42,7 @@ int main()
 	}
 
 	// Pointer to the array
-	int * ptr = example;
+	int* ptr = example;
 
 	std::cout << "Pointer 1 to example: " << *(ptr) << std::endl;
 	// Pointer increment to traverse the array
@@ -85,7 +85,7 @@ int main()
 	// This refers to n amount of rows but each row has 4 elements
 	int (*ptr2)[4] = example4;
 	// This is a pointer to the first element of the first row
-	int *ptr3 = example4[0];
+	int* ptr3 = example4[0];
 
 	// Adding to the pointer we increment the column and the [] use to access the row
 	// ptr2[3] -> Gets the row  (returns int* pointing to that row)
@@ -93,15 +93,22 @@ int main()
 	std::cout << "Example 4[3][1]: " << *(ptr2[3] + 1) << std::endl;
 	// This is just a pointer that jumps by row * width + column
 	// You can write the above pointer like this
+	// This can give you undefined behaviour because (https://gemini.google.com/share/c497b9302a2d)
+	// This cast from (int (*)[5]) to a pointer to a single integer (int *) is not guaranteed to result in a pointer 
+	// that points to the first element of the flattened array
+	// This cast is a type punning violation
 	std::cout << "Example 4[3][1] different : " << *((int*)ptr2 + (3 * 4 + 1)) << std::endl;
 	// As it is contiguiously stored in memory so this should be the same as above
 	std::cout << "Example 4[3][1] pointer : " << *(ptr3 + (3 * 4 + 1)) << std::endl;
 	// Pointer arithmetic to get to the element
+	// We first get the pointer that points to third row first element with ptr2 + 3
+	// Derefrence it to get the adddress of the element as int *
+	// then increment that address to get the next element in that row
+	// Derefrence again to get the value
 	std::cout << "Example 4[3][1] pointer by adding : " << *(*(ptr2 + 3) + 1) << std::endl;
 
-
-    // Allocation of a 2D array on the heap
-    int (*heapArray)[3] = new int[4][3];
+	// Allocation of a 2D array on the heap
+	int (*heapArray)[3] = new int[4][3];
 	// Access heapArray[1][2] still converts to *(heapArray + 1*3 + 2)
 
 	// ========== ONLY FOR UNDERSTANDING ===========
@@ -117,14 +124,14 @@ int main()
 	// 3. Memory Efficiency for Sparse Data
 	//    If many rows are empty or very short, you don't waste memory:
 	// 4. Row Swapping Without Data Movement. Swap rows by just swapping pointers
-	
+
 	// Not actual implemntation in C++
-	
+
 	// Here we create an array of 5 pointers
 	// and arr2d is a pointer to the first element
 	// There is no integer or data as of now. There are just pointers pointing to nothing.
 	// This is an array that contains memory addresses of 5 other arrays
-	int ** arr2d = new int*[5]; // Allocating 8 * 5 = 40 bytes in the heap
+	int** arr2d = new int* [5]; // Allocating 8 * 5 = 40 bytes in the heap
 	// this is basically
 	arr2d[0] = nullptr; // Same for all the other elements
 
@@ -145,7 +152,7 @@ int main()
 	arr2d[0][2] = 3;
 	arr2d[0][3] = 4;
 	arr2d[0][4] = 5;
-	
+
 	arr2d[1][0] = 6; // Second row, first column
 	arr2d[1][1] = 7; // Second row, second column and so on
 	arr2d[1][2] = 8;
@@ -160,10 +167,10 @@ int main()
 	delete[] arr2d;
 
 	// 3D array
-	int *** arr3d = new int**[5];
+	int*** arr3d = new int** [5];
 	for (int i = 0; i < 5; i++)
 	{
-		arr3d[i] = new int*[5];
+		arr3d[i] = new int* [5];
 		for (int j = 0; j < 5; j++)
 		{
 			// arr3d[i] -> dereferencing the first part
@@ -194,8 +201,8 @@ int main()
 
 	// Alertnative approach. Actually how it works in C++
 	// Stored contiguously so it is faster
-	int * arr2d_single = new int[5 * 5];
-	for(int i = 0; i < 5; i++)
+	int* arr2d_single = new int[5 * 5];
+	for (int i = 0; i < 5; i++)
 	{
 		for (int j = 0; j < 5; j++)
 		{
@@ -204,10 +211,58 @@ int main()
 	}
 
 	delete[] arr2d_single;
-	
+
 	// =========================================
 
 	return 0;
+}
+
+// Alternative ways to define a function that accepts a 2D Array
+// 1. void MultiplyMatrices(const int(*a), const int(*b), int& result); // Avoid this as it can lead to undefined behaviour (type mismatch)
+// 2. void MultiplyMatrices_2(const int(a)[4][4], const int(b)[4][4], int(&result)[4][4]);
+// 3. using Matrix4x4 = int[4][4];
+//    void MultiplyMatrices_3(const Matrix4x4 a, const Matrix4x4 b, Matrix4x4 & result); // Best most readable
+void Pass2DArray(const int (*a)[5])
+{
+	for (int i = 0; i < 5; i++)
+	{
+		for (int j = 0; j < 5; j++)
+		{
+			std::cout << a[i][j] << std::endl;
+		}
+	}
+}
+
+// Return a 2D array
+// THIS IS UNDEFINED BEHAVIOUR
+// The result is created on stack and is destroyed when the function returns the refrence of the object created
+// So the caller will not be able to access it as it is destroyed
+using Matrix5x5 = float[5][5];
+Matrix5x5& Return2DArray(const int (*a)[5])
+{
+	Matrix5x5 result;
+
+	for (int i = 0; i < 5; i++)
+	{
+		for (int j = 0; j < 5; j++)
+		{
+			result[i][j] = a[i][j];
+		}
+	}
+
+	return result;
+}
+// Best way to return a 2D array is to pass it by reference as a parameter
+// Other approach is to create a struct and then you can return that struct as value
+void Return2DArray_2(const int (*a)[5], int(&result)[5][5]) // Pass by reference (& result)
+{
+	for (int i = 0; i < 5; i++)
+	{
+		for (int j = 0; j < 5; j++)
+		{
+			result[i][j] = a[i][j];
+		}
+	}
 }
 
 // int a[] is basically int *a, which is a pointer to the first element of the array

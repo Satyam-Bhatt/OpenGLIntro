@@ -44,7 +44,7 @@ private:
 
 	bool ValueChanged();
 
-	Matrix4x4Alias& MultiplyMatrices(const Matrix4x4Alias a, const Matrix4x4Alias b, Matrix4x4Alias& result);
+	void MultiplyMatrices(const Matrix4x4Alias a, const Matrix4x4Alias b, Matrix4x4Alias& result);
 	void LocalSpaceTransformation(Matrix4x4Alias& result, Vector2 pivot);
 };
 

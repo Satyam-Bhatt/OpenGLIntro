@@ -302,7 +302,7 @@ bool Translate_Rotate_Scale::ValueChanged()
 	return false;
 }
 
-Matrix4x4Alias& Translate_Rotate_Scale::MultiplyMatrices(const Matrix4x4Alias a, const Matrix4x4Alias b, Matrix4x4Alias& result)
+void Translate_Rotate_Scale::MultiplyMatrices(const Matrix4x4Alias a, const Matrix4x4Alias b, Matrix4x4Alias& result)
 {
 	Matrix4x4Alias res;
 	for (int i = 0; i < 4; i++)
@@ -324,8 +324,6 @@ Matrix4x4Alias& Translate_Rotate_Scale::MultiplyMatrices(const Matrix4x4Alias a,
 			result[i][j] = res[i][j];
 		}
 	}
-
-	return result;
 }
 
 void Translate_Rotate_Scale::Exit()
