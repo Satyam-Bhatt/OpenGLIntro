@@ -171,6 +171,9 @@
     <ClCompile Include="SierpinskiTriangle.cpp">
       <Filter>Source Files\Transformations</Filter>
     </ClCompile>
+    <ClCompile Include="MatrixGraphTransformation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameState.h">
@@ -292,6 +295,9 @@
     </ClInclude>
     <ClInclude Include="SierpinskiTriangle.h">
       <Filter>Header Files\TransformationsMain</Filter>
+    </ClInclude>
+    <ClInclude Include="MatrixGraphTransformation.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
