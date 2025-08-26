@@ -172,7 +172,7 @@
       <Filter>Source Files\Transformations</Filter>
     </ClCompile>
     <ClCompile Include="MatrixGraphTransformation.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Transformations</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -297,7 +297,7 @@
       <Filter>Header Files\TransformationsMain</Filter>
     </ClInclude>
     <ClInclude Include="MatrixGraphTransformation.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\TransformationsMain</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
