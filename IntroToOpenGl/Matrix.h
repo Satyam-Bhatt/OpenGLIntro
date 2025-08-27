@@ -7,6 +7,182 @@
 
 namespace Matrix
 {
+	struct Matrix2x2
+	{
+		float m[2][2];
+
+		Matrix2x2() : m{ {1.0f, 0.0f}, {0.0f, 1.0f} } {}
+
+		// Constructor
+		Matrix2x2() {
+			for (int i = 0; i < 2; i++) {
+				for (int j = 0; j < 2; j++) {
+					if (i == j) {
+						m[i][j] = 1.0f;
+					}
+					else
+						m[i][j] = 0.0f;
+				}
+			}
+		}
+
+		// Copy constructor
+		Matrix2x2(const float(&matrix)[2][2]) {
+			for (int i = 0; i < 2; i++) {
+				for (int j = 0; j < 2; j++) {
+					m[i][j] = matrix[i][j];
+				}
+			}
+		}
+
+		// Constructor from individual values
+		Matrix2x2(float m00, float m01,
+			float m10, float m11) {
+			m[0][0] = m00; m[0][1] = m01;
+			m[1][0] = m10; m[1][1] = m11;
+		}
+
+		// Element access
+		float* operator[](int row) { return m[row]; }
+		// For const objects
+		const float* operator[](int row) const { return m[row]; }
+
+		// Matrix Addition
+		Matrix2x2 operator+(const Matrix2x2& other) const {
+			Matrix2x2 result;
+			for (int i = 0; i < 2; i++) {
+				for (int j = 0; j < 2; j++) {
+					result[i][j] = m[i][j] + other[i][j];
+				}
+			}
+			return result;
+		}
+
+		// Matrix Subtraction
+		Matrix2x2 operator-(const Matrix2x2& other) const {
+			Matrix2x2 result;
+			for (int i = 0; i < 2; i++) {
+				for (int j = 0; j < 2; j++) {
+					result[i][j] = m[i][j] - other[i][j];
+				}
+			}
+			return result;
+		}
+
+		// Matrix Multiplication
+		Matrix2x2 operator*(const Matrix2x2& other) const {
+			Matrix2x2 result;
+			for (int i = 0; i < 2; i++) {
+				for (int j = 0; j < 2; j++) {
+					result[i][j] = m[i][0] * other[0][j] + m[i][1] * other[1][j];
+				}
+			}
+			return result;
+		}
+
+		// Vector Multiplication
+		Vector::Vector2 operator*(const Vector::Vector2& vec) const
+		{
+			Vector::Vector2 result;
+			result.x = m[0][0] * vec.x + m[0][1] * vec.y;
+			result.y = m[1][0] * vec.x + m[1][1] * vec.y;
+			return result;
+		}
+
+		// Scalar Multiplication
+		Matrix2x2 operator*(float scalar) const {
+			Matrix2x2 result;
+			for (int i = 0; i < 2; i++) {
+				for (int j = 0; j < 2; j++) {
+					result[i][j] = m[i][j] * scalar;
+				}
+			}
+			return result;
+		}
+
+		// Assignment operator
+		Matrix2x2& operator=(const Matrix2x2& other) {
+			for (int i = 0; i < 2; i++) {
+				for (int j = 0; j < 2; j++) {
+					m[i][j] = other[i][j];
+				}
+			}
+			return *this;
+		}
+
+		Matrix2x2& operator*=(const Matrix2x2& other) {
+			if (this != &other) {
+				*this = *this * other;
+			}
+			return *this;
+		}
+
+		Matrix2x2& operator+= (const Matrix2x2& other) {
+			*this = *this + other;
+			return *this;
+		}
+
+		Matrix2x2& operator-= (const Matrix2x2& other) {
+			*this = *this - other;
+			return *this;
+		}
+
+		// Comparision Operator
+		bool operator==(const Matrix2x2& other) const {
+			for (int i = 0; i < 2; i++) {
+				for (int j = 0; j < 2; j++) {
+					if (m[i][j] != other[i][j]) {
+						return false;
+					}
+				}
+			}
+			return true;
+		}
+
+		bool operator!=(const Matrix2x2& other) const {
+			return !(*this == other);
+		}
+
+		bool isApproxEqual(const Matrix2x2& other, float epsilon = 1e-6f) const {
+			for (int i = 0; i < 2; i++) {
+				for (int j = 0; j < 2; j++) {
+					if (std::abs(m[i][j] - other[i][j]) > epsilon) {
+						return false;
+					}
+				}
+			}
+			return true;
+		}
+
+		bool isApproxNotEqual(const Matrix2x2& other, float epsilon = 1e-6f) const {
+			return !isApproxEqual(other, epsilon);
+		}
+
+		Matrix2x2 Transpose() const {
+			Matrix2x2 result;
+			for (int i = 0; i < 2; i++) {
+				for (int j = 0; j < 2; j++) {
+					result[i][j] = m[j][i];
+				}
+			}
+			return result;
+		}
+
+		void Print() const
+		{
+			for (int i = 0; i < 2; i++)
+			{
+				std::cout << "[";
+				for (int j = 0; j < 2; j++) {
+					std::cout << m[i][j];
+					if (j < 1) std::cout << ", ";
+				}
+				std::cout << "]" << std::endl;
+			}
+		}
+
+	};
+
 	struct Matrix4x4
 	{
 		float m[4][4];
@@ -245,7 +421,7 @@ namespace Matrix
 
 		static Matrix4x4 Rotation(const Matrix4x4& matrix, Vector::Vector3 axis, float rotationAngle) {
 			Matrix4x4 rotationMatrix;
-			
+
 			if (axis.x != 0.0f) {
 				rotationMatrix = rotationMatrix * CreateRotationX(rotationAngle);
 			}
