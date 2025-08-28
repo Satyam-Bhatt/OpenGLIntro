@@ -30,6 +30,7 @@ private:
 		MatrixUniform,
 		MyMatrixClass,
 		SierpinskiTriangle,
+		MatrixGraphTransformationGraph,
 		COUNT
 	};
 

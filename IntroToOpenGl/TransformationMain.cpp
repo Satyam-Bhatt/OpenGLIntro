@@ -5,6 +5,7 @@
 #include "MatrixUniform.h"
 #include "MyMatrixClass.h"
 #include "SierpinskiTriangle.h"
+#include "MatrixGraphTransformation.h"
 
 TransformationMain* TransformationMain::instance = nullptr;
 
@@ -27,6 +28,9 @@ TransformationMain::TransformationMain()
 
 	sceneNames[SubScene::SierpinskiTriangle] = "Sierpinski Triangle";
 	sceneFactories[SubScene::SierpinskiTriangle] = []() -> TransformationMain* { return SierpinskiTriangle::GetInstance(); };
+
+	sceneNames[SubScene::MatrixGraphTransformationGraph] = "Matrix Graph Transformation";
+	sceneFactories[SubScene::MatrixGraphTransformationGraph] = []() -> TransformationMain* { return MatrixGraphTransformation::GetInstance(); };
 }
 
 TransformationMain::~TransformationMain()
@@ -190,5 +194,9 @@ void TransformationMain::RenderText(SubScene sceneName)
 	else if (sceneName == SubScene::SierpinskiTriangle)
 	{
 		ImGui::TextWrapped("Created a sierpinski triangle using recursion ");
+	}
+	else if (sceneName == SubScene::MatrixGraphTransformationGraph)
+	{
+		ImGui::TextWrapped("Graph of transformations using matricies");
 	}
 }

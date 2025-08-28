@@ -346,5 +346,6 @@
     <None Include="SierpinskiTriangle.shader">
       <Filter>Shader\Transformations</Filter>
     </None>
+    <None Include="MatrixGraphTransformation.shader" />
   </ItemGroup>
 </Project>

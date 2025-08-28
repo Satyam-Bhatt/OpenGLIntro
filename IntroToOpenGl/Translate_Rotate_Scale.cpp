@@ -56,6 +56,7 @@ void Translate_Rotate_Scale::Start()
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 
+	// Pivot
 	float vertices2[] =
 	{
 		-0.05f, -0.05f, 0.0f, 1.0f, 0, 0,
@@ -186,6 +187,7 @@ void Translate_Rotate_Scale::Render()
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
+	// Pivot
 	shader2.Use();
 	glBindVertexArray(VAO2);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);

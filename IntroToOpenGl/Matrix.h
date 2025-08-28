@@ -11,8 +11,6 @@ namespace Matrix
 	{
 		float m[2][2];
 
-		Matrix2x2() : m{ {1.0f, 0.0f}, {0.0f, 1.0f} } {}
-
 		// Constructor
 		Matrix2x2() {
 			for (int i = 0; i < 2; i++) {

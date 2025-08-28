@@ -230,6 +230,7 @@
     <None Include="glmTest.shader" />
     <None Include="IntroTexture.shader" />
     <None Include="IntroTransformation.shader" />
+    <None Include="MatrixGraphTransformation.shader" />
     <None Include="MatrixUniform.shader" />
     <None Include="MipmapOptions.shader" />
     <None Include="MyMatrixClass.shader" />
