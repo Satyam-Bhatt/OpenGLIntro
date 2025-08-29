@@ -1,11 +1,13 @@
 #Satyam vertex
 #version 330 core
 
-layout (location = 0) in vec4 aPos;
+layout (location = 0) in vec2 aPos;
+uniform mat2 mat;
 
 void main()
 {
-	gl_Position = aPos;
+	vec2 pos = aPos * mat;
+	gl_Position = vec4(pos,0,1);
 }
 
 #Satyam fragment

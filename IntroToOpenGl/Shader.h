@@ -42,6 +42,7 @@ public:
     void SetTexture(const std::string& name, int slot);
     void SetMat4(const std::string& name, glm::mat4 matrix);
     void SetMat4_Custom(const std::string& name, float (&a)[4][4]);
+    void SetMat2_Custom(const std::string& name, float (&a)[2][2]);
 
 private:
 

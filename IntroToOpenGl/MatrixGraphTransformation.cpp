@@ -25,10 +25,10 @@ void MatrixGraphTransformation::Start()
 	};
 	float vertices[] =
 	{
-		-0.5f, -0.5f, 0.0f, 1.0f,
-		 0.5f, -0.5f, 0.0f, 1.0f,
-		-0.5f,  0.5f, 0.0f, 1.0f,
-		 0.5f,  0.5f, 0.0f, 1.0f
+		-0.5f, -0.5f, 
+		 0.5f, -0.5f, 
+		-0.5f,  0.5f, 
+		 0.5f,  0.5f 
 	};
 
 	glGenVertexArrays(1, &VAO);
@@ -42,7 +42,7 @@ void MatrixGraphTransformation::Start()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
-	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -66,12 +66,16 @@ void MatrixGraphTransformation::ImGuiRender(GLFWwindow* window)
 
 	ImGui::Begin("Level Specific", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
 
+	ImGui::DragFloat2("Top", &mat.m[0][0], 0.005f);
+	ImGui::DragFloat2("Right", &mat.m[1][0], 0.005f);
+
 	ImGui::End();
 }
 
 void MatrixGraphTransformation::Render()
 {
 	shader.Use();
+	shader.SetMat2_Custom("mat", mat.m);
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }

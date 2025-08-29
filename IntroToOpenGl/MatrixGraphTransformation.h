@@ -18,6 +18,8 @@ private:
 	static MatrixGraphTransformation instance;
 	Shader shader;
 
+	Matrix::Matrix2x2 mat;
+
 	uint32_t VAO, VBO, EBO;
 };
 

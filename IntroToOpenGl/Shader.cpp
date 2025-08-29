@@ -195,6 +195,13 @@ void Shader::SetMat4_Custom(const std::string& name, float(&a)[4][4])
 	glUniformMatrix4fv(GetUniformLocation(name), 1, GL_TRUE, &a[0][0]);
 }
 
+void Shader::SetMat2_Custom(const std::string& name, float(&a)[2][2])
+{
+	// The matrix stored is in Row Major form but opengl expects it to be in column major
+	// So by setting GL_TRUE we transpose the matrix and make it column major
+	glUniformMatrix2fv(GetUniformLocation(name), 1, GL_TRUE, &a[0][0]);
+}
+
 // Responsible for caching the uniform location and returning it
 int Shader::GetUniformLocation(const std::string& name)
 {
