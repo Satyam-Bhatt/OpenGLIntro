@@ -25,10 +25,10 @@ void MatrixGraphTransformation::Start()
 	};
 	float vertices[] =
 	{
-		-0.5f, -0.5f, 
-		 0.5f, -0.5f, 
-		-0.5f,  0.5f, 
-		 0.5f,  0.5f 
+		-1.0f, -1.0f, 0,0,
+		 1.0f, -1.0f, 1,0,
+		-1.0f,  1.0f, 0,1,
+		 1.0f,  1.0f, 1,1
 	};
 
 	glGenVertexArrays(1, &VAO);
@@ -42,8 +42,11 @@ void MatrixGraphTransformation::Start()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
+
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
+	glEnableVertexAttribArray(1);
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
@@ -68,6 +71,8 @@ void MatrixGraphTransformation::ImGuiRender(GLFWwindow* window)
 
 	ImGui::DragFloat2("Top", &mat.m[0][0], 0.005f);
 	ImGui::DragFloat2("Right", &mat.m[1][0], 0.005f);
+	ImGui::DragFloat("Grid Fade", &gridFade, 0.005f);
+	ImGui::DragFloat("Cells", &cells, 0.005f);
 
 	ImGui::End();
 }
@@ -76,6 +81,9 @@ void MatrixGraphTransformation::Render()
 {
 	shader.Use();
 	shader.SetMat2_Custom("mat", mat.m);
+	shader.SetFloat("Time", glfwGetTime());
+	shader.SetFloat("fade", gridFade);
+	shader.SetFloat("cells", cells);
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }

@@ -19,6 +19,8 @@ private:
 	Shader shader;
 
 	Matrix::Matrix2x2 mat;
+	float gridFade = 7.0f;
+	float cells = 10.0f;
 
 	uint32_t VAO, VBO, EBO;
 };
