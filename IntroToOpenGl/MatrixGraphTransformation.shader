@@ -20,6 +20,7 @@ out vec4 FragColor;
 uniform float Time;
 uniform float fade;
 uniform float cells;
+uniform bool nonLinearEffect1 = false, nonLinearEffect2 = false, nonLinearEffect3 = false;
 
 float sdBox( vec2 p, vec2 b )
 {
@@ -32,16 +33,25 @@ void main()
 	vec2 uv = vTexCoords;
 	vec2 newUV = (uv * 2 - 1) * cells;
 
-	// Periodic distortion
-	newUV = vec2(newUV.x + sin(Time) * sin(newUV.y), newUV.y + sin(Time) * cos(newUV.x));
+	if(nonLinearEffect1)
+	{
+		// Periodic distortion
+		newUV = vec2(newUV.x + sin(Time) * sin(newUV.y), newUV.y + sin(Time) * cos(newUV.x));
+	}
 
-	// Something cool
-	// newUV.x += sin(newUV.y * 6.28 + Time) * 0.2;
-	// newUV.y += cos(newUV.x * 6.28 + Time * 0.7) * 0.2;
+	if(nonLinearEffect2)
+	{
+		// Something cool
+		newUV.x += sin(newUV.y * 6.28 + Time) * 0.2;
+		newUV.y += cos(newUV.x * 6.28 + Time * 0.7) * 0.2;
+	}
 
-	// All Ways Up
-	// newUV.x += sin(newUV.y * 4.0 + Time) * cos(newUV.x * 3.0 + Time * 0.5) * 0.3;
-	// newUV.y += cos(newUV.x * 4.0 + Time * 0.7) * sin(newUV.y * 3.0 + Time) * 0.3;
+	if(nonLinearEffect3)
+	{
+		// All Ways Up
+		newUV.x += sin(newUV.y * 4.0 + Time) * cos(newUV.x * 3.0 + Time * 0.5) * 0.3;
+		newUV.y += cos(newUV.x * 4.0 + Time * 0.7) * sin(newUV.y * 3.0 + Time) * 0.3;
+	}
 
 	vec2 repeatedUV = fract(newUV);
 	

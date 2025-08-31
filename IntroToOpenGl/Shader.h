@@ -11,6 +11,7 @@
 #include <glm.hpp>
 #include <gtc/matrix_transform.hpp>
 #include <gtc/type_ptr.hpp>
+#include "Imgui/imgui.h"
 
 // If this is not defined, then this is the first include and the code below will be compiled but if this is already defined then 
 // the code below will not be compiled. Using these little lines of code informs your compiler to only include and compile this header file 
@@ -39,6 +40,7 @@ public:
     void SetFloat(const std::string& name, float value);
     void SetVec2(const std::string& name, float x, float y);
     void SetVec3(const std::string& name, Vector::Vector3 vector);
+    void SetVec4(const std::string& name, ImVec4 vector);
     void SetTexture(const std::string& name, int slot);
     void SetMat4(const std::string& name, glm::mat4 matrix);
     void SetMat4_Custom(const std::string& name, float (&a)[4][4]);

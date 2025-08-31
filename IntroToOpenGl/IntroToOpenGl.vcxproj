@@ -231,6 +231,7 @@
     <None Include="IntroTexture.shader" />
     <None Include="IntroTransformation.shader" />
     <None Include="MatrixGraphTransformation.shader" />
+    <None Include="MatrixGraphTransformation2.shader" />
     <None Include="MatrixUniform.shader" />
     <None Include="MipmapOptions.shader" />
     <None Include="MyMatrixClass.shader" />

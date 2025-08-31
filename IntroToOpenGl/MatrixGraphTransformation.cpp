@@ -16,7 +16,11 @@ MatrixGraphTransformation::~MatrixGraphTransformation()
 
 void MatrixGraphTransformation::Start()
 {
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 	shader = Shader("MatrixGraphTransformation.shader");
+	shader2 = Shader("MatrixGraphTransformation2.shader");
 
 	uint32_t indices[] =
 	{
@@ -25,10 +29,10 @@ void MatrixGraphTransformation::Start()
 	};
 	float vertices[] =
 	{
-		-1.0f, -1.0f, 0,0,
-		 1.0f, -1.0f, 1,0,
-		-1.0f,  1.0f, 0,1,
-		 1.0f,  1.0f, 1,1
+		-2.0f, -2.0f, 0,0,
+		 2.0f, -2.0f, 1,0,
+		-2.0f,  2.0f, 0,1,
+		 2.0f,  2.0f, 1,1
 	};
 
 	glGenVertexArrays(1, &VAO);
@@ -69,10 +73,22 @@ void MatrixGraphTransformation::ImGuiRender(GLFWwindow* window)
 
 	ImGui::Begin("Level Specific", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
 
-	ImGui::DragFloat2("Top", &mat.m[0][0], 0.005f);
-	ImGui::DragFloat2("Right", &mat.m[1][0], 0.005f);
+	ImGui::Text("Matrix");
+	ImGui::DragFloat2("Matrix Row 1", &mat.m[0][0], 0.005f);
+	ImGui::DragFloat2("Matrix Row 2", &mat.m[1][0], 0.005f);
+	ImGui::Dummy(ImVec2(0, 10));
+	ImGui::Text("Properties");
 	ImGui::DragFloat("Grid Fade", &gridFade, 0.005f);
 	ImGui::DragFloat("Cells", &cells, 0.005f);
+	ImGui::Dummy(ImVec2(0, 10));
+	ImGui::Text("Effects");
+	ImGui::Checkbox("Non Linear Transformation 1", &nonLinearEffect1);
+	ImGui::Checkbox("Non Linear Transformation 2", &nonLinearEffect2);
+	ImGui::Checkbox("Non Linear Transformation 3", &nonLinearEffect3);
+	ImGui::Dummy(ImVec2(0, 10));
+	ImGui::Text("Refrence Plane");
+	ImGui::Checkbox("Enable" , &refrencePlane);
+	ImGui::ColorEdit3("Line Color", (float*)&lineColor);
 
 	ImGui::End();
 }
@@ -84,8 +100,23 @@ void MatrixGraphTransformation::Render()
 	shader.SetFloat("Time", glfwGetTime());
 	shader.SetFloat("fade", gridFade);
 	shader.SetFloat("cells", cells);
+	shader.SetBool("nonLinearEffect1", nonLinearEffect1);
+	shader.SetBool("nonLinearEffect2", nonLinearEffect2);
+	shader.SetBool("nonLinearEffect3", nonLinearEffect3);
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+	if (refrencePlane)
+	{
+		shader2.Use();
+		shader2.SetFloat("cells", cells);
+		shader2.SetVec3("lineColor", lineColor);
+		glBindVertexArray(VAO);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+	}
+
+
+	glBindVertexArray(0);
 }
 
 void MatrixGraphTransformation::Exit()
@@ -94,6 +125,8 @@ void MatrixGraphTransformation::Exit()
 	if(VBO != 0) glDeleteBuffers(1, &VBO);
 	if(EBO != 0) glDeleteBuffers(1, &EBO);
 	if(shader.ID != 0) glDeleteProgram(shader.ID);
+	if(shader2.ID != 0) glDeleteProgram(shader2.ID);
+	if(shader.ID != 0 && shader2.ID != 0) glDisable(GL_BLEND);
 }
 
 MatrixGraphTransformation* MatrixGraphTransformation::GetInstance()
