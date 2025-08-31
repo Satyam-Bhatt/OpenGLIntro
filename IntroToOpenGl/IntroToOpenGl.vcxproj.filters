@@ -349,6 +349,8 @@
     <None Include="MatrixGraphTransformation.shader">
       <Filter>Shader\Transformations</Filter>
     </None>
-    <None Include="MatrixGraphTransformation2.shader" />
+    <None Include="MatrixGraphTransformation2.shader">
+      <Filter>Shader\Transformations</Filter>
+    </None>
   </ItemGroup>
 </Project>
