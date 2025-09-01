@@ -73,24 +73,43 @@ void MatrixGraphTransformation::ImGuiRender(GLFWwindow* window)
 
 	ImGui::Begin("Level Specific", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
 
-	ImGui::Text("Matrix");
-	ImGui::DragFloat2("Matrix Row 1", &mat.m[0][0], 0.005f);
-	ImGui::DragFloat2("Matrix Row 2", &mat.m[1][0], 0.005f);
-	ImGui::Dummy(ImVec2(0, 10));
-	ImGui::Text("Properties");
-	ImGui::DragFloat("Grid Fade", &gridFade, 0.005f);
-	ImGui::DragFloat("Cells", &cells, 0.005f);
-	ImGui::Dummy(ImVec2(0, 10));
-	ImGui::Text("Effects");
-	ImGui::Checkbox("Non Linear Transformation 1", &nonLinearEffect1);
-	ImGui::Checkbox("Non Linear Transformation 2", &nonLinearEffect2);
-	ImGui::Checkbox("Non Linear Transformation 3", &nonLinearEffect3);
-	ImGui::Dummy(ImVec2(0, 10));
-	ImGui::Text("Refrence Plane");
-	ImGui::Checkbox("Enable" , &refrencePlane);
-	ImGui::ColorEdit3("Line Color", (float*)&lineColor);
+	if (ImGui::BeginTable("LevelSpecificTable", 3, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg))
+	{
+		// Setup columns
+		ImGui::TableSetupColumn("Matrix");
+		ImGui::TableSetupColumn("Properties");
+		ImGui::TableSetupColumn("Reference Plane");
+		ImGui::TableHeadersRow();
+
+		ImGui::TableNextRow();
+
+		// Matrix column
+		ImGui::TableSetColumnIndex(0);
+		ImGui::DragFloat2("Row 1", &mat.m[0][0], 0.005f);
+		ImGui::DragFloat2("Row 2", &mat.m[1][0], 0.005f);
+		ImGui::Text("Effects");
+		ImGui::Checkbox("Effect 1", &nonLinearEffect1);
+		ImGui::SameLine();
+		ImGui::Checkbox("Effect 2", &nonLinearEffect2);
+		ImGui::SameLine();
+		ImGui::Checkbox("Effect 3", &nonLinearEffect3);
+
+		// Properties column
+		ImGui::TableSetColumnIndex(1);
+		ImGui::Text("Make grid fade negative to see a waffle like pattern");
+		ImGui::DragFloat("Grid Fade", &gridFade, 0.005f);
+		ImGui::DragFloat("Cells", &cells, 0.005f);
+
+		// Reference Plane column
+		ImGui::TableSetColumnIndex(2);
+		ImGui::Checkbox("Enable", &refrencePlane);
+		ImGui::ColorEdit3("Line Color", (float*)&lineColor);
+
+		ImGui::EndTable();
+	}
 
 	ImGui::End();
+
 }
 
 void MatrixGraphTransformation::Render()

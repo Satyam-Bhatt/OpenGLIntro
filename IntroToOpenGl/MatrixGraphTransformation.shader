@@ -33,6 +33,7 @@ void main()
 	vec2 uv = vTexCoords;
 	vec2 newUV = (uv * 2 - 1) * cells;
 
+	// Parsing x and y coordinates separately for non-linear effects to the graph
 	if(nonLinearEffect1)
 	{
 		// Periodic distortion
@@ -55,6 +56,7 @@ void main()
 
 	vec2 repeatedUV = fract(newUV);
 	
+	// SDF of the box just to make the lines a bit blurry and also have a hollow effect if fade < 0
 	float box = 1-sdBox(repeatedUV, vec2(0.9));
 	box = pow(box, fade);
 	box = clamp(box, 0.0, 1.0);

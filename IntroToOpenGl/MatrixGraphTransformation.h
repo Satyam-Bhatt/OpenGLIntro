@@ -24,7 +24,7 @@ private:
 
 	bool nonLinearEffect1 = false, nonLinearEffect2 = false, nonLinearEffect3 = false;
 
-	bool refrencePlane = true;
+	bool refrencePlane = false;
 	Vector::Vector3 lineColor = Vector::Vector3(0.23, 0.57, 0.84);
 
 	uint32_t VAO, VBO, EBO;
