@@ -114,6 +114,7 @@ void MatrixGraphTransformation::ImGuiRender(GLFWwindow* window)
 
 void MatrixGraphTransformation::Render()
 {
+	// To draw the graph
 	shader.Use();
 	shader.SetMat2_Custom("mat", mat.m);
 	shader.SetFloat("Time", glfwGetTime());
@@ -125,6 +126,7 @@ void MatrixGraphTransformation::Render()
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
+	// TO draw the refrence plane
 	if (refrencePlane)
 	{
 		shader2.Use();
