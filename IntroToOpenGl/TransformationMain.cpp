@@ -197,6 +197,6 @@ void TransformationMain::RenderText(SubScene sceneName)
 	}
 	else if (sceneName == SubScene::MatrixGraphTransformationGraph)
 	{
-		ImGui::TextWrapped("Graph of transformations using matricies");
+		ImGui::TextWrapped("Graph transformations using matricies and non linear functions");
 	}
 }
