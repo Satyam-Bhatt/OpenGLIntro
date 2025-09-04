@@ -358,5 +358,8 @@
     <None Include="MatrixGraphTransformation2.shader">
       <Filter>Shader\Transformations</Filter>
     </None>
+    <None Include="CoordinateSystems.shader">
+      <Filter>Shader\Transformations</Filter>
+    </None>
   </ItemGroup>
 </Project>
