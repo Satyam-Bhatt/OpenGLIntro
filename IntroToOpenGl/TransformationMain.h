@@ -31,6 +31,7 @@ private:
 		MyMatrixClass,
 		SierpinskiTriangle,
 		MatrixGraphTransformationGraph,
+		CoordinateSystem,
 		COUNT
 	};
 

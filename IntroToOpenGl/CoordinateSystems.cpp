@@ -79,10 +79,18 @@ void CoordinateSystems::ImGuiRender(GLFWwindow* window)
 
 void CoordinateSystems::Render()
 {
+	shader.Use();
+	glBindVertexArray(VAO);
+	glDrawElements(GL_TRIANGLES, 24, GL_UNSIGNED_INT, 0);
+	glBindVertexArray(0);
 }
 
 void CoordinateSystems::Exit()
 {
+	if(VAO != 0) glDeleteVertexArrays(1, &VAO);
+	if(VBO != 0) glDeleteBuffers(1, &VBO);
+	if(EBO != 0) glDeleteBuffers(1, &EBO);
+	if(shader.ID != 0) glDeleteProgram(shader.ID);
 }
 
 CoordinateSystems* CoordinateSystems::GetInstance()

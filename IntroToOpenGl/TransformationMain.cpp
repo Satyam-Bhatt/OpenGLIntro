@@ -6,6 +6,7 @@
 #include "MyMatrixClass.h"
 #include "SierpinskiTriangle.h"
 #include "MatrixGraphTransformation.h"
+#include "CoordinateSystems.h"
 
 TransformationMain* TransformationMain::instance = nullptr;
 
@@ -31,6 +32,9 @@ TransformationMain::TransformationMain()
 
 	sceneNames[SubScene::MatrixGraphTransformationGraph] = "Matrix Graph Transformation";
 	sceneFactories[SubScene::MatrixGraphTransformationGraph] = []() -> TransformationMain* { return MatrixGraphTransformation::GetInstance(); };
+
+	sceneNames[SubScene::CoordinateSystem] = "Coordinate Systems";
+	sceneFactories[SubScene::CoordinateSystem] = []() -> TransformationMain* { return CoordinateSystems::GetInstance(); };
 }
 
 TransformationMain::~TransformationMain()
@@ -198,5 +202,9 @@ void TransformationMain::RenderText(SubScene sceneName)
 	else if (sceneName == SubScene::MatrixGraphTransformationGraph)
 	{
 		ImGui::TextWrapped("Graph transformations using matricies and non linear functions");
+	}
+	else if (sceneName == SubScene::CoordinateSystem)
+	{
+		ImGui::TextWrapped("Trying out OpenGL Transformation || Model -> View -> Projection matrix to transform objects");
 	}
 }

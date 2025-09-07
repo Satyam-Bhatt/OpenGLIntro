@@ -2,7 +2,7 @@
 
 #version 330 core
 
-layout(loaction = 0) in vec3 aPos;
+layout(location = 0) in vec4 aPos;
 
 void main()
 {
