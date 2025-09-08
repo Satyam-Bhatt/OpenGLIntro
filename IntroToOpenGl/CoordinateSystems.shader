@@ -4,6 +4,8 @@
 
 layout(location = 0) in vec4 aPos;
 
+uniform mat4 rot;
+
 void main()
 {
 	gl_Position = aPos;

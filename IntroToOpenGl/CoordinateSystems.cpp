@@ -79,6 +79,9 @@ void CoordinateSystems::ImGuiRender(GLFWwindow* window)
 
 void CoordinateSystems::Render()
 {
+	Matrix::Matrix4x4 rotMat;
+	rotMat = Matrix::Matrix4x4::Rotation(rotMat, Vector::Vector3(0.0f, 1.0f, 0.0f), glfwGetTime());
+
 	shader.Use();
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, 24, GL_UNSIGNED_INT, 0);
