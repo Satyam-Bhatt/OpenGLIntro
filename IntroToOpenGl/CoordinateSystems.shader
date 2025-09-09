@@ -8,7 +8,8 @@ uniform mat4 rot;
 
 void main()
 {
-	gl_Position = aPos;
+	vec4 pos = rot * aPos;
+	gl_Position = pos;
 }
 
 #Satyam fragment

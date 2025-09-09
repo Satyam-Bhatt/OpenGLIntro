@@ -83,6 +83,7 @@ void CoordinateSystems::Render()
 	rotMat = Matrix::Matrix4x4::Rotation(rotMat, Vector::Vector3(0.0f, 1.0f, 0.0f), glfwGetTime());
 
 	shader.Use();
+	shader.SetMat4_Custom("rot", rotMat.m);
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, 24, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
