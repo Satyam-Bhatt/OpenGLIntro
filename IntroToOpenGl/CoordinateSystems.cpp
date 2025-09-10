@@ -74,13 +74,23 @@ void CoordinateSystems::ImGuiRender(GLFWwindow* window)
 	);
 
 	ImGui::Begin("Level Specific", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
+
+	ImGui::Checkbox("X axis", &rotX);
+	ImGui::Checkbox("Y axis", &rotY);
+	ImGui::Checkbox("Z axis", &rotZ);
+
 	ImGui::End();
 }
 
 void CoordinateSystems::Render()
 {
+
+	float axisX = rotX?1:0;
+	float axisY = rotY?1:0;
+	float axisZ = rotZ?1:0;
+
 	Matrix::Matrix4x4 rotMat;
-	rotMat = Matrix::Matrix4x4::Rotation(rotMat, Vector::Vector3(0.0f, 1.0f, 0.0f), glfwGetTime());
+	rotMat = Matrix::Matrix4x4::Rotation(rotMat, Vector::Vector3(axisX, axisY, axisZ), glfwGetTime());
 
 	shader.Use();
 	shader.SetMat4_Custom("rot", rotMat.m);

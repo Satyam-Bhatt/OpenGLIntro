@@ -20,6 +20,8 @@ private:
 	Shader shader;
 
 	uint32_t VAO = 0, VBO = 0, EBO = 0;
+
+	bool rotX = false, rotY = false, rotZ = true;
 	
 };
 
