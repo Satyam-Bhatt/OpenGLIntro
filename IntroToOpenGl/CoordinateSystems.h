@@ -1,5 +1,7 @@
 #pragma once
 #include "TransformationMain.h"
+
+using Matrix::Matrix4x4;
 class CoordinateSystems : public TransformationMain
 {
 public:
@@ -22,6 +24,11 @@ private:
 	uint32_t VAO = 0, VBO = 0, EBO = 0;
 
 	bool rotX = false, rotY = false, rotZ = true;
-	
+
+	Matrix4x4 CreateModelMatrix();
+	Matrix4x4 CreateViewMatrix();
+	Matrix4x4 CreateProjectionMatrix_FOV();
+	Matrix4x4 CreateProjectionMatrix();
+	Matrix4x4 CreateProjectionMatrix_ORTHO();
 };
 
