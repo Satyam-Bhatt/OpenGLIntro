@@ -122,4 +122,9 @@ CoordinateSystems* CoordinateSystems::GetInstance()
 	return &instance;
 }
 
+Matrix4x4 CoordinateSystems::CreateProjectionMatrix(float right, float top, float, float)
+{
+	return Matrix4x4();
+}
+
 
