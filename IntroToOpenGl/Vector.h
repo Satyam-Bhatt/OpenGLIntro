@@ -372,6 +372,36 @@ namespace Vector {
         }
     };
 
+    struct Vector4 {
+		float x, y, z, w;
+
+        // Constructor
+        Vector4() : x(0.0f), y(0.0f), z(0.0f), w(0.0f) {}
+		Vector4(float x, float y, float z, float w) : x(x), y(y), z(z), w(w) {}
+
+        // Constructor from Vector3
+        explicit Vector4(const Vector3& vector, float w = 1.0f) : x(vector.x), y(vector.y), z(vector.z), w(w) {}
+
+        // Copy Constructor
+		Vector4(const Vector4& other) : x(other.x), y(other.y), z(other.z), w(other.w) {}
+
+        // Assignment operator
+		Vector4& operator=(const Vector4& other) {
+			if (this != &other) {
+				x = other.x;
+				y = other.y;
+				z = other.z;
+				w = other.w;
+			}
+			return *this;
+		}
+
+        // Vector addition
+        Vector4 operator+(const Vector4& other) const {
+            return Vector4(x + other.x, y + other.y, z + other.z, w + other.w);
+        }
+	};
+
     // Global scalar multiplication (allows scalar * vector syntax)
     inline Vector2 operator*(float scalar, const Vector2& vector) {
         return vector * scalar;
