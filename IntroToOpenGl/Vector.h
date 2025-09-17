@@ -454,7 +454,19 @@ namespace Vector {
 			return Vector4(-x, -y, -z, -w);
 		}
 
+		// Comparison operator
+		bool operator==(const Vector4& other) const {
+			return (x == other.x && y == other.y && z == other.z && w == other.w);
+		}
 
+		bool operator != (const Vector4& other) const {
+			return !(*this == other);
+		}
+
+		// Dot product
+		float Dot(const Vector4& other) const {
+			return x * other.x + y * other.y + z * other.z + w * other.w;
+		}
 	};
 
 	// Global scalar multiplication (allows scalar * vector syntax)
