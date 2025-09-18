@@ -467,6 +467,53 @@ namespace Vector {
 		float Dot(const Vector4& other) const {
 			return x * other.x + y * other.y + z * other.z + w * other.w;
 		}
+
+		// Cross product
+		Vector4 Cross(const Vector4& other) const {
+			return Vector4(
+				y * other.z - z * other.y,
+				z * other.x - x * other.z,
+				x * other.y - y * other.x,
+				0.0f
+			);
+		}
+
+		// Length(magnitude) of the vector
+		float Length() const {
+			return std::sqrt(x * x + y * y + z * z + w * w);
+		}
+
+		// Squared Length (avoids the square root calculation)
+		float LengthSquared() const {
+			return x * x + y * y + z * z + w * w;
+		}
+
+		// Normalize this vector in-place
+		void Normalize() {
+			float length = Length();
+			if (length > 0.0f) {
+				x /= length;
+				y /= length;
+				z /= length;
+				w /= length;
+			}
+		}
+
+		// Normalize the vector (make it unit length)
+		Vector4 Normalized() const {
+			float length = Length();
+			if (length > 0.0f) {
+				return Vector4(x / length, y / length, z / length, w / length);
+			}
+			return *this;
+		}
+
+		// Print the vector (for debugging)
+		void Print() const {
+			std::cout << "Vector4(" << x << ", " << y << ", " << z << ", " << w << ")" << std::endl;
+		}
+
+
 	};
 
 	// Global scalar multiplication (allows scalar * vector syntax)
