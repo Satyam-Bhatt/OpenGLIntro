@@ -122,8 +122,30 @@ CoordinateSystems* CoordinateSystems::GetInstance()
 	return &instance;
 }
 
-Matrix4x4 CoordinateSystems::CreateProjectionMatrix_RAW(float right, float top, float near, float far)
+Matrix4x4 CoordinateSystems::CreateProjectionMatrix_RAW(float right, float left, float bottom, float top, float near, float far)
 {
+	Matrix4x4 tempMatrix;
+
+	tempMatrix[0][0] = 2 * near / (right - left);
+	tempMatrix[0][1] = 0;
+	tempMatrix[0][2] = (right + left) / (right - left);
+	tempMatrix[0][3] = 0;
+
+	tempMatrix[1][0] = 0;
+	tempMatrix[1][1] = 2 * near / (top - bottom);
+	tempMatrix[1][2] = (top + bottom) / (top - bottom);
+	tempMatrix[1][3] = 0;
+
+	tempMatrix[2][0] = 0;
+	tempMatrix[2][1] = 0;
+	tempMatrix[2][2] = -(far + near) / (far - near);
+	tempMatrix[2][3] = (- 2 * far * near) / (far - near);
+
+	tempMatrix[3][0] = 0;
+	tempMatrix[3][1] = 0;
+	tempMatrix[3][2] = -1;
+	tempMatrix[3][3] = 0;
+
 	return Matrix4x4();
 }
 
