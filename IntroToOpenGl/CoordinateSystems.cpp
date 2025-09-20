@@ -146,7 +146,7 @@ Matrix4x4 CoordinateSystems::CreateProjectionMatrix_RAW(float right, float left,
 	tempMatrix[3][2] = -1;
 	tempMatrix[3][3] = 0;
 
-	return Matrix4x4();
+	return tempMatrix;
 }
 
 

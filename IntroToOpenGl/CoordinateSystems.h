@@ -28,7 +28,7 @@ private:
 	Matrix4x4 CreateModelMatrix();
 	Matrix4x4 CreateViewMatrix();
 	Matrix4x4 CreateProjectionMatrix_FOV(float angle, float width, float height, float near, float far);
-	Matrix4x4 CreateProjectionMatrix_RAW(float right, float top, float near, float far);
+	Matrix4x4 CreateProjectionMatrix_RAW(float right, float left, float bottom, float top, float near, float far);
 	Matrix4x4 CreateProjectionMatrix_ORTHO(float left, float right, float bottom, float top, float near, float far);
 };
 
