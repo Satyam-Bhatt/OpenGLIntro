@@ -122,6 +122,11 @@ CoordinateSystems* CoordinateSystems::GetInstance()
 	return &instance;
 }
 
+Matrix4x4 CoordinateSystems::CreateProjectionMatrix_FOV(float angle, float width, float height, float, float)
+{
+	return Matrix4x4();
+}
+
 Matrix4x4 CoordinateSystems::CreateProjectionMatrix_RAW(float right, float left, float bottom, float top, float near, float far)
 {
 	Matrix4x4 tempMatrix;
