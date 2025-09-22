@@ -122,9 +122,36 @@ CoordinateSystems* CoordinateSystems::GetInstance()
 	return &instance;
 }
 
-Matrix4x4 CoordinateSystems::CreateProjectionMatrix_FOV(float angle, float width, float height, float, float)
+// Assuming the camera is at the origin and right = -left, top = -bottom
+Matrix4x4 CoordinateSystems::CreateProjectionMatrix_FOV(float angle, float width, float height, float near, float far)
 {
-	return Matrix4x4();
+	float aspectRatio = width / height;
+	float top = tan(angle / 2) * near;
+	float right = aspectRatio * top;
+
+	Matrix4x4 tempMatrix;
+
+	tempMatrix[0][0] = near / right;
+	tempMatrix[0][1] = 0;
+	tempMatrix[0][2] = 0;
+	tempMatrix[0][3] = 0;
+
+	tempMatrix[1][0] = 0;
+	tempMatrix[1][1] = near / top;
+	tempMatrix[1][2] = 0;
+	tempMatrix[1][3] = 0;
+
+	tempMatrix[2][0] = 0;
+	tempMatrix[2][1] = 0;
+	tempMatrix[2][2] = -(far + near) / (far - near);
+	tempMatrix[2][3] = (-2 * far * near) / (far - near);
+
+	tempMatrix[3][0] = 0;
+	tempMatrix[3][1] = 0;
+	tempMatrix[3][2] = -1;
+	tempMatrix[3][3] = 0;
+
+	return tempMatrix;
 }
 
 Matrix4x4 CoordinateSystems::CreateProjectionMatrix_RAW(float right, float left, float bottom, float top, float near, float far)
