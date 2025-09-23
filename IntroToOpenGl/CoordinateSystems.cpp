@@ -181,4 +181,31 @@ Matrix4x4 CoordinateSystems::CreateProjectionMatrix_RAW(float right, float left,
 	return tempMatrix;
 }
 
+Matrix4x4 CoordinateSystems::CreateProjectionMatrix_ORTHO(float left, float right, float bottom, float top, float far, float near)
+{
+	Matrix4x4 tempMatrix;
+
+	tempMatrix[0][0] = 2 / (right - left);
+	tempMatrix[0][1] = 0;
+	tempMatrix[0][2] = 0;
+	tempMatrix[0][3] = -(right + left) / (right - left);
+
+	tempMatrix[1][0] = 0;
+	tempMatrix[1][1] = 2 / (top - bottom);
+	tempMatrix[1][2] = 0;
+	tempMatrix[1][3] = -(top + bottom) / (top - bottom);
+
+	tempMatrix[2][0] = 0;
+	tempMatrix[2][1] = 0;
+	tempMatrix[2][2] = -2 / (far - near);
+	tempMatrix[2][3] = -(far + near) / (far - near);
+
+	tempMatrix[3][0] = 0;
+	tempMatrix[3][1] = 0;
+	tempMatrix[3][2] = 0;
+	tempMatrix[3][3] = 1;
+
+	return tempMatrix;
+}
+
 
