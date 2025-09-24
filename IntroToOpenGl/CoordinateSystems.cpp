@@ -122,6 +122,11 @@ CoordinateSystems* CoordinateSystems::GetInstance()
 	return &instance;
 }
 
+Matrix4x4 CoordinateSystems::CreateViewMatrix()
+{
+	return Matrix4x4();
+}
+
 // Assuming the camera is at the origin and right = -left, top = -bottom
 Matrix4x4 CoordinateSystems::CreateProjectionMatrix_FOV(float angle, float width, float height, float near, float far)
 {
