@@ -122,6 +122,11 @@ CoordinateSystems* CoordinateSystems::GetInstance()
 	return &instance;
 }
 
+Matrix4x4 CoordinateSystems::CreateModelMatrix()
+{
+	return Matrix4x4();
+}
+
 Matrix4x4 CoordinateSystems::CreateViewMatrix()
 {
 	return Matrix4x4();
