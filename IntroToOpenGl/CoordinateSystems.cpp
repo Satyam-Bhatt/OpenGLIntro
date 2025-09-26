@@ -132,6 +132,9 @@ Matrix4x4 CoordinateSystems::CreateViewMatrix()
 	return Matrix4x4();
 }
 
+// Projection matrix in easier terms if we think of it like this
+// First scale the Square Frustrum to a cuboid
+// Then make the cuboid to cube and bring it to the origin or in easier terms multiply with the orthographic matrix after we get a cuboid
 // Assuming the camera is at the origin and right = -left, top = -bottom
 Matrix4x4 CoordinateSystems::CreateProjectionMatrix_FOV(float angle, float width, float height, float near, float far)
 {
