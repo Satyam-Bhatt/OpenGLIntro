@@ -136,6 +136,12 @@ Matrix4x4 CoordinateSystems::CreateViewMatrix()
 // First scale the Square Frustrum to a cuboid
 // Then make the cuboid to cube and bring it to the origin or in easier terms multiply with the orthographic matrix after we get a cuboid
 // Assuming the camera is at the origin and right = -left, top = -bottom
+
+// Normalized z is inversely proportional to square of z projected because each component is divided by w component so if we divide z projected
+// with z projected we will get 1 hence loosing all the depth information. So we have to take the square of z projected to preserve the depth
+// inforamtion. 
+// But this causes a problem. Because the values are now z^2 the curve is not linear. So we get hight precision near the near plane and
+// low precision in the far plane as values are pretty close in the far plane.
 Matrix4x4 CoordinateSystems::CreateProjectionMatrix_FOV(float angle, float width, float height, float near, float far)
 {
 	float aspectRatio = width / height;
@@ -219,6 +225,11 @@ Matrix4x4 CoordinateSystems::CreateProjectionMatrix_ORTHO(float left, float righ
 	tempMatrix[3][3] = 1;
 
 	return tempMatrix;
+}
+
+Matrix4x4 CoordinateSystems::CreateInfinitePerspectiveMatrix(float, float right, float top)
+{
+	return Matrix4x4();
 }
 
 
