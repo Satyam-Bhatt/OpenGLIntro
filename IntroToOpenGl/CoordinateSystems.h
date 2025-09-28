@@ -30,6 +30,7 @@ private:
 	Matrix4x4 CreateProjectionMatrix_FOV(float angle, float width, float height, float near, float far);
 	Matrix4x4 CreateProjectionMatrix_RAW(float right, float left, float bottom, float top, float near, float far);
 	Matrix4x4 CreateProjectionMatrix_ORTHO(float left, float right, float bottom, float top, float far, float near);
-	Matrix4x4 CreateInfinitePerspectiveMatrix(float near, float right, float top);
+	Matrix4x4 CreateInfinitePerspectiveMatrix_Symmetric(float near, float right, float top);
+	Matrix4x4 CreateInfinitePerspectiveMatrix_Asymmetric(float near, float right, float left, float top, float bottom);
 };
 

@@ -227,7 +227,7 @@ Matrix4x4 CoordinateSystems::CreateProjectionMatrix_ORTHO(float left, float righ
 	return tempMatrix;
 }
 
-Matrix4x4 CoordinateSystems::CreateInfinitePerspectiveMatrix(float, float right, float top)
+Matrix4x4 CoordinateSystems::CreateInfinitePerspectiveMatrix_Symmetric(float, float right, float top)
 {
 	return Matrix4x4();
 }
