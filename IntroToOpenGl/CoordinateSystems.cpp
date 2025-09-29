@@ -227,7 +227,14 @@ Matrix4x4 CoordinateSystems::CreateProjectionMatrix_ORTHO(float left, float righ
 	return tempMatrix;
 }
 
-Matrix4x4 CoordinateSystems::CreateInfinitePerspectiveMatrix_Symmetric(float, float right, float top)
+// Far plane is at infinity and camera is at the center
+Matrix4x4 CoordinateSystems::CreateInfinitePerspectiveMatrix_Symmetric(float near, float right, float top)
+{
+	return Matrix4x4();
+}
+
+// Far plane is at infinity and camera is not at the center
+Matrix4x4 CoordinateSystems::CreateInfinitePerspectiveMatrix_Asymmetric(float near, float right, float left, float top, float bottom)
 {
 	return Matrix4x4();
 }
