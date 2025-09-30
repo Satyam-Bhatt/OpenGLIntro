@@ -236,7 +236,28 @@ Matrix4x4 CoordinateSystems::CreateInfinitePerspectiveMatrix_Symmetric(float nea
 // Far plane is at infinity and camera is not at the center
 Matrix4x4 CoordinateSystems::CreateInfinitePerspectiveMatrix_Asymmetric(float near, float right, float left, float top, float bottom)
 {
-	return Matrix4x4();
+	Matrix4x4 tempMatrix;
+	tempMatrix[0][0] = near / right;
+	tempMatrix[0][1] = 0;
+	tempMatrix[0][2] = 0;
+	tempMatrix[0][3] = 0;
+
+	tempMatrix[1][0] = 0;
+	tempMatrix[1][1] = near / top;
+	tempMatrix[1][2] = 0;
+	tempMatrix[1][3] = 0;
+
+	tempMatrix[2][0] = 0;
+	tempMatrix[2][1] = 0;
+	tempMatrix[2][2] = -1;
+	tempMatrix[2][3] = -2 * near;
+
+	tempMatrix[3][0] = 0;
+	tempMatrix[3][1] = 0;
+	tempMatrix[3][2] = -1;
+	tempMatrix[3][3] = 0;
+
+	return tempMatrix;
 }
 
 
