@@ -4,11 +4,13 @@
 
 layout(location = 0) in vec4 aPos;
 
-uniform mat4 rot;
+uniform mat4 model;
+uniform mat4 view;
+uniform mat4 projection;
 
 void main()
 {
-	vec4 pos = rot * aPos;
+	vec4 pos = model * view * projection * aPos;
 	gl_Position = pos;
 }
 
