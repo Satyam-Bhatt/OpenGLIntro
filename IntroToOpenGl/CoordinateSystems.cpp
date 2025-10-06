@@ -112,7 +112,10 @@ void CoordinateSystems::Render()
 	projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
 
 	shader.Use();
-	shader.SetMat4_Custom("rot", rotMat.m);
+	//shader.SetMat4_Custom("rot", rotMat.m);
+	shader.SetMat4("model", model);
+	shader.SetMat4("view", view);
+	shader.SetMat4("projection", projection);
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
