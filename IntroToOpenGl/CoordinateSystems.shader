@@ -10,7 +10,7 @@ uniform mat4 projection;
 
 void main()
 {
-	vec4 pos = model * view * projection * aPos;
+	vec4 pos = projection * view * model * aPos;
 	gl_Position = pos;
 }
 

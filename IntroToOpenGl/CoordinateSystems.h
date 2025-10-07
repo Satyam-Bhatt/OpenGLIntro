@@ -25,6 +25,8 @@ private:
 
 	bool rotX = false, rotY = false, rotZ = true;
 
+	float cameraZ = -2.0f;
+
 	Matrix4x4 CreateModelMatrix();
 	Matrix4x4 CreateViewMatrix();
 	Matrix4x4 CreateProjectionMatrix_FOV(float angle, float width, float height, float near, float far);
