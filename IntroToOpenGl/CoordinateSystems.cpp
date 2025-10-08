@@ -13,6 +13,8 @@ CoordinateSystems::~CoordinateSystems()
 
 void CoordinateSystems::Start()
 {
+	glEnable(GL_DEPTH_TEST);
+
 	shader = Shader("CoordinateSystems.shader");
 
 	unsigned int indices[] =
@@ -136,7 +138,7 @@ void CoordinateSystems::Exit()
 	if(VBO != 0) glDeleteBuffers(1, &VBO);
 	if(EBO != 0) glDeleteBuffers(1, &EBO);
 	if(shader.ID != 0) glDeleteProgram(shader.ID);
-
+	glEnable(GL_DEPTH_TEST);
 }
 
 CoordinateSystems* CoordinateSystems::GetInstance()

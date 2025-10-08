@@ -186,7 +186,9 @@ int main()
 		//State Setting function
 		glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w); //This is the color which fills the color buffer when we clear the color buffer
 		//State Using function
-		glClear(GL_COLOR_BUFFER_BIT); // Clear the color buffer at the end of the frame. We need to clear other buffers too if we have them like depth buffer or stencil buffer.
+		// Clear the color buffer at the end of the frame. We need to clear other buffers too if we have them like depth buffer or stencil buffer.
+		// Clear the depth buffer at the end of the frame as we update the depth buffer every frame
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
 
 		//Event Handling mostly for Input.
 		glfwPollEvents();
