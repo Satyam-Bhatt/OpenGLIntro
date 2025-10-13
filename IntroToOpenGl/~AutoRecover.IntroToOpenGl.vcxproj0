@@ -229,6 +229,7 @@
     <ClInclude Include="VertexPosToFrag.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="CoordinateSystem2.shader" />
     <None Include="CoordinateSystems.shader" />
     <None Include="glmTest.shader" />
     <None Include="IntroTexture.shader" />

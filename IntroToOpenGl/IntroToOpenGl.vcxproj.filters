@@ -361,5 +361,8 @@
     <None Include="CoordinateSystems.shader">
       <Filter>Shader\Transformations</Filter>
     </None>
+    <None Include="CoordinateSystem2.shader">
+      <Filter>Shader\Transformations</Filter>
+    </None>
   </ItemGroup>
 </Project>

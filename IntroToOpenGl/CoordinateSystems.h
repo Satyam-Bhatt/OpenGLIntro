@@ -19,7 +19,7 @@ public:
 private:
 	static CoordinateSystems instance;
 
-	Shader shader;
+	Shader shader, shader2;
 
 	uint32_t VAO = 0, VBO = 0, EBO = 0;
 	uint32_t VAO2 = 0, VBO2 = 0, EBO2 = 0;

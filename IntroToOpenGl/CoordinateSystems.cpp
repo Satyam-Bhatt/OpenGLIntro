@@ -16,6 +16,7 @@ void CoordinateSystems::Start()
 	glEnable(GL_DEPTH_TEST);
 
 	shader = Shader("CoordinateSystems.shader");
+	shader2 = Shader("CoordinateSystems2.shader");
 
 	unsigned int indices[] =
 	{
@@ -157,13 +158,18 @@ void CoordinateSystems::Render()
 	glm::mat4 projection;
 	projection = glm::perspective(glm::radians(45.0f), 900.0f / 800.0f, 0.1f, 100.0f);
 
-	shader.Use();
-	//shader.SetMat4_Custom("rot", rotMat.m);
-	shader.SetMat4("model", model);
-	shader.SetMat4("view", view);
-	shader.SetMat4("projection", projection);
-	glBindVertexArray(VAO);
-	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+	//shader.Use();
+	////shader.SetMat4_Custom("rot", rotMat.m);
+	//shader.SetMat4("model", model);
+	//shader.SetMat4("view", view);
+	//shader.SetMat4("projection", projection);
+	//glBindVertexArray(VAO);
+	//glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+	//glBindVertexArray(0);
+
+	shader2.Use();
+	glBindVertexArray(VAO2);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
 }
 
