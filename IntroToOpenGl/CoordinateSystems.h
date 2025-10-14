@@ -23,6 +23,7 @@ private:
 
 	uint32_t VAO = 0, VBO = 0, EBO = 0;
 	uint32_t VAO2 = 0, VBO2 = 0, EBO2 = 0;
+	uint32_t texture;
 
 	bool rotX = false, rotY = false, rotZ = true;
 

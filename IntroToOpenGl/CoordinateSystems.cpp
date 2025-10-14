@@ -15,8 +15,31 @@ void CoordinateSystems::Start()
 {
 	glEnable(GL_DEPTH_TEST);
 
-	shader = Shader("CoordinateSystems.shader");
-	shader2 = Shader("CoordinateSystems2.shader");
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+	int width, height, nChannels;
+	unsigned char* data = stbi_load("Images/awesomeface.png", &width, &height, &nChannels, 0);
+
+	if (data)
+	{
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+		glGenerateMipmap(GL_TEXTURE_2D);
+	}
+	else
+	{
+		std::cout << "Error loading texture" << std::endl;
+	}
+
+	stbi_image_free(data);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	//shader = Shader("CoordinateSystems.shader");
+	shader2 = Shader("CoordinateSystem2.shader");
 
 	unsigned int indices[] =
 	{
@@ -99,10 +122,12 @@ void CoordinateSystems::Start()
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
 
-
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+	shader2.Use();
+	shader2.SetTexture("myTexture", 0);
 }
 
 void CoordinateSystems::Update()
@@ -132,7 +157,6 @@ void CoordinateSystems::ImGuiRender(GLFWwindow* window)
 
 void CoordinateSystems::Render()
 {
-
 	float axisX = rotX?1:0;
 	float axisY = rotY?1:0;
 	float axisZ = rotZ?1:0;
@@ -167,6 +191,9 @@ void CoordinateSystems::Render()
 	//glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
 	//glBindVertexArray(0);
 
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, texture);
+
 	shader2.Use();
 	glBindVertexArray(VAO2);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
@@ -179,7 +206,8 @@ void CoordinateSystems::Exit()
 	if(VBO != 0) glDeleteBuffers(1, &VBO);
 	if(EBO != 0) glDeleteBuffers(1, &EBO);
 	if(shader.ID != 0) glDeleteProgram(shader.ID);
-	glEnable(GL_DEPTH_TEST);
+	if(texture != 0) glDeleteTextures(1, &texture);
+	glDisable(GL_DEPTH_TEST);
 }
 
 CoordinateSystems* CoordinateSystems::GetInstance()
