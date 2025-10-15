@@ -25,8 +25,9 @@ private:
 	uint32_t VAO2 = 0, VBO2 = 0, EBO2 = 0;
 	uint32_t texture;
 
-	bool rotX = false, rotY = false, rotZ = true;
+	bool rotX = true, rotY = true, rotZ = true;
 
+	float scaleSome = 1.0f;
 	float cameraZ = -2.0f;
 
 	Matrix4x4 CreateModelMatrix();

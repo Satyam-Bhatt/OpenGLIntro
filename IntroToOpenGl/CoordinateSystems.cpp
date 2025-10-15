@@ -102,7 +102,7 @@ void CoordinateSystems::Start()
 	unsigned int indices2[] =
 	{
 		0, 1, 2,  // First triangle
-		1, 3, 2   // Second triangle
+		2, 3, 0   // Second triangle
 	};
 
 	glGenVertexArrays(1, &VAO2);
@@ -150,6 +150,7 @@ void CoordinateSystems::ImGuiRender(GLFWwindow* window)
 	ImGui::Checkbox("X axis", &rotX);
 	ImGui::Checkbox("Y axis", &rotY);
 	ImGui::Checkbox("Z axis", &rotZ);
+	ImGui::DragFloat("Scale Some ", &scaleSome, 0.005f);
 	ImGui::DragFloat("camraZ", &cameraZ, 0.005f);
 
 	ImGui::End();
@@ -165,7 +166,8 @@ void CoordinateSystems::Render()
 	rotMat = Matrix::Matrix4x4::Rotation(rotMat, Vector::Vector3(axisX, axisY, axisZ), glfwGetTime());
 
 	glm::mat4 model = glm::mat4(1.0f);
-	model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.0f, 1.0f, 0.0f));
+	model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(axisX, axisY, axisZ)); // Performed after scaling
+	model = glm::scale(model, glm::vec3(1, scaleSome, 1)); // Performed first on the vertices
 
 	glm::mat4 view = glm::mat4(1.0f);
 	// note that we're translating the scene in the reverse direction of where we want to move
@@ -195,6 +197,9 @@ void CoordinateSystems::Render()
 	glBindTexture(GL_TEXTURE_2D, texture);
 
 	shader2.Use();
+	shader2.SetMat4("model", model);
+	shader2.SetMat4("view", view);
+	shader2.SetMat4("projection", projection);
 	glBindVertexArray(VAO2);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
