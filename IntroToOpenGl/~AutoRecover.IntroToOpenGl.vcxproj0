@@ -185,6 +185,7 @@
     <ClCompile Include="VertexPosToFrag.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="constants.h" />
     <ClInclude Include="CoordinateSystems.h" />
     <ClInclude Include="FirstShader.h" />
     <ClInclude Include="FirstTriangle.h" />

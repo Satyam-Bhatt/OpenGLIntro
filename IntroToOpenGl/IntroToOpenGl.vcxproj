@@ -143,6 +143,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="constants.cpp" />
     <ClCompile Include="CoordinateSystems.cpp" />
     <ClCompile Include="FirstShader.cpp" />
     <ClCompile Include="FirstTriangle.cpp" />
@@ -185,6 +186,7 @@
     <ClCompile Include="VertexPosToFrag.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="constants.h" />
     <ClInclude Include="CoordinateSystems.h" />
     <ClInclude Include="FirstShader.h" />
     <ClInclude Include="FirstTriangle.h" />

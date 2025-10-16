@@ -15,6 +15,7 @@
 #include "Vector.h"
 #include "stb_image.h"
 #include "Matrix.h"
+#include "constants.h"
 
 class GameState
 {

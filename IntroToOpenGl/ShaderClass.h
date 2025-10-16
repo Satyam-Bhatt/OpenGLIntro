@@ -1,8 +1,6 @@
 #pragma once
 #include "Shaders.h"
 
-extern float deltaTime;
-
 class ShaderClass : public Shaders
 {
 public:

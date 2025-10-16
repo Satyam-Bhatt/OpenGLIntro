@@ -166,23 +166,16 @@ void CoordinateSystems::Render()
 	rotMat = Matrix::Matrix4x4::Rotation(rotMat, Vector::Vector3(axisX, axisY, axisZ), glfwGetTime());
 
 	glm::mat4 model = glm::mat4(1.0f);
+	model = glm::translate(model, glm::vec3(0.5f, 0.0f, 0.0f)); // Performed last on the vertices
 	model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(axisX, axisY, axisZ)); // Performed after scaling
-	model = glm::scale(model, glm::vec3(1, scaleSome, 1)); // Performed first on the vertices
+	model = glm::scale(model, glm::vec3(0.5f, scaleSome, 0.5f)); // Performed first on the vertices
 
 	glm::mat4 view = glm::mat4(1.0f);
 	// note that we're translating the scene in the reverse direction of where we want to move
 	view = glm::translate(view, glm::vec3(0.0f, 0.0f, cameraZ));
 
-	//int display_w, display_h;
-	//glfwGetFramebufferSize(window, &display_w, &display_h);
-	//float viewportStartPos = (100 - VIEWPORT) * display_w / 100;
-	//float viewportWidth = display_w - viewportStartPos;
-	//glViewport(viewportStartPos, 0, viewportWidth, display_h);
-
-	//std::cout << viewportWidth << " || " << display_h << std::endl;
-
 	glm::mat4 projection;
-	projection = glm::perspective(glm::radians(45.0f), 900.0f / 800.0f, 0.1f, 100.0f);
+	projection = glm::perspective(glm::radians(45.0f), (float)viewportData.width / (float)viewportData.height, 0.1f, 100.0f);
 
 	//shader.Use();
 	////shader.SetMat4_Custom("rot", rotMat.m);

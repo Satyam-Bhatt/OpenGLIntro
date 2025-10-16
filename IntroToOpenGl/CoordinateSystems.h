@@ -2,6 +2,7 @@
 #include "TransformationMain.h"
 
 using Matrix::Matrix4x4;
+
 class CoordinateSystems : public TransformationMain
 {
 public:
@@ -27,7 +28,7 @@ private:
 
 	bool rotX = true, rotY = true, rotZ = true;
 
-	float scaleSome = 1.0f;
+	float scaleSome = 0.5f;
 	float cameraZ = -2.0f;
 
 	Matrix4x4 CreateModelMatrix();

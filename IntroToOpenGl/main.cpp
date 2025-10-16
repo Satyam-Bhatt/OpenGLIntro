@@ -13,40 +13,41 @@
 #include "Intro.h"
 #include "GameState.h"
 #include "SceneManager.h"
-
-#define TRIANGLE
-#define VIEWPORT 75
+#include "constants.h"
 
 GameState* currentState = NULL;
 GameState* nextState = NULL;
-GLFWwindow* window = NULL;
 ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-float deltaTime = 0.0f; // Poor implementation of deltaTime. Using extern to call it in each class is not great
 
 // Callback function called when the window is resized
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
+	float viewportStartPos = 0, viewportWidth = 0;
+
 	if (width >= 800 && width <= 1200)
 	{
-		float viewportStartPos = (100 - VIEWPORT) * width / 100;
-		float viewportWidth = width - viewportStartPos;
+		viewportStartPos = (100 - VIEWPORT) * width / 100;
+		viewportWidth = width - viewportStartPos;
 		glViewport(viewportStartPos, 0, viewportWidth, height);
 	}
 	else
 	{
 		if (width < 800)
 		{
-			float viewportStartPos = (100 - VIEWPORT) * 800 / 100;
-			float viewportWidth = width - viewportStartPos;
+			viewportStartPos = (100 - VIEWPORT) * 800 / 100;
+			viewportWidth = width - viewportStartPos;
 			glViewport(viewportStartPos, 0, viewportWidth, height);
 		}
 		else
 		{
-			float viewportStartPos = (100 - VIEWPORT) * 1200 / 100;
-			float viewportWidth = width - viewportStartPos;
+			viewportStartPos = (100 - VIEWPORT) * 1200 / 100;
+			viewportWidth = width - viewportStartPos;
 			glViewport(viewportStartPos, 0, viewportWidth, height);
 		}
 	}
+
+	viewportData.height = height;
+	viewportData.width = viewportWidth;
 }
 
 bool Initialize()
@@ -84,6 +85,9 @@ bool Initialize()
 	float viewportStartPos = (100 - VIEWPORT) * display_w / 100;
 	float viewportWidth = display_w - viewportStartPos;
 	glViewport(viewportStartPos, 0, viewportWidth, display_h);
+
+	viewportData.height = display_h;
+	viewportData.width = viewportWidth;
 
 	//Set the function to be called when the window is resized. Bind it once and GLFW will call it whenever the window is resized
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
