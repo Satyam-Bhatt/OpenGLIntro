@@ -38,7 +38,7 @@ void CoordinateSystems::Start()
 	stbi_image_free(data);
 	glBindTexture(GL_TEXTURE_2D, 0);
 
-	//shader = Shader("CoordinateSystems.shader");
+	shader = Shader("CoordinateSystems.shader");
 	shader2 = Shader("CoordinateSystem2.shader");
 
 	unsigned int indices[] =
@@ -162,13 +162,12 @@ void CoordinateSystems::Render()
 	float axisY = rotY?1:0;
 	float axisZ = rotZ?1:0;
 
-	Matrix::Matrix4x4 rotMat;
-	rotMat = Matrix::Matrix4x4::Rotation(rotMat, Vector::Vector3(axisX, axisY, axisZ), glfwGetTime());
-
 	glm::mat4 model = glm::mat4(1.0f);
-	model = glm::translate(model, glm::vec3(0.5f, 0.0f, 0.0f)); // Performed last on the vertices
-	model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(axisX, axisY, axisZ)); // Performed after scaling
+	model = glm::translate(model, glm::vec3(-0.35f, 0, 0 + 0.25f)); // Performed last on the vertices + adjust the pivot
+	if(rotX || rotY || rotZ)
+		model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(axisX, axisY, axisZ)); // Performed after scaling
 	model = glm::scale(model, glm::vec3(0.5f, scaleSome, 0.5f)); // Performed first on the vertices
+	model = glm::translate(model, glm::vec3(0, 0, -0.25f)); // We adjust the pivot first
 
 	glm::mat4 view = glm::mat4(1.0f);
 	// note that we're translating the scene in the reverse direction of where we want to move
@@ -177,17 +176,27 @@ void CoordinateSystems::Render()
 	glm::mat4 projection;
 	projection = glm::perspective(glm::radians(45.0f), (float)viewportData.width / (float)viewportData.height, 0.1f, 100.0f);
 
-	//shader.Use();
-	////shader.SetMat4_Custom("rot", rotMat.m);
-	//shader.SetMat4("model", model);
-	//shader.SetMat4("view", view);
-	//shader.SetMat4("projection", projection);
-	//glBindVertexArray(VAO);
-	//glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
-	//glBindVertexArray(0);
+	shader.Use();
+	shader.SetMat4("model", model);
+	shader.SetMat4("view", view);
+	shader.SetMat4("projection", projection);
+	glBindVertexArray(VAO);
+	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+	glBindVertexArray(0);
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture);
+
+	model = glm::mat4(1.0f);
+	view = glm::mat4(1.0f);
+
+	model = glm::translate(model, glm::vec3(0.5f, 0.0f, -0.5f)); // Performed last on the vertices
+	if (rotX || rotY || rotZ)
+		model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(axisX, axisY, axisZ)); // Performed after scaling
+	model = glm::scale(model, glm::vec3(0.5f, scaleSome, 0.5f)); // Performed first on the vertices
+
+	// note that we're translating the scene in the reverse direction of where we want to move
+	view = glm::translate(view, glm::vec3(0.0f, 0.0f, cameraZ));
 
 	shader2.Use();
 	shader2.SetMat4("model", model);
@@ -204,6 +213,7 @@ void CoordinateSystems::Exit()
 	if(VBO != 0) glDeleteBuffers(1, &VBO);
 	if(EBO != 0) glDeleteBuffers(1, &EBO);
 	if(shader.ID != 0) glDeleteProgram(shader.ID);
+	if(shader2.ID != 0) glDeleteProgram(shader2.ID);
 	if(texture != 0) glDeleteTextures(1, &texture);
 	glDisable(GL_DEPTH_TEST);
 }
