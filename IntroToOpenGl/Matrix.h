@@ -433,6 +433,36 @@ namespace Matrix
 			return matrix * rotationMatrix;
 		}
 
+		// Projection matrix in easier terms if we think of it like this
+		// First scale the Square Frustrum to a cuboid
+		// Then make the cuboid to cube and bring it to the origin or in easier terms multiply with the orthographic matrix after we get a cuboid
+		// Assuming the camera is at the origin and right = -left, top = -bottom
+
+		// Normalized z is inversely proportional to square of z projected because each component is divided by w component so if we divide z projected
+		// with z projected we will get 1 hence loosing all the depth information. So we have to take the square of z projected to preserve the depth
+		// inforamtion. 
+		// But this causes a problem. Because the values are now z^2 the curve is not linear. So we get hight precision near the near plane and
+		// low precision in the far plane as values are pretty close in the far plane.
+		static Matrix4x4 CreateProjectionMatrix_FOV(float angle, float width, float height, float near, float far)
+		{
+			float aspectRatio = width / height;
+			float top = tan(angle / 2) * near;
+			float right = aspectRatio * top;
+
+			Matrix4x4 result;
+
+			result[0][0] = near / right;
+
+			result[1][1] = near / top;
+
+			result[2][2] = -(far + near) / (far - near);
+			result[2][3] = (-2 * far * near) / (far - near);
+
+			result[3][2] = -1;
+
+			return result;
+		}
+
 		// Debug print function
 		void Print() const {
 			for (int i = 0; i < 4; i++) {
