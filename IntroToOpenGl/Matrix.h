@@ -463,6 +463,81 @@ namespace Matrix
 			return result;
 		}
 
+		// We assume that the camera is not at the center so right != -left and top != -bottom
+		static Matrix4x4 CreateProjectionMatrix_RAW(float right, float left, float bottom, float top, float near, float far)
+		{
+			Matrix4x4 result;
+
+			result[0][0] = 2 * near / (right - left);
+			result[0][2] = (right + left) / (right - left);
+
+			result[1][1] = 2 * near / (top - bottom);
+			result[1][2] = (top + bottom) / (top - bottom);
+
+			result[2][2] = -(far + near) / (far - near);
+			result[2][3] = (-2 * far * near) / (far - near);
+
+			result[3][2] = -1;
+
+			return result;
+		}
+
+		// Orthographic projection matrix has a cuboid instead of a frustrum so there is no perspective.
+		// This matrix transforms a cuboid to a cube
+		// Then scales it in -1 to 1 range
+		// as z axis in OpenGL is inverse (right hand coordinate system = +z is inside the screen) so we have to multiply [2][2] with -1 because we follow left hand coordinate system (+z outside the screen)
+		static Matrix4x4 CreateProjectionMatrix_ORTHO(float left, float right, float bottom, float top, float far, float near)
+		{
+			Matrix4x4 result;
+
+			result[0][0] = 2 / (right - left);
+			result[0][3] = -(right + left) / (right - left);
+
+			result[1][1] = 2 / (top - bottom);
+			result[1][3] = -(top + bottom) / (top - bottom);
+
+			result[2][2] = -2 / (far - near);
+			result[2][3] = -(far + near) / (far - near);
+
+			result[3][3] = 1;
+
+			return result;
+		}
+
+		// Far plane is at infinity and camera is at the center
+		static Matrix4x4 CreateInfinitePerspectiveMatrix_Symmetric(float near, float right, float top)
+		{
+			Matrix4x4 result;
+
+			result[0][0] = near / right;
+
+			result[1][1] = near / top;
+
+			result[2][2] = -1;
+			result[2][3] = -2 * near;
+
+			result[3][2] = -1;
+
+			return result;
+		}
+
+
+		// Far plane is at infinity and camera is not at the center
+		static Matrix4x4 CreateInfinitePerspectiveMatrix_Asymmetric(float near, float right, float left, float top, float bottom)
+		{
+			Matrix4x4 result;
+			result[0][0] = near / right;
+
+			result[1][1] = near / top;
+
+			result[2][2] = -1;
+			result[2][3] = -2 * near;
+
+			result[3][2] = -1;
+
+			return result;
+		}
+
 		// Debug print function
 		void Print() const {
 			for (int i = 0; i < 4; i++) {

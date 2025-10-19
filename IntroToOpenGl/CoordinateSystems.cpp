@@ -13,6 +13,12 @@ CoordinateSystems::~CoordinateSystems()
 
 void CoordinateSystems::Start()
 {
+	// We enable it so that the front and back faces are drawn accordingly
+	// Otherwise openGL would not have data that which is to be drawn in front.
+	// This makes sure that depth values are stored in z-buffer
+	// The depth is stored within each fragment (as the fragment's z value) and whenever the fragment wants to output its color, 
+	// OpenGL compares its depth values with the z-buffer. If the current fragment is behind the other fragment it is discarded, 
+	// otherwise overwritten. This process is called depth testing and is done automatically by OpenGL.
 	glEnable(GL_DEPTH_TEST);
 
 	glGenTextures(1, &texture);
@@ -145,13 +151,40 @@ void CoordinateSystems::ImGuiRender(GLFWwindow* window)
 		ImVec2(0.5f, 1.0f)
 	);
 
-	ImGui::Begin("Level Specific", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
+	// Set a fixed window width to make it smaller
+	ImGui::SetNextWindowSize(ImVec2(300, 0), ImGuiCond_Always);
 
+	ImGui::Begin("Level Specific", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
+
+	// Rotation checkboxes on one line
 	ImGui::Checkbox("X axis", &rotX);
+	ImGui::SameLine();
 	ImGui::Checkbox("Y axis", &rotY);
+	ImGui::SameLine();
 	ImGui::Checkbox("Z axis", &rotZ);
-	ImGui::DragFloat("Scale Some ", &scaleSome, 0.005f);
-	ImGui::DragFloat("camraZ", &cameraZ, 0.005f);
+
+	// Scale control
+	ImGui::PushItemWidth(80);
+	ImGui::DragFloat("Scale Y", &scaleSome, 0.005f);
+	ImGui::PopItemWidth();
+
+	// Camera and FOV on one line with narrower widths
+	ImGui::PushItemWidth(80);
+	ImGui::DragFloat("camera Z", &cameraZ, 0.005f);
+	ImGui::SameLine();
+	ImGui::DragFloat("FOV", &fov, 0.1f);
+	ImGui::PopItemWidth();
+
+	// Center the Orthographic checkbox
+	const char* checkboxLabel = "Orthographic";
+	float checkboxWidth = ImGui::CalcTextSize(checkboxLabel).x + ImGui::GetStyle().FramePadding.x * 2 + 20; // +20 for checkbox square
+	float windowWidth = ImGui::GetWindowWidth();
+	float centerPos = (windowWidth - checkboxWidth) * 0.5f;
+
+	// Set the X position where the element would be drawn
+	// A cursor is invisible refrence point that determine where the next UI will be drawn
+	ImGui::SetCursorPosX(centerPos);
+	ImGui::Checkbox(checkboxLabel, &orthographic);
 
 	ImGui::End();
 }
@@ -162,6 +195,8 @@ void CoordinateSystems::Render()
 	float axisY = rotY?1:0;
 	float axisZ = rotZ?1:0;
 
+	// Model Matrix
+	// Responsible for scaling, rotation and translation
 	glm::mat4 model = glm::mat4(1.0f);
 	model = glm::translate(model, glm::vec3(-0.35f, 0, 0 + 0.25f)); // Performed last on the vertices + adjust the pivot
 	if(rotX || rotY || rotZ)
@@ -169,17 +204,31 @@ void CoordinateSystems::Render()
 	model = glm::scale(model, glm::vec3(0.5f, scaleSome, 0.5f)); // Performed first on the vertices
 	model = glm::translate(model, glm::vec3(0, 0, -0.25f)); // We adjust the pivot first
 
+	// View Matrix
+	// Responsible for camera movement
+	// It gives us the position of vertices when looking from the camera
 	glm::mat4 view = glm::mat4(1.0f);
 	// note that we're translating the scene in the reverse direction of where we want to move
 	view = glm::translate(view, glm::vec3(0.0f, 0.0f, cameraZ));
 
+	// Projection Matrix
+	// Responsible for giving that 3D look using a square frustrum (perspective)
 	glm::mat4 projection;
-	projection = glm::perspective(glm::radians(45.0f), (float)viewportData.width / (float)viewportData.height, 0.1f, 100.0f);
+	projection = glm::perspective(glm::radians(fov), (float)viewportData.width / (float)viewportData.height, 0.1f, 100.0f);
+
+	// As our vertex coordinates are in [-1, 1], our cuboid should also be in [-1, 1]
+	// That is why our left edge is at -1 and our right edge is at 1 and same for top and bottom
+	// near and far can also be at -1 and 1 but we kept them -10 and 10 for safety
+	glm::mat4 ortho;
+	ortho = glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, -10.0f, 10.0f);
 
 	shader.Use();
 	shader.SetMat4("model", model);
 	shader.SetMat4("view", view);
-	shader.SetMat4("projection", projection);
+	if(orthographic)
+		shader.SetMat4("projection", ortho);
+	else
+		shader.SetMat4("projection", projection);
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
@@ -188,20 +237,18 @@ void CoordinateSystems::Render()
 	glBindTexture(GL_TEXTURE_2D, texture);
 
 	model = glm::mat4(1.0f);
-	view = glm::mat4(1.0f);
-
 	model = glm::translate(model, glm::vec3(0.5f, 0.0f, -0.5f)); // Performed last on the vertices
 	if (rotX || rotY || rotZ)
 		model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(axisX, axisY, axisZ)); // Performed after scaling
 	model = glm::scale(model, glm::vec3(0.5f, scaleSome, 0.5f)); // Performed first on the vertices
 
-	// note that we're translating the scene in the reverse direction of where we want to move
-	view = glm::translate(view, glm::vec3(0.0f, 0.0f, cameraZ));
-
 	shader2.Use();
 	shader2.SetMat4("model", model);
 	shader2.SetMat4("view", view);
-	shader2.SetMat4("projection", projection);
+	if(orthographic)
+		shader2.SetMat4("projection", ortho);
+	else
+		shader2.SetMat4("projection", projection);
 	glBindVertexArray(VAO2);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
@@ -223,164 +270,9 @@ CoordinateSystems* CoordinateSystems::GetInstance()
 	return &instance;
 }
 
-Matrix4x4 CoordinateSystems::CreateModelMatrix()
-{
-	return Matrix4x4();
-}
 
-Matrix4x4 CoordinateSystems::CreateViewMatrix()
-{
-	return Matrix4x4();
-}
 
-// Projection matrix in easier terms if we think of it like this
-// First scale the Square Frustrum to a cuboid
-// Then make the cuboid to cube and bring it to the origin or in easier terms multiply with the orthographic matrix after we get a cuboid
-// Assuming the camera is at the origin and right = -left, top = -bottom
 
-// Normalized z is inversely proportional to square of z projected because each component is divided by w component so if we divide z projected
-// with z projected we will get 1 hence loosing all the depth information. So we have to take the square of z projected to preserve the depth
-// inforamtion. 
-// But this causes a problem. Because the values are now z^2 the curve is not linear. So we get hight precision near the near plane and
-// low precision in the far plane as values are pretty close in the far plane.
-Matrix4x4 CoordinateSystems::CreateProjectionMatrix_FOV(float angle, float width, float height, float near, float far)
-{
-	float aspectRatio = width / height;
-	float top = tan(angle / 2) * near;
-	float right = aspectRatio * top;
 
-	Matrix4x4 tempMatrix;
-
-	tempMatrix[0][0] = near / right;
-	tempMatrix[0][1] = 0;
-	tempMatrix[0][2] = 0;
-	tempMatrix[0][3] = 0;
-
-	tempMatrix[1][0] = 0;
-	tempMatrix[1][1] = near / top;
-	tempMatrix[1][2] = 0;
-	tempMatrix[1][3] = 0;
-
-	tempMatrix[2][0] = 0;
-	tempMatrix[2][1] = 0;
-	tempMatrix[2][2] = -(far + near) / (far - near);
-	tempMatrix[2][3] = (-2 * far * near) / (far - near);
-
-	tempMatrix[3][0] = 0;
-	tempMatrix[3][1] = 0;
-	tempMatrix[3][2] = -1;
-	tempMatrix[3][3] = 0;
-
-	return tempMatrix;
-}
-
-Matrix4x4 CoordinateSystems::CreateProjectionMatrix_RAW(float right, float left, float bottom, float top, float near, float far)
-{
-	Matrix4x4 tempMatrix;
-
-	tempMatrix[0][0] = 2 * near / (right - left);
-	tempMatrix[0][1] = 0;
-	tempMatrix[0][2] = (right + left) / (right - left);
-	tempMatrix[0][3] = 0;
-
-	tempMatrix[1][0] = 0;
-	tempMatrix[1][1] = 2 * near / (top - bottom);
-	tempMatrix[1][2] = (top + bottom) / (top - bottom);
-	tempMatrix[1][3] = 0;
-
-	tempMatrix[2][0] = 0;
-	tempMatrix[2][1] = 0;
-	tempMatrix[2][2] = -(far + near) / (far - near);
-	tempMatrix[2][3] = (- 2 * far * near) / (far - near);
-
-	tempMatrix[3][0] = 0;
-	tempMatrix[3][1] = 0;
-	tempMatrix[3][2] = -1;
-	tempMatrix[3][3] = 0;
-
-	return tempMatrix;
-}
-
-Matrix4x4 CoordinateSystems::CreateProjectionMatrix_ORTHO(float left, float right, float bottom, float top, float far, float near)
-{
-	Matrix4x4 tempMatrix;
-
-	tempMatrix[0][0] = 2 / (right - left);
-	tempMatrix[0][1] = 0;
-	tempMatrix[0][2] = 0;
-	tempMatrix[0][3] = -(right + left) / (right - left);
-
-	tempMatrix[1][0] = 0;
-	tempMatrix[1][1] = 2 / (top - bottom);
-	tempMatrix[1][2] = 0;
-	tempMatrix[1][3] = -(top + bottom) / (top - bottom);
-
-	tempMatrix[2][0] = 0;
-	tempMatrix[2][1] = 0;
-	tempMatrix[2][2] = -2 / (far - near);
-	tempMatrix[2][3] = -(far + near) / (far - near);
-
-	tempMatrix[3][0] = 0;
-	tempMatrix[3][1] = 0;
-	tempMatrix[3][2] = 0;
-	tempMatrix[3][3] = 1;
-
-	return tempMatrix;
-}
-
-// Far plane is at infinity and camera is at the center
-Matrix4x4 CoordinateSystems::CreateInfinitePerspectiveMatrix_Symmetric(float near, float right, float top)
-{
-	Matrix4x4 tempMatrix;
-
-	tempMatrix[0][0] = near / right;
-	tempMatrix[0][1] = 0;
-	tempMatrix[0][2] = 0;
-	tempMatrix[0][3] = 0;
-
-	tempMatrix[1][0] = 0;
-	tempMatrix[1][1] = near / top;
-	tempMatrix[1][2] = 0;
-	tempMatrix[1][3] = 0;
-
-	tempMatrix[2][0] = 0;
-	tempMatrix[2][1] = 0;
-	tempMatrix[2][2] = -1;
-	tempMatrix[2][3] = -2 * near;
-
-	tempMatrix[3][0] = 0;
-	tempMatrix[3][1] = 0;
-	tempMatrix[3][2] = -1;
-	tempMatrix[3][3] = 0;
-	
-	return tempMatrix;
-}
-
-// Far plane is at infinity and camera is not at the center
-Matrix4x4 CoordinateSystems::CreateInfinitePerspectiveMatrix_Asymmetric(float near, float right, float left, float top, float bottom)
-{
-	Matrix4x4 tempMatrix;
-	tempMatrix[0][0] = near / right;
-	tempMatrix[0][1] = 0;
-	tempMatrix[0][2] = 0;
-	tempMatrix[0][3] = 0;
-
-	tempMatrix[1][0] = 0;
-	tempMatrix[1][1] = near / top;
-	tempMatrix[1][2] = 0;
-	tempMatrix[1][3] = 0;
-
-	tempMatrix[2][0] = 0;
-	tempMatrix[2][1] = 0;
-	tempMatrix[2][2] = -1;
-	tempMatrix[2][3] = -2 * near;
-
-	tempMatrix[3][0] = 0;
-	tempMatrix[3][1] = 0;
-	tempMatrix[3][2] = -1;
-	tempMatrix[3][3] = 0;
-
-	return tempMatrix;
-}
 
 
