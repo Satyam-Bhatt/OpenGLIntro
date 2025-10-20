@@ -32,6 +32,7 @@ private:
 		SierpinskiTriangle,
 		MatrixGraphTransformationGraph,
 		CoordinateSystem,
+		TextureMapping_3D,
 		COUNT
 	};
 

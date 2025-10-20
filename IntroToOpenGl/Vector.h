@@ -298,7 +298,7 @@ namespace Vector {
 		}
 
 		// Normalize the vector (make it unit length)
-		Vector3 Normalized() const {
+		Vector3 Normalize() const {
 			float length = Length();
 			if (length > 0.0f) {
 				return Vector3(x / length, y / length, z / length);
@@ -306,15 +306,15 @@ namespace Vector {
 			return *this;
 		}
 
-		// Normalize this vector in-place
-		void Normalize() {
-			float length = Length();
-			if (length > 0.0f) {
-				x /= length;
-				y /= length;
-				z /= length;
-			}
-		}
+		//// Normalize this vector in-place
+		//void Normalize() {
+		//	float length = Length();
+		//	if (length > 0.0f) {
+		//		x /= length;
+		//		y /= length;
+		//		z /= length;
+		//	}
+		//}
 
 		// Convert to Vector2 (drops the z component)
 		Vector2 ToVector2() const {
@@ -351,13 +351,13 @@ namespace Vector {
 
 		// Reflect a vector around a normal
 		static Vector3 Reflect(const Vector3& direction, const Vector3& normal) {
-			Vector3 normalizedNormal = normal.Normalized();
+			Vector3 normalizedNormal = normal.Normalize();
 			return direction - normalizedNormal * 2.0f * direction.Dot(normalizedNormal);
 		}
 
 		// Project a vector onto another vector
 		static Vector3 Project(const Vector3& vector, const Vector3& onNormal) {
-			Vector3 normal = onNormal.Normalized();
+			Vector3 normal = onNormal.Normalize();
 			return normal * vector.Dot(normal);
 		}
 

@@ -7,6 +7,7 @@
 #include "SierpinskiTriangle.h"
 #include "MatrixGraphTransformation.h"
 #include "CoordinateSystems.h"
+#include "TextureMapping_3D.h"
 
 TransformationMain* TransformationMain::instance = nullptr;
 
@@ -35,6 +36,9 @@ TransformationMain::TransformationMain()
 
 	sceneNames[SubScene::CoordinateSystem] = "Coordinate Systems";
 	sceneFactories[SubScene::CoordinateSystem] = []() -> TransformationMain* { return CoordinateSystems::GetInstance(); };
+
+	sceneNames[SubScene::TextureMapping_3D] = "Texture Mapping 3D";
+	sceneFactories[SubScene::TextureMapping_3D] = []() -> TransformationMain* { return TextureMapping_3D::GetInstance(); };
 }
 
 TransformationMain::~TransformationMain()
@@ -206,5 +210,9 @@ void TransformationMain::RenderText(SubScene sceneName)
 	else if (sceneName == SubScene::CoordinateSystem)
 	{
 		ImGui::TextWrapped("Trying out OpenGL Transformation || Model -> View -> Projection matrix to transform objects");
+	}
+	else if (sceneName == SubScene::TextureMapping_3D)
+	{
+		ImGui::TextWrapped("Texture Mapping in 3D Space");
 	}
 }

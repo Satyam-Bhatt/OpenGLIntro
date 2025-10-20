@@ -143,6 +143,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="TextureMapping_3D.cpp" />
+    <ClCompile Include="constants.cpp" />
+    <ClCompile Include="CoordinateSystems.cpp" />
     <ClCompile Include="FirstShader.cpp" />
     <ClCompile Include="FirstTriangle.cpp" />
     <ClCompile Include="glad.c" />
@@ -159,12 +162,16 @@
     <ClCompile Include="IntroTexture.cpp" />
     <ClCompile Include="IntroTransformation.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MatrixGraphTransformation.cpp" />
+    <ClCompile Include="MatrixUniform.cpp" />
     <ClCompile Include="MipmapOptions.cpp" />
+    <ClCompile Include="MyMatrixClass.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="SecondTriangle.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="ShaderClass.cpp" />
     <ClCompile Include="Shaders.cpp" />
+    <ClCompile Include="SierpinskiTriangle.cpp" />
     <ClCompile Include="stb_image.cpp" />
     <ClCompile Include="TestMain.cpp" />
     <ClCompile Include="TexelViewer.cpp" />
@@ -180,6 +187,9 @@
     <ClCompile Include="VertexPosToFrag.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="TextureMapping_3D.h" />
+    <ClInclude Include="constants.h" />
+    <ClInclude Include="CoordinateSystems.h" />
     <ClInclude Include="FirstShader.h" />
     <ClInclude Include="FirstTriangle.h" />
     <ClInclude Include="GameState.h" />
@@ -197,12 +207,17 @@
     <ClInclude Include="Intro.h" />
     <ClInclude Include="IntroTexture.h" />
     <ClInclude Include="IntroTransformation.h" />
+    <ClInclude Include="Matrix.h" />
+    <ClInclude Include="MatrixGraphTransformation.h" />
+    <ClInclude Include="MatrixUniform.h" />
     <ClInclude Include="MipmapOptions.h" />
+    <ClInclude Include="MyMatrixClass.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="SecondTriangle.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderClass.h" />
     <ClInclude Include="Shaders.h" />
+    <ClInclude Include="SierpinskiTriangle.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="TexelViewer.h" />
     <ClInclude Include="TextureMain.h" />
@@ -218,11 +233,18 @@
     <ClInclude Include="VertexPosToFrag.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="CoordinateSystem2.shader" />
+    <None Include="CoordinateSystems.shader" />
     <None Include="glmTest.shader" />
     <None Include="IntroTexture.shader" />
     <None Include="IntroTransformation.shader" />
+    <None Include="MatrixGraphTransformation.shader" />
+    <None Include="MatrixGraphTransformation2.shader" />
+    <None Include="MatrixUniform.shader" />
     <None Include="MipmapOptions.shader" />
+    <None Include="MyMatrixClass.shader" />
     <None Include="ShaderClass.shader" />
+    <None Include="SierpinskiTriangle.shader" />
     <None Include="TexelViewer.shader" />
     <None Include="Translate_Rotate_Scale.shader" />
     <None Include="Translate_Scale_Rotate_Pivot.shader" />

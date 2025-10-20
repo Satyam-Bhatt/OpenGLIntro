@@ -143,6 +143,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="3DTextureMapping.cpp" />
+    <ClCompile Include="constants.cpp" />
     <ClCompile Include="CoordinateSystems.cpp" />
     <ClCompile Include="FirstShader.cpp" />
     <ClCompile Include="FirstTriangle.cpp" />
@@ -185,6 +187,7 @@
     <ClCompile Include="VertexPosToFrag.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="3DTextureMapping.h" />
     <ClInclude Include="constants.h" />
     <ClInclude Include="CoordinateSystems.h" />
     <ClInclude Include="FirstShader.h" />

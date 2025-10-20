@@ -180,6 +180,9 @@
     <ClCompile Include="constants.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="TextureMapping_3D.cpp">
+      <Filter>Source Files\Transformations</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameState.h">
@@ -305,11 +308,14 @@
     <ClInclude Include="MatrixGraphTransformation.h">
       <Filter>Header Files\TransformationsMain</Filter>
     </ClInclude>
-    <ClInclude Include="CoordinateSystems.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="constants.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CoordinateSystems.h">
+      <Filter>Header Files\TransformationsMain</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureMapping_3D.h">
+      <Filter>Header Files\TransformationsMain</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -368,6 +374,9 @@
       <Filter>Shader\Transformations</Filter>
     </None>
     <None Include="CoordinateSystem2.shader">
+      <Filter>Shader\Transformations</Filter>
+    </None>
+    <None Include="TextureMapping_3D.shader">
       <Filter>Shader\Transformations</Filter>
     </None>
   </ItemGroup>

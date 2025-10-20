@@ -259,10 +259,19 @@ void CoordinateSystems::Exit()
 	if(VAO != 0) glDeleteVertexArrays(1, &VAO);
 	if(VBO != 0) glDeleteBuffers(1, &VBO);
 	if(EBO != 0) glDeleteBuffers(1, &EBO);
+	if(VAO2 != 0) glDeleteVertexArrays(1, &VAO2);
+	if(VBO2 != 0) glDeleteBuffers(1, &VBO2);
+	if(EBO2 != 0) glDeleteBuffers(1, &EBO2);
 	if(shader.ID != 0) glDeleteProgram(shader.ID);
 	if(shader2.ID != 0) glDeleteProgram(shader2.ID);
 	if(texture != 0) glDeleteTextures(1, &texture);
 	glDisable(GL_DEPTH_TEST);
+
+	rotX = true, rotY = true, rotZ = true;
+
+	scaleSome = 0.5f;
+	cameraZ = -2.0f, fov = 45.0f;
+	orthographic = false;
 }
 
 CoordinateSystems* CoordinateSystems::GetInstance()

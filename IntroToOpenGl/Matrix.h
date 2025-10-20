@@ -418,19 +418,27 @@ namespace Matrix
 		}
 
 		static Matrix4x4 Rotation(const Matrix4x4& matrix, Vector::Vector3 axis, float rotationAngle) {
-			Matrix4x4 rotationMatrix;
+			float const a = rotationAngle;
+			float const c = cos(a);
+			float const s = sin(a);
 
-			if (axis.x != 0.0f) {
-				rotationMatrix = rotationMatrix * CreateRotationX(rotationAngle);
-			}
-			if (axis.y != 0.0f) {
-				rotationMatrix = rotationMatrix * CreateRotationY(rotationAngle);
-			}
-			if (axis.z != 0.0f) {
-				rotationMatrix = rotationMatrix * CreateRotationZ(rotationAngle);
-			}
+			Vector::Vector3 normalizedAxis = axis.Normalize();
+			Vector::Vector3 temp = (1.0f - c) * normalizedAxis; // TODO: How does this work
 
-			return matrix * rotationMatrix;
+			Matrix4x4 Rotate;
+			Rotate[0][0] = c + temp.x * normalizedAxis.x;
+			Rotate[0][1] = temp.x * normalizedAxis.y + s * normalizedAxis.z;
+			Rotate[0][2] = temp.x * normalizedAxis.z - s * normalizedAxis.y;
+
+			Rotate[1][0] = temp.y * normalizedAxis.x - s * normalizedAxis.z;
+			Rotate[1][1] = c + temp.y * normalizedAxis.y;
+			Rotate[1][2] = temp.y * normalizedAxis.z + s * normalizedAxis.x;
+
+			Rotate[2][0] = temp.z * normalizedAxis.x + s * normalizedAxis.y;
+			Rotate[2][1] = temp.z * normalizedAxis.y - s * normalizedAxis.x;
+			Rotate[2][2] = c + temp.z * normalizedAxis.z;
+
+			return matrix * Rotate;
 		}
 
 		// Projection matrix in easier terms if we think of it like this
