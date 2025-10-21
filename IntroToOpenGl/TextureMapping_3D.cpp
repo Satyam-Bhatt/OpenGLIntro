@@ -149,45 +149,29 @@ void TextureMapping_3D::Render()
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, texture);
 
-    // TODO: Use your own matrix class and then spawn random cubes
-
-    // Model Matrix
-    // Responsible for scaling, rotation and translation
-    //glm::mat4 model = glm::mat4(1.0f);
-    //model = glm::translate(model, glm::vec3(0.0f, 0, 0 + 0.0f)); // Performed last on the vertices + adjust the pivot
-    //model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(1.0f, 1.0f, 1.0f)); // Performed after scaling
-    //model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f)); // Performed first on the vertices
-    //model = glm::translate(model, glm::vec3(0, 0,  0.0f)); // We adjust the pivot first
+    // TODO: Spawn random cubes
 
     Matrix4x4 model;
-    model = Matrix4x4::Translation(model, Vector3(0, 0, 0 + 0.0f)); // Performed last on the vertices + adjust the pivot
+    model = Matrix4x4::Translation(model, Vector3(0, 0, 0)); // Performed last on the vertices + adjust the pivot
     model = Matrix4x4::Rotation(model, Vector3(1.0f, 1.0f, 1.0f), (float)glfwGetTime()); // Performed after scaling
+    model = Matrix4x4::Scale(model, Vector3(0.5f, 0.5f, 0.5f)); // Performed first on the vertices
 
-    // View Matrix
-    // Responsible for camera movement
-    // It gives us the position of vertices when looking from the camera
-    glm::mat4 view = glm::mat4(1.0f);
-    // note that we're translating the scene in the reverse direction of where we want to move
-    view = glm::translate(view, glm::vec3(0.0f, 0.0f, -2.0f));
+    Matrix4x4 view;
+	view = Matrix4x4::Translation(view, Vector3(0, 0, cameraZ));
 
-    // Projection Matrix
-    // Responsible for giving that 3D look using a square frustrum (perspective)
-    glm::mat4 projection;
-    projection = glm::perspective(glm::radians(45.0f), (float)viewportData.width / (float)viewportData.height, 0.1f, 100.0f);
+    Matrix4x4 projection;
+    projection = Matrix4x4::CreateProjectionMatrix_FOV(fov * (PI / 180), (float)viewportData.width, (float)viewportData.height, 0.1f, 100.0f);
 
-    // As our vertex coordinates are in [-1, 1], our cuboid should also be in [-1, 1]
-    // That is why our left edge is at -1 and our right edge is at 1 and same for top and bottom
-    // near and far can also be at -1 and 1 but we kept them -10 and 10 for safety
-    glm::mat4 ortho;
-    ortho = glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, -10.0f, 10.0f);
+    Matrix4x4 ortho;
+    ortho = Matrix4x4::CreateProjectionMatrixSymmetric_ORTHO(1.0f, 1.0f, -10.0f, 10.0f);
 
     shader.Use();
     shader.SetMat4_Custom("model", model.m);
-    shader.SetMat4("view", view);
+    shader.SetMat4_Custom("view", view.m);
     if (orthographic)
-        shader.SetMat4("projection", ortho);
+        shader.SetMat4_Custom("projection", ortho.m);
     else
-        shader.SetMat4("projection", projection);
+        shader.SetMat4_Custom("projection", projection.m);
     glBindVertexArray(VAO);
     glDrawArrays(GL_TRIANGLES, 0, 36); // We don't have EBO this time
     glBindVertexArray(0);

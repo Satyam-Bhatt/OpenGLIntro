@@ -417,6 +417,10 @@ namespace Matrix
 			return result;
 		}
 
+		// Generally we rotate around each axis separately and then multiply the matrices in order X then Y then Z
+		// but this leads to gimbal lock. To avoid that we first rotate around an arbitary unit axis right away instead of combining rotation matrices.
+		// Then we multiply appropriate values with the axis that we have given.
+		// This does not promise avoid gimbal lock but chances are pretty low.
 		static Matrix4x4 Rotation(const Matrix4x4& matrix, Vector::Vector3 axis, float rotationAngle) {
 			float const a = rotationAngle;
 			float const c = cos(a);
@@ -451,10 +455,10 @@ namespace Matrix
 		// inforamtion. 
 		// But this causes a problem. Because the values are now z^2 the curve is not linear. So we get hight precision near the near plane and
 		// low precision in the far plane as values are pretty close in the far plane.
-		static Matrix4x4 CreateProjectionMatrix_FOV(float angle, float width, float height, float near, float far)
+		static Matrix4x4 CreateProjectionMatrix_FOV(float angle_InRadians, float width, float height, float near, float far)
 		{
 			float aspectRatio = width / height;
-			float top = tan(angle / 2) * near;
+			float top = tan(angle_InRadians / 2) * near;
 			float right = aspectRatio * top;
 
 			Matrix4x4 result;
@@ -494,7 +498,7 @@ namespace Matrix
 		// This matrix transforms a cuboid to a cube
 		// Then scales it in -1 to 1 range
 		// as z axis in OpenGL is inverse (right hand coordinate system = +z is inside the screen) so we have to multiply [2][2] with -1 because we follow left hand coordinate system (+z outside the screen)
-		static Matrix4x4 CreateProjectionMatrix_ORTHO(float left, float right, float bottom, float top, float far, float near)
+		static Matrix4x4 CreateProjectionMatrix_ORTHO(float right, float left, float top, float bottom, float near, float far)
 		{
 			Matrix4x4 result;
 
@@ -503,6 +507,22 @@ namespace Matrix
 
 			result[1][1] = 2 / (top - bottom);
 			result[1][3] = -(top + bottom) / (top - bottom);
+
+			result[2][2] = -2 / (far - near);
+			result[2][3] = -(far + near) / (far - near);
+
+			result[3][3] = 1;
+
+			return result;
+		}
+
+		static Matrix4x4 CreateProjectionMatrixSymmetric_ORTHO(float right, float top, float near, float far)
+		{
+			Matrix4x4 result;
+
+			result[0][0] = 1 / right;
+
+			result[1][1] = 1 / top;
 
 			result[2][2] = -2 / (far - near);
 			result[2][3] = -(far + near) / (far - near);

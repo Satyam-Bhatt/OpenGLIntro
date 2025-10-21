@@ -4,6 +4,8 @@
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 
+#define PI 3.14159265358979323846
+
 // constexpr is like a #define but for compile-time constants and also is type-safe
 constexpr int VIEWPORT = 75;
 
