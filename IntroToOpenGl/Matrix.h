@@ -366,6 +366,17 @@ namespace Matrix
 			return result;
 		}
 
+		static Matrix4x4 Identity() {
+			Matrix4x4 result;
+			for (int i = 0; i < 4; i++) {
+				for (int j = 0; j < 4; j++) {
+					if(i == j) result.m[i][j] = 1.0f;
+					else result.m[i][j] = 0.0f;
+				}
+			}
+			return result;
+		}
+
 		// Static methods
 		static Matrix4x4 Scale(const Matrix4x4& matrix, Vector::Vector3 scale) {
 			Matrix4x4 scaleMatrix;
@@ -426,8 +437,10 @@ namespace Matrix
 			float const c = cos(a);
 			float const s = sin(a);
 
+			// Rodrigues Rotation Formula : https://stemandmusic.in/maths/coordinate-geometry/rotationRRFMD.php
+
 			Vector::Vector3 normalizedAxis = axis.Normalize();
-			Vector::Vector3 temp = (1.0f - c) * normalizedAxis; // TODO: How does this work
+			Vector::Vector3 temp = (1.0f - c) * normalizedAxis;
 
 			Matrix4x4 Rotate;
 			Rotate[0][0] = c + temp.x * normalizedAxis.x;

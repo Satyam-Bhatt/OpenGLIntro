@@ -213,6 +213,6 @@ void TransformationMain::RenderText(SubScene sceneName)
 	}
 	else if (sceneName == SubScene::TextureMapping_3D)
 	{
-		ImGui::TextWrapped("Texture Mapping in 3D Space");
+		ImGui::TextWrapped("Texture Mapping in 3D Space and spawning cubes with one shader but by changing the model matrix");
 	}
 }

@@ -6,6 +6,12 @@ using Vector::Vector3;
 
 class TextureMapping_3D : public TransformationMain
 {
+	struct CubeTransform {
+		Vector3 position;
+		Vector3 rotationAxis;
+		float rotationSpeed;
+	};
+
 public:
 	TextureMapping_3D();
 	~TextureMapping_3D();
@@ -29,4 +35,7 @@ private:
 	bool orthographic = false;
 
 	float cameraZ = -2.0f, fov = 45.0f;
+	std::vector<CubeTransform> cubes;
+
+	void InitializeCubes();
 };

@@ -1,4 +1,6 @@
 #include "TextureMapping_3D.h"
+#include <random>
+#include <vector>
 
 TextureMapping_3D TextureMapping_3D::instance;
 
@@ -101,6 +103,8 @@ void TextureMapping_3D::Start()
 
     shader.Use();
     shader.SetTexture("myTexture", 0);
+
+    InitializeCubes();
 }
 
 void TextureMapping_3D::Update()
@@ -149,15 +153,8 @@ void TextureMapping_3D::Render()
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, texture);
 
-    // TODO: Spawn random cubes
-
-    Matrix4x4 model;
-    model = Matrix4x4::Translation(model, Vector3(0, 0, 0)); // Performed last on the vertices + adjust the pivot
-    model = Matrix4x4::Rotation(model, Vector3(1.0f, 1.0f, 1.0f), (float)glfwGetTime()); // Performed after scaling
-    model = Matrix4x4::Scale(model, Vector3(0.5f, 0.5f, 0.5f)); // Performed first on the vertices
-
     Matrix4x4 view;
-	view = Matrix4x4::Translation(view, Vector3(0, 0, cameraZ));
+    view = Matrix4x4::Translation(view, Vector3(0, 0, cameraZ));
 
     Matrix4x4 projection;
     projection = Matrix4x4::CreateProjectionMatrix_FOV(fov * (PI / 180), (float)viewportData.width, (float)viewportData.height, 0.1f, 100.0f);
@@ -165,16 +162,27 @@ void TextureMapping_3D::Render()
     Matrix4x4 ortho;
     ortho = Matrix4x4::CreateProjectionMatrixSymmetric_ORTHO(1.0f, 1.0f, -10.0f, 10.0f);
 
-    shader.Use();
-    shader.SetMat4_Custom("model", model.m);
-    shader.SetMat4_Custom("view", view.m);
-    if (orthographic)
-        shader.SetMat4_Custom("projection", ortho.m);
-    else
-        shader.SetMat4_Custom("projection", projection.m);
-    glBindVertexArray(VAO);
-    glDrawArrays(GL_TRIANGLES, 0, 36); // We don't have EBO this time
-    glBindVertexArray(0);
+    for (int i = 0; i < cubes.size(); i++)
+    {
+        Matrix4x4 model = Matrix4x4::Identity();
+
+        model = Matrix4x4::Translation(model, cubes[i].position);
+        model = Matrix4x4::Rotation(model, cubes[i].rotationAxis, (float)glfwGetTime() * cubes[i].rotationSpeed);
+        model = Matrix4x4::Scale(model, Vector3(0.3f, 0.3f, 0.3f));
+
+        shader.Use();
+        shader.SetMat4_Custom("model", model.m);
+        shader.SetMat4_Custom("view", view.m);
+
+        if (orthographic)
+            shader.SetMat4_Custom("projection", ortho.m);
+        else
+            shader.SetMat4_Custom("projection", projection.m);
+
+        glBindVertexArray(VAO);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
+        glBindVertexArray(0);
+    }
 }
 
 void TextureMapping_3D::Exit()
@@ -190,4 +198,42 @@ void TextureMapping_3D::Exit()
 TextureMapping_3D* TextureMapping_3D::GetInstance()
 {
 	return &instance;
+}
+
+void TextureMapping_3D::InitializeCubes()
+{
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_real_distribution<float> offsetRange(-0.2f, 0.2f);  // offset from grid position
+    std::uniform_real_distribution<float> axisRange(0.0f, 1.0f);
+    std::uniform_real_distribution<float> speedRange(0.5f, 2.0f);
+
+    int numCubes = 12;
+    cubes.clear();
+
+    float spacing = 0.6f; // Distance between cubes (adjust based on your scale)
+    int cubesPerRow = 4;  // 4x3 grid for 12 cubes
+
+    for (int i = 0; i < numCubes; i++)
+    {
+        CubeTransform cube;
+
+        int row = i / cubesPerRow;
+        int col = i % cubesPerRow;
+
+        float offsetX = (cubesPerRow - 1) * spacing / 2.0f;
+        float offsetY = ((numCubes / cubesPerRow) - 1) * spacing / 2.0f;
+
+        cube.position = Vector3(
+            col * spacing - offsetX + offsetRange(gen),
+            row * spacing - offsetY + offsetRange(gen),
+            offsetRange(gen)
+        );
+
+        Vector3 axis(axisRange(gen), axisRange(gen), axisRange(gen));
+        cube.rotationAxis = axis.Normalize();
+
+        cube.rotationSpeed = speedRange(gen);
+        cubes.push_back(cube);
+    }
 }
