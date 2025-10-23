@@ -183,6 +183,9 @@
     <ClCompile Include="TextureMapping_3D.cpp">
       <Filter>Source Files\Transformations</Filter>
     </ClCompile>
+    <ClCompile Include="StitchingTest.cpp">
+      <Filter>Source Files\Transformations</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameState.h">
@@ -315,6 +318,9 @@
       <Filter>Header Files\TransformationsMain</Filter>
     </ClInclude>
     <ClInclude Include="TextureMapping_3D.h">
+      <Filter>Header Files\TransformationsMain</Filter>
+    </ClInclude>
+    <ClInclude Include="StitchingTest.h">
       <Filter>Header Files\TransformationsMain</Filter>
     </ClInclude>
   </ItemGroup>
