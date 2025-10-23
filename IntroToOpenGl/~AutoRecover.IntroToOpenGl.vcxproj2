@@ -143,6 +143,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="StitchingTest.cpp" />
     <ClCompile Include="TextureMapping_3D.cpp" />
     <ClCompile Include="constants.cpp" />
     <ClCompile Include="CoordinateSystems.cpp" />
@@ -187,6 +188,7 @@
     <ClCompile Include="VertexPosToFrag.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="StitchingTest.h" />
     <ClInclude Include="TextureMapping_3D.h" />
     <ClInclude Include="constants.h" />
     <ClInclude Include="CoordinateSystems.h" />
@@ -246,6 +248,7 @@
     <None Include="ShaderClass.shader" />
     <None Include="SierpinskiTriangle.shader" />
     <None Include="TexelViewer.shader" />
+    <None Include="TextureMapping_3D.shader" />
     <None Include="Translate_Rotate_Scale.shader" />
     <None Include="Translate_Scale_Rotate_Pivot.shader" />
     <None Include="TriangleTexture.shader" />
