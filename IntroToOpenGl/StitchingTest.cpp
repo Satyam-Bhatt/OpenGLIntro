@@ -1,5 +1,9 @@
 #include "StitchingTest.h"
 
+StitchingTest::StitchingTest()
+{
+}
+
 StitchingTest::~StitchingTest()
 {
 }
