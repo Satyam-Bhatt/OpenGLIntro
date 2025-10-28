@@ -3,6 +3,7 @@
 
 class StitchingTest : public TransformationMain
 {
+public:
 	StitchingTest();
 	~StitchingTest();
 
@@ -11,5 +12,10 @@ class StitchingTest : public TransformationMain
 	void ImGuiRender(GLFWwindow* window) override;
 	void Render() override;
 	void Exit() override;
+
+	static StitchingTest* GetInstance();
+
+private:
+	static StitchingTest instance;
 };
 

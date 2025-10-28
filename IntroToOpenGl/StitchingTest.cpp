@@ -1,5 +1,7 @@
 #include "StitchingTest.h"
 
+StitchingTest StitchingTest::instance;
+
 StitchingTest::StitchingTest()
 {
 }
@@ -26,4 +28,9 @@ void StitchingTest::Render()
 
 void StitchingTest::Exit()
 {
+}
+
+StitchingTest* StitchingTest::GetInstance()
+{
+	return &instance;
 }
