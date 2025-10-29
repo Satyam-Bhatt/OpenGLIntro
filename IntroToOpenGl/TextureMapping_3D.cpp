@@ -207,6 +207,7 @@ void TextureMapping_3D::InitializeCubes()
     std::uniform_real_distribution<float> offsetRange(-0.2f, 0.2f);  // offset from grid position
     std::uniform_real_distribution<float> axisRange(0.0f, 1.0f);
     std::uniform_real_distribution<float> speedRange(0.5f, 2.0f);
+    std::uniform_real_distribution<float> offsetRangeZ(-3.0f, 0.2f);  // offset from grid position
 
     int numCubes = 12;
     cubes.clear();
@@ -227,7 +228,7 @@ void TextureMapping_3D::InitializeCubes()
         cube.position = Vector3(
             col * spacing - offsetX + offsetRange(gen),
             row * spacing - offsetY + offsetRange(gen),
-            offsetRange(gen)
+            offsetRangeZ(gen)
         );
 
         Vector3 axis(axisRange(gen), axisRange(gen), axisRange(gen));
