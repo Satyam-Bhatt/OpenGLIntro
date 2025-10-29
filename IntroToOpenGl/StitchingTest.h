@@ -17,5 +17,9 @@ public:
 
 private:
 	static StitchingTest instance;
+
+	Shader shader;
+
+	uint32_t VAO = 0, VBO = 0, EBO = 0;
 };
 
