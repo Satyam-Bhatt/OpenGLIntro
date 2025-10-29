@@ -19,6 +19,7 @@ void CoordinateSystems::Start()
 	// The depth is stored within each fragment (as the fragment's z value) and whenever the fragment wants to output its color, 
 	// OpenGL compares its depth values with the z-buffer. If the current fragment is behind the other fragment it is discarded, 
 	// otherwise overwritten. This process is called depth testing and is done automatically by OpenGL.
+	// Depth test is disabled by default
 	glEnable(GL_DEPTH_TEST);
 
 	glGenTextures(1, &texture);
@@ -265,6 +266,8 @@ void CoordinateSystems::Exit()
 	if(shader.ID != 0) glDeleteProgram(shader.ID);
 	if(shader2.ID != 0) glDeleteProgram(shader2.ID);
 	if(texture != 0) glDeleteTextures(1, &texture);
+
+	// We need to disable it otherwise it stays enabled until we disable it
 	glDisable(GL_DEPTH_TEST);
 
 	rotX = true, rotY = true, rotZ = true;
