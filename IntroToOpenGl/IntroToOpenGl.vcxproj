@@ -247,6 +247,7 @@
     <None Include="MyMatrixClass.shader" />
     <None Include="ShaderClass.shader" />
     <None Include="SierpinskiTriangle.shader" />
+    <None Include="StitchingTest.shader" />
     <None Include="TexelViewer.shader" />
     <None Include="TextureMapping_3D.shader" />
     <None Include="Translate_Rotate_Scale.shader" />

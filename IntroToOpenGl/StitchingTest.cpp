@@ -8,6 +8,7 @@ StitchingTest::StitchingTest()
 
 StitchingTest::~StitchingTest()
 {
+	Exit();
 }
 
 void StitchingTest::Start()
