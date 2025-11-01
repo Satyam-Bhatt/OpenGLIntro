@@ -14,6 +14,10 @@ StitchingTest::~StitchingTest()
 void StitchingTest::Start()
 {
 	shader = Shader("StitchingTest.shader");
+
+	glGenVertexArrays(1, &VAO);
+	glGenBuffers(1, &VBO);
+	glGenBuffers(1, &EBO);
 }
 
 void StitchingTest::Update()
