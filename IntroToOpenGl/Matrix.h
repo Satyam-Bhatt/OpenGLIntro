@@ -488,6 +488,26 @@ namespace Matrix
 			return result;
 		}
 
+		static Matrix4x4 CreateProjectionMatrix_FOV_LeftHanded(float angle_InRadians, float width, float height, float near, float far)
+		{
+			float aspectRatio = width / height;
+			float top = tan(angle_InRadians / 2) * near;
+			float right = aspectRatio * top;
+
+			Matrix4x4 result;
+
+			result[0][0] = near / right;
+
+			result[1][1] = near / top;
+
+			result[2][2] = (far + near) / (far - near);
+			result[2][3] = (-2 * far * near) / (far - near);
+
+			result[3][2] = -1;
+
+			return result;
+		}
+
 		// We assume that the camera is not at the center so right != -left and top != -bottom
 		static Matrix4x4 CreateProjectionMatrix_RAW(float right, float left, float bottom, float top, float near, float far)
 		{
@@ -538,6 +558,22 @@ namespace Matrix
 			result[1][1] = 1 / top;
 
 			result[2][2] = -2 / (far - near);
+			result[2][3] = -(far + near) / (far - near);
+
+			result[3][3] = 1;
+
+			return result;
+		}
+
+		static Matrix4x4 CreateProjectionMatrixSymmetric_ORTHO_LeftHanded(float right, float top, float near, float far)
+		{
+			Matrix4x4 result;
+
+			result[0][0] = 1 / right;
+
+			result[1][1] = 1 / top;
+
+			result[2][2] = 2 / (far - near); // Only scaling changes because we don't need to flip near and far
 			result[2][3] = -(far + near) / (far - near);
 
 			result[3][3] = 1;
