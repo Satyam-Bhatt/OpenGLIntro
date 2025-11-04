@@ -145,8 +145,6 @@ void TextureMapping_3D::ImGuiRender(GLFWwindow* window)
     ImGui::SetCursorPosX(centerPos);
     ImGui::Checkbox(checkboxLabel, &orthographic);
 
-    ImGui::Checkbox("Left Handed", &leftHanded);
-
     ImGui::End();
 }
 
@@ -159,14 +157,10 @@ void TextureMapping_3D::Render()
     view = Matrix4x4::Translation(view, Vector3(0, 0, cameraZ));
 
     Matrix4x4 projection;
-    if(!leftHanded)
-        projection = Matrix4x4::CreateProjectionMatrix_FOV(fov * (PI / 180), (float)viewportData.width, (float)viewportData.height, 0.1f, 100.0f);
-    else
-        projection = Matrix4x4::CreateProjectionMatrix_FOV_LeftHanded(fov * (PI / 180), (float)viewportData.width, (float)viewportData.height, 0.1f, 100.0f);
+    projection = Matrix4x4::CreateProjectionMatrix_FOV(fov * (PI / 180), (float)viewportData.width, (float)viewportData.height, 0.1f, 100.0f);
 
     Matrix4x4 ortho;
-    // ortho = Matrix4x4::CreateProjectionMatrixSymmetric_ORTHO(1.0f, 1.0f, -10.0f, 10.0f);
-    ortho = Matrix4x4::CreateProjectionMatrixSymmetric_ORTHO_LeftHanded(1.0f, 1.0f, -10.0f, 10.0f);
+    ortho = Matrix4x4::CreateProjectionMatrixSymmetric_ORTHO(1.0f, 1.0f, -10.0f, 10.0f);
 
     for (int i = 0; i < cubes.size(); i++)
     {

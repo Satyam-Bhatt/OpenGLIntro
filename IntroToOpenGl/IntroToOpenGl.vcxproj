@@ -143,6 +143,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Right_LeftHanded.cpp" />
     <ClCompile Include="StitchingTest.cpp" />
     <ClCompile Include="TextureMapping_3D.cpp" />
     <ClCompile Include="constants.cpp" />
@@ -188,6 +189,7 @@
     <ClCompile Include="VertexPosToFrag.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Right_LeftHanded.h" />
     <ClInclude Include="StitchingTest.h" />
     <ClInclude Include="TextureMapping_3D.h" />
     <ClInclude Include="constants.h" />

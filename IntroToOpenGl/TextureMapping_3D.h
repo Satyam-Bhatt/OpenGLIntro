@@ -32,7 +32,6 @@ private:
 	uint32_t VAO = 0, VBO = 0;
 	uint32_t texture = 0;
 
-	bool leftHanded = false;
 	bool orthographic = false;
 
 	float cameraZ = -2.0f, fov = 45.0f;
