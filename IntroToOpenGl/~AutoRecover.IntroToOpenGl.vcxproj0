@@ -247,6 +247,7 @@
     <None Include="MatrixUniform.shader" />
     <None Include="MipmapOptions.shader" />
     <None Include="MyMatrixClass.shader" />
+    <None Include="Right_LeftHanded.shader" />
     <None Include="ShaderClass.shader" />
     <None Include="SierpinskiTriangle.shader" />
     <None Include="StitchingTest.shader" />

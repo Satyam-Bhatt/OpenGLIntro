@@ -33,6 +33,7 @@ private:
 		MatrixGraphTransformationGraph,
 		CoordinateSystem,
 		TextureMapping_3D,
+		Right_LeftHanded,
 		COUNT
 	};
 

@@ -9,7 +9,7 @@ class TextureMapping_3D : public TransformationMain
 	struct CubeTransform {
 		Vector3 position;
 		Vector3 rotationAxis;
-		float rotationSpeed;
+		float rotationSpeed = 0.0f;
 	};
 
 public:

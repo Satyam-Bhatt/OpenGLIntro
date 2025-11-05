@@ -394,5 +394,8 @@
     <None Include="StitchingTest.shader">
       <Filter>Shader\Transformations</Filter>
     </None>
+    <None Include="Right_LeftHanded.shader">
+      <Filter>Shader\Transformations</Filter>
+    </None>
   </ItemGroup>
 </Project>

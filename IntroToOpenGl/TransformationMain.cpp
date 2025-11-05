@@ -8,6 +8,7 @@
 #include "MatrixGraphTransformation.h"
 #include "CoordinateSystems.h"
 #include "TextureMapping_3D.h"
+#include "Right_LeftHanded.h"
 
 TransformationMain* TransformationMain::instance = nullptr;
 
@@ -39,6 +40,9 @@ TransformationMain::TransformationMain()
 
 	sceneNames[SubScene::TextureMapping_3D] = "Texture Mapping 3D";
 	sceneFactories[SubScene::TextureMapping_3D] = []() -> TransformationMain* { return TextureMapping_3D::GetInstance(); };
+
+	sceneNames[SubScene::Right_LeftHanded] = "Right Left Handed";
+	sceneFactories[SubScene::Right_LeftHanded] = []() -> TransformationMain* { return Right_LeftHanded::GetInstance(); };
 }
 
 TransformationMain::~TransformationMain()
@@ -214,5 +218,13 @@ void TransformationMain::RenderText(SubScene sceneName)
 	else if (sceneName == SubScene::TextureMapping_3D)
 	{
 		ImGui::TextWrapped("Texture Mapping in 3D Space and spawning cubes with one shader but by changing the model matrix");
+	}
+	else if (sceneName == SubScene::Right_LeftHanded)
+	{
+		ImGui::TextWrapped("Left handed and Right handed coordinate systems. Both use different projection matricies");
+	}
+	else
+	{
+
 	}
 }
