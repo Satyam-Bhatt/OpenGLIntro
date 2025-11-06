@@ -503,7 +503,7 @@ namespace Matrix
 			result[2][2] = (far + near) / (far - near);
 			result[2][3] = (-2 * far * near) / (far - near);
 
-			result[3][2] = -1;
+			result[3][2] = 1;
 
 			return result;
 		}

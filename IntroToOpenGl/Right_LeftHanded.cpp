@@ -13,7 +13,15 @@ Right_LeftHanded::~Right_LeftHanded()
 
 void Right_LeftHanded::Start()
 {
+	// Open GL default depth test ranges from 0 to 1. 0 is the closest and 1 is the farthest
+	// Near value (-1) is the closest become 0 and far value (1) is the farthest becomes 1
+
+
 	glEnable(GL_DEPTH_TEST);
+	// This remaps the depth values so that 
+	// -> Near value (-1) is the closest become 1 
+	// -> Far value (1) is the farthest becomes 0
+	// glDepthRange(1.0, 0.0); 
 
 	glGenTextures(1, &texture);
 	glBindTexture(GL_TEXTURE_2D, texture);
@@ -165,7 +173,8 @@ void Right_LeftHanded::Render()
 
 	Matrix4x4 model = Matrix4x4::Identity();
 	model = Matrix4x4::Translation(model, Vector3(-0.5f, position.y, position.z));
-	model = Matrix4x4::Rotation(model, rotationAxis, rotationAngle * PI/180);
+	// model = Matrix4x4::Rotation(model, rotationAxis, rotationAngle * PI/180);
+	model = Matrix4x4::Rotation(model, rotationAxis, (float)glfwGetTime() * 1.0f);
 	model = Matrix4x4::Scale(model, scale);
 
 	shader.Use();
@@ -185,7 +194,8 @@ void Right_LeftHanded::Render()
 
 	model = Matrix4x4::Identity();
 	model = Matrix4x4::Translation(model, Vector3(0.5f, position.y, position.z));
-	model = Matrix4x4::Rotation(model, rotationAxis, rotationAngle * PI/180);
+	// model = Matrix4x4::Rotation(model, rotationAxis, rotationAngle * PI/180);
+	model = Matrix4x4::Rotation(model, rotationAxis, (float)glfwGetTime() * 1.0f);
 	model = Matrix4x4::Scale(model, scale);
 
 	projection = Matrix4x4::CreateProjectionMatrix_FOV_LeftHanded(fov * (PI / 180), (float)viewportData.width, (float)viewportData.height, 0.1f, 100.0f);
