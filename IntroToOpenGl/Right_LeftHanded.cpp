@@ -150,6 +150,31 @@ void Right_LeftHanded::ImGuiRender(GLFWwindow* window)
 	ImGui::Checkbox("Ortho", &orthographic);
 	
 	ImGui::End();
+
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 12.0f);
+	ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.2f, 0.2f, 0.2f, 1.0f));
+
+	float windowWidth = viewport[2] * 0.8f;
+
+	ImGui::SetNextWindowSizeConstraints(
+		ImVec2(windowWidth, 0),
+		ImVec2(windowWidth, FLT_MAX)
+	);
+
+	ImGui::SetNextWindowPos(
+		ImVec2(viewport[0] + viewport[2] / 2, viewport[1] + 200),
+		ImGuiCond_Always,
+		ImVec2(0.5f, 0.0f)  // Pivot point: 0.5f means centered horizontally
+	);
+
+	ImGui::Begin("Description Area", 0, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_AlwaysAutoResize);
+
+	ImGui::TextWrapped("Left Handed Coordinate System");
+
+	ImGui::End();
+	ImGui::PopStyleColor();
+	ImGui::PopStyleVar();
+
 }
 
 void Right_LeftHanded::Render()
