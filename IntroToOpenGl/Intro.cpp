@@ -147,6 +147,14 @@ void Intro::HandleInput(GLFWwindow* window)
 
 void Intro::Exit()
 {
+	ImGuiIO& io = ImGui::GetIO();
+
+	// Destroy the font texture
+	ImGui_ImplOpenGL3_DestroyFontsTexture();
+
+	// Clear all fonts
+	io.Fonts->Clear();
+
 	headingFont = NULL;
 	descriptionFont = NULL;
 }

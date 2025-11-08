@@ -16,7 +16,6 @@ void Right_LeftHanded::Start()
 	// Open GL default depth test ranges from 0 to 1. 0 is the closest and 1 is the farthest
 	// Near value (-1) is the closest become 0 and far value (1) is the farthest becomes 1
 
-
 	glEnable(GL_DEPTH_TEST);
 	// This remaps the depth values so that 
 	// -> Near value (-1) is the closest become 1 
@@ -117,6 +116,7 @@ void Right_LeftHanded::Update()
 
 void Right_LeftHanded::ImGuiRender(GLFWwindow* window)
 {
+	// viewport[0] = x, viewport[1] = y, viewport[2] = width, viewport[3] = height
 	GLint viewport[4];
 	glGetIntegerv(GL_VIEWPORT, viewport);
 
@@ -151,27 +151,79 @@ void Right_LeftHanded::ImGuiRender(GLFWwindow* window)
 	
 	ImGui::End();
 
+	float leftIMGUIWindowWidth = viewport[2] - (float)viewportData.width;
+	float windowWidth = viewport[2] * 0.5f;
+
+	// HEADING - RIGHT HANDED
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 12.0f);
 	ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.2f, 0.2f, 0.2f, 1.0f));
 
-	float windowWidth = viewport[2] * 0.8f;
-
 	ImGui::SetNextWindowSizeConstraints(
-		ImVec2(windowWidth, 0),
+		ImVec2(100, 0),
 		ImVec2(windowWidth, FLT_MAX)
 	);
 
 	ImGui::SetNextWindowPos(
-		ImVec2(viewport[0] + viewport[2] / 2, viewport[1] + 200),
+		// Set the position in the starting 1/4th of the redering area
+		ImVec2(viewport[0] + leftIMGUIWindowWidth + (float)viewportData.width / 4, viewport[1] + 50),
 		ImGuiCond_Always,
 		ImVec2(0.5f, 0.0f)  // Pivot point: 0.5f means centered horizontally
 	);
 
-	ImGui::Begin("Description Area", 0, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_AlwaysAutoResize);
+	ImGui::Begin("Heading 1", 0, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_AlwaysAutoResize);
 
-	ImGui::TextWrapped("Left Handed Coordinate System");
+	ImGui::Text("Right Handed Coordinate System");
+	ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.2f, 0.4f, 0.8f, 1.0f));
+	ImGui::BulletText("Z OUTISIDE the screen");
+	ImGui::PopStyleColor();
+
+	ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.8f, 0.2f, 0.2f, 1.0f));
+	ImGui::BulletText("X to the right");
+	ImGui::PopStyleColor();
+
+	ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.2f, 0.8f, 0.4f, 1.0f));
+	ImGui::BulletText("Y to the top");
+	ImGui::PopStyleColor();
 
 	ImGui::End();
+
+	ImGui::PopStyleColor();
+	ImGui::PopStyleVar();
+
+	// HEADING - LEFT HANDED
+
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 12.0f);
+	ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.2f, 0.2f, 0.2f, 1.0f));
+
+	ImGui::SetNextWindowSizeConstraints(
+		ImVec2(100, 0),
+		ImVec2(windowWidth, FLT_MAX)
+	);
+
+	ImGui::SetNextWindowPos(
+		// Set the position in the ending 1/4th of the redering area
+		ImVec2(viewport[0] + leftIMGUIWindowWidth + (float)viewportData.width / 4 + (float)viewportData.width / 2, viewport[1] + 50),
+		ImGuiCond_Always,
+		ImVec2(0.5f, 0.0f)  // Pivot point: 0.5f means centered horizontally
+	);
+
+	ImGui::Begin("Heading 2", 0, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_AlwaysAutoResize);
+
+	ImGui::Text("Left Handed Coordinate System");
+	ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.2f, 0.4f, 0.8f, 1.0f));
+	ImGui::BulletText("Z INSIDE the screen");
+	ImGui::PopStyleColor();
+
+	ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.8f, 0.2f, 0.2f, 1.0f));
+	ImGui::BulletText("X to the right");
+	ImGui::PopStyleColor();
+
+	ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.2f, 0.8f, 0.4f, 1.0f));
+	ImGui::BulletText("Y to the top");
+	ImGui::PopStyleColor();
+
+	ImGui::End();
+
 	ImGui::PopStyleColor();
 	ImGui::PopStyleVar();
 
