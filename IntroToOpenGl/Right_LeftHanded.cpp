@@ -120,6 +120,9 @@ void Right_LeftHanded::ImGuiRender(GLFWwindow* window)
 	GLint viewport[4];
 	glGetIntegerv(GL_VIEWPORT, viewport);
 
+	float leftIMGUIWindowWidth = viewport[2] - (float)viewportData.width;
+	float windowWidth = viewport[2] * 0.5f;
+
 	ImGui::SetNextWindowPos(
 		ImVec2(viewport[0] + viewport[2] / 2, viewport[3]),
 		ImGuiCond_Always,
@@ -151,8 +154,24 @@ void Right_LeftHanded::ImGuiRender(GLFWwindow* window)
 	
 	ImGui::End();
 
-	float leftIMGUIWindowWidth = viewport[2] - (float)viewportData.width;
-	float windowWidth = viewport[2] * 0.5f;
+	// Left Camera 
+
+	ImGui::SetNextWindowPos(
+		ImVec2(viewport[0] + leftIMGUIWindowWidth + (float)viewportData.width / 4, viewport[3]),
+		ImGuiCond_Always,
+		ImVec2(0.5f, 1.0f)
+	);
+
+	// Set a fixed window width to make it smaller
+	ImGui::SetNextWindowSize(ImVec2(300, 0), ImGuiCond_Always);
+
+	ImGui::Begin("Left Camera Z", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize| ImGuiWindowFlags_NoDecoration);
+
+	ImGui::PushItemWidth(80);
+	ImGui::DragFloat("Left Camera Z", &leftCameraZ, 0.005f);
+	ImGui::PopItemWidth();
+
+	ImGui::End();
 
 	// HEADING - RIGHT HANDED
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 12.0f);
