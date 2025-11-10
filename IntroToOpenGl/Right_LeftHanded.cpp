@@ -123,6 +123,7 @@ void Right_LeftHanded::ImGuiRender(GLFWwindow* window)
 	float leftIMGUIWindowWidth = viewport[2] - (float)viewportData.width;
 	float windowWidth = viewport[2] * 0.5f;
 
+#pragma region MAIN WINDOW
 	ImGui::SetNextWindowPos(
 		ImVec2(viewport[0] + viewport[2] / 2, viewport[3]),
 		ImGuiCond_Always,
@@ -135,7 +136,7 @@ void Right_LeftHanded::ImGuiRender(GLFWwindow* window)
 	ImGui::Begin("Level Specific", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
 
 	ImGui::PushItemWidth(80);
-	ImGui::DragFloat("PosY: " , &position.y, 0.005f);
+	ImGui::DragFloat("PosY: ", &position.y, 0.005f);
 	ImGui::SameLine();
 	ImGui::DragFloat("PosZ: ", &position.z, 0.005f);
 	ImGui::PopItemWidth();
@@ -151,29 +152,32 @@ void Right_LeftHanded::ImGuiRender(GLFWwindow* window)
 
 	ImGui::DragFloat("cameraZ", &cameraZ, 0.005f);
 	ImGui::Checkbox("Ortho", &orthographic);
-	
+
 	ImGui::End();
+#pragma endregion
 
-	// Left Camera 
-
+#pragma region  LEFT CAMERA Z
 	ImGui::SetNextWindowPos(
 		ImVec2(viewport[0] + leftIMGUIWindowWidth + (float)viewportData.width / 4, viewport[3]),
 		ImGuiCond_Always,
 		ImVec2(0.5f, 1.0f)
 	);
 
-	// Set a fixed window width to make it smaller
-	ImGui::SetNextWindowSize(ImVec2(300, 0), ImGuiCond_Always);
+	ImGui::SetNextWindowSizeConstraints(
+		ImVec2(100, 0),
+		ImVec2(viewport[2], FLT_MAX)
+	);
 
-	ImGui::Begin("Left Camera Z", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize| ImGuiWindowFlags_NoDecoration);
+	ImGui::Begin("Left Camera Z", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoDecoration);
 
-	ImGui::PushItemWidth(80);
-	ImGui::DragFloat("Left Camera Z", &leftCameraZ, 0.005f);
+	ImGui::PushItemWidth(50);
+	ImGui::DragFloat("L-Cam Z", &leftCameraZ, 0.005f);
 	ImGui::PopItemWidth();
 
 	ImGui::End();
+#pragma endregion
 
-	// HEADING - RIGHT HANDED
+#pragma region RIGHT HANDED
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 12.0f);
 	ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.2f, 0.2f, 0.2f, 1.0f));
 
@@ -208,9 +212,9 @@ void Right_LeftHanded::ImGuiRender(GLFWwindow* window)
 
 	ImGui::PopStyleColor();
 	ImGui::PopStyleVar();
+#pragma endregion
 
-	// HEADING - LEFT HANDED
-
+#pragma region LEFT HANDED
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 12.0f);
 	ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.2f, 0.2f, 0.2f, 1.0f));
 
@@ -245,7 +249,7 @@ void Right_LeftHanded::ImGuiRender(GLFWwindow* window)
 
 	ImGui::PopStyleColor();
 	ImGui::PopStyleVar();
-
+#pragma endregion
 }
 
 void Right_LeftHanded::Render()
