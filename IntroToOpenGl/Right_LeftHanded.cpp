@@ -177,6 +177,27 @@ void Right_LeftHanded::ImGuiRender(GLFWwindow* window)
 	ImGui::End();
 #pragma endregion
 
+#pragma region  RIGHT CAMERA Z
+	ImGui::SetNextWindowPos(
+		ImVec2(viewport[0] + leftIMGUIWindowWidth + (float)viewportData.width / 4 + (float)viewportData.width / 2, viewport[3]),
+		ImGuiCond_Always,
+		ImVec2(0.5f, 1.0f)
+	);
+
+	ImGui::SetNextWindowSizeConstraints(
+		ImVec2(100, 0),
+		ImVec2(viewport[2], FLT_MAX)
+	);
+
+	ImGui::Begin("Right Camera Z", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoDecoration);
+
+	ImGui::PushItemWidth(50);
+	ImGui::DragFloat("R-Cam Z", &rightCameraZ, 0.005f);
+	ImGui::PopItemWidth();
+
+	ImGui::End();
+#pragma endregion
+
 #pragma region RIGHT HANDED
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 12.0f);
 	ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.2f, 0.2f, 0.2f, 1.0f));

@@ -33,6 +33,6 @@ private:
 	Vector3 scale = Vector3(0.5f, 0.5f, 0.5f);
 
 	bool orthographic = false;
-	float cameraZ = -2.0f, fov = 45.0f, leftCameraZ = -2.0f;
+	float cameraZ = -2.0f, fov = 45.0f, leftCameraZ = -2.0f, rightCameraZ = 2.0f;
 };
 
