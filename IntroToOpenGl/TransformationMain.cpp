@@ -222,6 +222,8 @@ void TransformationMain::RenderText(SubScene sceneName)
 	else if (sceneName == SubScene::Right_LeftHanded)
 	{
 		ImGui::TextWrapped("Left handed and Right handed coordinate systems. Both use different projection matricies");
+		ImGui::TextWrapped("Camera Z value changes as in Left Handed Coordinate system +Z is inside the screen and in Right Handed Coordinate system -Z is inside the screen");
+		ImGui::TextWrapped("Rotation also changes as winding order changes");
 	}
 	else
 	{

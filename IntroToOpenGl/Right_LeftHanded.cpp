@@ -218,7 +218,7 @@ void Right_LeftHanded::ImGuiRender(GLFWwindow* window)
 
 	ImGui::Text("Right Handed Coordinate System");
 	ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.2f, 0.4f, 0.8f, 1.0f));
-	ImGui::BulletText("Z OUTISIDE the screen");
+	ImGui::BulletText("+Z OUTISIDE the screen");
 	ImGui::PopStyleColor();
 
 	ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.8f, 0.2f, 0.2f, 1.0f));
@@ -255,7 +255,7 @@ void Right_LeftHanded::ImGuiRender(GLFWwindow* window)
 
 	ImGui::Text("Left Handed Coordinate System");
 	ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.2f, 0.4f, 0.8f, 1.0f));
-	ImGui::BulletText("Z INSIDE the screen");
+	ImGui::BulletText("+Z INSIDE the screen");
 	ImGui::PopStyleColor();
 
 	ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.8f, 0.2f, 0.2f, 1.0f));
@@ -284,7 +284,7 @@ void Right_LeftHanded::Render()
 	glBindTexture(GL_TEXTURE_2D, texture);
 
 	Matrix4x4 view;
-	view = Matrix4x4::Translation(view, Vector3(0, 0, cameraZ));
+	view = Matrix4x4::Translation(view, Vector3(0, 0, leftCameraZ));
 
 	Matrix4x4 projection;
 	projection = Matrix4x4::CreateProjectionMatrix_FOV(fov * (PI / 180), (float)viewportData.width, (float)viewportData.height, 0.1f, 100.0f);
@@ -319,8 +319,13 @@ void Right_LeftHanded::Render()
 	model = Matrix4x4::Rotation(model, rotationAxis, (float)glfwGetTime() * 1.0f);
 	model = Matrix4x4::Scale(model, scale);
 
+	view = Matrix4x4::Identity();
+	view = Matrix4x4::Translation(view, Vector3(0, 0, rightCameraZ));
+
+	projection = Matrix4x4::Identity();
 	projection = Matrix4x4::CreateProjectionMatrix_FOV_LeftHanded(fov * (PI / 180), (float)viewportData.width, (float)viewportData.height, 0.1f, 100.0f);
 
+	ortho = Matrix4x4::Identity();
 	ortho = Matrix4x4::CreateProjectionMatrixSymmetric_ORTHO(1.0f, 1.0f, -10.0f, 10.0f);
 
 	shader.Use();
