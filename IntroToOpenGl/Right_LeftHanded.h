@@ -28,11 +28,10 @@ private:
 	uint32_t texture = 0;
 
 	Vector3 position = Vector3(0.0f, 0.0f, 0.0f);
-	float rotationAngle = 0.0f;
 	bool rotationAxisX = false, rotationAxisY = true, rotationAxisZ = false;
 	Vector3 scale = Vector3(0.5f, 0.5f, 0.5f);
 
 	bool orthographic = false;
-	float cameraZ = -2.0f, fov = 45.0f, leftCameraZ = -2.0f, rightCameraZ = 2.0f;
+	float fov = 45.0f, leftCameraZ = -2.0f, rightCameraZ = 2.0f;
 };
 
