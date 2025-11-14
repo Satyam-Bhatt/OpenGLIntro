@@ -325,7 +325,7 @@ void Right_LeftHanded::Render()
 	projection = Matrix4x4::CreateProjectionMatrix_FOV_LeftHanded(fov * (PI / 180), (float)viewportData.width, (float)viewportData.height, 0.1f, 100.0f);
 
 	ortho = Matrix4x4::Identity();
-	ortho = Matrix4x4::CreateProjectionMatrixSymmetric_ORTHO(1.0f, 1.0f, -10.0f, 10.0f);
+	ortho = Matrix4x4::CreateProjectionMatrixSymmetric_ORTHO_LeftHanded(1.0f, 1.0f, -10.0f, 10.0f);
 
 	shader.Use();
 	shader.SetMat4_Custom("model", model.m);

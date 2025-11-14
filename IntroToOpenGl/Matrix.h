@@ -500,10 +500,10 @@ namespace Matrix
 
 			result[1][1] = near / top;
 
-			result[2][2] = (far + near) / (far - near);
+			result[2][2] = (far + near) / (far - near); // Sign Change
 			result[2][3] = (-2 * far * near) / (far - near);
 
-			result[3][2] = 1;
+			result[3][2] = 1; // Sign Change as z values are not +ve
 
 			return result;
 		}
