@@ -89,6 +89,29 @@ void StitchingTest::ImGuiRender(GLFWwindow* window)
 
 void StitchingTest::Render()
 {
+	float axisX = rotX ? 1 : 0;
+	float axisY = rotY ? 1 : 0;
+	float axisZ = rotZ ? 1 : 0;
+	Vector3 rotationAxis = Vector3((float)axisX, (float)axisY, (float)axisZ);
+
+	Matrix4x4 model = Matrix4x4::Identity();
+	model = Matrix4x4::Translation(model, Vector3(-0.5f, 0, 0));
+	model = Matrix4x4::Rotation(model, rotationAxis, (float)glfwGetTime() * 1.0f);
+	model = Matrix4x4::Scale(model, Vector3(0.5f, 0.5f, 0.5f));
+
+	Matrix4x4 view;
+	view = Matrix4x4::Translation(view, Vector3(0, 0, cameraZ));
+
+	Matrix4x4 projection;
+	projection = Matrix4x4::CreateProjectionMatrix_FOV(fov * (PI / 180), (float)viewportData.width, (float)viewportData.height, 0.1f, 100.0f);
+
+	shader.Use();
+	shader.SetMat4_Custom("model", model.m);
+	shader.SetMat4_Custom("view", view.m);
+	shader.SetMat4_Custom("projection", projection.m);
+	glBindVertexArray(VAO);
+	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+	glBindVertexArray(0);
 }
 
 void StitchingTest::Exit()

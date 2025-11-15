@@ -22,7 +22,6 @@ private:
 	static Right_LeftHanded instance;
 
 	Shader shader;
-	ImFont* headingFont;
 
 	uint32_t VAO = 0, VBO = 0;
 	uint32_t texture = 0;

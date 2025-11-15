@@ -489,6 +489,7 @@ namespace Matrix
 			return result;
 		}
 
+		// Left Handed Coordinate System
 		static Matrix4x4 CreateProjectionMatrix_FOV_LeftHanded(float angle_InRadians, float width, float height, float near, float far)
 		{
 			float aspectRatio = width / height;
@@ -567,6 +568,7 @@ namespace Matrix
 			return result;
 		}
 
+		// Left Handed Coordinate System
 		static Matrix4x4 CreateProjectionMatrixSymmetric_ORTHO_LeftHanded(float right, float top, float near, float far)
 		{
 			Matrix4x4 result;
