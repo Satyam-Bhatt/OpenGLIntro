@@ -9,6 +9,7 @@
 #include "CoordinateSystems.h"
 #include "TextureMapping_3D.h"
 #include "Right_LeftHanded.h"
+#include "StitchingTest.h"
 
 TransformationMain* TransformationMain::instance = nullptr;
 
@@ -43,6 +44,9 @@ TransformationMain::TransformationMain()
 
 	sceneNames[SubScene::Right_LeftHanded] = "Right Left Handed";
 	sceneFactories[SubScene::Right_LeftHanded] = []() -> TransformationMain* { return Right_LeftHanded::GetInstance(); };
+
+	sceneNames[SubScene::StitchingTest] = "Stitching Test";
+	sceneFactories[SubScene::StitchingTest] = []() -> TransformationMain* { return StitchingTest::GetInstance(); };
 }
 
 TransformationMain::~TransformationMain()

@@ -34,6 +34,7 @@ private:
 		CoordinateSystem,
 		TextureMapping_3D,
 		Right_LeftHanded,
+		StitchingTest,
 		COUNT
 	};
 
