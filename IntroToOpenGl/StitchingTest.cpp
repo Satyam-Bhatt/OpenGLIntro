@@ -13,6 +13,8 @@ StitchingTest::~StitchingTest()
 
 void StitchingTest::Start()
 {
+	glEnable(GL_DEPTH_TEST);
+
 	shader = Shader("StitchingTest.shader");
 
 	unsigned int indices[] =
@@ -39,14 +41,14 @@ void StitchingTest::Start()
 
 	float vertices[] =
 	{
-		-0.5f, -0.5f, 0.0f, 1.0f,
-		 0.5f, -0.5f, 0.0f, 1.0f,
-		-0.5f,  0.5f, 0.0f, 1.0f,
-		 0.5f,  0.5f, 0.0f, 1.0f,
-		-0.5f, -0.5f, 0.5f, 1.0f,
-		 0.5f, -0.5f, 0.5f, 1.0f,
-		-0.5f,  0.5f, 0.5f, 1.0f,
-		 0.5f,  0.5f, 0.5f, 1.0f
+		-0.5f, -0.5f, -0.5f, 1.0f,  // 0: front bottom-left
+		 0.5f, -0.5f, -0.5f, 1.0f,  // 1: front bottom-right
+		-0.5f,  0.5f, -0.5f, 1.0f,  // 2: front top-left
+		 0.5f,  0.5f, -0.5f, 1.0f,  // 3: front top-right
+		-0.5f, -0.5f,  0.5f, 1.0f,  // 4: back bottom-left
+		 0.5f, -0.5f,  0.5f, 1.0f,  // 5: back bottom-right
+		-0.5f,  0.5f,  0.5f, 1.0f,  // 6: back top-left
+		 0.5f,  0.5f,  0.5f, 1.0f   // 7: back top-right
 	};
 
 	glGenVertexArrays(1, &VAO);
@@ -95,7 +97,7 @@ void StitchingTest::Render()
 	Vector3 rotationAxis = Vector3((float)axisX, (float)axisY, (float)axisZ);
 
 	Matrix4x4 model = Matrix4x4::Identity();
-	model = Matrix4x4::Translation(model, Vector3(-0.5f, 0, 0));
+	model = Matrix4x4::Translation(model, Vector3(0, 0, 0));
 	model = Matrix4x4::Rotation(model, rotationAxis, (float)glfwGetTime() * 1.0f);
 	model = Matrix4x4::Scale(model, Vector3(0.5f, 0.5f, 0.5f));
 
