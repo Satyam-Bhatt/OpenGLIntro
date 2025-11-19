@@ -23,7 +23,7 @@ private:
 
 	Shader shader;
 
-	uint32_t VAO = 0, VBO = 0, EBO = 0;
+	uint32_t VAO = 0, VBO = 0;
 
 	bool rotX = true, rotY = true, rotZ = true;
 	float cameraZ = -2.0f, fov = 45.0f;

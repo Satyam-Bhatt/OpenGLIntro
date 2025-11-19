@@ -17,53 +17,73 @@ void StitchingTest::Start()
 
 	shader = Shader("StitchingTest.shader");
 
-	unsigned int indices[] =
-	{
-		// Front face
-		0, 1, 2,
-		1, 3, 2,
-		// Back face  
-		4, 6, 5,
-		5, 6, 7,
-		// Left face
-		0, 2, 4,
-		2, 6, 4,
-		// Right face
-		1, 5, 3,
-		3, 5, 7,
-		// Top face
-		2, 3, 6,
-		3, 7, 6,
-		// Bottom face
-		0, 4, 1,
-		1, 4, 5
-	};
+    float vertices[] =
+    {
+        // Position (x, y, z, w)     // Color (r, g, b)
 
-	float vertices[] =
-	{
-		-0.5f, -0.5f, -0.5f, 1.0f,  // 0: front bottom-left
-		 0.5f, -0.5f, -0.5f, 1.0f,  // 1: front bottom-right
-		-0.5f,  0.5f, -0.5f, 1.0f,  // 2: front top-left
-		 0.5f,  0.5f, -0.5f, 1.0f,  // 3: front top-right
-		-0.5f, -0.5f,  0.5f, 1.0f,  // 4: back bottom-left
-		 0.5f, -0.5f,  0.5f, 1.0f,  // 5: back bottom-right
-		-0.5f,  0.5f,  0.5f, 1.0f,  // 6: back top-left
-		 0.5f,  0.5f,  0.5f, 1.0f   // 7: back top-right
-	};
+        // Front face (Red)
+        -0.5f, -0.5f, -0.5f, 1.0f,   1.0f, 0.0f, 0.0f,
+         0.5f, -0.5f, -0.5f, 1.0f,   1.0f, 0.0f, 0.0f,
+        -0.5f,  0.5f, -0.5f, 1.0f,   1.0f, 0.0f, 0.0f,
+         0.5f, -0.5f, -0.5f, 1.0f,   1.0f, 0.0f, 0.0f,
+         0.5f,  0.5f, -0.5f, 1.0f,   1.0f, 0.0f, 0.0f,
+        -0.5f,  0.5f, -0.5f, 1.0f,   1.0f, 0.0f, 0.0f,
 
-	glGenVertexArrays(1, &VAO);
-	glGenBuffers(1, &VBO);
-	glGenBuffers(1, &EBO);
+        // Back face (Green)
+        -0.5f, -0.5f,  0.5f, 1.0f,   0.0f, 1.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f, 1.0f,   0.0f, 1.0f, 0.0f,
+         0.5f, -0.5f,  0.5f, 1.0f,   0.0f, 1.0f, 0.0f,
+         0.5f, -0.5f,  0.5f, 1.0f,   0.0f, 1.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f, 1.0f,   0.0f, 1.0f, 0.0f,
+         0.5f,  0.5f,  0.5f, 1.0f,   0.0f, 1.0f, 0.0f,
 
-	glBindVertexArray(VAO);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
+         // Left face (Blue)
+         -0.5f, -0.5f, -0.5f, 1.0f,   0.0f, 0.0f, 1.0f,
+         -0.5f,  0.5f, -0.5f, 1.0f,   0.0f, 0.0f, 1.0f,
+         -0.5f, -0.5f,  0.5f, 1.0f,   0.0f, 0.0f, 1.0f,
+         -0.5f,  0.5f, -0.5f, 1.0f,   0.0f, 0.0f, 1.0f,
+         -0.5f,  0.5f,  0.5f, 1.0f,   0.0f, 0.0f, 1.0f,
+         -0.5f, -0.5f,  0.5f, 1.0f,   0.0f, 0.0f, 1.0f,
 
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+         // Right face (Yellow)
+          0.5f, -0.5f, -0.5f, 1.0f,   1.0f, 1.0f, 0.0f,
+          0.5f, -0.5f,  0.5f, 1.0f,   1.0f, 1.0f, 0.0f,
+          0.5f,  0.5f, -0.5f, 1.0f,   1.0f, 1.0f, 0.0f,
+          0.5f,  0.5f, -0.5f, 1.0f,   1.0f, 1.0f, 0.0f,
+          0.5f, -0.5f,  0.5f, 1.0f,   1.0f, 1.0f, 0.0f,
+          0.5f,  0.5f,  0.5f, 1.0f,   1.0f, 1.0f, 0.0f,
 
-	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
+          // Top face (Cyan)
+          -0.5f,  0.5f, -0.5f, 1.0f,   0.0f, 1.0f, 1.0f,
+           0.5f,  0.5f, -0.5f, 1.0f,   0.0f, 1.0f, 1.0f,
+          -0.5f,  0.5f,  0.5f, 1.0f,   0.0f, 1.0f, 1.0f,
+           0.5f,  0.5f, -0.5f, 1.0f,   0.0f, 1.0f, 1.0f,
+           0.5f,  0.5f,  0.5f, 1.0f,   0.0f, 1.0f, 1.0f,
+          -0.5f,  0.5f,  0.5f, 1.0f,   0.0f, 1.0f, 1.0f,
+
+          // Bottom face (Magenta)
+          -0.5f, -0.5f, -0.5f, 1.0f,   1.0f, 0.0f, 1.0f,
+          -0.5f, -0.5f,  0.5f, 1.0f,   1.0f, 0.0f, 1.0f,
+           0.5f, -0.5f, -0.5f, 1.0f,   1.0f, 0.0f, 1.0f,
+           0.5f, -0.5f, -0.5f, 1.0f,   1.0f, 0.0f, 1.0f,
+          -0.5f, -0.5f,  0.5f, 1.0f,   1.0f, 0.0f, 1.0f,
+           0.5f, -0.5f,  0.5f, 1.0f,   1.0f, 0.0f, 1.0f
+    };
+
+    glGenVertexArrays(1, &VAO);
+    glGenBuffers(1, &VBO);
+    glBindVertexArray(VAO);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
+
+    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)(4 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
 }
 
 void StitchingTest::Update()
@@ -112,7 +132,7 @@ void StitchingTest::Render()
 	shader.SetMat4_Custom("view", view.m);
 	shader.SetMat4_Custom("projection", projection.m);
 	glBindVertexArray(VAO);
-	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+    glDrawArrays(GL_TRIANGLES, 0, 36);
 	glBindVertexArray(0);
 }
 
