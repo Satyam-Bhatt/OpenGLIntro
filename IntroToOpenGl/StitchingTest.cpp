@@ -117,7 +117,7 @@ void StitchingTest::Render()
 	Vector3 rotationAxis = Vector3((float)axisX, (float)axisY, (float)axisZ);
 
 	Matrix4x4 model = Matrix4x4::Identity();
-	model = Matrix4x4::Translation(model, Vector3(0, 0, 0));
+	model = Matrix4x4::Translation(model, Vector3(-0.5f, 0, 0));
 	model = Matrix4x4::Rotation(model, rotationAxis, (float)glfwGetTime() * 1.0f);
 	model = Matrix4x4::Scale(model, Vector3(0.5f, 0.5f, 0.5f));
 
@@ -125,7 +125,7 @@ void StitchingTest::Render()
 	view = Matrix4x4::Translation(view, Vector3(0, 0, cameraZ));
 
 	Matrix4x4 projection;
-	projection = Matrix4x4::CreateProjectionMatrix_FOV(fov * (PI / 180), (float)viewportData.width, (float)viewportData.height, 0.1f, 100.0f);
+	projection = Matrix4x4::CreateProjectionMatrix_FOV_LeftHanded(fov * (PI / 180), (float)viewportData.width, (float)viewportData.height, 0.1f, 100.0f);
 
 	shader.Use();
 	shader.SetMat4_Custom("model", model.m);
@@ -134,6 +134,19 @@ void StitchingTest::Render()
 	glBindVertexArray(VAO);
     glDrawArrays(GL_TRIANGLES, 0, 36);
 	glBindVertexArray(0);
+
+    model = Matrix4x4::Identity();
+    model = Matrix4x4::Translation(model, Vector3(0.5f, 0, 0));
+    model = Matrix4x4::Rotation(model, rotationAxis, (float)glfwGetTime() * 1.0f);
+    model = Matrix4x4::Scale(model, Vector3(0.5f, 0.5f, 0.5f));
+
+    shader.Use();
+    shader.SetMat4_Custom("model", model.m);
+    shader.SetMat4_Custom("view", view.m);
+    shader.SetMat4_Custom("projection", projection.m);
+    glBindVertexArray(VAO);
+    glDrawArrays(GL_TRIANGLES, 0, 36);
+    glBindVertexArray(0);
 }
 
 void StitchingTest::Exit()
