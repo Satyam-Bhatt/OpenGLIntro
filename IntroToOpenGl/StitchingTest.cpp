@@ -102,9 +102,16 @@ void StitchingTest::ImGuiRender(GLFWwindow* window)
 	);
 
 	// Set a fixed window width to make it smaller
-	ImGui::SetNextWindowSize(ImVec2(300, 0), ImGuiCond_Always);
+    ImGui::SetNextWindowSizeConstraints(
+        ImVec2(100, 0),
+        ImVec2(viewport[2], FLT_MAX)
+    );
 
 	ImGui::Begin("Level Specific", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
+
+    ImGui::DragFloat3("Box 1", &pos1.x, 0.005f);
+    ImGui::DragFloat3("Box 2", &pos2.x, 0.005f);
+    ImGui::DragFloat("Far", &far, 0.005f);
 
 	ImGui::End();
 }
@@ -117,7 +124,7 @@ void StitchingTest::Render()
 	Vector3 rotationAxis = Vector3((float)axisX, (float)axisY, (float)axisZ);
 
 	Matrix4x4 model = Matrix4x4::Identity();
-	model = Matrix4x4::Translation(model, Vector3(-0.5f, 0, 0));
+	model = Matrix4x4::Translation(model, pos1);
 	model = Matrix4x4::Rotation(model, rotationAxis, (float)glfwGetTime() * 1.0f);
 	model = Matrix4x4::Scale(model, Vector3(0.5f, 0.5f, 0.5f));
 
@@ -125,7 +132,7 @@ void StitchingTest::Render()
 	view = Matrix4x4::Translation(view, Vector3(0, 0, cameraZ));
 
 	Matrix4x4 projection;
-	projection = Matrix4x4::CreateProjectionMatrix_FOV_LeftHanded(fov * (PI / 180), (float)viewportData.width, (float)viewportData.height, 0.1f, 100.0f);
+	projection = Matrix4x4::CreateProjectionMatrix_FOV_LeftHanded(fov * (PI / 180), (float)viewportData.width, (float)viewportData.height, 0.1f, far);
 
 	shader.Use();
 	shader.SetMat4_Custom("model", model.m);
@@ -136,8 +143,8 @@ void StitchingTest::Render()
 	glBindVertexArray(0);
 
     model = Matrix4x4::Identity();
-    model = Matrix4x4::Translation(model, Vector3(0.5f, 0, 0));
-    model = Matrix4x4::Rotation(model, rotationAxis, (float)glfwGetTime() * 1.0f);
+    model = Matrix4x4::Translation(model, pos2);
+    model = Matrix4x4::Rotation(model, rotationAxis, -(float)glfwGetTime() * 1.0f);
     model = Matrix4x4::Scale(model, Vector3(0.5f, 0.5f, 0.5f));
 
     shader.Use();
