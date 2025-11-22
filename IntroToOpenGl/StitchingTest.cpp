@@ -82,6 +82,71 @@ void StitchingTest::Start()
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)(4 * sizeof(float)));
     glEnableVertexAttribArray(1);
 
+    float vertices2[] =
+    {
+        // Position (x, y, z, w)     // Color (r, g, b)
+
+        // Front face (Green)
+        -0.5f, -0.5f, -0.5f, 1.0f,   0.0f, 1.0f, 0.0f,
+         0.5f, -0.5f, -0.5f, 1.0f,   0.0f, 1.0f, 0.0f,
+        -0.5f,  0.5f, -0.5f, 1.0f,   0.0f, 1.0f, 0.0f,
+         0.5f, -0.5f, -0.5f, 1.0f,   0.0f, 1.0f, 0.0f,
+         0.5f,  0.5f, -0.5f, 1.0f,   0.0f, 1.0f, 0.0f,
+        -0.5f,  0.5f, -0.5f, 1.0f,   0.0f, 1.0f, 0.0f,
+
+        // Back face (Red)
+        -0.5f, -0.5f,  0.5f, 1.0f,   1.0f, 0.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f, 1.0f,   1.0f, 0.0f, 0.0f,
+         0.5f, -0.5f,  0.5f, 1.0f,   1.0f, 0.0f, 0.0f,
+         0.5f, -0.5f,  0.5f, 1.0f,   1.0f, 0.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f, 1.0f,   1.0f, 0.0f, 0.0f,
+         0.5f,  0.5f,  0.5f, 1.0f,   1.0f, 0.0f, 0.0f,
+
+         // Left face (Yellow)
+         -0.5f, -0.5f, -0.5f, 1.0f,   1.0f, 1.0f, 0.0f,
+         -0.5f,  0.5f, -0.5f, 1.0f,   1.0f, 1.0f, 0.0f,
+         -0.5f, -0.5f,  0.5f, 1.0f,   1.0f, 1.0f, 0.0f,
+         -0.5f,  0.5f, -0.5f, 1.0f,   1.0f, 1.0f, 0.0f,
+         -0.5f,  0.5f,  0.5f, 1.0f,   1.0f, 1.0f, 0.0f,
+         -0.5f, -0.5f,  0.5f, 1.0f,   1.0f, 1.0f, 0.0f,
+
+         // Right face (Blue)
+          0.5f, -0.5f, -0.5f, 1.0f,   0.0f, 0.0f, 1.0f,
+          0.5f, -0.5f,  0.5f, 1.0f,   0.0f, 0.0f, 1.0f,
+          0.5f,  0.5f, -0.5f, 1.0f,   0.0f, 0.0f, 1.0f,
+          0.5f,  0.5f, -0.5f, 1.0f,   0.0f, 0.0f, 1.0f,
+          0.5f, -0.5f,  0.5f, 1.0f,   0.0f, 0.0f, 1.0f,
+          0.5f,  0.5f,  0.5f, 1.0f,   0.0f, 0.0f, 1.0f,
+
+          // Top face (Magenta)
+          -0.5f,  0.5f, -0.5f, 1.0f,   1.0f, 0.0f, 1.0f,
+           0.5f,  0.5f, -0.5f, 1.0f,   1.0f, 0.0f, 1.0f,
+          -0.5f,  0.5f,  0.5f, 1.0f,   1.0f, 0.0f, 1.0f,
+           0.5f,  0.5f, -0.5f, 1.0f,   1.0f, 0.0f, 1.0f,
+           0.5f,  0.5f,  0.5f, 1.0f,   1.0f, 0.0f, 1.0f,
+          -0.5f,  0.5f,  0.5f, 1.0f,   1.0f, 0.0f, 1.0f,
+
+          // Bottom face (Cyan)
+          -0.5f, -0.5f, -0.5f, 1.0f,   0.0f, 1.0f, 1.0f,
+          -0.5f, -0.5f,  0.5f, 1.0f,   0.0f, 1.0f, 1.0f,
+           0.5f, -0.5f, -0.5f, 1.0f,   0.0f, 1.0f, 1.0f,
+           0.5f, -0.5f, -0.5f, 1.0f,   0.0f, 1.0f, 1.0f,
+          -0.5f, -0.5f,  0.5f, 1.0f,   0.0f, 1.0f, 1.0f,
+           0.5f, -0.5f,  0.5f, 1.0f,   0.0f, 1.0f, 1.0f
+    };
+
+    glGenVertexArrays(1, &VAO2);
+    glGenBuffers(1, &VBO2);
+    glBindVertexArray(VAO2);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO2);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices2), vertices2, GL_DYNAMIC_DRAW);
+
+    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)(4 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 }
@@ -111,7 +176,9 @@ void StitchingTest::ImGuiRender(GLFWwindow* window)
 
     ImGui::DragFloat3("Box 1", &pos1.x, 0.005f);
     ImGui::DragFloat3("Box 2", &pos2.x, 0.005f);
+    ImGui::DragFloat("Scale of Right", &scaleOfRightCube, 0.005f);
     ImGui::DragFloat("Far", &far, 0.005f);
+    ImGui::DragFloat("Near", &near, 0.005f);
 
 	ImGui::End();
 }
@@ -132,7 +199,7 @@ void StitchingTest::Render()
 	view = Matrix4x4::Translation(view, Vector3(0, 0, cameraZ));
 
 	Matrix4x4 projection;
-	projection = Matrix4x4::CreateProjectionMatrix_FOV_LeftHanded(fov * (PI / 180), (float)viewportData.width, (float)viewportData.height, 0.1f, far);
+	projection = Matrix4x4::CreateProjectionMatrix_FOV_LeftHanded(fov * (PI / 180), (float)viewportData.width, (float)viewportData.height, near, far);
 
 	shader.Use();
 	shader.SetMat4_Custom("model", model.m);
@@ -144,14 +211,14 @@ void StitchingTest::Render()
 
     model = Matrix4x4::Identity();
     model = Matrix4x4::Translation(model, pos2);
-    model = Matrix4x4::Rotation(model, rotationAxis, -(float)glfwGetTime() * 1.0f);
-    model = Matrix4x4::Scale(model, Vector3(0.5f, 0.5f, 0.5f));
+    model = Matrix4x4::Rotation(model, rotationAxis, (float)glfwGetTime() * 1.0f);
+    model = Matrix4x4::Scale(model, Vector3(scaleOfRightCube, scaleOfRightCube, scaleOfRightCube));
 
     shader.Use();
     shader.SetMat4_Custom("model", model.m);
     shader.SetMat4_Custom("view", view.m);
     shader.SetMat4_Custom("projection", projection.m);
-    glBindVertexArray(VAO);
+    glBindVertexArray(VAO2);
     glDrawArrays(GL_TRIANGLES, 0, 36);
     glBindVertexArray(0);
 }
