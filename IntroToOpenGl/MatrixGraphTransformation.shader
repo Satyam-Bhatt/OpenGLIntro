@@ -8,7 +8,7 @@ uniform mat2 mat;
 
 void main()
 {
-	vec2 pos = aPos * mat;
+	vec2 pos = mat * aPos;
 	vTexCoords = aTexCoords;
 	gl_Position = vec4(pos,0,1);
 }
