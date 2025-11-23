@@ -229,8 +229,13 @@ void TransformationMain::RenderText(SubScene sceneName)
 		ImGui::TextWrapped("Camera Z value changes as in Left Handed Coordinate system +Z is inside the screen and in Right Handed Coordinate system -Z is inside the screen");
 		ImGui::TextWrapped("Rotation also changes as winding order changes");
 	}
+	else if(sceneName == SubScene::StitchingTest)
+	{
+		ImGui::TextWrapped("As Z values are not linearly spread out so when near and far values have a huge difference the precision is low near the far plane");
+		ImGui::TextWrapped("When one of the cube is a bit smaller or similar in size and overlap eachother, then stitching occurs because there is a small difference in Z value and GPU doesn't know which to render first");
+	}
 	else
 	{
-
+		ImGui::TextWrapped("Unknown scene");
 	}
 }

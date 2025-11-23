@@ -172,7 +172,7 @@ void StitchingTest::ImGuiRender(GLFWwindow* window)
         ImVec2(viewport[2], FLT_MAX)
     );
 
-	ImGui::Begin("Level Specific", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
+	ImGui::Begin("Level Specific", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
 
     ImGui::DragFloat3("Box 1", &pos1.x, 0.005f);
     ImGui::DragFloat3("Box 2", &pos2.x, 0.005f);
