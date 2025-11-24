@@ -201,10 +201,16 @@ void StitchingTest::Render()
 	Matrix4x4 projection;
 	projection = Matrix4x4::CreateProjectionMatrix_FOV_LeftHanded(fov * (PI / 180), (float)viewportData.width, (float)viewportData.height, near, far);
 
+    // 0.00046599 || 0.000414214
+    Matrix4x4 perspectiveMatrix = Matrix4x4::CreateOnlyPerspectiveMatrix(near, far);
+    Matrix4x4 orthoMatrix = Matrix4x4::CreateProjectionMatrixSymmetric_ORTHO_LeftHanded(0.00046599f, 0.000414214f, near, far);
+
 	shader.Use();
 	shader.SetMat4_Custom("model", model.m);
 	shader.SetMat4_Custom("view", view.m);
 	shader.SetMat4_Custom("projection", projection.m);
+    shader.SetMat4_Custom("perspectiveOnly", perspectiveMatrix.m);
+    shader.SetMat4_Custom("orthoOnly", orthoMatrix.m);
 	glBindVertexArray(VAO);
     glDrawArrays(GL_TRIANGLES, 0, 36);
 	glBindVertexArray(0);

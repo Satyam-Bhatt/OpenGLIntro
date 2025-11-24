@@ -11,13 +11,21 @@ out	vec3 color;
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
+uniform mat4 perspectiveOnly;
+uniform mat4 orthoOnly;
 
 void main()
 {
 	pos = aPos;
 	color = aColor;
 	vec4 pos = projection * view * model * aPos;
-	gl_Position = pos;
+	//gl_Position = pos;
+
+	float z_Square = aPos.z * aPos.z;
+	vec4 pos2 = perspectiveOnly * view * model * aPos;
+	vec4 newPos = vec4(pos2.x, pos2.y, z_Square, pos2.w);
+	vec4 feedPos = orthoOnly * newPos;
+	gl_Position = feedPos;
 }
 
 #Satyam fragment

@@ -585,6 +585,23 @@ namespace Matrix
 			return result;
 		}
 
+		static Matrix4x4 CreateOnlyPerspectiveMatrix(float near, float far)
+		{
+			Matrix4x4 result;
+
+			result[0][0] = near;
+			
+			result[1][1] = near;
+			
+			result[2][2] = near + far;
+			result[2][3] = -near * far;
+
+			result[3][2] = 1;
+			result[3][3] = 0;
+
+			return result;
+		}
+
 		// Far plane is at infinity and camera is at the center
 		static Matrix4x4 CreateInfinitePerspectiveMatrix_Symmetric(float near, float right, float top)
 		{
