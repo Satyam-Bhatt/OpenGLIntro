@@ -21,11 +21,12 @@ void main()
 	vec4 pos = projection * view * model * aPos;
 	//gl_Position = pos;
 
-	float z_Square = aPos.z * aPos.z;
 	vec4 pos2 = perspectiveOnly * view * model * aPos;
+	vec4 zPos = view * model * aPos;
+	float z_Square = zPos.z * zPos.z;
 	vec4 newPos = vec4(pos2.x, pos2.y, z_Square, pos2.w);
 	vec4 feedPos = orthoOnly * newPos;
-	gl_Position = feedPos;
+	gl_Position = vec4(feedPos.x, feedPos.y, feedPos.z, feedPos.w);
 }
 
 #Satyam fragment
