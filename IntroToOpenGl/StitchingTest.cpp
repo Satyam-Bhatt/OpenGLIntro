@@ -160,6 +160,10 @@ void StitchingTest::ImGuiRender(GLFWwindow* window)
 	GLint viewport[4];
 	glGetIntegerv(GL_VIEWPORT, viewport);
 
+    float leftIMGUIWindowWidth = viewport[2] - (float)viewportData.width;
+    float windowWidth = viewport[2] * 0.4f;
+
+#pragma region MAIN WINDOW
 	ImGui::SetNextWindowPos(
 		ImVec2(viewport[0] + viewport[2] / 2, viewport[3]),
 		ImGuiCond_Always,
@@ -174,13 +178,88 @@ void StitchingTest::ImGuiRender(GLFWwindow* window)
 
 	ImGui::Begin("Level Specific", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
 
-    ImGui::DragFloat3("Box 1", &pos1.x, 0.005f);
-    ImGui::DragFloat3("Box 2", &pos2.x, 0.005f);
-    ImGui::DragFloat("Scale of Right", &scaleOfRightCube, 0.005f);
+    //ImGui::DragFloat3("Box 1", &pos1.x, 0.005f);
+    ImGui::DragFloat3("Inner Box", &pos2.x, 0.005f);
+    ImGui::DragFloat("Inner Box Scale", &scaleOfRightCube, 0.005f);
     ImGui::DragFloat("Far", &far, 0.005f);
     ImGui::DragFloat("Near", &near, 0.005f);
 
 	ImGui::End();
+#pragma endregion
+
+#pragma region Z-FIGHTING
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 12.0f);
+    ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.2f, 0.2f, 0.2f, 1.0f));
+
+    ImGui::SetNextWindowSizeConstraints(
+        ImVec2(100, 0),
+        ImVec2(windowWidth, FLT_MAX)
+    );
+
+    //ImGui::SetNextWindowSize(
+    //    ImVec2(windowWidth, 500)
+    //);
+
+    ImGui::SetNextWindowPos(
+        // Set the position in the starting 1/4th of the redering area
+        ImVec2(viewport[0] + leftIMGUIWindowWidth + (float)viewportData.width / 4, viewport[1] + 50),
+        ImGuiCond_Always,
+        ImVec2(0.5f, 0.0f)  // Pivot point: 0.5f means centered horizontally
+    );
+
+    ImGui::Begin("Heading 1", 0, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_AlwaysAutoResize);
+
+    ImGui::Dummy(ImVec2(windowWidth, 0.0f));
+    ImGui::Text("Z-FIGHTING");
+
+    ImGui::Indent(10.0f);
+    ImGui::TextWrapped("Flickering can be observed as near and far planes have huge difference and scale difference is not much between both the boxes.");
+	ImGui::Unindent(10.0f);
+
+    ImGui::End();
+
+    ImGui::PopStyleColor();
+    ImGui::PopStyleVar();
+#pragma endregion
+
+#pragma region Z-FIGHTING FIX
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 12.0f);
+    ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.2f, 0.2f, 0.2f, 1.0f));
+
+    ImGui::SetNextWindowSizeConstraints(
+        ImVec2(100, 0),
+        ImVec2(windowWidth, FLT_MAX)
+    );
+
+    ImGui::SetNextWindowPos(
+        // Set the position in the ending 1/4th of the redering area
+        ImVec2(viewport[0] + leftIMGUIWindowWidth + (float)viewportData.width / 4 + (float)viewportData.width / 2, viewport[1] + 50),
+        ImGuiCond_Always,
+        ImVec2(0.5f, 0.0f)  // Pivot point: 0.5f means centered horizontally
+    );
+
+    ImGui::Begin("Heading 2", 0, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_AlwaysAutoResize);
+
+    ImGui::Text("Z- Fighting Fixed");
+    ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.2f, 0.4f, 0.8f, 1.0f));
+    ImGui::BulletText("+Z INSIDE the screen");
+    ImGui::PopStyleColor();
+
+    ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.8f, 0.2f, 0.2f, 1.0f));
+    ImGui::BulletText("X to the right");
+    ImGui::PopStyleColor();
+
+    ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.2f, 0.8f, 0.4f, 1.0f));
+    ImGui::BulletText("Y to the top");
+    ImGui::PopStyleColor();
+
+    ImGui::End();
+
+    ImGui::PopStyleColor();
+    ImGui::PopStyleVar();
+#pragma endregion
+
+
 }
 
 void StitchingTest::Render()
@@ -190,8 +269,11 @@ void StitchingTest::Render()
 	float axisZ = rotZ ? 1 : 0;
 	Vector3 rotationAxis = Vector3((float)axisX, (float)axisY, (float)axisZ);
 
+    float xOffsetFromCenter = 1.0f;
+
+#pragma region RIGHT BIG CUBE
 	Matrix4x4 model = Matrix4x4::Identity();
-	model = Matrix4x4::Translation(model, pos1);
+	model = Matrix4x4::Translation(model, pos1 + Vector3(xOffsetFromCenter, 0, 0));
 	model = Matrix4x4::Rotation(model, rotationAxis, (float)glfwGetTime() * 1.0f);
 	model = Matrix4x4::Scale(model, Vector3(0.5f, 0.5f, 0.5f));
 
@@ -201,8 +283,8 @@ void StitchingTest::Render()
 	Matrix4x4 projection;
 	projection = Matrix4x4::CreateProjectionMatrix_FOV_LeftHanded(fov * (PI / 180), (float)viewportData.width, (float)viewportData.height, near, far);
 
-    // 0.00046599 || 0.000414214
     Matrix4x4 perspectiveMatrix = Matrix4x4::CreateOnlyPerspectiveMatrix(near, far);
+    // Calculated left and right from fov
     Matrix4x4 orthoMatrix = Matrix4x4::CreateProjectionMatrixSymmetric_ORTHO_LeftHanded(0.00046599f, 0.000414214f, near, far);
 
 	shader.Use();
@@ -211,12 +293,15 @@ void StitchingTest::Render()
 	shader.SetMat4_Custom("projection", projection.m);
     shader.SetMat4_Custom("perspectiveOnly", perspectiveMatrix.m);
     shader.SetMat4_Custom("orthoOnly", orthoMatrix.m);
+    shader.SetBool("zFightFix", true);
 	glBindVertexArray(VAO);
     glDrawArrays(GL_TRIANGLES, 0, 36);
 	glBindVertexArray(0);
+#pragma endregion
 
+#pragma region RIGHT SMALL CUBE
     model = Matrix4x4::Identity();
-    model = Matrix4x4::Translation(model, pos2);
+    model = Matrix4x4::Translation(model, pos2 + Vector3(xOffsetFromCenter, 0, 0));
     model = Matrix4x4::Rotation(model, rotationAxis, (float)glfwGetTime() * 1.0f);
     model = Matrix4x4::Scale(model, Vector3(scaleOfRightCube, scaleOfRightCube, scaleOfRightCube));
 
@@ -224,9 +309,49 @@ void StitchingTest::Render()
     shader.SetMat4_Custom("model", model.m);
     shader.SetMat4_Custom("view", view.m);
     shader.SetMat4_Custom("projection", projection.m);
+    shader.SetMat4_Custom("perspectiveOnly", perspectiveMatrix.m);
+    shader.SetMat4_Custom("orthoOnly", orthoMatrix.m);
+    shader.SetBool("zFightFix", true);
     glBindVertexArray(VAO2);
     glDrawArrays(GL_TRIANGLES, 0, 36);
     glBindVertexArray(0);
+#pragma endregion
+
+#pragma region LEFT BIG CUBE
+    model = Matrix4x4::Identity();
+    model = Matrix4x4::Translation(model, pos1 - Vector3(xOffsetFromCenter, 0, 0));
+    model = Matrix4x4::Rotation(model, rotationAxis, (float)glfwGetTime() * 1.0f);
+    model = Matrix4x4::Scale(model, Vector3(0.5f, 0.5f, 0.5f));
+
+    shader.Use();
+    shader.SetMat4_Custom("model", model.m);
+    shader.SetMat4_Custom("view", view.m);
+    shader.SetMat4_Custom("projection", projection.m);
+    shader.SetMat4_Custom("perspectiveOnly", perspectiveMatrix.m);
+    shader.SetMat4_Custom("orthoOnly", orthoMatrix.m);
+    shader.SetBool("zFightFix", false);
+    glBindVertexArray(VAO);
+    glDrawArrays(GL_TRIANGLES, 0, 36);
+    glBindVertexArray(0);
+#pragma endregion
+
+#pragma region LEFT SMALL CUBE
+        model = Matrix4x4::Identity();
+        model = Matrix4x4::Translation(model, pos2 - Vector3(xOffsetFromCenter, 0, 0));
+        model = Matrix4x4::Rotation(model, rotationAxis, (float)glfwGetTime() * 1.0f);
+        model = Matrix4x4::Scale(model, Vector3(scaleOfRightCube, scaleOfRightCube, scaleOfRightCube));
+
+        shader.Use();
+        shader.SetMat4_Custom("model", model.m);
+        shader.SetMat4_Custom("view", view.m);
+        shader.SetMat4_Custom("projection", projection.m);
+        shader.SetMat4_Custom("perspectiveOnly", perspectiveMatrix.m);
+        shader.SetMat4_Custom("orthoOnly", orthoMatrix.m);
+        shader.SetBool("zFightFix", false);
+        glBindVertexArray(VAO2);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
+        glBindVertexArray(0);
+#pragma endregion
 }
 
 void StitchingTest::Exit()
