@@ -196,13 +196,9 @@ void StitchingTest::ImGuiRender(GLFWwindow* window)
         ImVec2(windowWidth, FLT_MAX)
     );
 
-    //ImGui::SetNextWindowSize(
-    //    ImVec2(windowWidth, 500)
-    //);
-
     ImGui::SetNextWindowPos(
         // Set the position in the starting 1/4th of the redering area
-        ImVec2(viewport[0] + leftIMGUIWindowWidth + (float)viewportData.width / 4, viewport[1] + 50),
+        ImVec2(viewport[0] + leftIMGUIWindowWidth + (float)viewportData.width / 4, viewport[1] + 20),
         ImGuiCond_Always,
         ImVec2(0.5f, 0.0f)  // Pivot point: 0.5f means centered horizontally
     );
@@ -233,25 +229,32 @@ void StitchingTest::ImGuiRender(GLFWwindow* window)
 
     ImGui::SetNextWindowPos(
         // Set the position in the ending 1/4th of the redering area
-        ImVec2(viewport[0] + leftIMGUIWindowWidth + (float)viewportData.width / 4 + (float)viewportData.width / 2, viewport[1] + 50),
+        ImVec2(viewport[0] + leftIMGUIWindowWidth + (float)viewportData.width / 4 + (float)viewportData.width / 2, viewport[1] + 20),
         ImGuiCond_Always,
         ImVec2(0.5f, 0.0f)  // Pivot point: 0.5f means centered horizontally
     );
 
     ImGui::Begin("Heading 2", 0, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_AlwaysAutoResize);
 
-    ImGui::Text("Z- Fighting Fixed");
-    ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.2f, 0.4f, 0.8f, 1.0f));
-    ImGui::BulletText("+Z INSIDE the screen");
-    ImGui::PopStyleColor();
+    ImGui::Dummy(ImVec2(windowWidth, 0.0f));
 
-    ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.8f, 0.2f, 0.2f, 1.0f));
-    ImGui::BulletText("X to the right");
-    ImGui::PopStyleColor();
+    ImGui::Text("Z- FIGHTING FIXED");
 
-    ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.2f, 0.8f, 0.4f, 1.0f));
-    ImGui::BulletText("Y to the top");
-    ImGui::PopStyleColor();
+    ImGui::Indent(10.0f);
+    ImGui::TextWrapped("There is no flickering although the values are still the same.");
+    ImGui::Unindent(10.0f);
+
+    ImGui::Text("WHY?");
+
+    ImGui::Indent(10.0f);
+    ImGui::TextWrapped("So flickering basically happens because the Z values are non linearly distributed. It happens because we get an quadratic equation in the projection matrix and we solve it for near and far plane. So the Z value is same for the near and far points but all of the points in the middle are non linearly distributed.");
+    ImGui::Unindent(10.0f);
+
+    ImGui::Text("SOLUTION");
+
+	ImGui::Indent(10.0f);
+	ImGui::TextWrapped("Rather than changing the values of near and far planes, I just replaced the value of Z in the shader. So rather than providing the interpolated values of Z, I just swap them with the linear values that we get after multiplying with the model and view matrix. Although it is not mathematically correct but it does the job.");
+	ImGui::Unindent(10.0f);
 
     ImGui::End();
 
