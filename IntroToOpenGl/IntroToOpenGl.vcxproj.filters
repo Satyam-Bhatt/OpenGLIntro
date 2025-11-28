@@ -189,6 +189,9 @@
     <ClCompile Include="Right_LeftHanded.cpp">
       <Filter>Source Files\Transformations</Filter>
     </ClCompile>
+    <ClCompile Include="Transformation_3D.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameState.h">
@@ -328,6 +331,9 @@
     </ClInclude>
     <ClInclude Include="Right_LeftHanded.h">
       <Filter>Header Files\TransformationsMain</Filter>
+    </ClInclude>
+    <ClInclude Include="Transformation_3D.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

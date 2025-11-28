@@ -25,11 +25,24 @@ void main()
 	}
 	else
 	{
-		vec4 pos2 = perspectiveOnly * view * model * aPos;
+		// This fixes Z fighting as we replace non linear Z values with linear values. Though it mathematically incorrect but it does the job
+
+		// Find the position of the vertex when it goes from a square frusturm to cuboid
+		vec4 positionInTheCuboid = perspectiveOnly * view * model * aPos;
+
+		// Z position after being affected by model and view matrix
 		vec4 zPos = view * model * aPos;
+
+		// As Z is divides by W we square it so that we don't loose depth information
 		float z_Square = zPos.z * zPos.z;
-		vec4 newPos = vec4(pos2.x, pos2.y, z_Square, pos2.w);
-		vec4 feedPos = orthoOnly * newPos;
+
+		// We replace the Z value as the existing Z value is non linear because of the quadratic equation m1 Z + m2 = Z^2
+		positionInTheCuboid = vec4(positionInTheCuboid.x, positionInTheCuboid.y, z_Square, positionInTheCuboid.w);
+
+		// We multiply this with the orthographic matrix to reposition and scale the cuboid
+		vec4 feedPos = orthoOnly * positionInTheCuboid;
+
+		// gl_Position automatically converts homogenous coordinates to cartesian by dividing X,Y and Z by W
 		gl_Position = vec4(feedPos.x, feedPos.y, feedPos.z, feedPos.w);
 	}
 

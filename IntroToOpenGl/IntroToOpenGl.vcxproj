@@ -179,6 +179,7 @@
     <ClCompile Include="TexelViewer.cpp" />
     <ClCompile Include="TextureMain.cpp" />
     <ClCompile Include="TransformationMain.cpp" />
+    <ClCompile Include="Transformation_3D.cpp" />
     <ClCompile Include="Translate_Rotate_Scale.cpp" />
     <ClCompile Include="TriangleTexture.cpp" />
     <ClCompile Include="TriangleWithVertexDataManipulation.cpp" />
@@ -226,6 +227,7 @@
     <ClInclude Include="TexelViewer.h" />
     <ClInclude Include="TextureMain.h" />
     <ClInclude Include="TransformationMain.h" />
+    <ClInclude Include="Transformation_3D.h" />
     <ClInclude Include="Translate_Rotate_Scale.h" />
     <ClInclude Include="TriangleTexture.h" />
     <ClInclude Include="TriangleWithVertexDataManipulation.h" />
