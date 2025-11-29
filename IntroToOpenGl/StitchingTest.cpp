@@ -359,6 +359,11 @@ void StitchingTest::Render()
 
 void StitchingTest::Exit()
 {
+    if (VAO != 0) glDeleteVertexArrays(1, &VAO);
+    if (VBO != 0) glDeleteBuffers(1, &VBO);
+    if (shader.ID != 0) glDeleteProgram(shader.ID);
+
+    glDisable(GL_DEPTH_TEST);
 }
 
 StitchingTest* StitchingTest::GetInstance()

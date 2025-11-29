@@ -1,8 +1,7 @@
 #pragma once
 #include "TransformationMain.h"
 
-using namespace Matrix;
-using namespace Vector;
+
 class MyMatrixClass : public TransformationMain
 {
 public:

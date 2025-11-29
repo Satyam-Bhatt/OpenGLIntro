@@ -190,7 +190,7 @@
       <Filter>Source Files\Transformations</Filter>
     </ClCompile>
     <ClCompile Include="Transformation_3D.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Transformations</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -333,7 +333,7 @@
       <Filter>Header Files\TransformationsMain</Filter>
     </ClInclude>
     <ClInclude Include="Transformation_3D.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\TransformationsMain</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -401,6 +401,9 @@
       <Filter>Shader\Transformations</Filter>
     </None>
     <None Include="Right_LeftHanded.shader">
+      <Filter>Shader\Transformations</Filter>
+    </None>
+    <None Include="Transformation_3D.shader">
       <Filter>Shader\Transformations</Filter>
     </None>
   </ItemGroup>

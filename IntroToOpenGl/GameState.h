@@ -17,6 +17,10 @@
 #include "Matrix.h"
 #include "constants.h"
 
+//TODO: Remove all the using statements
+using namespace Matrix;
+using namespace Vector;
+
 class GameState
 {
 public:

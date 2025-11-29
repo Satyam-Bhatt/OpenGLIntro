@@ -18,5 +18,8 @@ public:
 private:
 	static Transformation_3D instance;
 
+	Shader shader;
+	uint32_t VAO = 0, VBO = 0;
+
 };
 

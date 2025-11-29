@@ -255,6 +255,7 @@
     <None Include="StitchingTest.shader" />
     <None Include="TexelViewer.shader" />
     <None Include="TextureMapping_3D.shader" />
+    <None Include="Transformation_3D.shader" />
     <None Include="Translate_Rotate_Scale.shader" />
     <None Include="Translate_Scale_Rotate_Pivot.shader" />
     <None Include="TriangleTexture.shader" />

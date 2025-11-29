@@ -1,7 +1,6 @@
 ﻿#pragma once
 #include "TransformationMain.h"
 
-using namespace Vector;
 using Matrix4x4Alias = float[4][4];
 
 class IntroTransformation : public TransformationMain
