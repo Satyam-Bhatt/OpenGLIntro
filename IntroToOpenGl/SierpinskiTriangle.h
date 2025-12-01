@@ -1,7 +1,6 @@
 #pragma once
 #include "TransformationMain.h"
 
-using namespace Vector;
 class SierpinskiTriangle : public TransformationMain
 {
 public:

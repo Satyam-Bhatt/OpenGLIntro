@@ -1,8 +1,6 @@
 #pragma once
 #include "TransformationMain.h"
 
-using Matrix::Matrix4x4;
-
 class CoordinateSystems : public TransformationMain
 {
 public:

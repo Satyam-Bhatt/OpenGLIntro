@@ -1,9 +1,6 @@
 #pragma once
 #include "TransformationMain.h"
 
-using Matrix::Matrix4x4;
-using Vector::Vector3;
-
 class TextureMapping_3D : public TransformationMain
 {
 	struct CubeTransform {

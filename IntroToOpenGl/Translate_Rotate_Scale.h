@@ -1,7 +1,6 @@
 #pragma once
 #include "IntroTransformation.h"
 
-using namespace Vector;
 using Matrix4x4Alias = float[4][4];
 
 class Translate_Rotate_Scale : public IntroTransformation

@@ -1,8 +1,6 @@
 #pragma once
 #include "TextureMain.h"
 
-using namespace Vector;
-
 class TwoTextures :
     public TextureMain
 {

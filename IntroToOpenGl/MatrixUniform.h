@@ -1,8 +1,6 @@
 #pragma once
 #include "TransformationMain.h"
 
-using namespace Vector;
-
 class MatrixUniform: public TransformationMain
 {
 public:
