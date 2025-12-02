@@ -119,8 +119,11 @@ void Transformation_3D::Render()
 {
     Matrix4x4 model = Matrix4x4::Identity();
 
+    Matrix4x4 view = Matrix4x4::Identity();
+    view = Matrix4x4::Translation(view, Vector3(0.0f, 0.0f, -5.0f));
 
-
+    Matrix4x4 projection;
+    projection = Matrix4x4::CreateProjectionMatrix_FOV_LeftHanded(45.0f * (PI / 180), (float)viewportData.width, (float)viewportData.height, 0.1f, 100.0f);
 }
 
 void Transformation_3D::Exit()
