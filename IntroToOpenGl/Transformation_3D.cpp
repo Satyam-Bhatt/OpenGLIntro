@@ -124,6 +124,14 @@ void Transformation_3D::Render()
 
     Matrix4x4 projection;
     projection = Matrix4x4::CreateProjectionMatrix_FOV_LeftHanded(45.0f * (PI / 180), (float)viewportData.width, (float)viewportData.height, 0.1f, 100.0f);
+
+    shader.Use();
+    shader.SetMat4_Custom("model", model.m);
+    shader.SetMat4_Custom("view", view.m);
+    shader.SetMat4_Custom("projection", projection.m);
+    glBindVertexArray(VAO);
+    glDrawArrays(GL_TRIANGLES, 0, 36);
+    glBindVertexArray(0);
 }
 
 void Transformation_3D::Exit()
