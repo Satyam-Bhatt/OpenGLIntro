@@ -10,6 +10,7 @@
 #include "TextureMapping_3D.h"
 #include "Right_LeftHanded.h"
 #include "StitchingTest.h"
+#include "Transformation_3D.h"
 
 TransformationMain* TransformationMain::instance = nullptr;
 
@@ -47,6 +48,9 @@ TransformationMain::TransformationMain()
 
 	sceneNames[SubScene::StitchingTest] = "Stitching Test";
 	sceneFactories[SubScene::StitchingTest] = []() -> TransformationMain* { return StitchingTest::GetInstance(); };
+
+	sceneNames[SubScene::Transformation_3D] = "Transformation 3D";
+	sceneFactories[SubScene::Transformation_3D] = []() -> TransformationMain* { return Transformation_3D::GetInstance(); };
 }
 
 TransformationMain::~TransformationMain()
@@ -233,6 +237,10 @@ void TransformationMain::RenderText(SubScene sceneName)
 	{
 		ImGui::TextWrapped("As Z values are not linearly spread out so when near and far values have a huge difference the precision is low near the far plane");
 		ImGui::TextWrapped("When one of the cube is a bit smaller or similar in size and overlap eachother, then stitching occurs because there is a small difference in Z value and GPU doesn't know which to render first");
+	}
+	else if (sceneName == SubScene::Transformation_3D)
+	{
+		ImGui::TextWrapped("3D cube transformation");
 	}
 	else
 	{

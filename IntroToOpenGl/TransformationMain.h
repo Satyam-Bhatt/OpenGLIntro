@@ -35,6 +35,7 @@ private:
 		TextureMapping_3D,
 		Right_LeftHanded,
 		StitchingTest,
+		Transformation_3D,
 		COUNT
 	};
 

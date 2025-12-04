@@ -29,7 +29,7 @@ void main()
 
 		// Find the position of the vertex when it goes from a square frusturm to cuboid
 		vec4 positionInTheCuboid = perspectiveOnly * view * model * aPos;
-
+ 
 		// Z position after being affected by model and view matrix
 		vec4 zPos = view * model * aPos;
 
