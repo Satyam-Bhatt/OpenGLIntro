@@ -222,6 +222,9 @@ void StitchingTest::ImGuiRender(GLFWwindow* window)
     ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 12.0f);
     ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.2f, 0.2f, 0.2f, 1.0f));
 
+    // Redefine the window width
+    windowWidth = viewport[2] * 0.5f;
+
     ImGui::SetNextWindowSizeConstraints(
         ImVec2(100, 0),
         ImVec2(windowWidth, FLT_MAX)
@@ -229,7 +232,7 @@ void StitchingTest::ImGuiRender(GLFWwindow* window)
 
     ImGui::SetNextWindowPos(
         // Set the position in the ending 1/4th of the redering area
-        ImVec2(viewport[0] + leftIMGUIWindowWidth + (float)viewportData.width / 4 + (float)viewportData.width / 2, viewport[1] + 20),
+        ImVec2((viewport[0] + leftIMGUIWindowWidth + (float)viewportData.width / 4 + (float)viewportData.width / 2)- 10, viewport[1] + 20),
         ImGuiCond_Always,
         ImVec2(0.5f, 0.0f)  // Pivot point: 0.5f means centered horizontally
     );
@@ -244,16 +247,17 @@ void StitchingTest::ImGuiRender(GLFWwindow* window)
     ImGui::TextWrapped("There is no flickering although the values are still the same.");
     ImGui::Unindent(10.0f);
 
-    ImGui::Text("WHY?");
+    ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "WHY?");
 
     ImGui::Indent(10.0f);
-    ImGui::TextWrapped("So flickering basically happens because the Z values are non linearly distributed. It happens because we get an quadratic equation in the projection matrix and we solve it for near and far plane. So the Z value is same for the near and far points but all of the points in the middle are non linearly distributed.");
+    ImGui::TextWrapped("We want the final value of Z to be Z^2. With Matrix operation we cannot produce squared terms so we approximate it with a linear form m1*Z + m2. We choose m1 and m2 so that this approximation matches the true Z^2 at the near and far planes. During the conversion from homogeneous to Cartesian coordinates, each component is divided by w, which we have set to Z. As for the Z value we are dividing the linear approximation of Z^2 by Z.");
+    ImGui::TextWrapped("Because of this approximation, the values near the near plane are well seperated but the values closer to the far plane bunch together. This is what causes Z fighting. Since the GPU receives nearly identical depth values for objects far away, it struggles to decide which fragment is in front.");
     ImGui::Unindent(10.0f);
 
-    ImGui::Text("SOLUTION");
+    ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "SOLUTION");
 
 	ImGui::Indent(10.0f);
-	ImGui::TextWrapped("Rather than changing the values of near and far planes, I just replaced the value of Z in the shader. So rather than providing the interpolated values of Z, I just swap them with the linear values that we get after multiplying with the model and view matrix. Although it is not mathematically correct but it does the job.");
+	ImGui::TextWrapped("Rather than changing the values of near and far planes, we can manually override the Z value in the shader. So rather than providing the linear approximation, we just swap them with the Z value that we get after multiplying with the model and view matrix. Although it is not mathematically correct but gives a workable result.");
 	ImGui::Unindent(10.0f);
 
     ImGui::End();
@@ -261,8 +265,6 @@ void StitchingTest::ImGuiRender(GLFWwindow* window)
     ImGui::PopStyleColor();
     ImGui::PopStyleVar();
 #pragma endregion
-
-
 }
 
 void StitchingTest::Render()
@@ -276,7 +278,7 @@ void StitchingTest::Render()
 
 #pragma region RIGHT BIG CUBE
 	Matrix4x4 model = Matrix4x4::Identity();
-	model = Matrix4x4::Translation(model, pos1 + Vector3(xOffsetFromCenter, 0, 0));
+	model = Matrix4x4::Translation(model, pos1 + Vector3(xOffsetFromCenter, -0.5f, 0));
 	model = Matrix4x4::Rotation(model, rotationAxis, (float)glfwGetTime() * 1.0f);
 	model = Matrix4x4::Scale(model, Vector3(0.5f, 0.5f, 0.5f));
 
@@ -288,7 +290,10 @@ void StitchingTest::Render()
 
     Matrix4x4 perspectiveMatrix = Matrix4x4::CreateOnlyPerspectiveMatrix(near, far);
     // Calculated left and right from fov
-    Matrix4x4 orthoMatrix = Matrix4x4::CreateProjectionMatrixSymmetric_ORTHO_LeftHanded(0.00046599f, 0.000414214f, near, far);
+    float aspectRatio = (float)viewportData.width / (float)viewportData.height;
+    float top = tan(fov * (PI / 180) / 2) * near;
+    float right = top * aspectRatio;
+    Matrix4x4 orthoMatrix = Matrix4x4::CreateProjectionMatrixSymmetric_ORTHO_LeftHanded(right, top, near, far);
 
 	shader.Use();
 	shader.SetMat4_Custom("model", model.m);
@@ -304,7 +309,7 @@ void StitchingTest::Render()
 
 #pragma region RIGHT SMALL CUBE
     model = Matrix4x4::Identity();
-    model = Matrix4x4::Translation(model, pos2 + Vector3(xOffsetFromCenter, 0, 0));
+    model = Matrix4x4::Translation(model, pos2 + Vector3(xOffsetFromCenter, -0.5f, 0));
     model = Matrix4x4::Rotation(model, rotationAxis, (float)glfwGetTime() * 1.0f);
     model = Matrix4x4::Scale(model, Vector3(scaleOfRightCube, scaleOfRightCube, scaleOfRightCube));
 
@@ -322,7 +327,7 @@ void StitchingTest::Render()
 
 #pragma region LEFT BIG CUBE
     model = Matrix4x4::Identity();
-    model = Matrix4x4::Translation(model, pos1 - Vector3(xOffsetFromCenter, 0, 0));
+    model = Matrix4x4::Translation(model, pos1 - Vector3(xOffsetFromCenter, 0.5f, 0));
     model = Matrix4x4::Rotation(model, rotationAxis, (float)glfwGetTime() * 1.0f);
     model = Matrix4x4::Scale(model, Vector3(0.5f, 0.5f, 0.5f));
 
@@ -340,7 +345,7 @@ void StitchingTest::Render()
 
 #pragma region LEFT SMALL CUBE
         model = Matrix4x4::Identity();
-        model = Matrix4x4::Translation(model, pos2 - Vector3(xOffsetFromCenter, 0, 0));
+        model = Matrix4x4::Translation(model, pos2 - Vector3(xOffsetFromCenter, 0.5f, 0));
         model = Matrix4x4::Rotation(model, rotationAxis, (float)glfwGetTime() * 1.0f);
         model = Matrix4x4::Scale(model, Vector3(scaleOfRightCube, scaleOfRightCube, scaleOfRightCube));
 

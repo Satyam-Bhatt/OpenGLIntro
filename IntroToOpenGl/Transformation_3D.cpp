@@ -114,12 +114,14 @@ void Transformation_3D::ImGuiRender(GLFWwindow* window)
 	ImGui::Begin("Level Specific", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
 
 	ImGui::DragFloat3("Local Rotation", &rotation.x, 0.5f);
+	ImGui::DragFloat3("World Position", &position.x, 0.5f);
 
 	ImGui::End();
 }
 
 void Transformation_3D::Render()
 {
+	// TODO: This rotation does not feel natural, some in local and some in global
 	Matrix4x4 model = Matrix4x4::Identity();
 	model = Matrix4x4::Rotation(model, Vector3(1.0f, 0.0f, 0.0f), rotation.x * (PI / 180.0f));
 	model = Matrix4x4::Rotation(model, Vector3(0.0f, 1.0f, 0.0f), rotation.y * (PI / 180.0f));
