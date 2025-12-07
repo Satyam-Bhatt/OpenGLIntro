@@ -130,8 +130,13 @@ void Transformation_3D::Render()
 	Matrix4x4 rotX = Matrix4x4::CreateRotationX(rotation.x * (PI / 180.0f));
 	Matrix4x4 rotY = Matrix4x4::CreateRotationY(rotation.y * (PI / 180.0f));
 	Matrix4x4 rotZ = Matrix4x4::CreateRotationZ(rotation.z * (PI / 180.0f));
-
+	
 	Matrix4x4 rotCombined = rotX * rotY * rotZ;
+
+	Vector3 rotVec = Vector3(1, 0, 0);
+	Vector3 rotatedVec = rotCombined * rotVec;
+
+	float angleBetweenVectors = acos(rotatedVec.Normalize().Dot(Vector3(1, 0, 0)));
 
 	model = rotCombined;
 
