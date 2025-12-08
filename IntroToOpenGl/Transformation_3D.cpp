@@ -136,9 +136,17 @@ void Transformation_3D::Render()
 	Vector3 rotVec = Vector3(1, 0, 0);
 	Vector3 rotatedVec = rotCombined * rotVec;
 
+	Vector3 axis = Vector3(0, 0, 0);
+	rotatedVec.x != 0 ? axis.x = 1 : axis.x = 0;
+	rotatedVec.y != 0 ? axis.y = 1 : axis.y = 0;
+	rotatedVec.z != 0 ? axis.z = 1 : axis.z = 0;
+
 	float angleBetweenVectors = acos(rotatedVec.Normalize().Dot(Vector3(1, 0, 0)));
 
-	model = rotCombined;
+	Matrix4x4 crazyRotation = Matrix4x4::Rotation(Matrix4x4::Identity(), axis, angleBetweenVectors);
+
+	// model = rotCombined;
+	model = crazyRotation;
 
 	Matrix4x4 view = Matrix4x4::Identity();
 	view = Matrix4x4::Translation(view, Vector3(0.0f, 0.0f, 5.0f));
