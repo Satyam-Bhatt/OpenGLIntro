@@ -114,7 +114,8 @@ void Transformation_3D::ImGuiRender(GLFWwindow* window)
 	ImGui::Begin("Level Specific", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
 
 	ImGui::DragFloat3("Local Rotation", &rotation.x, 0.5f);
-	ImGui::DragFloat3("World Position", &position.x, 0.5f);
+	ImGui::DragFloat3("World Position", &position.x, 0.005f);
+	ImGui::DragFloat3("Local Scale", &scale.x, 0.005f);
 
 	ImGui::End();
 }
@@ -123,14 +124,19 @@ void Transformation_3D::Render()
 {
 	// TODO: This rotation does not feel natural, some in local and some in global
 	Matrix4x4 model = Matrix4x4::Identity();
-	//model = Matrix4x4::Rotation(model, Vector3(1.0f, 0.0f, 0.0f), rotation.x * (PI / 180.0f));
-	//model = Matrix4x4::Rotation(model, Vector3(0.0f, 1.0f, 0.0f), rotation.y * (PI / 180.0f));
-	//model = Matrix4x4::Rotation(model, Vector3(0.0f, 0.0f, 1.0f), rotation.z * (PI / 180.0f));
+	model = Matrix4x4::Translation(model, position);
+	
+	model = Matrix4x4::Rotation(model, Vector3(1.0f, 0.0f, 0.0f), rotation.x * (PI / 180.0f));
+	model = Matrix4x4::Rotation(model, Vector3(0.0f, 1.0f, 0.0f), rotation.y * (PI / 180.0f));
+	model = Matrix4x4::Rotation(model, Vector3(0.0f, 0.0f, 1.0f), rotation.z * (PI / 180.0f));
 
+	model = Matrix4x4::Scale(model, scale);
+
+#pragma region Experiment
 	Matrix4x4 rotX = Matrix4x4::CreateRotationX(rotation.x * (PI / 180.0f));
 	Matrix4x4 rotY = Matrix4x4::CreateRotationY(rotation.y * (PI / 180.0f));
 	Matrix4x4 rotZ = Matrix4x4::CreateRotationZ(rotation.z * (PI / 180.0f));
-	
+
 	Matrix4x4 rotCombined = rotX * rotY * rotZ;
 
 	Vector3 rotVec = Vector3(1, 0, 0);
@@ -146,7 +152,11 @@ void Transformation_3D::Render()
 	Matrix4x4 crazyRotation = Matrix4x4::Rotation(Matrix4x4::Identity(), axis, angleBetweenVectors);
 
 	// model = rotCombined;
-	model = crazyRotation;
+	//model = crazyRotation;
+#pragma endregion
+
+
+
 
 	Matrix4x4 view = Matrix4x4::Identity();
 	view = Matrix4x4::Translation(view, Vector3(0.0f, 0.0f, 5.0f));
