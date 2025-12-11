@@ -24,6 +24,8 @@ private:
 
 	Vector3 scale = Vector3(1.0f, 1.0f, 1.0f);
 
+	bool rodrigueRotation = true;
+
 	Shader shader;
 	uint32_t VAO = 0, VBO = 0;
 
