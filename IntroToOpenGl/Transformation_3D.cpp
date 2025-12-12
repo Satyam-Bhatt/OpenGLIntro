@@ -126,9 +126,21 @@ void Transformation_3D::Render()
 	Matrix4x4 model = Matrix4x4::Identity();
 	model = Matrix4x4::Translation(model, position);
 	
-	model = Matrix4x4::Rotation(model, Vector3(0.0f, 0.0f, 1.0f), rotation.z * (PI / 180.0f));
-	model = Matrix4x4::Rotation(model, Vector3(0.0f, 1.0f, 0.0f), rotation.y * (PI / 180.0f));
-	model = Matrix4x4::Rotation(model, Vector3(1.0f, 0.0f, 0.0f), rotation.x * (PI / 180.0f));
+	if (rodrigueRotation)
+	{
+		model = Matrix4x4::Rotation(model, Vector3(0.0f, 0.0f, 1.0f), rotation.z * (PI / 180.0f));
+		model = Matrix4x4::Rotation(model, Vector3(0.0f, 1.0f, 0.0f), rotation.y * (PI / 180.0f));
+		model = Matrix4x4::Rotation(model, Vector3(1.0f, 0.0f, 0.0f), rotation.x * (PI / 180.0f));
+	}
+	else
+	{
+		Matrix4x4 rotX = Matrix4x4::CreateRotationX(rotation.x * (PI / 180.0f));
+		Matrix4x4 rotY = Matrix4x4::CreateRotationY(rotation.y * (PI / 180.0f));
+		Matrix4x4 rotZ = Matrix4x4::CreateRotationZ(rotation.z * (PI / 180.0f));
+
+		Matrix4x4 rotCombined = rotZ * rotY * rotX;
+		model = model * rotCombined;
+	}
 
 	model = Matrix4x4::Scale(model, scale);
 
