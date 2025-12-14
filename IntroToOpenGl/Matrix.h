@@ -444,15 +444,15 @@ namespace Matrix
 
 			Matrix4x4 Rotate;
 			Rotate[0][0] = c + temp.x * normalizedAxis.x;
-			Rotate[0][1] = temp.x * normalizedAxis.y + s * normalizedAxis.z;
-			Rotate[0][2] = temp.x * normalizedAxis.z - s * normalizedAxis.y;
+			Rotate[0][1] = temp.x * normalizedAxis.y - s * normalizedAxis.z;
+			Rotate[0][2] = temp.x * normalizedAxis.z + s * normalizedAxis.y;
 
-			Rotate[1][0] = temp.y * normalizedAxis.x - s * normalizedAxis.z;
+			Rotate[1][0] = temp.y * normalizedAxis.x + s * normalizedAxis.z;
 			Rotate[1][1] = c + temp.y * normalizedAxis.y;
-			Rotate[1][2] = temp.y * normalizedAxis.z + s * normalizedAxis.x;
+			Rotate[1][2] = temp.y * normalizedAxis.z - s * normalizedAxis.x;
 
-			Rotate[2][0] = temp.z * normalizedAxis.x + s * normalizedAxis.y;
-			Rotate[2][1] = temp.z * normalizedAxis.y - s * normalizedAxis.x;
+			Rotate[2][0] = temp.z * normalizedAxis.x - s * normalizedAxis.y;
+			Rotate[2][1] = temp.z * normalizedAxis.y + s * normalizedAxis.x;
 			Rotate[2][2] = c + temp.z * normalizedAxis.z;
 
 			return matrix * Rotate;

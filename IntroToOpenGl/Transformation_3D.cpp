@@ -125,6 +125,7 @@ void Transformation_3D::ImGuiRender(GLFWwindow* window)
 void Transformation_3D::Render()
 {
 	// TODO: This rotation does not feel natural, some in local and some in global
+	// Lets first rotate the object and then find the vector as per the rotated axes and then rotate the object around it
 	Matrix4x4 model = Matrix4x4::Identity();
 	model = Matrix4x4::Translation(model, position);
 	
@@ -133,6 +134,7 @@ void Transformation_3D::Render()
 		model = Matrix4x4::Rotation(model, Vector3(0.0f, 0.0f, 1.0f), rotation.z * (PI / 180.0f));
 		model = Matrix4x4::Rotation(model, Vector3(0.0f, 1.0f, 0.0f), rotation.y * (PI / 180.0f));
 		model = Matrix4x4::Rotation(model, Vector3(1.0f, 0.0f, 0.0f), rotation.x * (PI / 180.0f));
+		//model = Matrix4x4::Rotation(model, Vector3(0.707f, 0.0f, 0.707f), rotation.x * (PI / 180.0f));
 	}
 	else
 	{
