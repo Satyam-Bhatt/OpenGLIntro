@@ -148,32 +148,6 @@ void Transformation_3D::Render()
 
 	model = Matrix4x4::Scale(model, scale);
 
-#pragma region Experiment
-	Matrix4x4 rotX = Matrix4x4::CreateRotationX(rotation.x * (PI / 180.0f));
-	Matrix4x4 rotY = Matrix4x4::CreateRotationY(rotation.y * (PI / 180.0f));
-	Matrix4x4 rotZ = Matrix4x4::CreateRotationZ(rotation.z * (PI / 180.0f));
-
-	Matrix4x4 rotCombined = rotX * rotY * rotZ;
-
-	Vector3 rotVec = Vector3(1, 0, 0);
-	Vector3 rotatedVec = rotCombined * rotVec;
-
-	Vector3 axis = Vector3(0, 0, 0);
-	rotatedVec.x != 0 ? axis.x = 1 : axis.x = 0;
-	rotatedVec.y != 0 ? axis.y = 1 : axis.y = 0;
-	rotatedVec.z != 0 ? axis.z = 1 : axis.z = 0;
-
-	float angleBetweenVectors = acos(rotatedVec.Normalize().Dot(Vector3(1, 0, 0)));
-
-	Matrix4x4 crazyRotation = Matrix4x4::Rotation(Matrix4x4::Identity(), axis, angleBetweenVectors);
-
-	// model = rotCombined;
-	//model = crazyRotation;
-#pragma endregion
-
-
-
-
 	Matrix4x4 view = Matrix4x4::Identity();
 	view = Matrix4x4::Translation(view, Vector3(0.0f, 0.0f, 5.0f));
 
