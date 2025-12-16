@@ -113,11 +113,9 @@ void Transformation_3D::ImGuiRender(GLFWwindow* window)
 
 	ImGui::Begin("Level Specific", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
 
-	ImGui::DragFloat3("Local Rotation", &rotation.x, 0.5f);
+	ImGui::DragFloat3("Rotation", &rotation.x, 0.5f);
 	ImGui::DragFloat3("World Position", &position.x, 0.005f);
 	ImGui::DragFloat3("Local Scale", &scale.x, 0.005f);
-
-	ImGui::Checkbox("Rodrigues Rotation", &rodrigueRotation);
 
 	ImGui::End();
 }
