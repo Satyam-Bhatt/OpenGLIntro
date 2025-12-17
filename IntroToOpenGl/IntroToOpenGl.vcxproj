@@ -188,6 +188,7 @@
     <ClCompile Include="UniformsInShader.cpp" />
     <ClCompile Include="VertexAttributes.cpp" />
     <ClCompile Include="VertexPosToFrag.cpp" />
+    <ClCompile Include="ViewMatrix.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Right_LeftHanded.h" />
@@ -237,6 +238,7 @@
     <ClInclude Include="Vector.h" />
     <ClInclude Include="VertexAttributes.h" />
     <ClInclude Include="VertexPosToFrag.h" />
+    <ClInclude Include="ViewMatrix.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="CoordinateSystem2.shader" />

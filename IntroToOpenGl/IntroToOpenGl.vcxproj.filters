@@ -192,6 +192,9 @@
     <ClCompile Include="Transformation_3D.cpp">
       <Filter>Source Files\Transformations</Filter>
     </ClCompile>
+    <ClCompile Include="ViewMatrix.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameState.h">
@@ -334,6 +337,9 @@
     </ClInclude>
     <ClInclude Include="Transformation_3D.h">
       <Filter>Header Files\TransformationsMain</Filter>
+    </ClInclude>
+    <ClInclude Include="ViewMatrix.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
