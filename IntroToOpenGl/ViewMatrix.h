@@ -14,5 +14,10 @@ public:
 	void Exit() override;
 
 	static ViewMatrix* GetInstance();
+
+private:
+	static ViewMatrix instance;
+	Shader shader;
+	uint32_t VAO = 0, VBO = 0;
 };
 

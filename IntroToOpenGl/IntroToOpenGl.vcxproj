@@ -264,6 +264,7 @@
     <None Include="TwoTextures.shader" />
     <None Include="TwoTextureSecondShader.shader" />
     <None Include="VertexToPos.shader" />
+    <None Include="ViewMatrix.shader" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
