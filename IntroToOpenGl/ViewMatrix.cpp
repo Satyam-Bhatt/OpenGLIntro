@@ -11,3 +11,7 @@ ViewMatrix::~ViewMatrix()
 void ViewMatrix::Start()
 {
 }
+
+void ViewMatrix::Update()
+{
+}
