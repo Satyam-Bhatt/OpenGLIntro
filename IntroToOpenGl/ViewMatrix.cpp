@@ -19,3 +19,7 @@ void ViewMatrix::Update()
 void ViewMatrix::ImGuiRender(GLFWwindow* window)
 {
 }
+
+void ViewMatrix::Render()
+{
+}
