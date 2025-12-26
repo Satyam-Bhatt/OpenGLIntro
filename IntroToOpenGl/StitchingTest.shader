@@ -2,17 +2,17 @@
 
 #version 330 core
 
-layout(location = 0) in vec4 aPos;
-layout(location = 1) in vec3 aColor;
+layout(location = 0) in vec4 aPos; // The vertex position
+layout(location = 1) in vec3 aColor; // The vertex color
 
-out	vec3 color;
+out	vec3 color; // The color variable to be passed to the fragment shader
 
-uniform mat4 model;
-uniform mat4 view;
-uniform mat4 projection;
-uniform mat4 perspectiveOnly;
-uniform mat4 orthoOnly;
-uniform bool zFightFix;
+uniform mat4 model; // The model matrix
+uniform mat4 view; // The view matrix
+uniform mat4 projection; // The projection matrix. Has both perspective and orthographic components
+uniform mat4 perspectiveOnly; // The projection matrix with only the perspective component
+uniform mat4 orthoOnly; // The projection matrix with only the orthographic component
+uniform bool zFightFix; // A boolean to enable or disable the z-fighting fix
 
 void main()
 {
@@ -33,10 +33,10 @@ void main()
 		// Z position after being affected by model and view matrix
 		vec4 zPos = view * model * aPos;
 
-		// As Z is divides by W we square it so that we don't loose depth information
+		// As Z is divided by the W component we square it so that we don't loose depth information
 		float z_Square = zPos.z * zPos.z;
 
-		// We replace the Z value as the existing Z value is non linear because of the quadratic equation m1 Z + m2 = Z^2
+		// We replace the Z value as the existing Z value is a linear approximation
 		positionInTheCuboid = vec4(positionInTheCuboid.x, positionInTheCuboid.y, z_Square, positionInTheCuboid.w);
 
 		// We multiply this with the orthographic matrix to reposition and scale the cuboid
