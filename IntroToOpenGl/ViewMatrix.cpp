@@ -23,3 +23,12 @@ void ViewMatrix::ImGuiRender(GLFWwindow* window)
 void ViewMatrix::Render()
 {
 }
+
+void ViewMatrix::Exit()
+{
+}
+
+ViewMatrix* ViewMatrix::GetInstance()
+{
+	return nullptr;
+}
