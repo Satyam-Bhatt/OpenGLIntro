@@ -1,5 +1,7 @@
 #include "ViewMatrix.h"
 
+ViewMatrix ViewMatrix::instance;
+
 ViewMatrix::ViewMatrix()
 {
 }
