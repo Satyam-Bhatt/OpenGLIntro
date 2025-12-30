@@ -32,5 +32,5 @@ void ViewMatrix::Exit()
 
 ViewMatrix* ViewMatrix::GetInstance()
 {
-	return nullptr;
+	return &instance;
 }
