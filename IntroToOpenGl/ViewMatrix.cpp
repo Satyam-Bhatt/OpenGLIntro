@@ -8,10 +8,12 @@ ViewMatrix::ViewMatrix()
 
 ViewMatrix::~ViewMatrix()
 {
+	Exit();
 }
 
 void ViewMatrix::Start()
 {
+	glEnable(GL_DEPTH_TEST);
 }
 
 void ViewMatrix::Update()
