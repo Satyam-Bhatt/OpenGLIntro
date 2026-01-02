@@ -225,7 +225,7 @@ void Translate_Rotate_Scale::LocalSpaceTransformation(Matrix4x4Alias& result, Ve
 	{
 		deltaRotation = storeRotation;
 
-		// roll back matrix should rotate the suqre in the opposite direction so we change the sign
+		// roll back matrix should rotate the square in the opposite direction so we change the sign
 		// Identity = cos(-theta) = cos(theta) and sin(-theta) = -sin(theta)
 		rollBack[0][0] = cos(deltaRotation * (PI / 180));
 		rollBack[0][1] = sin(deltaRotation * (PI / 180));

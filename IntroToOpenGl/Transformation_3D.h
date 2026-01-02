@@ -13,6 +13,8 @@ public:
 	void Render() override;
 	void Exit() override;
 
+	void TestRotate();
+
 	static Transformation_3D* GetInstance();
 
 private:
@@ -20,11 +22,14 @@ private:
 
 	Vector3 position = Vector3(0.0f, 0.0f, 0.0f);
 
+	Vector3 previousRotation = Vector3(0.0f, 0.0f, 0.0f);
 	Vector3 rotation = Vector3(0.0f, 0.0f, 0.0f);
 
 	Vector3 scale = Vector3(1.0f, 1.0f, 1.0f);
 
 	bool rodrigueRotation = true;
+
+	Matrix4x4 model, view, projection;
 
 	Shader shader;
 	uint32_t VAO = 0, VBO = 0;

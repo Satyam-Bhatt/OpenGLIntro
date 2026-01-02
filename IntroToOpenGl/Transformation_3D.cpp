@@ -116,6 +116,10 @@ void Transformation_3D::ImGuiRender(GLFWwindow* window)
 	ImGui::DragFloat3("Rotation", &rotation.x, 0.5f);
 	ImGui::DragFloat3("World Position", &position.x, 0.005f);
 	ImGui::DragFloat3("Local Scale", &scale.x, 0.005f);
+	if (ImGui::Button("Rotate"))
+	{
+		TestRotate();
+	}
 
 	ImGui::End();
 }
@@ -159,6 +163,16 @@ void Transformation_3D::Render()
 	glBindVertexArray(VAO);
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 	glBindVertexArray(0);
+}
+
+// TODO; Have all the logic of rotation scaling and translation here and update the matrices here only. Remove everything from render except the draw call
+void Transformation_3D::TestRotate()
+{
+	Vector3 deltaRotation = rotation - previousRotation;
+
+	std::cout << "Delta Rotation: (" << deltaRotation.x << ", " << deltaRotation.y << ", " << deltaRotation.z << ")\n";
+
+	previousRotation = rotation;
 }
 
 void Transformation_3D::Exit()
