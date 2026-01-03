@@ -128,33 +128,33 @@ void Transformation_3D::Render()
 {
 	// TODO: This rotation does not feel natural, some in local and some in global
 	// Lets first rotate the object and then find the vector as per the rotated axes and then rotate the object around it
-	Matrix4x4 model = Matrix4x4::Identity();
-	model = Matrix4x4::Translation(model, position);
-	
-	if (rodrigueRotation)
-	{
-		model = Matrix4x4::Rotation(model, Vector3(0.0f, 0.0f, 1.0f), rotation.z * (PI / 180.0f));
-		model = Matrix4x4::Rotation(model, Vector3(0.0f, 1.0f, 0.0f), rotation.y * (PI / 180.0f));
-		model = Matrix4x4::Rotation(model, Vector3(1.0f, 0.0f, 0.0f), rotation.x * (PI / 180.0f));
-		//model = Matrix4x4::Rotation(model, Vector3(0.707f, 0.0f, 0.707f), rotation.x * (PI / 180.0f));
-	}
-	else
-	{
-		Matrix4x4 rotX = Matrix4x4::CreateRotationX(rotation.x * (PI / 180.0f));
-		Matrix4x4 rotY = Matrix4x4::CreateRotationY(rotation.y * (PI / 180.0f));
-		Matrix4x4 rotZ = Matrix4x4::CreateRotationZ(rotation.z * (PI / 180.0f));
+	//Matrix4x4 model = Matrix4x4::Identity();
+	//model = Matrix4x4::Translation(model, position);
+	//
+	//if (rodrigueRotation)
+	//{
+	//	model = Matrix4x4::Rotation(model, Vector3(0.0f, 0.0f, 1.0f), rotation.z * (PI / 180.0f));
+	//	model = Matrix4x4::Rotation(model, Vector3(0.0f, 1.0f, 0.0f), rotation.y * (PI / 180.0f));
+	//	model = Matrix4x4::Rotation(model, Vector3(1.0f, 0.0f, 0.0f), rotation.x * (PI / 180.0f));
+	//	//model = Matrix4x4::Rotation(model, Vector3(0.707f, 0.0f, 0.707f), rotation.x * (PI / 180.0f));
+	//}
+	//else
+	//{
+	//	Matrix4x4 rotX = Matrix4x4::CreateRotationX(rotation.x * (PI / 180.0f));
+	//	Matrix4x4 rotY = Matrix4x4::CreateRotationY(rotation.y * (PI / 180.0f));
+	//	Matrix4x4 rotZ = Matrix4x4::CreateRotationZ(rotation.z * (PI / 180.0f));
 
-		Matrix4x4 rotCombined = rotZ * rotY * rotX;
-		model = model * rotCombined;
-	}
+	//	Matrix4x4 rotCombined = rotZ * rotY * rotX;
+	//	model = model * rotCombined;
+	//}
 
-	model = Matrix4x4::Scale(model, scale);
+	//model = Matrix4x4::Scale(model, scale);
 
-	Matrix4x4 view = Matrix4x4::Identity();
-	view = Matrix4x4::Translation(view, Vector3(0.0f, 0.0f, 5.0f));
+	//Matrix4x4 view = Matrix4x4::Identity();
+	//view = Matrix4x4::Translation(view, Vector3(0.0f, 0.0f, 5.0f));
 
-	Matrix4x4 projection;
-	projection = Matrix4x4::CreateProjectionMatrix_FOV_LeftHanded(45.0f * (PI / 180), (float)viewportData.width, (float)viewportData.height, 0.1f, 100.0f);
+	//Matrix4x4 projection;
+	//projection = Matrix4x4::CreateProjectionMatrix_FOV_LeftHanded(45.0f * (PI / 180), (float)viewportData.width, (float)viewportData.height, 0.1f, 100.0f);
 
 	shader.Use();
 	shader.SetMat4_Custom("model", model.m);
@@ -168,9 +168,30 @@ void Transformation_3D::Render()
 // TODO; Have all the logic of rotation scaling and translation here and update the matrices here only. Remove everything from render except the draw call
 void Transformation_3D::TestRotate()
 {
-	Vector3 deltaRotation = rotation - previousRotation;
+	model = Matrix4x4::Identity();
+	view = Matrix4x4::Identity();
+	projection = Matrix4x4::Identity();
 
+	Vector3 deltaRotation = rotation - previousRotation;
+	std::cout << "Current Rotation: (" << rotation.x << ", " << rotation.y << ", " << rotation.z << ")\n";
+	std::cout << "Previous Rotation: (" << previousRotation.x << ", " << previousRotation.y << ", " << previousRotation.z << ")\n";
 	std::cout << "Delta Rotation: (" << deltaRotation.x << ", " << deltaRotation.y << ", " << deltaRotation.z << ")\n";
+
+	model = Matrix4x4::Translation(model, position);
+
+	model = Matrix4x4::Rotation(model, Vector3(0.0f, 0.0f, 1.0f), previousRotation.z * (PI / 180.0f));
+	model = Matrix4x4::Rotation(model, Vector3(0.0f, 1.0f, 0.0f), previousRotation.y * (PI / 180.0f));
+	model = Matrix4x4::Rotation(model, Vector3(1.0f, 0.0f, 0.0f), previousRotation.x * (PI / 180.0f));
+
+	model = Matrix4x4::Rotation(model, Vector3(0.0f, 0.0f, 1.0f), deltaRotation.z * (PI / 180.0f));
+	model = Matrix4x4::Rotation(model, Vector3(0.0f, 1.0f, 0.0f), deltaRotation.y * (PI / 180.0f));
+	model = Matrix4x4::Rotation(model, Vector3(1.0f, 0.0f, 0.0f), deltaRotation.x * (PI / 180.0f));
+
+	model = Matrix4x4::Scale(model, scale);
+
+	view = Matrix4x4::Translation(view, Vector3(0.0f, 0.0f, 5.0f));
+
+	projection = Matrix4x4::CreateProjectionMatrix_FOV_LeftHanded(45.0f * (PI / 180), (float)viewportData.width, (float)viewportData.height, 0.1f, 100.0f);
 
 	previousRotation = rotation;
 }
