@@ -29,7 +29,7 @@ private:
 
 	bool rodrigueRotation = true;
 
-	Matrix4x4 model, view, projection;
+	Matrix4x4 model, view, projection, current_rot;
 
 	Shader shader;
 	uint32_t VAO = 0, VBO = 0;

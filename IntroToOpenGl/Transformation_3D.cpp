@@ -126,11 +126,24 @@ void Transformation_3D::ImGuiRender(GLFWwindow* window)
 
 void Transformation_3D::Render()
 {
-	// TODO: This rotation does not feel natural, some in local and some in global
+	// TODO: This rotation does not go back to 0
 	// Lets first rotate the object and then find the vector as per the rotated axes and then rotate the object around it
-	//Matrix4x4 model = Matrix4x4::Identity();
-	//model = Matrix4x4::Translation(model, position);
-	//
+
+	Vector3 deltaRotation = rotation - previousRotation;
+	Matrix4x4 deltaRotMatrix = Matrix4x4::Identity();
+
+	deltaRotMatrix = Matrix4x4::Rotation(deltaRotMatrix, Vector3(1.0f, 0.0f, 0.0f), deltaRotation.x * (PI / 180.0f));
+	deltaRotMatrix = Matrix4x4::Rotation(deltaRotMatrix, Vector3(0.0f, 1.0f, 0.0f), deltaRotation.y * (PI / 180.0f));
+	deltaRotMatrix = Matrix4x4::Rotation(deltaRotMatrix, Vector3(0.0f, 0.0f, 1.0f), deltaRotation.z * (PI / 180.0f));
+
+	current_rot = current_rot * deltaRotMatrix;
+	previousRotation = rotation;
+	
+
+	Matrix4x4 model = Matrix4x4::Identity();
+	model = Matrix4x4::Translation(model, position);
+	model = model * current_rot;
+	
 	//if (rodrigueRotation)
 	//{
 	//	model = Matrix4x4::Rotation(model, Vector3(0.0f, 0.0f, 1.0f), rotation.z * (PI / 180.0f));
@@ -148,13 +161,13 @@ void Transformation_3D::Render()
 	//	model = model * rotCombined;
 	//}
 
-	//model = Matrix4x4::Scale(model, scale);
+	model = Matrix4x4::Scale(model, scale);
 
-	//Matrix4x4 view = Matrix4x4::Identity();
-	//view = Matrix4x4::Translation(view, Vector3(0.0f, 0.0f, 5.0f));
+	Matrix4x4 view = Matrix4x4::Identity();
+	view = Matrix4x4::Translation(view, Vector3(0.0f, 0.0f, 5.0f));
 
-	//Matrix4x4 projection;
-	//projection = Matrix4x4::CreateProjectionMatrix_FOV_LeftHanded(45.0f * (PI / 180), (float)viewportData.width, (float)viewportData.height, 0.1f, 100.0f);
+	Matrix4x4 projection;
+	projection = Matrix4x4::CreateProjectionMatrix_FOV_LeftHanded(45.0f * (PI / 180), (float)viewportData.width, (float)viewportData.height, 0.1f, 100.0f);
 
 	shader.Use();
 	shader.SetMat4_Custom("model", model.m);
@@ -165,7 +178,7 @@ void Transformation_3D::Render()
 	glBindVertexArray(0);
 }
 
-// TODO; Have all the logic of rotation scaling and translation here and update the matrices here only. Remove everything from render except the draw call
+// TESTING remove later
 void Transformation_3D::TestRotate()
 {
 	model = Matrix4x4::Identity();
