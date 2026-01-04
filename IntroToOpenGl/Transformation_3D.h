@@ -13,12 +13,13 @@ public:
 	void Render() override;
 	void Exit() override;
 
-	void TestRotate();
 
 	static Transformation_3D* GetInstance();
 
 private:
 	static Transformation_3D instance;
+
+	void Reset();
 
 	Vector3 position = Vector3(0.0f, 0.0f, 0.0f);
 
@@ -33,6 +34,5 @@ private:
 
 	Shader shader;
 	uint32_t VAO = 0, VBO = 0;
-
 };
 

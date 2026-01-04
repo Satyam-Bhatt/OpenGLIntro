@@ -116,9 +116,9 @@ void Transformation_3D::ImGuiRender(GLFWwindow* window)
 	ImGui::DragFloat3("Rotation", &rotation.x, 0.5f);
 	ImGui::DragFloat3("World Position", &position.x, 0.005f);
 	ImGui::DragFloat3("Local Scale", &scale.x, 0.005f);
-	if (ImGui::Button("Rotate"))
+	if (ImGui::Button("RESET"))
 	{
-		TestRotate();
+		Reset();
 	}
 
 	ImGui::End();
@@ -126,9 +126,7 @@ void Transformation_3D::ImGuiRender(GLFWwindow* window)
 
 void Transformation_3D::Render()
 {
-	// TODO: This rotation does not go back to 0
-	// Lets first rotate the object and then find the vector as per the rotated axes and then rotate the object around it
-
+	// BUG: This rotation does not go back to 0
 	Vector3 deltaRotation = rotation - previousRotation;
 	Matrix4x4 deltaRotMatrix = Matrix4x4::Identity();
 
@@ -136,30 +134,15 @@ void Transformation_3D::Render()
 	deltaRotMatrix = Matrix4x4::Rotation(deltaRotMatrix, Vector3(0.0f, 1.0f, 0.0f), deltaRotation.y * (PI / 180.0f));
 	deltaRotMatrix = Matrix4x4::Rotation(deltaRotMatrix, Vector3(0.0f, 0.0f, 1.0f), deltaRotation.z * (PI / 180.0f));
 
+	// Applying the delta rotation to the current rotation matrix.
+	// If we just set the current rotation to the new rotation matrix it would reset the previous rotations and only apply the latest rotation
+	// To make it feel natural or rotation in local space we need to keep applying the delta rotations to the current rotation matrix
 	current_rot = current_rot * deltaRotMatrix;
 	previousRotation = rotation;
-	
 
 	Matrix4x4 model = Matrix4x4::Identity();
 	model = Matrix4x4::Translation(model, position);
 	model = model * current_rot;
-	
-	//if (rodrigueRotation)
-	//{
-	//	model = Matrix4x4::Rotation(model, Vector3(0.0f, 0.0f, 1.0f), rotation.z * (PI / 180.0f));
-	//	model = Matrix4x4::Rotation(model, Vector3(0.0f, 1.0f, 0.0f), rotation.y * (PI / 180.0f));
-	//	model = Matrix4x4::Rotation(model, Vector3(1.0f, 0.0f, 0.0f), rotation.x * (PI / 180.0f));
-	//	//model = Matrix4x4::Rotation(model, Vector3(0.707f, 0.0f, 0.707f), rotation.x * (PI / 180.0f));
-	//}
-	//else
-	//{
-	//	Matrix4x4 rotX = Matrix4x4::CreateRotationX(rotation.x * (PI / 180.0f));
-	//	Matrix4x4 rotY = Matrix4x4::CreateRotationY(rotation.y * (PI / 180.0f));
-	//	Matrix4x4 rotZ = Matrix4x4::CreateRotationZ(rotation.z * (PI / 180.0f));
-
-	//	Matrix4x4 rotCombined = rotZ * rotY * rotX;
-	//	model = model * rotCombined;
-	//}
 
 	model = Matrix4x4::Scale(model, scale);
 
@@ -178,35 +161,13 @@ void Transformation_3D::Render()
 	glBindVertexArray(0);
 }
 
-// TESTING remove later
-void Transformation_3D::TestRotate()
+void Transformation_3D::Reset()
 {
-	model = Matrix4x4::Identity();
-	view = Matrix4x4::Identity();
-	projection = Matrix4x4::Identity();
-
-	Vector3 deltaRotation = rotation - previousRotation;
-	std::cout << "Current Rotation: (" << rotation.x << ", " << rotation.y << ", " << rotation.z << ")\n";
-	std::cout << "Previous Rotation: (" << previousRotation.x << ", " << previousRotation.y << ", " << previousRotation.z << ")\n";
-	std::cout << "Delta Rotation: (" << deltaRotation.x << ", " << deltaRotation.y << ", " << deltaRotation.z << ")\n";
-
-	model = Matrix4x4::Translation(model, position);
-
-	model = Matrix4x4::Rotation(model, Vector3(0.0f, 0.0f, 1.0f), previousRotation.z * (PI / 180.0f));
-	model = Matrix4x4::Rotation(model, Vector3(0.0f, 1.0f, 0.0f), previousRotation.y * (PI / 180.0f));
-	model = Matrix4x4::Rotation(model, Vector3(1.0f, 0.0f, 0.0f), previousRotation.x * (PI / 180.0f));
-
-	model = Matrix4x4::Rotation(model, Vector3(0.0f, 0.0f, 1.0f), deltaRotation.z * (PI / 180.0f));
-	model = Matrix4x4::Rotation(model, Vector3(0.0f, 1.0f, 0.0f), deltaRotation.y * (PI / 180.0f));
-	model = Matrix4x4::Rotation(model, Vector3(1.0f, 0.0f, 0.0f), deltaRotation.x * (PI / 180.0f));
-
-	model = Matrix4x4::Scale(model, scale);
-
-	view = Matrix4x4::Translation(view, Vector3(0.0f, 0.0f, 5.0f));
-
-	projection = Matrix4x4::CreateProjectionMatrix_FOV_LeftHanded(45.0f * (PI / 180), (float)viewportData.width, (float)viewportData.height, 0.1f, 100.0f);
-
-	previousRotation = rotation;
+	current_rot = Matrix4x4::Identity();
+	rotation = Vector3(0.0f, 0.0f, 0.0f);
+	previousRotation = Vector3(0.0f, 0.0f, 0.0f);
+	scale = Vector3(1.0f, 1.0f, 1.0f);
+	position = Vector3(0.0f, 0.0f, 0.0f);
 }
 
 void Transformation_3D::Exit()
