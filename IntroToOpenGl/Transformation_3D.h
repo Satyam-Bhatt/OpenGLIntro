@@ -20,6 +20,9 @@ private:
 	static Transformation_3D instance;
 
 	void Reset();
+	bool ValueChangedX();
+	bool ValueChangedY();
+	bool ValueChangedZ();
 
 	Vector3 position = Vector3(0.0f, 0.0f, 0.0f);
 
@@ -28,7 +31,7 @@ private:
 
 	Vector3 scale = Vector3(1.0f, 1.0f, 1.0f);
 
-	bool rodrigueRotation = true;
+	bool localRotation = true;
 
 	Matrix4x4 model, view, projection, current_rot;
 

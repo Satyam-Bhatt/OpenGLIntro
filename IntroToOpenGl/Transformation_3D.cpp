@@ -116,6 +116,7 @@ void Transformation_3D::ImGuiRender(GLFWwindow* window)
 	ImGui::DragFloat3("Rotation", &rotation.x, 0.5f);
 	ImGui::DragFloat3("World Position", &position.x, 0.005f);
 	ImGui::DragFloat3("Local Scale", &scale.x, 0.005f);
+	ImGui::Checkbox("Local Rotation", &localRotation);
 	if (ImGui::Button("RESET"))
 	{
 		Reset();
@@ -138,11 +139,23 @@ void Transformation_3D::Render()
 	// If we just set the current rotation to the new rotation matrix it would reset the previous rotations and only apply the latest rotation
 	// To make it feel natural or rotation in local space we need to keep applying the delta rotations to the current rotation matrix
 	current_rot = current_rot * deltaRotMatrix;
-	previousRotation = rotation;
 
 	Matrix4x4 model = Matrix4x4::Identity();
 	model = Matrix4x4::Translation(model, position);
-	model = model * current_rot;
+
+	if(localRotation)
+		model = model * current_rot;
+	else
+	{
+		if (ValueChangedX())
+			model = Matrix4x4::Rotation(model, Vector3(1.0f, 0.0f, 0.0f), rotation.x * (PI / 180.0f));
+		if (ValueChangedY())
+			model = Matrix4x4::Rotation(model, Vector3(0.0f, 1.0f, 0.0f), rotation.y * (PI / 180.0f));
+		if (ValueChangedZ())
+			model = Matrix4x4::Rotation(model, Vector3(0.0f, 0.0f, 1.0f), rotation.z * (PI / 180.0f));
+	}
+
+	previousRotation = rotation;
 
 	model = Matrix4x4::Scale(model, scale);
 
@@ -159,6 +172,27 @@ void Transformation_3D::Render()
 	glBindVertexArray(VAO);
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 	glBindVertexArray(0);
+}
+
+bool Transformation_3D::ValueChangedX()
+{
+	if(previousRotation.x != rotation.x)
+		return true;
+	return false;
+}
+
+bool Transformation_3D::ValueChangedY()
+{
+	if (previousRotation.y != rotation.y)
+		return true;
+	return false;
+}
+
+bool Transformation_3D::ValueChangedZ()
+{
+	if (previousRotation.z != rotation.z)
+		return true;
+	return false;
 }
 
 void Transformation_3D::Reset()
