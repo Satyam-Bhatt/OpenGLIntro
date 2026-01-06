@@ -123,40 +123,66 @@ void Transformation_3D::ImGuiRender(GLFWwindow* window)
 	}
 
 	ImGui::End();
+
+	ImGui::SetNextWindowPos(
+		// Set the position in the starting 1/4th of the redering area
+		ImVec2(viewport[0] + leftIMGUIWindowWidth + (float)viewportData.width / 2, viewport[1] + 20),
+		ImGuiCond_Always,
+		ImVec2(0.5f, 0.0f)
+	);
+
+	// Set a fixed window width to make it smaller
+	ImGui::SetNextWindowSizeConstraints(
+		ImVec2(100, 0),
+		ImVec2(windowWidth, FLT_MAX)
+	);
+
+	ImGui::Begin("Heading 1", 0, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_AlwaysAutoResize);
+
+	if(localRotation)
+		ImGui::Text("LOCAL ROTATION");
+	else
+		ImGui::Text("WORLD ROTATION");
+
+	ImGui::End();
 }
 
 void Transformation_3D::Render()
 {
-	// BUG: This rotation does not go back to 0
-	Vector3 deltaRotation = rotation - previousRotation;
-	Matrix4x4 deltaRotMatrix = Matrix4x4::Identity();
+	Vector3 delta = rotation - previousRotation;
+	Matrix4x4 deltaRot = Matrix4x4::Identity();
+	deltaRot = Matrix4x4::Rotation(deltaRot, Vector3(1, 0, 0), delta.x * (PI / 180));
+	deltaRot = Matrix4x4::Rotation(deltaRot, Vector3(0, 1, 0), delta.y * (PI / 180));
+	deltaRot = Matrix4x4::Rotation(deltaRot, Vector3(0, 0, 1), delta.z * (PI / 180));
 
-	deltaRotMatrix = Matrix4x4::Rotation(deltaRotMatrix, Vector3(1.0f, 0.0f, 0.0f), deltaRotation.x * (PI / 180.0f));
-	deltaRotMatrix = Matrix4x4::Rotation(deltaRotMatrix, Vector3(0.0f, 1.0f, 0.0f), deltaRotation.y * (PI / 180.0f));
-	deltaRotMatrix = Matrix4x4::Rotation(deltaRotMatrix, Vector3(0.0f, 0.0f, 1.0f), deltaRotation.z * (PI / 180.0f));
+	if (localRotation)
+	{
+		// Local-space
+		// BUG: This rotation does not go back to 0
 
-	// Applying the delta rotation to the current rotation matrix.
-	// If we just set the current rotation to the new rotation matrix it would reset the previous rotations and only apply the latest rotation
-	// To make it feel natural or rotation in local space we need to keep applying the delta rotations to the current rotation matrix
-	current_rot = current_rot * deltaRotMatrix;
+		// Applying the delta rotation to the current rotation matrix.
+		// If we just set the current rotation to the new rotation matrix it would reset the previous rotations and only apply the latest rotation
+		// To make it feel natural or rotation in local space we need to keep applying the delta rotations to the current rotation matrix
 
-	Matrix4x4 model = Matrix4x4::Identity();
-	model = Matrix4x4::Translation(model, position);
-
-	if(localRotation)
-		model = model * current_rot;
+		// This is local because consider vertex v
+		// the expression is current_rot_new = current_rot_old * deltaRot * v
+		// So what happens is that v is rotated by deltaRot first. Then the alreaddy rotated v is transformed by current_rot_old
+		current_rot = current_rot * deltaRot;
+	}
 	else
 	{
-		if (ValueChangedX())
-			model = Matrix4x4::Rotation(model, Vector3(1.0f, 0.0f, 0.0f), rotation.x * (PI / 180.0f));
-		if (ValueChangedY())
-			model = Matrix4x4::Rotation(model, Vector3(0.0f, 1.0f, 0.0f), rotation.y * (PI / 180.0f));
-		if (ValueChangedZ())
-			model = Matrix4x4::Rotation(model, Vector3(0.0f, 0.0f, 1.0f), rotation.z * (PI / 180.0f));
+		// World-space
+
+		// This is global because vertex v is first transformed by current_rot_old which makes it world oriented
+		// then the already world oriented v is rotated by deltaRot. Delta rot is built from fixed world axes only, and it acts on the vertices only after it has been transformed to world space
+		current_rot = deltaRot * current_rot;
 	}
 
 	previousRotation = rotation;
 
+	Matrix4x4 model = Matrix4x4::Identity();
+	model = Matrix4x4::Translation(model, position);
+	model = model * current_rot;
 	model = Matrix4x4::Scale(model, scale);
 
 	Matrix4x4 view = Matrix4x4::Identity();
@@ -176,7 +202,7 @@ void Transformation_3D::Render()
 
 bool Transformation_3D::ValueChangedX()
 {
-	if(previousRotation.x != rotation.x)
+	if (previousRotation.x != rotation.x)
 		return true;
 	return false;
 }
