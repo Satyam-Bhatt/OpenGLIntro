@@ -122,6 +122,10 @@ void Transformation_3D::ImGuiRender(GLFWwindow* window)
 		Reset();
 	}
 
+	ImGui::DragFloat3("Gizmo Rotation", &gizmoRotation.x, 0.5f);
+	ImGui::DragFloat3("Gizmo World Position", &gizmoPosition.x, 0.005f);
+	ImGui::DragFloat3("Gizmo Local Scale", &gizmoScale.x, 0.005f);
+
 	ImGui::End();
 
 	ImGui::SetNextWindowPos(
@@ -191,8 +195,34 @@ void Transformation_3D::Render()
 	Matrix4x4 projection;
 	projection = Matrix4x4::CreateProjectionMatrix_FOV_LeftHanded(45.0f * (PI / 180), (float)viewportData.width, (float)viewportData.height, 0.1f, 100.0f);
 
+	//shader.Use();
+	//shader.SetMat4_Custom("model", model.m);
+	//shader.SetMat4_Custom("view", view.m);
+	//shader.SetMat4_Custom("projection", projection.m);
+	//glBindVertexArray(VAO);
+	//glDrawArrays(GL_TRIANGLES, 0, 36);
+	//glBindVertexArray(0);
+
+	// GIZMO
+
+	Vector3 pivot = Vector3(-0.5f, 0.0f, 0.0f);
+
+	Vector3 gizmoDelta = gizmoRotation - gizmoPreviousRotation;
+	Matrix4x4 gizmoDeltaRot = Matrix4x4::Identity();
+	gizmoDeltaRot = Matrix4x4::Rotation(gizmoDeltaRot, Vector3(1, 0, 0), gizmoDelta.x * (PI / 180));
+	gizmoDeltaRot = Matrix4x4::Rotation(gizmoDeltaRot, Vector3(0, 1, 0), gizmoDelta.y * (PI / 180));
+	gizmoDeltaRot = Matrix4x4::Rotation(gizmoDeltaRot, Vector3(0, 0, 1), gizmoDelta.z * (PI / 180));
+	current_gizmo_rot = gizmoDeltaRot * current_gizmo_rot;
+	gizmoPreviousRotation = gizmoRotation;
+
+	Matrix4x4 gizmoModel = Matrix4x4::Identity();
+	gizmoModel = Matrix4x4::Translation(gizmoModel, gizmoPosition + pivot);
+	gizmoModel = gizmoModel * current_gizmo_rot;
+	gizmoModel = Matrix4x4::Scale(gizmoModel, gizmoScale);
+	gizmoModel = Matrix4x4::Translation(gizmoModel, -pivot);
+
 	shader.Use();
-	shader.SetMat4_Custom("model", model.m);
+	shader.SetMat4_Custom("model", gizmoModel.m);
 	shader.SetMat4_Custom("view", view.m);
 	shader.SetMat4_Custom("projection", projection.m);
 	glBindVertexArray(VAO);

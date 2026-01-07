@@ -129,8 +129,6 @@ void Translate_Rotate_Scale::Update()
 		}
 	}
 
-
-
 	storeRotation = rotation;
 	storeScale = scale;
 	storeTranslate = translate;
