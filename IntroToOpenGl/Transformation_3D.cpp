@@ -84,7 +84,12 @@ void Transformation_3D::Start()
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
+
+	// Initialize gizmo rotation matrices as per initial gizmo rotation values
+	current_gizmo_rot_Y = Matrix4x4::Rotation(current_gizmo_rot_Y, Vector3(0, 0, 1), 90 * (PI / 180));
+	current_gizmo_rot_Z = Matrix4x4::Rotation(current_gizmo_rot_Z, Vector3(0, 1, 0), -90 * (PI / 180));
 }
+
 
 void Transformation_3D::Update()
 {
@@ -203,7 +208,7 @@ void Transformation_3D::Render()
 	//glDrawArrays(GL_TRIANGLES, 0, 36);
 	//glBindVertexArray(0);
 
-	// GIZMO
+	// GIZMO 1
 
 	Vector3 pivot = Vector3(-0.5f, 0.0f, 0.0f);
 
@@ -212,12 +217,12 @@ void Transformation_3D::Render()
 	gizmoDeltaRot = Matrix4x4::Rotation(gizmoDeltaRot, Vector3(1, 0, 0), gizmoDelta.x * (PI / 180));
 	gizmoDeltaRot = Matrix4x4::Rotation(gizmoDeltaRot, Vector3(0, 1, 0), gizmoDelta.y * (PI / 180));
 	gizmoDeltaRot = Matrix4x4::Rotation(gizmoDeltaRot, Vector3(0, 0, 1), gizmoDelta.z * (PI / 180));
-	current_gizmo_rot = gizmoDeltaRot * current_gizmo_rot;
+	current_gizmo_rot_X = gizmoDeltaRot * current_gizmo_rot_X;
 	gizmoPreviousRotation = gizmoRotation;
 
 	Matrix4x4 gizmoModel = Matrix4x4::Identity();
 	gizmoModel = Matrix4x4::Translation(gizmoModel, gizmoPosition + pivot);
-	gizmoModel = gizmoModel * current_gizmo_rot;
+	gizmoModel = gizmoModel * current_gizmo_rot_X;
 	gizmoModel = Matrix4x4::Scale(gizmoModel, gizmoScale);
 	gizmoModel = Matrix4x4::Translation(gizmoModel, -pivot);
 
@@ -228,6 +233,24 @@ void Transformation_3D::Render()
 	glBindVertexArray(VAO);
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 	glBindVertexArray(0);
+
+	// GIZMO 2
+
+	current_gizmo_rot_Y = gizmoDeltaRot * current_gizmo_rot_Y;
+	gizmoModel = Matrix4x4::Identity();
+	gizmoModel = Matrix4x4::Translation(gizmoModel, gizmoPosition + pivot);
+	gizmoModel = gizmoModel * current_gizmo_rot_Y;
+	gizmoModel = Matrix4x4::Scale(gizmoModel, gizmoScale);
+	gizmoModel = Matrix4x4::Translation(gizmoModel, -pivot);
+
+	shader.Use();
+	shader.SetMat4_Custom("model", gizmoModel.m);
+	shader.SetMat4_Custom("view", view.m);
+	shader.SetMat4_Custom("projection", projection.m);
+	glBindVertexArray(VAO);
+	glDrawArrays(GL_TRIANGLES, 0, 36);
+	glBindVertexArray(0);
+	
 }
 
 bool Transformation_3D::ValueChangedX()
