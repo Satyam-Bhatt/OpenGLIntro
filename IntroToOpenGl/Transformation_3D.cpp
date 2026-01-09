@@ -250,7 +250,23 @@ void Transformation_3D::Render()
 	glBindVertexArray(VAO);
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 	glBindVertexArray(0);
-	
+
+	// GIZMO 3
+
+	current_gizmo_rot_Z = gizmoDeltaRot * current_gizmo_rot_Z;
+	gizmoModel = Matrix4x4::Identity();
+	gizmoModel = Matrix4x4::Translation(gizmoModel, gizmoPosition + pivot);
+	gizmoModel = gizmoModel * current_gizmo_rot_Z;
+	gizmoModel = Matrix4x4::Scale(gizmoModel, gizmoScale);
+	gizmoModel = Matrix4x4::Translation(gizmoModel, -pivot);
+
+	shader.Use();
+	shader.SetMat4_Custom("model", gizmoModel.m);
+	shader.SetMat4_Custom("view", view.m);
+	shader.SetMat4_Custom("projection", projection.m);
+	glBindVertexArray(VAO);
+	glDrawArrays(GL_TRIANGLES, 0, 36);
+	glBindVertexArray(0);
 }
 
 bool Transformation_3D::ValueChangedX()
