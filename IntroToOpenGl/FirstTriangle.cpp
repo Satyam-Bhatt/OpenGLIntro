@@ -78,14 +78,13 @@ void FirstTriangle::Start()
 	// -> Calls to glEnableVertexAttribArray or glDisableVertexAttribArray.
 	// -> Vertex attribute configurations via glVertexAttribPointer.
 	// -> Vertex buffer objects associated with vertex attributes by calls to glVertexAttribPointer.
-	//unsigned int VAO;
 	glGenVertexArrays(1, &VAO);
 	// Bind VAO. This should be done before glVertexAttribPointer as now it will store calls to it. Its good if we do it before binding VBO as well
 	// The last element buffer object that gets bound while a VAO is bound, is stored as the VAO's element buffer object. Binding to a VAO then also automatically binds that EBO.
 	glBindVertexArray(VAO);
 
 	// Here we are storing the vertex data on the graphics card memory and is managed by verter buffer object called as VBO
-	//unsigned int VBO; //Vertex Buffer Object -> this is a buffer that holds the verticies and is also an openGL object and represents the buffer
+	//Vertex Buffer Object -> this is a buffer that holds the verticies and is also an openGL object and represents the buffer
 	glGenBuffers(1, &VBO); // It generated one buffer object and the ID is stored in VBO (more in the definition of glGenBuffers)
 	glBindBuffer(GL_ARRAY_BUFFER, VBO); // Bind the buffer to the target. GL_ARRAY_BUFFER is the target/buffer type for vertex buffer object // || DEFINE ||
 	// As GL_ARRAY_BUFFER is now bound to the buffer VBO so any buffer operation will be performed on this buffer. glBufferData just copies the vertices data defined above to the buffer's memory
@@ -138,11 +137,11 @@ void FirstTriangle::Render()
 {
 	// == Drawing ==
 // To Draw in wireframe mode. Default is glPolygonMode(GL_FRONT_AND_BACK, GL_FILL).
-	if(wireframeMode)
+	if (wireframeMode)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	else
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-// Run our first program
+	// Run our first program
 	glUseProgram(shaderProgram); // Use the shader program
 	glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized. It is generally done if we want to draw some other thing with a different VAO
 	// Draws primitives using currently active shader program and the active/bound VAO. 

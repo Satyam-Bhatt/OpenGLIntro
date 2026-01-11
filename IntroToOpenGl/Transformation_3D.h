@@ -36,7 +36,7 @@ private:
 	Matrix4x4 current_rot;
 
 	Shader shader;
-	uint32_t VAO = 0, VBO = 0;
+	uint32_t VAO = 0, VBO = 0, VAO2 = 0, VBO2 = 0;
 
 	Vector3 gizmoPosition = Vector3(0.5f, 1.2f, 0.0f);
 	Vector3 gizmoScale = Vector3(0.3f, 0.1f, 0.1f);
