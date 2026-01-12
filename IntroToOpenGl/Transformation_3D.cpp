@@ -17,60 +17,75 @@ void Transformation_3D::Start()
 
 	shader = Shader("Transformation_3D.shader");
 
-	//float vertices[] =
-	//{
-	//	// Position (x, y, z, w)     // Color (r, g, b)
-
-	//	// Front face (Red)
-	//	-0.5f, -0.5f, -0.5f, 1.0f,   1.0f, 0.0f, 0.0f,
-	//	 0.5f, -0.5f, -0.5f, 1.0f,   1.0f, 0.0f, 0.0f,
-	//	-0.5f,  0.5f, -0.5f, 1.0f,   1.0f, 0.0f, 0.0f,
-	//	 0.5f, -0.5f, -0.5f, 1.0f,   1.0f, 0.0f, 0.0f,
-	//	 0.5f,  0.5f, -0.5f, 1.0f,   1.0f, 0.0f, 0.0f,
-	//	-0.5f,  0.5f, -0.5f, 1.0f,   1.0f, 0.0f, 0.0f,
-
-	//	// Back face (Green)
-	//	-0.5f, -0.5f,  0.5f, 1.0f,   0.0f, 1.0f, 0.0f,
-	//	-0.5f,  0.5f,  0.5f, 1.0f,   0.0f, 1.0f, 0.0f,
-	//	 0.5f, -0.5f,  0.5f, 1.0f,   0.0f, 1.0f, 0.0f,
-	//	 0.5f, -0.5f,  0.5f, 1.0f,   0.0f, 1.0f, 0.0f,
-	//	-0.5f,  0.5f,  0.5f, 1.0f,   0.0f, 1.0f, 0.0f,
-	//	 0.5f,  0.5f,  0.5f, 1.0f,   0.0f, 1.0f, 0.0f,
-
-	//	 // Left face (Blue)
-	//	 -0.5f, -0.5f, -0.5f, 1.0f,   0.0f, 0.0f, 1.0f,
-	//	 -0.5f,  0.5f, -0.5f, 1.0f,   0.0f, 0.0f, 1.0f,
-	//	 -0.5f, -0.5f,  0.5f, 1.0f,   0.0f, 0.0f, 1.0f,
-	//	 -0.5f,  0.5f, -0.5f, 1.0f,   0.0f, 0.0f, 1.0f,
-	//	 -0.5f,  0.5f,  0.5f, 1.0f,   0.0f, 0.0f, 1.0f,
-	//	 -0.5f, -0.5f,  0.5f, 1.0f,   0.0f, 0.0f, 1.0f,
-
-	//	 // Right face (Yellow)
-	//	  0.5f, -0.5f, -0.5f, 1.0f,   1.0f, 1.0f, 0.0f,
-	//	  0.5f, -0.5f,  0.5f, 1.0f,   1.0f, 1.0f, 0.0f,
-	//	  0.5f,  0.5f, -0.5f, 1.0f,   1.0f, 1.0f, 0.0f,
-	//	  0.5f,  0.5f, -0.5f, 1.0f,   1.0f, 1.0f, 0.0f,
-	//	  0.5f, -0.5f,  0.5f, 1.0f,   1.0f, 1.0f, 0.0f,
-	//	  0.5f,  0.5f,  0.5f, 1.0f,   1.0f, 1.0f, 0.0f,
-
-	//	  // Top face (Cyan)
-	//	  -0.5f,  0.5f, -0.5f, 1.0f,   0.0f, 1.0f, 1.0f,
-	//	   0.5f,  0.5f, -0.5f, 1.0f,   0.0f, 1.0f, 1.0f,
-	//	  -0.5f,  0.5f,  0.5f, 1.0f,   0.0f, 1.0f, 1.0f,
-	//	   0.5f,  0.5f, -0.5f, 1.0f,   0.0f, 1.0f, 1.0f,
-	//	   0.5f,  0.5f,  0.5f, 1.0f,   0.0f, 1.0f, 1.0f,
-	//	  -0.5f,  0.5f,  0.5f, 1.0f,   0.0f, 1.0f, 1.0f,
-
-	//	  // Bottom face (Magenta)
-	//	  -0.5f, -0.5f, -0.5f, 1.0f,   1.0f, 0.0f, 1.0f,
-	//	  -0.5f, -0.5f,  0.5f, 1.0f,   1.0f, 0.0f, 1.0f,
-	//	   0.5f, -0.5f, -0.5f, 1.0f,   1.0f, 0.0f, 1.0f,
-	//	   0.5f, -0.5f, -0.5f, 1.0f,   1.0f, 0.0f, 1.0f,
-	//	  -0.5f, -0.5f,  0.5f, 1.0f,   1.0f, 0.0f, 1.0f,
-	//	   0.5f, -0.5f,  0.5f, 1.0f,   1.0f, 0.0f, 1.0f
-	//};
-
 	float vertices[] =
+	{
+		// Position (x, y, z, w)     // Color (r, g, b)
+
+		// Front face (Red)
+		-0.5f, -0.5f, -0.5f, 1.0f,   1.0f, 0.0f, 0.0f,
+		 0.5f, -0.5f, -0.5f, 1.0f,   1.0f, 0.0f, 0.0f,
+		-0.5f,  0.5f, -0.5f, 1.0f,   1.0f, 0.0f, 0.0f,
+		 0.5f, -0.5f, -0.5f, 1.0f,   1.0f, 0.0f, 0.0f,
+		 0.5f,  0.5f, -0.5f, 1.0f,   1.0f, 0.0f, 0.0f,
+		-0.5f,  0.5f, -0.5f, 1.0f,   1.0f, 0.0f, 0.0f,
+
+		// Back face (Green)
+		-0.5f, -0.5f,  0.5f, 1.0f,   0.0f, 1.0f, 0.0f,
+		-0.5f,  0.5f,  0.5f, 1.0f,   0.0f, 1.0f, 0.0f,
+		 0.5f, -0.5f,  0.5f, 1.0f,   0.0f, 1.0f, 0.0f,
+		 0.5f, -0.5f,  0.5f, 1.0f,   0.0f, 1.0f, 0.0f,
+		-0.5f,  0.5f,  0.5f, 1.0f,   0.0f, 1.0f, 0.0f,
+		 0.5f,  0.5f,  0.5f, 1.0f,   0.0f, 1.0f, 0.0f,
+
+		 // Left face (Blue)
+		 -0.5f, -0.5f, -0.5f, 1.0f,   0.0f, 0.0f, 1.0f,
+		 -0.5f,  0.5f, -0.5f, 1.0f,   0.0f, 0.0f, 1.0f,
+		 -0.5f, -0.5f,  0.5f, 1.0f,   0.0f, 0.0f, 1.0f,
+		 -0.5f,  0.5f, -0.5f, 1.0f,   0.0f, 0.0f, 1.0f,
+		 -0.5f,  0.5f,  0.5f, 1.0f,   0.0f, 0.0f, 1.0f,
+		 -0.5f, -0.5f,  0.5f, 1.0f,   0.0f, 0.0f, 1.0f,
+
+		 // Right face (Yellow)
+		  0.5f, -0.5f, -0.5f, 1.0f,   1.0f, 1.0f, 0.0f,
+		  0.5f, -0.5f,  0.5f, 1.0f,   1.0f, 1.0f, 0.0f,
+		  0.5f,  0.5f, -0.5f, 1.0f,   1.0f, 1.0f, 0.0f,
+		  0.5f,  0.5f, -0.5f, 1.0f,   1.0f, 1.0f, 0.0f,
+		  0.5f, -0.5f,  0.5f, 1.0f,   1.0f, 1.0f, 0.0f,
+		  0.5f,  0.5f,  0.5f, 1.0f,   1.0f, 1.0f, 0.0f,
+
+		  // Top face (Cyan)
+		  -0.5f,  0.5f, -0.5f, 1.0f,   0.0f, 1.0f, 1.0f,
+		   0.5f,  0.5f, -0.5f, 1.0f,   0.0f, 1.0f, 1.0f,
+		  -0.5f,  0.5f,  0.5f, 1.0f,   0.0f, 1.0f, 1.0f,
+		   0.5f,  0.5f, -0.5f, 1.0f,   0.0f, 1.0f, 1.0f,
+		   0.5f,  0.5f,  0.5f, 1.0f,   0.0f, 1.0f, 1.0f,
+		  -0.5f,  0.5f,  0.5f, 1.0f,   0.0f, 1.0f, 1.0f,
+
+		  // Bottom face (Magenta)
+		  -0.5f, -0.5f, -0.5f, 1.0f,   1.0f, 0.0f, 1.0f,
+		  -0.5f, -0.5f,  0.5f, 1.0f,   1.0f, 0.0f, 1.0f,
+		   0.5f, -0.5f, -0.5f, 1.0f,   1.0f, 0.0f, 1.0f,
+		   0.5f, -0.5f, -0.5f, 1.0f,   1.0f, 0.0f, 1.0f,
+		  -0.5f, -0.5f,  0.5f, 1.0f,   1.0f, 0.0f, 1.0f,
+		   0.5f, -0.5f,  0.5f, 1.0f,   1.0f, 0.0f, 1.0f
+	};
+
+	glGenVertexArrays(1, &VAO);
+	glGenBuffers(1, &VBO);
+	glBindVertexArray(VAO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
+
+	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)(4 * sizeof(float)));
+	glEnableVertexAttribArray(1);
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
+
+	float vertices2[] =
 	{
 		// Position (x, y, z, w)     // Color (r, g, b)
 		// Front face (White)
@@ -117,11 +132,11 @@ void Transformation_3D::Start()
 		   0.5f, -0.5f,  0.5f, 1.0f,   0.5f, 0.5f, 0.5f
 	};
 
-	glGenVertexArrays(1, &VAO);
+	glGenVertexArrays(1, &VAO2);
 	glGenBuffers(1, &VBO);
-	glBindVertexArray(VAO);
+	glBindVertexArray(VAO2);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices2), vertices2, GL_DYNAMIC_DRAW);
 
 	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
