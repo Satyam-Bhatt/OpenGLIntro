@@ -266,14 +266,14 @@ void Transformation_3D::Render()
 	shader.SetMat4_Custom("model", model.m);
 	shader.SetMat4_Custom("view", view.m);
 	shader.SetMat4_Custom("projection", projection.m);
-	shader.SetVec3("colorToBeShaded", Vector3(0.0f, 0.3f, 0.2f));
+	shader.SetVec3("colorToBeShaded", Vector3(1.0f, 1.0f, 1.0f));
 	glBindVertexArray(VAO);
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 	glBindVertexArray(0);
 
 	// GIZMO 1
 
-	Vector3 pivot = Vector3(-0.5f, 0.0f, 0.0f);
+	Vector3 pivot = Vector3(-0.65f, 0.0f, 0.0f);
 
 	Vector3 gizmoDelta = gizmoRotation - gizmoPreviousRotation;
 	Matrix4x4 gizmoDeltaRot = Matrix4x4::Identity();
@@ -293,7 +293,8 @@ void Transformation_3D::Render()
 	shader.SetMat4_Custom("model", gizmoModel.m);
 	shader.SetMat4_Custom("view", view.m);
 	shader.SetMat4_Custom("projection", projection.m);
-	glBindVertexArray(VAO);
+	shader.SetVec3("colorToBeShaded", Vector3(1.0f, 0.0f, 0.0f));
+	glBindVertexArray(VAO2);
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 	glBindVertexArray(0);
 
@@ -310,7 +311,8 @@ void Transformation_3D::Render()
 	shader.SetMat4_Custom("model", gizmoModel.m);
 	shader.SetMat4_Custom("view", view.m);
 	shader.SetMat4_Custom("projection", projection.m);
-	glBindVertexArray(VAO);
+	shader.SetVec3("colorToBeShaded", Vector3(0.0f, 1.0f, 0.0f));
+	glBindVertexArray(VAO2);
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 	glBindVertexArray(0);
 
@@ -327,7 +329,8 @@ void Transformation_3D::Render()
 	shader.SetMat4_Custom("model", gizmoModel.m);
 	shader.SetMat4_Custom("view", view.m);
 	shader.SetMat4_Custom("projection", projection.m);
-	glBindVertexArray(VAO);
+	shader.SetVec3("colorToBeShaded", Vector3(0.0f, 0.0f, 1.0f));
+	glBindVertexArray(VAO2);
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 	glBindVertexArray(0);
 }
