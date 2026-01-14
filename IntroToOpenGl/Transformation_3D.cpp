@@ -210,7 +210,7 @@ void Transformation_3D::ImGuiRender(GLFWwindow* window)
 
 	ImGui::Begin("Heading 1", 0, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_AlwaysAutoResize);
 
-	if(localRotation)
+	if (localRotation)
 		ImGui::Text("LOCAL ROTATION");
 	else
 		ImGui::Text("WORLD ROTATION");
@@ -285,7 +285,7 @@ void Transformation_3D::Render()
 
 	Matrix4x4 gizmoModel = Matrix4x4::Identity();
 	gizmoModel = Matrix4x4::Translation(gizmoModel, gizmoPosition + pivot);
-	gizmoModel = gizmoModel * current_gizmo_rot_X;
+	gizmoModel = gizmoModel * current_rot;// current_gizmo_rot_X;
 	gizmoModel = Matrix4x4::Scale(gizmoModel, gizmoScale);
 	gizmoModel = Matrix4x4::Translation(gizmoModel, -pivot);
 
@@ -300,10 +300,10 @@ void Transformation_3D::Render()
 
 	// GIZMO 2
 
-	current_gizmo_rot_Y = gizmoDeltaRot * current_gizmo_rot_Y;
+	//current_gizmo_rot_Y = gizmoDeltaRot * current_gizmo_rot_Y;
 	gizmoModel = Matrix4x4::Identity();
 	gizmoModel = Matrix4x4::Translation(gizmoModel, gizmoPosition + pivot);
-	gizmoModel = gizmoModel * current_gizmo_rot_Y;
+	gizmoModel = gizmoModel * current_rot * current_gizmo_rot_Y;
 	gizmoModel = Matrix4x4::Scale(gizmoModel, gizmoScale);
 	gizmoModel = Matrix4x4::Translation(gizmoModel, -pivot);
 
