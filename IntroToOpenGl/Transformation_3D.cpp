@@ -189,10 +189,6 @@ void Transformation_3D::ImGuiRender(GLFWwindow* window)
 		Reset();
 	}
 
-	ImGui::DragFloat3("Gizmo Rotation", &gizmoRotation.x, 0.5f);
-	ImGui::DragFloat3("Gizmo World Position", &gizmoPosition.x, 0.005f);
-	ImGui::DragFloat3("Gizmo Local Scale", &gizmoScale.x, 0.005f);
-
 	ImGui::End();
 
 	ImGui::SetNextWindowPos(
@@ -226,10 +222,10 @@ void Transformation_3D::Render()
 	deltaRot = Matrix4x4::Rotation(deltaRot, Vector3(0, 1, 0), delta.y * (PI / 180));
 	deltaRot = Matrix4x4::Rotation(deltaRot, Vector3(0, 0, 1), delta.z * (PI / 180));
 
+	// BUG: This rotation does not go back to 0
 	if (localRotation)
 	{
 		// Local-space
-		// BUG: This rotation does not go back to 0
 
 		// Applying the delta rotation to the current rotation matrix.
 		// If we just set the current rotation to the new rotation matrix it would reset the previous rotations and only apply the latest rotation
@@ -275,17 +271,16 @@ void Transformation_3D::Render()
 
 	Vector3 pivot = Vector3(-0.65f, 0.0f, 0.0f);
 
-	Vector3 gizmoDelta = gizmoRotation - gizmoPreviousRotation;
-	Matrix4x4 gizmoDeltaRot = Matrix4x4::Identity();
-	gizmoDeltaRot = Matrix4x4::Rotation(gizmoDeltaRot, Vector3(1, 0, 0), gizmoDelta.x * (PI / 180));
-	gizmoDeltaRot = Matrix4x4::Rotation(gizmoDeltaRot, Vector3(0, 1, 0), gizmoDelta.y * (PI / 180));
-	gizmoDeltaRot = Matrix4x4::Rotation(gizmoDeltaRot, Vector3(0, 0, 1), gizmoDelta.z * (PI / 180));
-	current_gizmo_rot_X = gizmoDeltaRot * current_gizmo_rot_X;
-	gizmoPreviousRotation = gizmoRotation;
-
+	// First we have the gizmo model matrix position at center, scale 1, no rotation
+	// Then we translate it to the gizmo position as per pivot so that the scaling and rotation happens around the pivot
+	// Then we apply scale
+	// For rotation if local then we apply the current object rotation as gizmo should follow object rotation
+	// else we don't apply object rotation
+	// Finally we translate back by -pivot to bring the gizmo back to its original position
 	Matrix4x4 gizmoModel = Matrix4x4::Identity();
 	gizmoModel = Matrix4x4::Translation(gizmoModel, gizmoPosition + pivot);
-	gizmoModel = gizmoModel * current_rot;// current_gizmo_rot_X;
+	if (localRotation)
+		gizmoModel = gizmoModel * current_rot;
 	gizmoModel = Matrix4x4::Scale(gizmoModel, gizmoScale);
 	gizmoModel = Matrix4x4::Translation(gizmoModel, -pivot);
 
@@ -300,10 +295,13 @@ void Transformation_3D::Render()
 
 	// GIZMO 2
 
-	//current_gizmo_rot_Y = gizmoDeltaRot * current_gizmo_rot_Y;
 	gizmoModel = Matrix4x4::Identity();
 	gizmoModel = Matrix4x4::Translation(gizmoModel, gizmoPosition + pivot);
-	gizmoModel = gizmoModel * current_rot * current_gizmo_rot_Y;
+	// Here we first rotate the gizmo by 90 degrees around Z so that it aligns with Y axis then we apply object rotation if local
+	if (localRotation)
+		gizmoModel = gizmoModel * current_rot * current_gizmo_rot_Y;
+	else
+		gizmoModel = gizmoModel * current_gizmo_rot_Y;
 	gizmoModel = Matrix4x4::Scale(gizmoModel, gizmoScale);
 	gizmoModel = Matrix4x4::Translation(gizmoModel, -pivot);
 
@@ -318,10 +316,13 @@ void Transformation_3D::Render()
 
 	// GIZMO 3
 
-	current_gizmo_rot_Z = gizmoDeltaRot * current_gizmo_rot_Z;
 	gizmoModel = Matrix4x4::Identity();
 	gizmoModel = Matrix4x4::Translation(gizmoModel, gizmoPosition + pivot);
-	gizmoModel = gizmoModel * current_gizmo_rot_Z;
+	// Here we first rotate the gizmo by -90 degrees around Y so that it aligns with Z axis then we apply object rotation if local
+	if (localRotation)
+		gizmoModel = gizmoModel * current_rot * current_gizmo_rot_Z;
+	else
+		gizmoModel = gizmoModel * current_gizmo_rot_Z;
 	gizmoModel = Matrix4x4::Scale(gizmoModel, gizmoScale);
 	gizmoModel = Matrix4x4::Translation(gizmoModel, -pivot);
 
@@ -369,7 +370,23 @@ void Transformation_3D::Exit()
 {
 	if (VAO != 0) glDeleteVertexArrays(1, &VAO);
 	if (VBO != 0) glDeleteBuffers(1, &VBO);
+	if (VAO2 != 0) glDeleteVertexArrays(1, &VAO2);
+	if (VBO2 != 0) glDeleteBuffers(1, &VBO2);
 	if (shader.ID != 0) glDeleteProgram(shader.ID);
+
+	position = Vector3(0.0f, 0.0f, 0.0f);
+	previousRotation = Vector3(0.0f, 0.0f, 0.0f);
+	rotation = Vector3(0.0f, 0.0f, 0.0f);
+	scale = Vector3(1.0f, 1.0f, 1.0f);
+	gizmoPosition = Vector3(0.5f, 1.2f, 0.0f);
+	gizmoScale = Vector3(0.3f, 0.1f, 0.1f);
+	gizmoRotation = Vector3(0.0f, 0.0f, 0.0f);
+	current_gizmo_rot_X = Matrix4x4::Identity();
+	current_gizmo_rot_Y = Matrix4x4::Identity();
+	current_gizmo_rot_Z = Matrix4x4::Identity();
+
+	current_rot = Matrix4x4::Identity();
+
 
 	glDisable(GL_DEPTH_TEST);
 }

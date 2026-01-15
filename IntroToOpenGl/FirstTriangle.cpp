@@ -7,6 +7,7 @@ FirstTriangle::FirstTriangle()
 	VAO = 0;
 	VBO = 0;
 	shaderProgram = 0;
+	wireframeMode = false;
 }
 
 FirstTriangle::~FirstTriangle()

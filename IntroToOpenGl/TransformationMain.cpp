@@ -240,7 +240,9 @@ void TransformationMain::RenderText(SubScene sceneName)
 	}
 	else if (sceneName == SubScene::Transformation_3D)
 	{
-		ImGui::TextWrapped("3D cube transformation");
+		ImGui::TextWrapped("3D cube transformation. Rotate around local and global axis.");
+		ImGui::TextWrapped("Rotations are being done using matricies where we apply the delta rotation to the current rotation matrix. The order of these determine the local and global rotation.");
+		ImGui::TextWrapped("The problem is that we cannot get at 0 rotation if the order is different.");
 	}
 	else
 	{
