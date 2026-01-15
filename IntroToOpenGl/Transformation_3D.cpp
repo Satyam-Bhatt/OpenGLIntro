@@ -222,7 +222,7 @@ void Transformation_3D::Render()
 	deltaRot = Matrix4x4::Rotation(deltaRot, Vector3(0, 1, 0), delta.y * (PI / 180));
 	deltaRot = Matrix4x4::Rotation(deltaRot, Vector3(0, 0, 1), delta.z * (PI / 180));
 
-	// BUG: This rotation does not go back to 0
+	// ISSUE: This rotation does not go back to 0
 	if (localRotation)
 	{
 		// Local-space
