@@ -184,6 +184,26 @@ void Transformation_3D::ImGuiRender(GLFWwindow* window)
 	ImGui::DragFloat3("World Position", &position.x, 0.005f);
 	ImGui::DragFloat3("Local Scale", &scale.x, 0.005f);
 	ImGui::Checkbox("Local Rotation", &localRotation);
+
+	ImGui::PushItemWidth(100.0f);
+	ImGui::Combo("Rotation Space", &rotationSpaceIndex, ROTATION_SPACES, IM_ARRAYSIZE(ROTATION_SPACES));
+	ImGui::SameLine();
+	ImGui::Combo("Rotation Order", &rotationOrderIndex, ROTATION_ORDER, IM_ARRAYSIZE(ROTATION_ORDER));
+	ImGui::PopItemWidth();
+
+	if (rotationSpaceIndex == 0)
+	{
+		ImGui::TextWrapped("Rotation happens around:");
+		ImGui::Indent(10);
+		ImGui::TextWrapped("X -> right");
+		ImGui::TextWrapped("Y -> up");
+		ImGui::TextWrapped("Z -> inside the screen");
+	}
+	if (rotationSpaceIndex == 1)
+		ImGui::TextWrapped("The axis rotates with the cube.");
+	if (rotationSpaceIndex == 2)
+		ImGui::TextWrapped("Generally how most game engines implemetn rotation. I find it non intuitive but in it you can go back to 0.");
+
 	if (ImGui::Button("RESET"))
 	{
 		Reset();
@@ -222,6 +242,11 @@ void Transformation_3D::Render()
 	deltaRot = Matrix4x4::Rotation(deltaRot, Vector3(0, 1, 0), delta.y * (PI / 180));
 	deltaRot = Matrix4x4::Rotation(deltaRot, Vector3(0, 0, 1), delta.z * (PI / 180));
 
+	Matrix4x4 engineRot = Matrix4x4::Identity();
+	engineRot = Matrix4x4::Rotation(engineRot, Vector3(1, 0, 0), rotation.x * (PI / 180));
+	engineRot = Matrix4x4::Rotation(engineRot, Vector3(0, 1, 0), rotation.y * (PI / 180));
+	engineRot = Matrix4x4::Rotation(engineRot, Vector3(0, 0, 1), rotation.z * (PI / 180));
+
 	// ISSUE: This rotation does not go back to 0
 	if (localRotation)
 	{
@@ -249,7 +274,7 @@ void Transformation_3D::Render()
 
 	Matrix4x4 model = Matrix4x4::Identity();
 	model = Matrix4x4::Translation(model, position);
-	model = model * current_rot;
+	model = model * engineRot; //current_rot;
 	model = Matrix4x4::Scale(model, scale);
 
 	Matrix4x4 view = Matrix4x4::Identity();
@@ -336,27 +361,6 @@ void Transformation_3D::Render()
 	glBindVertexArray(0);
 }
 
-bool Transformation_3D::ValueChangedX()
-{
-	if (previousRotation.x != rotation.x)
-		return true;
-	return false;
-}
-
-bool Transformation_3D::ValueChangedY()
-{
-	if (previousRotation.y != rotation.y)
-		return true;
-	return false;
-}
-
-bool Transformation_3D::ValueChangedZ()
-{
-	if (previousRotation.z != rotation.z)
-		return true;
-	return false;
-}
-
 void Transformation_3D::Reset()
 {
 	current_rot = Matrix4x4::Identity();
@@ -364,6 +368,16 @@ void Transformation_3D::Reset()
 	previousRotation = Vector3(0.0f, 0.0f, 0.0f);
 	scale = Vector3(1.0f, 1.0f, 1.0f);
 	position = Vector3(0.0f, 0.0f, 0.0f);
+}
+
+Matrix4x4 Transformation_3D::GetDeltaRotationMatrix(const Vector3& deltaRotation)
+{
+	return Matrix4x4();
+}
+
+Matrix4x4 Transformation_3D::GetEngineRotationMatrix(const Vector3& rotation)
+{
+	return Matrix4x4();
 }
 
 void Transformation_3D::Exit()

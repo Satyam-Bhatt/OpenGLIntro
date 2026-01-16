@@ -20,9 +20,8 @@ private:
 	static Transformation_3D instance;
 
 	void Reset();
-	bool ValueChangedX();
-	bool ValueChangedY();
-	bool ValueChangedZ();
+	Matrix4x4 GetDeltaRotationMatrix(const Vector3& deltaRotation);
+	Matrix4x4 GetEngineRotationMatrix(const Vector3& rotation);
 
 	Vector3 position = Vector3(0.0f, 0.0f, 0.0f);
 
@@ -43,5 +42,10 @@ private:
 	Vector3 gizmoRotation = Vector3(0.0f, 0.0f, 0.0f);
 	Vector3 gizmoPreviousRotation = Vector3(0.0f, 0.0f, 0.0f);
 	Matrix4x4 current_gizmo_rot_X, current_gizmo_rot_Y, current_gizmo_rot_Z;
+
+	const char* ROTATION_ORDER[6] = { "XYZ", "XZY", "YZX", "YXZ", "ZXY", "ZYX" };
+	int rotationOrderIndex = 0;
+	const char* ROTATION_SPACES[3] = { "World Space", "Local Space", "Engine"};
+	int rotationSpaceIndex = 0;
 };
 
