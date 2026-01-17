@@ -372,6 +372,33 @@ void Transformation_3D::Reset()
 
 Matrix4x4 Transformation_3D::GetDeltaRotationMatrix(const Vector3& deltaRotation)
 {
+	Matrix4x4 deltaRot = Matrix4x4::Identity();
+
+	if (rotationOrderIndex == 0) // XYZ
+	{
+		deltaRot = Matrix4x4::Rotation(Matrix4x4::Identity(), Vector3(1, 0, 0), deltaRotation.x * (PI / 180));
+		deltaRot = Matrix4x4::Rotation(deltaRot, Vector3(0, 1, 0), deltaRotation.y * (PI / 180));
+		deltaRot = Matrix4x4::Rotation(deltaRot, Vector3(0, 0, 1), deltaRotation.z * (PI / 180));
+	}
+	else if (rotationOrderIndex == 1) // XZY
+	{
+		deltaRot = Matrix4x4::Rotation(Matrix4x4::Identity(), Vector3(1, 0, 0), deltaRotation.x * (PI / 180));
+		deltaRot = Matrix4x4::Rotation(deltaRot, Vector3(0, 0, 1), deltaRotation.z * (PI / 180));
+		deltaRot = Matrix4x4::Rotation(deltaRot, Vector3(0, 1, 0), deltaRotation.y * (PI / 180));
+	}
+	else if (rotationOrderIndex == 2) // YXZ
+	{
+	}
+	else if (rotationOrderIndex == 3) // YZX
+	{
+	}
+	else if (rotationOrderIndex == 4) // ZXY
+	{
+	}
+	else if (rotationOrderIndex == 5) // ZYX
+	{
+	}
+
 	return Matrix4x4();
 }
 
