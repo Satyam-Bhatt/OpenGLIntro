@@ -394,15 +394,24 @@ Matrix4x4 Transformation_3D::GetDeltaRotationMatrix(const Vector3& deltaRotation
 	}
 	else if (rotationOrderIndex == 3) // YZX
 	{
+		deltaRot = Matrix4x4::Rotation(deltaRot, Vector3(0, 1, 0), deltaRotation.y * (PI / 180));
+		deltaRot = Matrix4x4::Rotation(deltaRot, Vector3(0, 0, 1), deltaRotation.z * (PI / 180));
+		deltaRot = Matrix4x4::Rotation(deltaRot, Vector3(1, 0, 0), deltaRotation.x * (PI / 180));
 	}
 	else if (rotationOrderIndex == 4) // ZXY
 	{
+		deltaRot = Matrix4x4::Rotation(deltaRot, Vector3(0, 0, 1), deltaRotation.z * (PI / 180));
+		deltaRot = Matrix4x4::Rotation(deltaRot, Vector3(1, 0, 0), deltaRotation.x * (PI / 180));
+		deltaRot = Matrix4x4::Rotation(deltaRot, Vector3(0, 1, 0), deltaRotation.y * (PI / 180));
 	}
 	else if (rotationOrderIndex == 5) // ZYX
 	{
+		deltaRot = Matrix4x4::Rotation(deltaRot, Vector3(0, 0, 1), deltaRotation.z * (PI / 180));
+		deltaRot = Matrix4x4::Rotation(deltaRot, Vector3(0, 1, 0), deltaRotation.y * (PI / 180));
+		deltaRot = Matrix4x4::Rotation(deltaRot, Vector3(1, 0, 0), deltaRotation.x * (PI / 180));
 	}
 
-	return Matrix4x4();
+	return deltaRot;
 }
 
 Matrix4x4 Transformation_3D::GetEngineRotationMatrix(const Vector3& rotation)
