@@ -20,8 +20,7 @@ private:
 	static Transformation_3D instance;
 
 	void Reset();
-	Matrix4x4 GetDeltaRotationMatrix(const Vector3& deltaRotation);
-	Matrix4x4 GetEngineRotationMatrix(const Vector3& rotation);
+	Matrix4x4 GetRotationMatrix(const Vector3& rotation);
 
 	Vector3 position = Vector3(0.0f, 0.0f, 0.0f);
 

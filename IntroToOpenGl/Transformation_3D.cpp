@@ -237,19 +237,25 @@ void Transformation_3D::ImGuiRender(GLFWwindow* window)
 void Transformation_3D::Render()
 {
 	Vector3 delta = rotation - previousRotation;
-	Matrix4x4 deltaRot = Matrix4x4::Identity();
-	deltaRot = Matrix4x4::Rotation(deltaRot, Vector3(1, 0, 0), delta.x * (PI / 180));
-	deltaRot = Matrix4x4::Rotation(deltaRot, Vector3(0, 1, 0), delta.y * (PI / 180));
-	deltaRot = Matrix4x4::Rotation(deltaRot, Vector3(0, 0, 1), delta.z * (PI / 180));
+	Matrix4x4 deltaRot = GetRotationMatrix(delta);
 
-	Matrix4x4 engineRot = Matrix4x4::Identity();
-	engineRot = Matrix4x4::Rotation(engineRot, Vector3(1, 0, 0), rotation.x * (PI / 180));
-	engineRot = Matrix4x4::Rotation(engineRot, Vector3(0, 1, 0), rotation.y * (PI / 180));
-	engineRot = Matrix4x4::Rotation(engineRot, Vector3(0, 0, 1), rotation.z * (PI / 180));
+	Matrix4x4 engineRot = GetRotationMatrix(rotation);
 
-	// ISSUE: This rotation does not go back to 0
-	if (localRotation)
-	{
+	previousRotation = rotation;
+
+	Matrix4x4 model = Matrix4x4::Identity();
+	model = Matrix4x4::Translation(model, position);
+
+	// ISSUE: This rotation does not go back to 0 when the Space is World or Local. Works fine for Engine space.
+	if (rotationSpaceIndex == 0) {
+		// World-space
+
+		// This is global because vertex v is first transformed by current_rot_old which makes it world oriented
+		// then the already world oriented v is rotated by deltaRot. Delta rot is built from fixed world axes only, and it acts on the vertices only after it has been transformed to world space
+		current_rot = deltaRot * current_rot;
+		model = model * current_rot;
+	}
+	else if (rotationSpaceIndex == 1) {
 		// Local-space
 
 		// Applying the delta rotation to the current rotation matrix.
@@ -259,22 +265,14 @@ void Transformation_3D::Render()
 		// This is local because consider vertex v
 		// the expression is current_rot_new = current_rot_old * deltaRot * v
 		// So what happens is that v is rotated by deltaRot first. Then the alreaddy rotated v is transformed by current_rot_old
+
 		current_rot = current_rot * deltaRot;
+		model = model * current_rot;
 	}
-	else
-	{
-		// World-space
-
-		// This is global because vertex v is first transformed by current_rot_old which makes it world oriented
-		// then the already world oriented v is rotated by deltaRot. Delta rot is built from fixed world axes only, and it acts on the vertices only after it has been transformed to world space
-		current_rot = deltaRot * current_rot;
+	else if (rotationSpaceIndex == 2) {
+		model = model * engineRot;
 	}
 
-	previousRotation = rotation;
-
-	Matrix4x4 model = Matrix4x4::Identity();
-	model = Matrix4x4::Translation(model, position);
-	model = model * engineRot; //current_rot;
 	model = Matrix4x4::Scale(model, scale);
 
 	Matrix4x4 view = Matrix4x4::Identity();
@@ -370,53 +368,48 @@ void Transformation_3D::Reset()
 	position = Vector3(0.0f, 0.0f, 0.0f);
 }
 
-Matrix4x4 Transformation_3D::GetDeltaRotationMatrix(const Vector3& deltaRotation)
+Matrix4x4 Transformation_3D::GetRotationMatrix(const Vector3& rotation)
 {
-	Matrix4x4 deltaRot = Matrix4x4::Identity();
+	Matrix4x4 engineRot = Matrix4x4::Identity();
 
 	if (rotationOrderIndex == 0) // XYZ
 	{
-		deltaRot = Matrix4x4::Rotation(deltaRot, Vector3(1, 0, 0), deltaRotation.x * (PI / 180));
-		deltaRot = Matrix4x4::Rotation(deltaRot, Vector3(0, 1, 0), deltaRotation.y * (PI / 180));
-		deltaRot = Matrix4x4::Rotation(deltaRot, Vector3(0, 0, 1), deltaRotation.z * (PI / 180));
+		engineRot = Matrix4x4::Rotation(engineRot, Vector3(1, 0, 0), rotation.x * (PI / 180));
+		engineRot = Matrix4x4::Rotation(engineRot, Vector3(0, 1, 0), rotation.y * (PI / 180));
+		engineRot = Matrix4x4::Rotation(engineRot, Vector3(0, 0, 1), rotation.z * (PI / 180));
 	}
 	else if (rotationOrderIndex == 1) // XZY
 	{
-		deltaRot = Matrix4x4::Rotation(deltaRot, Vector3(1, 0, 0), deltaRotation.x * (PI / 180));
-		deltaRot = Matrix4x4::Rotation(deltaRot, Vector3(0, 0, 1), deltaRotation.z * (PI / 180));
-		deltaRot = Matrix4x4::Rotation(deltaRot, Vector3(0, 1, 0), deltaRotation.y * (PI / 180));
+		engineRot = Matrix4x4::Rotation(engineRot, Vector3(1, 0, 0), rotation.x * (PI / 180));
+		engineRot = Matrix4x4::Rotation(engineRot, Vector3(0, 0, 1), rotation.z * (PI / 180));
+		engineRot = Matrix4x4::Rotation(engineRot, Vector3(0, 1, 0), rotation.y * (PI / 180));
 	}
 	else if (rotationOrderIndex == 2) // YXZ
 	{
-		deltaRot = Matrix4x4::Rotation(deltaRot, Vector3(0,1,0), deltaRotation.y * (PI/180));
-		deltaRot = Matrix4x4::Rotation(deltaRot, Vector3(1,0,0), deltaRotation.x * (PI/180));
-		deltaRot = Matrix4x4::Rotation(deltaRot, Vector3(0,0,1), deltaRotation.z * (PI/180));
+		engineRot = Matrix4x4::Rotation(engineRot, Vector3(0, 1, 0), rotation.y * (PI / 180));
+		engineRot = Matrix4x4::Rotation(engineRot, Vector3(1, 0, 0), rotation.x * (PI / 180));
+		engineRot = Matrix4x4::Rotation(engineRot, Vector3(0, 0, 1), rotation.z * (PI / 180));
 	}
 	else if (rotationOrderIndex == 3) // YZX
 	{
-		deltaRot = Matrix4x4::Rotation(deltaRot, Vector3(0, 1, 0), deltaRotation.y * (PI / 180));
-		deltaRot = Matrix4x4::Rotation(deltaRot, Vector3(0, 0, 1), deltaRotation.z * (PI / 180));
-		deltaRot = Matrix4x4::Rotation(deltaRot, Vector3(1, 0, 0), deltaRotation.x * (PI / 180));
+		engineRot = Matrix4x4::Rotation(engineRot, Vector3(0, 1, 0), rotation.y * (PI / 180));
+		engineRot = Matrix4x4::Rotation(engineRot, Vector3(0, 0, 1), rotation.z * (PI / 180));
+		engineRot = Matrix4x4::Rotation(engineRot, Vector3(1, 0, 0), rotation.x * (PI / 180));
 	}
 	else if (rotationOrderIndex == 4) // ZXY
 	{
-		deltaRot = Matrix4x4::Rotation(deltaRot, Vector3(0, 0, 1), deltaRotation.z * (PI / 180));
-		deltaRot = Matrix4x4::Rotation(deltaRot, Vector3(1, 0, 0), deltaRotation.x * (PI / 180));
-		deltaRot = Matrix4x4::Rotation(deltaRot, Vector3(0, 1, 0), deltaRotation.y * (PI / 180));
+		engineRot = Matrix4x4::Rotation(engineRot, Vector3(0, 0, 1), rotation.z * (PI / 180));
+		engineRot = Matrix4x4::Rotation(engineRot, Vector3(1, 0, 0), rotation.x * (PI / 180));
+		engineRot = Matrix4x4::Rotation(engineRot, Vector3(0, 1, 0), rotation.y * (PI / 180));
 	}
 	else if (rotationOrderIndex == 5) // ZYX
 	{
-		deltaRot = Matrix4x4::Rotation(deltaRot, Vector3(0, 0, 1), deltaRotation.z * (PI / 180));
-		deltaRot = Matrix4x4::Rotation(deltaRot, Vector3(0, 1, 0), deltaRotation.y * (PI / 180));
-		deltaRot = Matrix4x4::Rotation(deltaRot, Vector3(1, 0, 0), deltaRotation.x * (PI / 180));
+		engineRot = Matrix4x4::Rotation(engineRot, Vector3(0, 0, 1), rotation.z * (PI / 180));
+		engineRot = Matrix4x4::Rotation(engineRot, Vector3(0, 1, 0), rotation.y * (PI / 180));
+		engineRot = Matrix4x4::Rotation(engineRot, Vector3(1, 0, 0), rotation.x * (PI / 180));
 	}
 
-	return deltaRot;
-}
-
-Matrix4x4 Transformation_3D::GetEngineRotationMatrix(const Vector3& rotation)
-{
-	return Matrix4x4();
+	return engineRot;
 }
 
 void Transformation_3D::Exit()
