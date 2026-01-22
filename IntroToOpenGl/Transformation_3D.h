@@ -20,6 +20,7 @@ private:
 	static Transformation_3D instance;
 
 	void Reset();
+	void RenderGizmo(float (&view)[4][4], float (&projection)[4][4]);
 	Matrix4x4 GetRotationMatrix(const Vector3& rotation);
 
 	Vector3 position = Vector3(0.0f, 0.0f, 0.0f);

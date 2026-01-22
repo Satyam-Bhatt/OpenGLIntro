@@ -202,7 +202,7 @@ void Transformation_3D::ImGuiRender(GLFWwindow* window)
 	if (rotationSpaceIndex == 1)
 		ImGui::TextWrapped("The axis rotates with the cube.");
 	if (rotationSpaceIndex == 2)
-		ImGui::TextWrapped("Generally how most game engines implemetn rotation. I find it non intuitive but in it you can go back to 0.");
+		ImGui::TextWrapped("Generally how most game engines implemetn rotation. I find it non intuitive but in it you can go back to 0. Also the First axis is global and the last 2 are local");
 
 	if (ImGui::Button("RESET"))
 	{
@@ -270,6 +270,10 @@ void Transformation_3D::Render()
 		model = model * current_rot;
 	}
 	else if (rotationSpaceIndex == 2) {
+
+		// We need this to supply to gizmo so that we can make them rotate in local space when the space index is set to engine
+		current_rot = current_rot * deltaRot;
+
 		model = model * engineRot;
 	}
 
@@ -290,73 +294,8 @@ void Transformation_3D::Render()
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 	glBindVertexArray(0);
 
-	// GIZMO 1
-
-	Vector3 pivot = Vector3(-0.65f, 0.0f, 0.0f);
-
-	// First we have the gizmo model matrix position at center, scale 1, no rotation
-	// Then we translate it to the gizmo position as per pivot so that the scaling and rotation happens around the pivot
-	// Then we apply scale
-	// For rotation if local then we apply the current object rotation as gizmo should follow object rotation
-	// else we don't apply object rotation
-	// Finally we translate back by -pivot to bring the gizmo back to its original position
-	Matrix4x4 gizmoModel = Matrix4x4::Identity();
-	gizmoModel = Matrix4x4::Translation(gizmoModel, gizmoPosition + pivot);
-	if (localRotation)
-		gizmoModel = gizmoModel * current_rot;
-	gizmoModel = Matrix4x4::Scale(gizmoModel, gizmoScale);
-	gizmoModel = Matrix4x4::Translation(gizmoModel, -pivot);
-
-	shader.Use();
-	shader.SetMat4_Custom("model", gizmoModel.m);
-	shader.SetMat4_Custom("view", view.m);
-	shader.SetMat4_Custom("projection", projection.m);
-	shader.SetVec3("colorToBeShaded", Vector3(1.0f, 0.0f, 0.0f));
-	glBindVertexArray(VAO2);
-	glDrawArrays(GL_TRIANGLES, 0, 36);
-	glBindVertexArray(0);
-
-	// GIZMO 2
-
-	gizmoModel = Matrix4x4::Identity();
-	gizmoModel = Matrix4x4::Translation(gizmoModel, gizmoPosition + pivot);
-	// Here we first rotate the gizmo by 90 degrees around Z so that it aligns with Y axis then we apply object rotation if local
-	if (localRotation)
-		gizmoModel = gizmoModel * current_rot * current_gizmo_rot_Y;
-	else
-		gizmoModel = gizmoModel * current_gizmo_rot_Y;
-	gizmoModel = Matrix4x4::Scale(gizmoModel, gizmoScale);
-	gizmoModel = Matrix4x4::Translation(gizmoModel, -pivot);
-
-	shader.Use();
-	shader.SetMat4_Custom("model", gizmoModel.m);
-	shader.SetMat4_Custom("view", view.m);
-	shader.SetMat4_Custom("projection", projection.m);
-	shader.SetVec3("colorToBeShaded", Vector3(0.0f, 1.0f, 0.0f));
-	glBindVertexArray(VAO2);
-	glDrawArrays(GL_TRIANGLES, 0, 36);
-	glBindVertexArray(0);
-
-	// GIZMO 3
-
-	gizmoModel = Matrix4x4::Identity();
-	gizmoModel = Matrix4x4::Translation(gizmoModel, gizmoPosition + pivot);
-	// Here we first rotate the gizmo by -90 degrees around Y so that it aligns with Z axis then we apply object rotation if local
-	if (localRotation)
-		gizmoModel = gizmoModel * current_rot * current_gizmo_rot_Z;
-	else
-		gizmoModel = gizmoModel * current_gizmo_rot_Z;
-	gizmoModel = Matrix4x4::Scale(gizmoModel, gizmoScale);
-	gizmoModel = Matrix4x4::Translation(gizmoModel, -pivot);
-
-	shader.Use();
-	shader.SetMat4_Custom("model", gizmoModel.m);
-	shader.SetMat4_Custom("view", view.m);
-	shader.SetMat4_Custom("projection", projection.m);
-	shader.SetVec3("colorToBeShaded", Vector3(0.0f, 0.0f, 1.0f));
-	glBindVertexArray(VAO2);
-	glDrawArrays(GL_TRIANGLES, 0, 36);
-	glBindVertexArray(0);
+	if(rotationSpaceIndex != 2)
+		RenderGizmo(view.m, projection.m);
 }
 
 void Transformation_3D::Reset()
@@ -368,10 +307,110 @@ void Transformation_3D::Reset()
 	position = Vector3(0.0f, 0.0f, 0.0f);
 }
 
+void Transformation_3D::RenderGizmo(float(&view)[4][4], float(&projection)[4][4])
+{
+	// GIZMO 1 - X
+
+	Vector3 pivot = Vector3(-0.65f, 0.0f, 0.0f);
+
+	// First we have the gizmo model matrix position at center, scale 1, no rotation
+	// Then we translate it to the gizmo position as per pivot so that the scaling and rotation happens around the pivot
+	// Then we apply scale
+	// For rotation if local then we apply the current object rotation as gizmo should follow object rotation
+	// else we don't apply object rotation
+	// Finally we translate back by -pivot to bring the gizmo back to its original position
+	Matrix4x4 gizmoModel = Matrix4x4::Identity();
+	gizmoModel = Matrix4x4::Translation(gizmoModel, gizmoPosition + pivot);
+
+	// Rotation
+	if (rotationSpaceIndex == 0)
+	{
+		// World space
+		gizmoModel = gizmoModel;
+	}
+	else if (rotationSpaceIndex == 1)
+	{
+		// Local space
+		gizmoModel = gizmoModel * current_rot;
+	}
+
+	gizmoModel = Matrix4x4::Scale(gizmoModel, gizmoScale);
+	gizmoModel = Matrix4x4::Translation(gizmoModel, -pivot);
+
+	shader.Use();
+	shader.SetMat4_Custom("model", gizmoModel.m);
+	shader.SetMat4_Custom("view", view);
+	shader.SetMat4_Custom("projection", projection);
+	shader.SetVec3("colorToBeShaded", Vector3(1.0f, 0.0f, 0.0f));
+	glBindVertexArray(VAO2);
+	glDrawArrays(GL_TRIANGLES, 0, 36);
+	glBindVertexArray(0);
+
+	// GIZMO 2 - Y
+
+	gizmoModel = Matrix4x4::Identity();
+	gizmoModel = Matrix4x4::Translation(gizmoModel, gizmoPosition + pivot);
+
+	//Rotation
+	if (rotationSpaceIndex == 0)
+	{
+		// World space
+		gizmoModel = gizmoModel * current_gizmo_rot_Y;
+	}
+	else if (rotationSpaceIndex == 1)
+	{
+		// Local space
+		// Here we first rotate the gizmo by 90 degrees around Z so that it aligns with Y axis then we apply object rotation if local
+		gizmoModel = gizmoModel * current_rot * current_gizmo_rot_Y;
+	}
+
+	gizmoModel = Matrix4x4::Scale(gizmoModel, gizmoScale);
+	gizmoModel = Matrix4x4::Translation(gizmoModel, -pivot);
+
+	shader.Use();
+	shader.SetMat4_Custom("model", gizmoModel.m);
+	shader.SetMat4_Custom("view", view);
+	shader.SetMat4_Custom("projection", projection);
+	shader.SetVec3("colorToBeShaded", Vector3(0.0f, 1.0f, 0.0f));
+	glBindVertexArray(VAO2);
+	glDrawArrays(GL_TRIANGLES, 0, 36);
+	glBindVertexArray(0);
+
+	// GIZMO 3 - Z
+
+	gizmoModel = Matrix4x4::Identity();
+	gizmoModel = Matrix4x4::Translation(gizmoModel, gizmoPosition + pivot);
+
+	//Rotatiom
+	if (rotationSpaceIndex == 0)
+	{
+		// World space
+		gizmoModel = gizmoModel * current_gizmo_rot_Z;
+	}
+	else if (rotationSpaceIndex == 1)
+	{
+		// Local space
+		gizmoModel = gizmoModel * current_rot * current_gizmo_rot_Z;
+	}
+
+	gizmoModel = Matrix4x4::Scale(gizmoModel, gizmoScale);
+	gizmoModel = Matrix4x4::Translation(gizmoModel, -pivot);
+
+	shader.Use();
+	shader.SetMat4_Custom("model", gizmoModel.m);
+	shader.SetMat4_Custom("view", view);
+	shader.SetMat4_Custom("projection", projection);
+	shader.SetVec3("colorToBeShaded", Vector3(0.0f, 0.0f, 1.0f));
+	glBindVertexArray(VAO2);
+	glDrawArrays(GL_TRIANGLES, 0, 36);
+	glBindVertexArray(0);
+}
+
 Matrix4x4 Transformation_3D::GetRotationMatrix(const Vector3& rotation)
 {
 	Matrix4x4 engineRot = Matrix4x4::Identity();
 
+	// First Axis are Global and last two is Local
 	if (rotationOrderIndex == 0) // XYZ
 	{
 		engineRot = Matrix4x4::Rotation(engineRot, Vector3(1, 0, 0), rotation.x * (PI / 180));
