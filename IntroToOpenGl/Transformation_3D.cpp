@@ -239,6 +239,7 @@ void Transformation_3D::Render()
 	Vector3 delta = rotation - previousRotation;
 	Matrix4x4 deltaRot = GetRotationMatrix(delta);
 
+	// Generally most game engines apply rotations directly
 	Matrix4x4 engineRot = GetRotationMatrix(rotation);
 
 	previousRotation = rotation;
@@ -270,10 +271,6 @@ void Transformation_3D::Render()
 		model = model * current_rot;
 	}
 	else if (rotationSpaceIndex == 2) {
-
-		// We need this to supply to gizmo so that we can make them rotate in local space when the space index is set to engine
-		current_rot = current_rot * deltaRot;
-
 		model = model * engineRot;
 	}
 
