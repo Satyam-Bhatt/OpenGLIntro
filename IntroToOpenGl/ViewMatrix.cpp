@@ -11,6 +11,7 @@ ViewMatrix::~ViewMatrix()
 	Exit();
 }
 
+// QUESTION- Play with the view matrix by translating in several directions and see how the scene changes. Think of the view matrix as a camera object.
 void ViewMatrix::Start()
 {
 	glEnable(GL_DEPTH_TEST);
@@ -35,6 +36,54 @@ void ViewMatrix::Start()
 	{
 		std::cout << "Error loading texture" << std::endl;
 	}
+
+	stbi_image_free(data);
+
+	shader = Shader("ViewMatrix.shader");
+
+	float vertices[] = {
+	 -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+	  0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
+	  0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+	  0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+	 -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+	 -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+
+	 -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+	  0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+	  0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+	  0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+	 -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
+	 -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+
+	 -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+	 -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+	 -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+	 -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+	 -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+	 -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+	  0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+	  0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+	  0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+	  0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+	  0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+	  0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+	 -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+	  0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
+	  0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+	  0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+	 -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+	 -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+
+	 -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+	  0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+	  0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+	  0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+	 -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
+	 -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
+	};
 }
 
 void ViewMatrix::Update()
