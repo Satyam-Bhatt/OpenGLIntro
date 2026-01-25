@@ -407,7 +407,7 @@ Matrix4x4 Transformation_3D::GetRotationMatrix(const Vector3& rotation)
 {
 	Matrix4x4 engineRot = Matrix4x4::Identity();
 
-	// First Axis are Global and last two is Local
+	// First Axis are Global and last two is Local in Engine Rotation
 	if (rotationOrderIndex == 0) // XYZ
 	{
 		engineRot = Matrix4x4::Rotation(engineRot, Vector3(1, 0, 0), rotation.x * (PI / 180));
