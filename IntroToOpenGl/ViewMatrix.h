@@ -20,5 +20,7 @@ private:
 	Shader shader;
 	uint32_t VAO = 0, VBO = 0;
 	uint32_t texture = 0;
+
+	Vector3 viewPosition = Vector3(0.0f, 0.0f, 5.0f);
 };
 

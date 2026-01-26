@@ -84,6 +84,24 @@ void ViewMatrix::Start()
 	 -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
 	 -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
 	};
+
+	glGenVertexArrays(1, &VAO);
+	glGenBuffers(1, &VBO);
+
+	glBindVertexArray(VAO);
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+	// position attribute
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+	// texture coord attribute
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
 }
 
 void ViewMatrix::Update()
@@ -92,10 +110,32 @@ void ViewMatrix::Update()
 
 void ViewMatrix::ImGuiRender(GLFWwindow* window)
 {
+	GLint viewport[4];
+	glGetIntegerv(GL_VIEWPORT, viewport);
+
+	ImGui::SetNextWindowPos(
+		ImVec2(viewport[0] + viewport[2] / 2, viewport[3]),
+		ImGuiCond_Always,
+		ImVec2(0.5f, 1.0f)
+	);
+
+	ImGui::Begin("Level Specific", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
+
+	ImGui::End();
 }
 
 void ViewMatrix::Render()
 {
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, texture);
+
+	Matrix4x4 model;
+	model = Matrix4x4::Translation(model, Vector3(0, 0, 0));
+	model = Matrix4x4::Rotation(model, Vector3(1, 1, 1), glfwGetTime());
+	model = Matrix4x4::Scale(model, Vector3(1, 1, 1));
+
+	Matrix4x4 view;
+	view = Matrix4x4::Translation(view, viewPosition);
 }
 
 void ViewMatrix::Exit()
@@ -106,3 +146,4 @@ ViewMatrix* ViewMatrix::GetInstance()
 {
 	return &instance;
 }
+
