@@ -201,7 +201,7 @@ void Transformation_3D::ImGuiRender(GLFWwindow* window)
 	}
 	if (rotationSpaceIndex == 1)
 		ImGui::TextWrapped("The axis rotates with the cube.");
-	if (rotationSpaceIndex == 2)
+	if (rotationSpaceIndex == 2) // TODO
 		ImGui::TextWrapped("Generally how most game engines implemetn rotation. I find it non intuitive but in it you can go back to 0. Also the First axis is global and the last 2 are local");
 
 	if (ImGui::Button("RESET"))
@@ -291,6 +291,10 @@ void Transformation_3D::Render()
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 	glBindVertexArray(0);
 
+	// TODO
+	// When in engine rotation mode we don't show gizmo as it would be confusing. The first axis is global and the last two are local
+	// In engies we just directly punch in rotation values rather than the change in rotation values
+	// It is because
 	if(rotationSpaceIndex != 2)
 		RenderGizmo(view.m, projection.m);
 }
