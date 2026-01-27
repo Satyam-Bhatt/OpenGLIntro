@@ -136,6 +136,8 @@ void ViewMatrix::Render()
 
 	Matrix4x4 view;
 	view = Matrix4x4::Translation(view, viewPosition);
+
+	Matrix4x4 projection;
 }
 
 void ViewMatrix::Exit()
