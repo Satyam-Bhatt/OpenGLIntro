@@ -242,7 +242,8 @@ void TransformationMain::RenderText(SubScene sceneName)
 	{
 		ImGui::TextWrapped("3D cube transformation. Rotate around local and global axis.");
 		ImGui::TextWrapped("Rotations are being done using matricies where we apply the delta rotation to the current rotation matrix. The order of these determine the local and global rotation.");
-		ImGui::TextWrapped("The problem is that we cannot get at 0 rotation if the order is different.");
+		ImGui::TextWrapped("The problem is that we cannot get at 0 rotation if the order is different and also similar input values can result in different results depending on the order.");
+		ImGui::TextWrapped("Also implemented engine rotation where the first axis is global and the last two are local in rotation order. Here we directly set the rotation matrix from the input values. We get consistent result from similar input values and we can go back to 0.");
 	}
 	else
 	{

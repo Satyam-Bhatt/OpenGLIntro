@@ -183,13 +183,18 @@ void Transformation_3D::ImGuiRender(GLFWwindow* window)
 	ImGui::DragFloat3("Rotation", &rotation.x, 0.5f);
 	ImGui::DragFloat3("World Position", &position.x, 0.005f);
 	ImGui::DragFloat3("Local Scale", &scale.x, 0.005f);
-	ImGui::Checkbox("Local Rotation", &localRotation);
 
-	ImGui::PushItemWidth(100.0f);
+	ImGui::PushItemWidth(150.0f);
 	ImGui::Combo("Rotation Space", &rotationSpaceIndex, ROTATION_SPACES, IM_ARRAYSIZE(ROTATION_SPACES));
-	ImGui::SameLine();
-	ImGui::Combo("Rotation Order", &rotationOrderIndex, ROTATION_ORDER, IM_ARRAYSIZE(ROTATION_ORDER));
+
+	if (rotationSpaceIndex == 2)
+	{
+		ImGui::SameLine();
+		ImGui::Combo("Rotation Order", &rotationOrderIndex, ROTATION_ORDER, IM_ARRAYSIZE(ROTATION_ORDER));
+	}
 	ImGui::PopItemWidth();
+
+	ImGui::Dummy(ImVec2(viewport[2]*0.9f, 0.0f));
 
 	if (rotationSpaceIndex == 0)
 	{
@@ -198,38 +203,18 @@ void Transformation_3D::ImGuiRender(GLFWwindow* window)
 		ImGui::TextWrapped("X -> right");
 		ImGui::TextWrapped("Y -> up");
 		ImGui::TextWrapped("Z -> inside the screen");
+		ImGui::Unindent(10);
+		ImGui::TextWrapped("We calculate delta rotation for it. It looks intuitive but here we can't go back to 0 and also similar rotation numbers won't produce similar rotation as the order matters.");
 	}
 	if (rotationSpaceIndex == 1)
-		ImGui::TextWrapped("The axis rotates with the cube.");
-	if (rotationSpaceIndex == 2) // TODO
-		ImGui::TextWrapped("Generally how most game engines implemetn rotation. I find it non intuitive but in it you can go back to 0. Also the First axis is global and the last 2 are local");
+		ImGui::TextWrapped("The axis rotates with the cube. We calculate delta rotation for it. It looks intuitive but here we can't go back to 0 and also similar rotation numbers won't produce similar rotation as the order matters.");
+	if (rotationSpaceIndex == 2)
+		ImGui::TextWrapped("Generally how most game engines implemetn rotation. Angle is directly put into the rotation matrix. It looks non intuitive(that is why no gizmo) but in it you can go back to 0 and the rotation is consistent that means same rotation would produce same result irrespective of the order you enter them in. Also the First axis is global and the last 2 are local in rotation order.");
 
 	if (ImGui::Button("RESET"))
 	{
 		Reset();
 	}
-
-	ImGui::End();
-
-	ImGui::SetNextWindowPos(
-		// Set the position in the starting 1/4th of the redering area
-		ImVec2(viewport[0] + leftIMGUIWindowWidth + (float)viewportData.width / 2, viewport[1] + 20),
-		ImGuiCond_Always,
-		ImVec2(0.5f, 0.0f)
-	);
-
-	// Set a fixed window width to make it smaller
-	ImGui::SetNextWindowSizeConstraints(
-		ImVec2(100, 0),
-		ImVec2(windowWidth, FLT_MAX)
-	);
-
-	ImGui::Begin("Heading 1", 0, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_AlwaysAutoResize);
-
-	if (localRotation)
-		ImGui::Text("LOCAL ROTATION");
-	else
-		ImGui::Text("WORLD ROTATION");
 
 	ImGui::End();
 }
@@ -291,10 +276,10 @@ void Transformation_3D::Render()
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 	glBindVertexArray(0);
 
-	// TODO
-	// When in engine rotation mode we don't show gizmo as it would be confusing. The first axis is global and the last two are local
-	// In engies we just directly punch in rotation values rather than the change in rotation values
-	// It is because
+	// When in engine rotation mode we don't show gizmo as it would be confusing. The first axis is global and the last two are local in the rotation order
+	// In engies we just directly punch in rotation values rather than the find the change in rotation values
+	// It is because we want similar rotation for similar input values and also want to be able to go back to 0
+	// Although it looks non intuitive but it is consistent
 	if(rotationSpaceIndex != 2)
 		RenderGizmo(view.m, projection.m);
 }
