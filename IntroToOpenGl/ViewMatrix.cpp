@@ -138,10 +138,22 @@ void ViewMatrix::Render()
 	view = Matrix4x4::Translation(view, viewPosition);
 
 	Matrix4x4 projection;
+	projection = Matrix4x4::CreateProjectionMatrix_FOV_LeftHanded(45.0f * (PI / 180), (float)viewportData.width, (float)viewportData.height, 0.1f, 100.0f);
+
+	shader.Use();
+	shader.SetMat4_Custom("model", model.m);
 }
 
 void ViewMatrix::Exit()
 {
+	if (VAO != 0) glDeleteVertexArrays(1, &VAO);
+	if (VBO != 0) glDeleteBuffers(1, &VBO);
+	if (shader.ID != 0) glDeleteProgram(shader.ID);
+	if (texture != 0) glDeleteTextures(1, &texture);
+
+	viewPosition = Vector3(0.0f, 0.0f, 5.0f);
+
+	glDisable(GL_DEPTH_TEST);
 }
 
 ViewMatrix* ViewMatrix::GetInstance()

@@ -30,8 +30,6 @@ private:
 
 	Vector3 scale = Vector3(1.0f, 1.0f, 1.0f);
 
-	bool localRotation = true;
-
 	Matrix4x4 current_rot;
 
 	Shader shader;
