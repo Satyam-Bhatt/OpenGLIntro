@@ -36,6 +36,7 @@ private:
 		Right_LeftHanded,
 		StitchingTest,
 		Transformation_3D,
+		ViewMatrix,
 		COUNT
 	};
 

@@ -11,6 +11,7 @@
 #include "Right_LeftHanded.h"
 #include "StitchingTest.h"
 #include "Transformation_3D.h"
+#include "ViewMatrix.h"
 
 TransformationMain* TransformationMain::instance = nullptr;
 
@@ -51,6 +52,9 @@ TransformationMain::TransformationMain()
 
 	sceneNames[SubScene::Transformation_3D] = "Transformation 3D";
 	sceneFactories[SubScene::Transformation_3D] = []() -> TransformationMain* { return Transformation_3D::GetInstance(); };
+
+	sceneNames[SubScene::ViewMatrix] = "View Matrix";
+	sceneFactories[SubScene::ViewMatrix] = []() -> TransformationMain* { return ViewMatrix::GetInstance(); };
 }
 
 TransformationMain::~TransformationMain()
@@ -244,6 +248,10 @@ void TransformationMain::RenderText(SubScene sceneName)
 		ImGui::TextWrapped("Rotations are being done using matricies where we apply the delta rotation to the current rotation matrix. The order of these determine the local and global rotation.");
 		ImGui::TextWrapped("The problem is that we cannot get at 0 rotation if the order is different and also similar input values can result in different results depending on the order.");
 		ImGui::TextWrapped("Also implemented engine rotation where the first axis is global and the last two are local in rotation order. Here we directly set the rotation matrix from the input values. We get consistent result from similar input values and we can go back to 0.");
+	}
+	else if (sceneName == SubScene::ViewMatrix)
+	{
+		ImGui::TextWrapped("Changing translation values of the view and model matrix.");
 	}
 	else
 	{

@@ -11,7 +11,6 @@ ViewMatrix::~ViewMatrix()
 	Exit();
 }
 
-// QUESTION- Play with the view matrix by translating in several directions and see how the scene changes. Think of the view matrix as a camera object.
 void ViewMatrix::Start()
 {
 	glEnable(GL_DEPTH_TEST);
@@ -38,6 +37,7 @@ void ViewMatrix::Start()
 	}
 
 	stbi_image_free(data);
+	glBindTexture(GL_TEXTURE_2D, 0);
 
 	shader = Shader("ViewMatrix.shader");
 
@@ -102,6 +102,9 @@ void ViewMatrix::Start()
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
+
+	shader.Use();
+	shader.SetTexture("myTexture", 0);
 }
 
 void ViewMatrix::Update()
@@ -121,6 +124,18 @@ void ViewMatrix::ImGuiRender(GLFWwindow* window)
 
 	ImGui::Begin("Level Specific", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
 
+	ImGui::DragFloat3("View Position", &viewPosition.x, 0.005f);
+
+	//TODO
+	//ImGui::TextDisabled("S-Axis (?)");
+	if (ImGui::BeginItemTooltip())
+	{
+		ImGui::TextUnformatted("Only works when the texture coordinates are changed. Responsible for X axis");
+		ImGui::EndTooltip();
+	}
+
+	ImGui::DragFloat3("Model Position", &modelPostion.x, 0.005f);
+
 	ImGui::End();
 }
 
@@ -130,7 +145,7 @@ void ViewMatrix::Render()
 	glBindTexture(GL_TEXTURE_2D, texture);
 
 	Matrix4x4 model;
-	model = Matrix4x4::Translation(model, Vector3(0, 0, 0));
+	model = Matrix4x4::Translation(model, modelPostion);
 	model = Matrix4x4::Rotation(model, Vector3(1, 1, 1), glfwGetTime());
 	model = Matrix4x4::Scale(model, Vector3(1, 1, 1));
 
@@ -142,6 +157,14 @@ void ViewMatrix::Render()
 
 	shader.Use();
 	shader.SetMat4_Custom("model", model.m);
+	shader.SetMat4_Custom("view", view.m);
+	shader.SetMat4_Custom("projection", projection.m);
+	
+	glBindVertexArray(VAO);
+	glDrawArrays(GL_TRIANGLES, 0, 36);
+	glBindVertexArray(0);
+
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void ViewMatrix::Exit()

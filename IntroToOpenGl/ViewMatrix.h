@@ -22,5 +22,6 @@ private:
 	uint32_t texture = 0;
 
 	Vector3 viewPosition = Vector3(0.0f, 0.0f, 5.0f);
+	Vector3 modelPostion = Vector3(0.0f, 0.0f, 0.0f);
 };
 
