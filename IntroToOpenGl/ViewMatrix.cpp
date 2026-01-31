@@ -125,16 +125,22 @@ void ViewMatrix::ImGuiRender(GLFWwindow* window)
 	ImGui::Begin("Level Specific", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
 
 	ImGui::DragFloat3("View Position", &viewPosition.x, 0.005f);
-
-	//TODO
-	//ImGui::TextDisabled("S-Axis (?)");
+	ImGui::SameLine();
+	ImGui::TextDisabled("(?)");
 	if (ImGui::BeginItemTooltip())
 	{
-		ImGui::TextUnformatted("Only works when the texture coordinates are changed. Responsible for X axis");
+		ImGui::TextUnformatted("Changes the camera position");
 		ImGui::EndTooltip();
 	}
 
 	ImGui::DragFloat3("Model Position", &modelPostion.x, 0.005f);
+	ImGui::SameLine();
+	ImGui::TextDisabled("(?)");
+	if (ImGui::BeginItemTooltip())
+	{
+		ImGui::TextUnformatted("Changes the position of the cube");
+		ImGui::EndTooltip();
+	}
 
 	ImGui::End();
 }
@@ -145,9 +151,6 @@ void ViewMatrix::Render()
 	glBindTexture(GL_TEXTURE_2D, texture);
 
 	Matrix4x4 model;
-	model = Matrix4x4::Translation(model, modelPostion);
-	model = Matrix4x4::Rotation(model, Vector3(1, 1, 1), glfwGetTime());
-	model = Matrix4x4::Scale(model, Vector3(1, 1, 1));
 
 	Matrix4x4 view;
 	view = Matrix4x4::Translation(view, viewPosition);
@@ -155,13 +158,21 @@ void ViewMatrix::Render()
 	Matrix4x4 projection;
 	projection = Matrix4x4::CreateProjectionMatrix_FOV_LeftHanded(45.0f * (PI / 180), (float)viewportData.width, (float)viewportData.height, 0.1f, 100.0f);
 
-	shader.Use();
-	shader.SetMat4_Custom("model", model.m);
-	shader.SetMat4_Custom("view", view.m);
-	shader.SetMat4_Custom("projection", projection.m);
+	for (int i = 0; i < 4; i++)
+	{
+		model = Matrix4x4::Translation(model, modelPostion + Vector3(0,1,0));
+		model = Matrix4x4::Rotation(model, Vector3(1, 1, 1), glfwGetTime());
+		model = Matrix4x4::Scale(model, Vector3(1, 1, 1));
+
+		shader.Use();
+		shader.SetMat4_Custom("model", model.m);
+		shader.SetMat4_Custom("view", view.m);
+		shader.SetMat4_Custom("projection", projection.m);
 	
-	glBindVertexArray(VAO);
-	glDrawArrays(GL_TRIANGLES, 0, 36);
+		glBindVertexArray(VAO);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+	}
+
 	glBindVertexArray(0);
 
 	glBindTexture(GL_TEXTURE_2D, 0);
