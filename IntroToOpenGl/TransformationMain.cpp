@@ -251,7 +251,7 @@ void TransformationMain::RenderText(SubScene sceneName)
 	}
 	else if (sceneName == SubScene::ViewMatrix)
 	{
-		ImGui::TextWrapped("Changing translation values of the view and model matrix.");
+		ImGui::TextWrapped("Changing translation values of the view matrix. Its like moving the camera around. Increase the cube count to populate the space");
 	}
 	else
 	{

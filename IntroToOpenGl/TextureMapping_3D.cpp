@@ -212,7 +212,7 @@ void TextureMapping_3D::InitializeCubes()
     int numCubes = 12;
     cubes.clear();
 
-    float spacing = 0.6f; // Distance between cubes (adjust based on your scale)
+    float spacing = 0.6f; // Distance between cubes
     int cubesPerRow = 4;  // 4x3 grid for 12 cubes
 
     for (int i = 0; i < numCubes; i++)
