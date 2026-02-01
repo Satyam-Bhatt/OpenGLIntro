@@ -1,0 +1,537 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="18.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="MinSizeRel|x64">
+      <Configuration>MinSizeRel</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="RelWithDebInfo|x64">
+      <Configuration>RelWithDebInfo</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{2ABCBEEC-21D7-3AD2-B8F4-F75BF9EDE860}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0.26100.0</WindowsTargetPlatformVersion>
+    <Platform>x64</Platform>
+    <ProjectName>IntroToOpenGl</ProjectName>
+    <VCProjectUpgraderObjectName>NoUpgrade</VCProjectUpgraderObjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v145</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v145</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v145</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v145</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\build\Debug\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">IntroToOpenGl.dir\Debug\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">IntroToOpenGl</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</GenerateManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\build\Release\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">IntroToOpenGl.dir\Release\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">IntroToOpenGl</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</GenerateManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\build\MinSizeRel\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">IntroToOpenGl.dir\MinSizeRel\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">IntroToOpenGl</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">true</GenerateManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\build\RelWithDebInfo\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">IntroToOpenGl.dir\RelWithDebInfo\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">IntroToOpenGl</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">true</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">true</GenerateManifest>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl;C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\glm;C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\glad\KHR;C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\glad\glad;C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\OpenGLLibrary\glfw-3.4.bin.WIN64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <BufferSecurityCheck></BufferSecurityCheck>
+      <CallingConvention></CallingConvention>
+      <ConformanceMode>true</ConformanceMode>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <FloatingPointModel></FloatingPointModel>
+      <ForceConformanceInForLoopScope></ForceConformanceInForLoopScope>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <MinimalRebuild></MinimalRebuild>
+      <Optimization>Disabled</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RemoveUnreferencedCodeData></RemoveUnreferencedCodeData>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <SupportJustMyCode></SupportJustMyCode>
+      <TreatWChar_tAsBuiltInType></TreatWChar_tAsBuiltInType>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;UNICODE;_UNICODE;NDEBUG;_CONSOLE;CMAKE_INTDIR="Debug"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_DEBUG;_WINDOWS;UNICODE;_UNICODE;NDEBUG;_CONSOLE;CMAKE_INTDIR=\"Debug\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl;C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\glm;C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\glad\KHR;C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\glad\glad;C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\OpenGLLibrary\glfw-3.4.bin.WIN64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl;C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\glm;C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\glad\KHR;C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\glad\glad;C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\OpenGLLibrary\glfw-3.4.bin.WIN64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;user32.lib;gdi32.lib;shell32.lib;kernel32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:/Users/satya/OneDrive/Desktop/SDL&amp;OpenGL/OpenGLIntro2/IntroToOpenGl/OpenGLLibrary/glfw-3.4.bin.WIN64/lib-vc2022;C:/Users/satya/OneDrive/Desktop/SDL&amp;OpenGL/OpenGLIntro2/IntroToOpenGl/OpenGLLibrary/glfw-3.4.bin.WIN64/lib-vc2022/$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+      <DataExecutionPrevention></DataExecutionPrevention>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImageHasSafeExceptionHandlers></ImageHasSafeExceptionHandlers>
+      <ImportLibrary>C:/Users/satya/OneDrive/Desktop/SDL&amp;OpenGL/OpenGLIntro2/IntroToOpenGl/build/Debug/IntroToOpenGl.lib</ImportLibrary>
+      <LinkErrorReporting></LinkErrorReporting>
+      <ProgramDataBaseFile>C:/Users/satya/OneDrive/Desktop/SDL&amp;OpenGL/OpenGLIntro2/IntroToOpenGl/build/Debug/IntroToOpenGl.pdb</ProgramDataBaseFile>
+      <RandomizedBaseAddress></RandomizedBaseAddress>
+      <SubSystem>Console</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl;C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\glm;C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\glad\KHR;C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\glad\glad;C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\OpenGLLibrary\glfw-3.4.bin.WIN64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <BufferSecurityCheck></BufferSecurityCheck>
+      <CallingConvention></CallingConvention>
+      <ConformanceMode>true</ConformanceMode>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <FloatingPointModel></FloatingPointModel>
+      <ForceConformanceInForLoopScope></ForceConformanceInForLoopScope>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <MinimalRebuild></MinimalRebuild>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RemoveUnreferencedCodeData></RemoveUnreferencedCodeData>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <SupportJustMyCode></SupportJustMyCode>
+      <TreatWChar_tAsBuiltInType></TreatWChar_tAsBuiltInType>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;UNICODE;_UNICODE;_CONSOLE;CMAKE_INTDIR="Release"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;UNICODE;_UNICODE;_CONSOLE;CMAKE_INTDIR=\"Release\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl;C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\glm;C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\glad\KHR;C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\glad\glad;C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\OpenGLLibrary\glfw-3.4.bin.WIN64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl;C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\glm;C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\glad\KHR;C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\glad\glad;C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\OpenGLLibrary\glfw-3.4.bin.WIN64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;user32.lib;gdi32.lib;shell32.lib;kernel32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:/Users/satya/OneDrive/Desktop/SDL&amp;OpenGL/OpenGLIntro2/IntroToOpenGl/OpenGLLibrary/glfw-3.4.bin.WIN64/lib-vc2022;C:/Users/satya/OneDrive/Desktop/SDL&amp;OpenGL/OpenGLIntro2/IntroToOpenGl/OpenGLLibrary/glfw-3.4.bin.WIN64/lib-vc2022/$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+      <DataExecutionPrevention></DataExecutionPrevention>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImageHasSafeExceptionHandlers></ImageHasSafeExceptionHandlers>
+      <ImportLibrary>C:/Users/satya/OneDrive/Desktop/SDL&amp;OpenGL/OpenGLIntro2/IntroToOpenGl/build/Release/IntroToOpenGl.lib</ImportLibrary>
+      <LinkErrorReporting></LinkErrorReporting>
+      <OptimizeReferences>true</OptimizeReferences>
+      <ProgramDataBaseFile>C:/Users/satya/OneDrive/Desktop/SDL&amp;OpenGL/OpenGLIntro2/IntroToOpenGl/build/Release/IntroToOpenGl.pdb</ProgramDataBaseFile>
+      <RandomizedBaseAddress></RandomizedBaseAddress>
+      <SubSystem>Console</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl;C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\glm;C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\glad\KHR;C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\glad\glad;C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\OpenGLLibrary\glfw-3.4.bin.WIN64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <BufferSecurityCheck></BufferSecurityCheck>
+      <CallingConvention></CallingConvention>
+      <ConformanceMode>true</ConformanceMode>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <FloatingPointModel></FloatingPointModel>
+      <ForceConformanceInForLoopScope></ForceConformanceInForLoopScope>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <MinimalRebuild></MinimalRebuild>
+      <Optimization>MinSpace</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RemoveUnreferencedCodeData></RemoveUnreferencedCodeData>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <SupportJustMyCode></SupportJustMyCode>
+      <TreatWChar_tAsBuiltInType></TreatWChar_tAsBuiltInType>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;UNICODE;_UNICODE;_CONSOLE;CMAKE_INTDIR="MinSizeRel"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;UNICODE;_UNICODE;_CONSOLE;CMAKE_INTDIR=\"MinSizeRel\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl;C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\glm;C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\glad\KHR;C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\glad\glad;C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\OpenGLLibrary\glfw-3.4.bin.WIN64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl;C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\glm;C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\glad\KHR;C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\glad\glad;C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\OpenGLLibrary\glfw-3.4.bin.WIN64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;user32.lib;gdi32.lib;shell32.lib;kernel32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:/Users/satya/OneDrive/Desktop/SDL&amp;OpenGL/OpenGLIntro2/IntroToOpenGl/OpenGLLibrary/glfw-3.4.bin.WIN64/lib-vc2022;C:/Users/satya/OneDrive/Desktop/SDL&amp;OpenGL/OpenGLIntro2/IntroToOpenGl/OpenGLLibrary/glfw-3.4.bin.WIN64/lib-vc2022/$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+      <DataExecutionPrevention></DataExecutionPrevention>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImageHasSafeExceptionHandlers></ImageHasSafeExceptionHandlers>
+      <ImportLibrary>C:/Users/satya/OneDrive/Desktop/SDL&amp;OpenGL/OpenGLIntro2/IntroToOpenGl/build/MinSizeRel/IntroToOpenGl.lib</ImportLibrary>
+      <LinkErrorReporting></LinkErrorReporting>
+      <ProgramDataBaseFile>C:/Users/satya/OneDrive/Desktop/SDL&amp;OpenGL/OpenGLIntro2/IntroToOpenGl/build/MinSizeRel/IntroToOpenGl.pdb</ProgramDataBaseFile>
+      <RandomizedBaseAddress></RandomizedBaseAddress>
+      <SubSystem>Console</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl;C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\glm;C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\glad\KHR;C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\glad\glad;C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\OpenGLLibrary\glfw-3.4.bin.WIN64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <BufferSecurityCheck></BufferSecurityCheck>
+      <CallingConvention></CallingConvention>
+      <ConformanceMode>true</ConformanceMode>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <FloatingPointModel></FloatingPointModel>
+      <ForceConformanceInForLoopScope></ForceConformanceInForLoopScope>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <MinimalRebuild></MinimalRebuild>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RemoveUnreferencedCodeData></RemoveUnreferencedCodeData>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <SupportJustMyCode></SupportJustMyCode>
+      <TreatWChar_tAsBuiltInType></TreatWChar_tAsBuiltInType>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;UNICODE;_UNICODE;_CONSOLE;CMAKE_INTDIR="RelWithDebInfo"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;UNICODE;_UNICODE;_CONSOLE;CMAKE_INTDIR=\"RelWithDebInfo\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl;C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\glm;C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\glad\KHR;C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\glad\glad;C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\OpenGLLibrary\glfw-3.4.bin.WIN64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl;C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\glm;C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\glad\KHR;C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\glad\glad;C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\OpenGLLibrary\glfw-3.4.bin.WIN64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;user32.lib;gdi32.lib;shell32.lib;kernel32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:/Users/satya/OneDrive/Desktop/SDL&amp;OpenGL/OpenGLIntro2/IntroToOpenGl/OpenGLLibrary/glfw-3.4.bin.WIN64/lib-vc2022;C:/Users/satya/OneDrive/Desktop/SDL&amp;OpenGL/OpenGLIntro2/IntroToOpenGl/OpenGLLibrary/glfw-3.4.bin.WIN64/lib-vc2022/$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+      <DataExecutionPrevention></DataExecutionPrevention>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImageHasSafeExceptionHandlers></ImageHasSafeExceptionHandlers>
+      <ImportLibrary>C:/Users/satya/OneDrive/Desktop/SDL&amp;OpenGL/OpenGLIntro2/IntroToOpenGl/build/RelWithDebInfo/IntroToOpenGl.lib</ImportLibrary>
+      <LinkErrorReporting></LinkErrorReporting>
+      <ProgramDataBaseFile>C:/Users/satya/OneDrive/Desktop/SDL&amp;OpenGL/OpenGLIntro2/IntroToOpenGl/build/RelWithDebInfo/IntroToOpenGl.pdb</ProgramDataBaseFile>
+      <RandomizedBaseAddress></RandomizedBaseAddress>
+      <SubSystem>Console</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\CMakeLists.txt">
+      <UseUtf8Encoding>Always</UseUtf8Encoding>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building Custom Rule C:/Users/satya/OneDrive/Desktop/SDL^&amp;OpenGL/OpenGLIntro2/IntroToOpenGl/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" "-SC:/Users/satya/OneDrive/Desktop/SDL&amp;OpenGL/OpenGLIntro2/IntroToOpenGl" "-BC:/Users/satya/OneDrive/Desktop/SDL&amp;OpenGL/OpenGLIntro2/IntroToOpenGl/build" --check-stamp-file "C:/Users/satya/OneDrive/Desktop/SDL&amp;OpenGL/OpenGLIntro2/IntroToOpenGl/build/CMakeFiles/generate.stamp"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeCCompiler.cmake.in;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeCCompilerABI.c;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeCInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeCXXCompiler.cmake.in;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeCXXCompilerABI.cpp;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeCompilerIdDetection.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeDetermineCCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeDetermineCXXCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeDetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeDetermineCompilerABI.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeDetermineCompilerId.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeDetermineCompilerSupport.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeDetermineRCCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeDetermineSystem.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeFindBinUtils.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeParseImplicitIncludeInfo.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeParseImplicitLinkInfo.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeParseLibraryArchitecture.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeRCCompiler.cmake.in;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeSystem.cmake.in;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeTestCCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeTestCXXCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeTestCompilerCommon.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeTestRCCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\ADSP-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\ARMCC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\ARMClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\AppleClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\Borland-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\Bruce-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\Clang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\Clang-DetermineCompilerInternal.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\Compaq-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\Compaq-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\Cray-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\CrayClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\Diab-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\Embarcadero-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\Fujitsu-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\FujitsuClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\GHS-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\GNU-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\GNU-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\HP-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\HP-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\IAR-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\IBMCPP-C-DetermineVersionInternal.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\IBMCPP-CXX-DetermineVersionInternal.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\IBMClang-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\IBMClang-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\Intel-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\IntelLLVM-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\LCC-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\LCC-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\MSVC-C.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\MSVC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\NVHPC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\NVIDIA-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\OpenWatcom-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\OrangeC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\PGI-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\PathScale-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\Renesas-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\SCO-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\SDCC-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\SunPro-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\SunPro-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\TI-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\TIClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\Tasking-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\TinyCC-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\VisualAge-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\VisualAge-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\Watcom-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\XL-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\XL-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\XLClang-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\XLClang-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\zOS-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\zOS-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CompilerId\VS-10.vcxproj.in;C:\Program Files\CMake\share\cmake-4.2\Modules\Internal\CMakeCLinkerInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Internal\CMakeCXXLinkerInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Internal\CMakeCommonLinkerInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Internal\CMakeDetermineLinkerId.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Internal\CMakeInspectCLinker.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Internal\CMakeInspectCXXLinker.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Internal\FeatureTesting.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Linker\MSVC-C.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Linker\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Linker\MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Linker\Windows-MSVC-C.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Linker\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Linker\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows-Determine-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows-Initialize.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows-MSVC-C.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\WindowsPaths.cmake;C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\build\CMakeFiles\4.2.3\CMakeCCompiler.cmake;C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\build\CMakeFiles\4.2.3\CMakeCXXCompiler.cmake;C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\build\CMakeFiles\4.2.3\CMakeRCCompiler.cmake;C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\build\CMakeFiles\4.2.3\CMakeSystem.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\build\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule C:/Users/satya/OneDrive/Desktop/SDL^&amp;OpenGL/OpenGLIntro2/IntroToOpenGl/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" "-SC:/Users/satya/OneDrive/Desktop/SDL&amp;OpenGL/OpenGLIntro2/IntroToOpenGl" "-BC:/Users/satya/OneDrive/Desktop/SDL&amp;OpenGL/OpenGLIntro2/IntroToOpenGl/build" --check-stamp-file "C:/Users/satya/OneDrive/Desktop/SDL&amp;OpenGL/OpenGLIntro2/IntroToOpenGl/build/CMakeFiles/generate.stamp"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeCCompiler.cmake.in;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeCCompilerABI.c;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeCInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeCXXCompiler.cmake.in;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeCXXCompilerABI.cpp;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeCompilerIdDetection.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeDetermineCCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeDetermineCXXCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeDetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeDetermineCompilerABI.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeDetermineCompilerId.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeDetermineCompilerSupport.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeDetermineRCCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeDetermineSystem.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeFindBinUtils.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeParseImplicitIncludeInfo.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeParseImplicitLinkInfo.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeParseLibraryArchitecture.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeRCCompiler.cmake.in;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeSystem.cmake.in;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeTestCCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeTestCXXCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeTestCompilerCommon.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeTestRCCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\ADSP-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\ARMCC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\ARMClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\AppleClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\Borland-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\Bruce-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\Clang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\Clang-DetermineCompilerInternal.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\Compaq-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\Compaq-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\Cray-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\CrayClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\Diab-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\Embarcadero-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\Fujitsu-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\FujitsuClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\GHS-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\GNU-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\GNU-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\HP-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\HP-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\IAR-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\IBMCPP-C-DetermineVersionInternal.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\IBMCPP-CXX-DetermineVersionInternal.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\IBMClang-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\IBMClang-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\Intel-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\IntelLLVM-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\LCC-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\LCC-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\MSVC-C.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\MSVC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\NVHPC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\NVIDIA-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\OpenWatcom-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\OrangeC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\PGI-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\PathScale-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\Renesas-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\SCO-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\SDCC-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\SunPro-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\SunPro-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\TI-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\TIClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\Tasking-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\TinyCC-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\VisualAge-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\VisualAge-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\Watcom-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\XL-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\XL-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\XLClang-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\XLClang-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\zOS-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\zOS-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CompilerId\VS-10.vcxproj.in;C:\Program Files\CMake\share\cmake-4.2\Modules\Internal\CMakeCLinkerInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Internal\CMakeCXXLinkerInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Internal\CMakeCommonLinkerInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Internal\CMakeDetermineLinkerId.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Internal\CMakeInspectCLinker.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Internal\CMakeInspectCXXLinker.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Internal\FeatureTesting.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Linker\MSVC-C.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Linker\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Linker\MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Linker\Windows-MSVC-C.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Linker\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Linker\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows-Determine-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows-Initialize.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows-MSVC-C.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\WindowsPaths.cmake;C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\build\CMakeFiles\4.2.3\CMakeCCompiler.cmake;C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\build\CMakeFiles\4.2.3\CMakeCXXCompiler.cmake;C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\build\CMakeFiles\4.2.3\CMakeRCCompiler.cmake;C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\build\CMakeFiles\4.2.3\CMakeSystem.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\build\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Building Custom Rule C:/Users/satya/OneDrive/Desktop/SDL^&amp;OpenGL/OpenGLIntro2/IntroToOpenGl/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" "-SC:/Users/satya/OneDrive/Desktop/SDL&amp;OpenGL/OpenGLIntro2/IntroToOpenGl" "-BC:/Users/satya/OneDrive/Desktop/SDL&amp;OpenGL/OpenGLIntro2/IntroToOpenGl/build" --check-stamp-file "C:/Users/satya/OneDrive/Desktop/SDL&amp;OpenGL/OpenGLIntro2/IntroToOpenGl/build/CMakeFiles/generate.stamp"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeCCompiler.cmake.in;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeCCompilerABI.c;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeCInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeCXXCompiler.cmake.in;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeCXXCompilerABI.cpp;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeCompilerIdDetection.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeDetermineCCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeDetermineCXXCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeDetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeDetermineCompilerABI.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeDetermineCompilerId.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeDetermineCompilerSupport.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeDetermineRCCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeDetermineSystem.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeFindBinUtils.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeParseImplicitIncludeInfo.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeParseImplicitLinkInfo.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeParseLibraryArchitecture.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeRCCompiler.cmake.in;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeSystem.cmake.in;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeTestCCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeTestCXXCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeTestCompilerCommon.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeTestRCCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\ADSP-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\ARMCC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\ARMClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\AppleClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\Borland-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\Bruce-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\Clang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\Clang-DetermineCompilerInternal.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\Compaq-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\Compaq-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\Cray-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\CrayClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\Diab-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\Embarcadero-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\Fujitsu-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\FujitsuClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\GHS-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\GNU-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\GNU-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\HP-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\HP-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\IAR-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\IBMCPP-C-DetermineVersionInternal.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\IBMCPP-CXX-DetermineVersionInternal.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\IBMClang-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\IBMClang-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\Intel-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\IntelLLVM-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\LCC-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\LCC-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\MSVC-C.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\MSVC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\NVHPC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\NVIDIA-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\OpenWatcom-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\OrangeC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\PGI-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\PathScale-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\Renesas-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\SCO-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\SDCC-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\SunPro-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\SunPro-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\TI-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\TIClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\Tasking-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\TinyCC-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\VisualAge-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\VisualAge-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\Watcom-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\XL-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\XL-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\XLClang-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\XLClang-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\zOS-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\zOS-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CompilerId\VS-10.vcxproj.in;C:\Program Files\CMake\share\cmake-4.2\Modules\Internal\CMakeCLinkerInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Internal\CMakeCXXLinkerInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Internal\CMakeCommonLinkerInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Internal\CMakeDetermineLinkerId.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Internal\CMakeInspectCLinker.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Internal\CMakeInspectCXXLinker.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Internal\FeatureTesting.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Linker\MSVC-C.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Linker\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Linker\MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Linker\Windows-MSVC-C.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Linker\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Linker\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows-Determine-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows-Initialize.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows-MSVC-C.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\WindowsPaths.cmake;C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\build\CMakeFiles\4.2.3\CMakeCCompiler.cmake;C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\build\CMakeFiles\4.2.3\CMakeCXXCompiler.cmake;C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\build\CMakeFiles\4.2.3\CMakeRCCompiler.cmake;C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\build\CMakeFiles\4.2.3\CMakeSystem.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\build\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Building Custom Rule C:/Users/satya/OneDrive/Desktop/SDL^&amp;OpenGL/OpenGLIntro2/IntroToOpenGl/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" "-SC:/Users/satya/OneDrive/Desktop/SDL&amp;OpenGL/OpenGLIntro2/IntroToOpenGl" "-BC:/Users/satya/OneDrive/Desktop/SDL&amp;OpenGL/OpenGLIntro2/IntroToOpenGl/build" --check-stamp-file "C:/Users/satya/OneDrive/Desktop/SDL&amp;OpenGL/OpenGLIntro2/IntroToOpenGl/build/CMakeFiles/generate.stamp"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeCCompiler.cmake.in;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeCCompilerABI.c;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeCInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeCXXCompiler.cmake.in;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeCXXCompilerABI.cpp;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeCompilerIdDetection.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeDetermineCCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeDetermineCXXCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeDetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeDetermineCompilerABI.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeDetermineCompilerId.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeDetermineCompilerSupport.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeDetermineRCCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeDetermineSystem.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeFindBinUtils.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeParseImplicitIncludeInfo.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeParseImplicitLinkInfo.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeParseLibraryArchitecture.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeRCCompiler.cmake.in;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeSystem.cmake.in;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeTestCCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeTestCXXCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeTestCompilerCommon.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeTestRCCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\ADSP-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\ARMCC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\ARMClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\AppleClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\Borland-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\Bruce-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\Clang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\Clang-DetermineCompilerInternal.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\Compaq-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\Compaq-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\Cray-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\CrayClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\Diab-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\Embarcadero-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\Fujitsu-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\FujitsuClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\GHS-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\GNU-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\GNU-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\HP-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\HP-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\IAR-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\IBMCPP-C-DetermineVersionInternal.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\IBMCPP-CXX-DetermineVersionInternal.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\IBMClang-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\IBMClang-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\Intel-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\IntelLLVM-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\LCC-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\LCC-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\MSVC-C.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\MSVC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\NVHPC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\NVIDIA-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\OpenWatcom-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\OrangeC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\PGI-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\PathScale-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\Renesas-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\SCO-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\SDCC-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\SunPro-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\SunPro-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\TI-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\TIClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\Tasking-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\TinyCC-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\VisualAge-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\VisualAge-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\Watcom-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\XL-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\XL-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\XLClang-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\XLClang-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\zOS-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\zOS-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CompilerId\VS-10.vcxproj.in;C:\Program Files\CMake\share\cmake-4.2\Modules\Internal\CMakeCLinkerInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Internal\CMakeCXXLinkerInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Internal\CMakeCommonLinkerInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Internal\CMakeDetermineLinkerId.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Internal\CMakeInspectCLinker.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Internal\CMakeInspectCXXLinker.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Internal\FeatureTesting.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Linker\MSVC-C.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Linker\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Linker\MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Linker\Windows-MSVC-C.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Linker\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Linker\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows-Determine-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows-Initialize.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows-MSVC-C.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\WindowsPaths.cmake;C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\build\CMakeFiles\4.2.3\CMakeCCompiler.cmake;C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\build\CMakeFiles\4.2.3\CMakeCXXCompiler.cmake;C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\build\CMakeFiles\4.2.3\CMakeRCCompiler.cmake;C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\build\CMakeFiles\4.2.3\CMakeSystem.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\build\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\Right_LeftHanded.cpp" />
+    <ClCompile Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\StitchingTest.cpp" />
+    <ClCompile Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\TextureMapping_3D.cpp" />
+    <ClCompile Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\constants.cpp" />
+    <ClCompile Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\CoordinateSystems.cpp" />
+    <ClCompile Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\FirstShader.cpp" />
+    <ClCompile Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\FirstTriangle.cpp" />
+    <ClCompile Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\glad.c" />
+    <ClCompile Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\glmTest.cpp" />
+    <ClCompile Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\HelloTriangle.cpp" />
+    <ClCompile Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\Imgui\imgui.cpp" />
+    <ClCompile Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\Imgui\imgui_demo.cpp" />
+    <ClCompile Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\Imgui\imgui_draw.cpp" />
+    <ClCompile Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\Imgui\imgui_impl_glfw.cpp" />
+    <ClCompile Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\Imgui\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\Imgui\imgui_tables.cpp" />
+    <ClCompile Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\Imgui\imgui_widgets.cpp" />
+    <ClCompile Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\Intro.cpp" />
+    <ClCompile Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\IntroTexture.cpp" />
+    <ClCompile Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\IntroTransformation.cpp" />
+    <ClCompile Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\main.cpp" />
+    <ClCompile Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\MatrixGraphTransformation.cpp" />
+    <ClCompile Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\MatrixUniform.cpp" />
+    <ClCompile Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\MipmapOptions.cpp" />
+    <ClCompile Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\MyMatrixClass.cpp" />
+    <ClCompile Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\SceneManager.cpp" />
+    <ClCompile Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\SecondTriangle.cpp" />
+    <ClCompile Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\Shader.cpp" />
+    <ClCompile Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\ShaderClass.cpp" />
+    <ClCompile Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\Shaders.cpp" />
+    <ClCompile Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\SierpinskiTriangle.cpp" />
+    <ClCompile Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\stb_image.cpp" />
+    <ClCompile Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\TestMain.cpp" />
+    <ClCompile Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\TexelViewer.cpp" />
+    <ClCompile Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\TextureMain.cpp" />
+    <ClCompile Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\TransformationMain.cpp" />
+    <ClCompile Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\Transformation_3D.cpp" />
+    <ClCompile Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\Translate_Rotate_Scale.cpp" />
+    <ClCompile Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\TriangleTexture.cpp" />
+    <ClCompile Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\TriangleWithVertexDataManipulation.cpp" />
+    <ClCompile Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\TwoTextures.cpp" />
+    <ClCompile Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\TwoTriangles.cpp" />
+    <ClCompile Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\UniformsInShader.cpp" />
+    <ClCompile Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\VertexAttributes.cpp" />
+    <ClCompile Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\VertexPosToFrag.cpp" />
+    <ClCompile Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\ViewMatrix.cpp" />
+    <ClInclude Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\Right_LeftHanded.h" />
+    <ClInclude Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\StitchingTest.h" />
+    <ClInclude Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\TextureMapping_3D.h" />
+    <ClInclude Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\constants.h" />
+    <ClInclude Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\CoordinateSystems.h" />
+    <ClInclude Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\FirstShader.h" />
+    <ClInclude Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\FirstTriangle.h" />
+    <ClInclude Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\GameState.h" />
+    <ClInclude Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\glmTest.h" />
+    <ClInclude Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\HelloTriangle.h" />
+    <ClInclude Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\Imgui\imconfig.h" />
+    <ClInclude Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\Imgui\imgui.h" />
+    <ClInclude Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\Imgui\imgui_impl_glfw.h" />
+    <ClInclude Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\Imgui\imgui_impl_opengl3.h" />
+    <ClInclude Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\Imgui\imgui_impl_opengl3_loader.h" />
+    <ClInclude Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\Imgui\imgui_internal.h" />
+    <ClInclude Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\Imgui\imstb_rectpack.h" />
+    <ClInclude Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\Imgui\imstb_textedit.h" />
+    <ClInclude Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\Imgui\imstb_truetype.h" />
+    <ClInclude Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\Intro.h" />
+    <ClInclude Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\IntroTexture.h" />
+    <ClInclude Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\IntroTransformation.h" />
+    <ClInclude Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\Matrix.h" />
+    <ClInclude Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\MatrixGraphTransformation.h" />
+    <ClInclude Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\MatrixUniform.h" />
+    <ClInclude Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\MipmapOptions.h" />
+    <ClInclude Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\MyMatrixClass.h" />
+    <ClInclude Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\SceneManager.h" />
+    <ClInclude Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\SecondTriangle.h" />
+    <ClInclude Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\Shader.h" />
+    <ClInclude Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\ShaderClass.h" />
+    <ClInclude Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\Shaders.h" />
+    <ClInclude Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\SierpinskiTriangle.h" />
+    <ClInclude Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\stb_image.h" />
+    <ClInclude Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\TexelViewer.h" />
+    <ClInclude Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\TextureMain.h" />
+    <ClInclude Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\TransformationMain.h" />
+    <ClInclude Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\Transformation_3D.h" />
+    <ClInclude Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\Translate_Rotate_Scale.h" />
+    <ClInclude Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\TriangleTexture.h" />
+    <ClInclude Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\TriangleWithVertexDataManipulation.h" />
+    <ClInclude Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\TwoTextures.h" />
+    <ClInclude Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\TwoTriangles.h" />
+    <ClInclude Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\UniformsInShader.h" />
+    <ClInclude Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\Vector.h" />
+    <ClInclude Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\VertexAttributes.h" />
+    <ClInclude Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\VertexPosToFrag.h" />
+    <ClInclude Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\ViewMatrix.h" />
+    <None Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\CoordinateSystem2.shader">
+    </None>
+    <None Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\CoordinateSystems.shader">
+    </None>
+    <None Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\glmTest.shader">
+    </None>
+    <None Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\IntroTexture.shader">
+    </None>
+    <None Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\IntroTransformation.shader">
+    </None>
+    <None Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\MatrixGraphTransformation.shader">
+    </None>
+    <None Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\MatrixGraphTransformation2.shader">
+    </None>
+    <None Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\MatrixUniform.shader">
+    </None>
+    <None Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\MipmapOptions.shader">
+    </None>
+    <None Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\MyMatrixClass.shader">
+    </None>
+    <None Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\Right_LeftHanded.shader">
+    </None>
+    <None Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\ShaderClass.shader">
+    </None>
+    <None Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\SierpinskiTriangle.shader">
+    </None>
+    <None Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\StitchingTest.shader">
+    </None>
+    <None Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\TexelViewer.shader">
+    </None>
+    <None Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\TextureMapping_3D.shader">
+    </None>
+    <None Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\Transformation_3D.shader">
+    </None>
+    <None Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\Translate_Rotate_Scale.shader">
+    </None>
+    <None Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\Translate_Scale_Rotate_Pivot.shader">
+    </None>
+    <None Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\TriangleTexture.shader">
+    </None>
+    <None Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\TwoTextures.shader">
+    </None>
+    <None Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\TwoTextureSecondShader.shader">
+    </None>
+    <None Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\VertexToPos.shader">
+    </None>
+    <None Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\ViewMatrix.shader">
+    </None>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="C:\Users\satya\OneDrive\Desktop\SDL&amp;OpenGL\OpenGLIntro2\IntroToOpenGl\build\ZERO_CHECK.vcxproj">
+      <Project>{37E69E88-033A-322B-A5B5-4E492911F3E9}</Project>
+      <Name>ZERO_CHECK</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
