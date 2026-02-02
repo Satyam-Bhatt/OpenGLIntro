@@ -143,6 +143,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CameraMain.cpp" />
     <ClCompile Include="Right_LeftHanded.cpp" />
     <ClCompile Include="StitchingTest.cpp" />
     <ClCompile Include="TextureMapping_3D.cpp" />
@@ -191,6 +192,7 @@
     <ClCompile Include="ViewMatrix.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CameraMain.h" />
     <ClInclude Include="Right_LeftHanded.h" />
     <ClInclude Include="StitchingTest.h" />
     <ClInclude Include="TextureMapping_3D.h" />

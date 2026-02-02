@@ -55,6 +55,12 @@
     <Filter Include="Shader\Transformations">
       <UniqueIdentifier>{0c2ff212-e5d0-49b6-acb0-ecbf9a4a6057}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Camera">
+      <UniqueIdentifier>{57627edd-a553-45ab-8e43-4a7f5a093a27}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Camera">
+      <UniqueIdentifier>{a33b72e5-5ecb-4001-be58-933032de1911}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -194,6 +200,9 @@
     </ClCompile>
     <ClCompile Include="ViewMatrix.cpp">
       <Filter>Source Files\Transformations</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraMain.cpp">
+      <Filter>Source Files\Camera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -340,6 +349,9 @@
     </ClInclude>
     <ClInclude Include="ViewMatrix.h">
       <Filter>Header Files\TransformationsMain</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraMain.h">
+      <Filter>Header Files\Camera</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
