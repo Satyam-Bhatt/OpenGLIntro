@@ -61,6 +61,9 @@
     <Filter Include="Header Files\Camera">
       <UniqueIdentifier>{a33b72e5-5ecb-4001-be58-933032de1911}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shader\Camera">
+      <UniqueIdentifier>{e6053661-a07c-446f-8604-82e991a295d7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -202,6 +205,9 @@
       <Filter>Source Files\Transformations</Filter>
     </ClCompile>
     <ClCompile Include="CameraMain.cpp">
+      <Filter>Source Files\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="GLMLookAtCamera.cpp">
       <Filter>Source Files\Camera</Filter>
     </ClCompile>
   </ItemGroup>
@@ -353,6 +359,9 @@
     <ClInclude Include="CameraMain.h">
       <Filter>Header Files\Camera</Filter>
     </ClInclude>
+    <ClInclude Include="GLMLookAtCamera.h">
+      <Filter>Header Files\Camera</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ShaderClass.shader">
@@ -426,6 +435,9 @@
     </None>
     <None Include="ViewMatrix.shader">
       <Filter>Shader\Transformations</Filter>
+    </None>
+    <None Include="GLMLookAtCamera.shader">
+      <Filter>Shader\Camera</Filter>
     </None>
   </ItemGroup>
 </Project>

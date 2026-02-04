@@ -42,7 +42,7 @@ private:
 	std::unordered_map<int, std::string> sceneNames;
 	std::unordered_map<int, std::function<CameraMain* ()>> sceneFactories;
 
-	std::string SceneTostring(SubScene scene);
+	std::string SceneToString(SubScene scene);
 
 	void ChangeState();
 	void ChangeScene();

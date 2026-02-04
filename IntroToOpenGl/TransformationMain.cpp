@@ -59,6 +59,7 @@ TransformationMain::TransformationMain()
 
 TransformationMain::~TransformationMain()
 {
+	Exit();
 }
 
 void TransformationMain::Start()

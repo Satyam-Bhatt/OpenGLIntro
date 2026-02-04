@@ -143,6 +143,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="GLMLookAtCamera.cpp" />
     <ClCompile Include="CameraMain.cpp" />
     <ClCompile Include="Right_LeftHanded.cpp" />
     <ClCompile Include="StitchingTest.cpp" />
@@ -192,6 +193,7 @@
     <ClCompile Include="ViewMatrix.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="GLMLookAtCamera.h" />
     <ClInclude Include="CameraMain.h" />
     <ClInclude Include="Right_LeftHanded.h" />
     <ClInclude Include="StitchingTest.h" />
@@ -243,6 +245,7 @@
     <ClInclude Include="ViewMatrix.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="GLMLookAtCamera.shader" />
     <None Include="CoordinateSystem2.shader" />
     <None Include="CoordinateSystems.shader" />
     <None Include="glmTest.shader" />
