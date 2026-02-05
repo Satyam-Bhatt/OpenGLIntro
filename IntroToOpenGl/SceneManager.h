@@ -15,6 +15,7 @@
 #include "Shaders.h"
 #include "TextureMain.h"
 #include "TransformationMain.h"
+#include "CameraMain.h"
 
 // STL
 #include <unordered_map>
@@ -45,6 +46,7 @@ private:
 		Shaders,
 		TextureMain,
 		TransformationMain,
+		CameraMain,
 		COUNT
 	};
 

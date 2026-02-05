@@ -31,10 +31,15 @@ SceneManager::SceneManager()
 	sceneFactories[Scenes::TextureMain] = []() -> GameState* { return TextureMain::GetInstance(); };
 	sceneDestructors[Scenes::TextureMain] = []() -> void { TextureMain::DeleteInstance(); };
 
-	// Transformation scne
+	// Transformation scene
 	sceneNames[Scenes::TransformationMain] = "Transformations";
 	sceneFactories[Scenes::TransformationMain] = []() -> GameState* { return TransformationMain::GetInstance(); };
 	sceneDestructors[Scenes::TransformationMain] = []() -> void { TransformationMain::DeleteInstance(); };
+
+	// Camera scene
+	sceneNames[Scenes::CameraMain] = "Camera";
+	sceneFactories[Scenes::CameraMain] = []() -> GameState* {return CameraMain::GetInstance(); };
+	sceneDestructors[Scenes::CameraMain] = []() -> void {CameraMain::DeleteInstance(); };
 }
 
 void SceneManager::ImGuiRender(GLFWwindow* window)

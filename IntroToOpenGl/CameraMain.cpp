@@ -85,7 +85,9 @@ void CameraMain::Render()
 
 void CameraMain::HandleInput(GLFWwindow* window)
 {
-	currentProject->HandleInput(window);
+	if (currentProject != nullptr) {
+		currentProject->HandleInput(window);
+	}
 }
 
 void CameraMain::Exit()

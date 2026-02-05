@@ -23,6 +23,7 @@ using namespace Vector;
 
 class GameState
 {
+	// = 0 makes the function pure virtual, meaning that any class that inherits from this class must implement this function. It also makes the GameState class an abstract
 public:
 	virtual void Start() = 0;
 	virtual void Update() = 0;
