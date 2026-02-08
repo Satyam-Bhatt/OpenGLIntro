@@ -31,8 +31,11 @@ private:
 	uint32_t VAO = 0, VBO = 0;
 	uint32_t texture = 0;
 
+	bool rotateCameraAround = false;
+
+	glm::vec3 cameraPosition = glm::vec3(0.0f, 0.0f, 5.0f), targetPosition = glm::vec3(0, 0, 0), upVector = glm::vec3(0, 1, 0);
+
 	int numCubes = 25;
-	Vector3 viewPosition = Vector3(0.0f, 0.0f, 5.0f);
 	std::vector<CubeTransform> cubes;
 
 	void InitializeCubes();

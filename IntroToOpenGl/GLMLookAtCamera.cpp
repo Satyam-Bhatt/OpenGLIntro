@@ -125,13 +125,15 @@ void GLMLookAtCamera::ImGuiRender(GLFWwindow* window)
 
 	ImGui::Begin("Level Specific", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
 
-	ImGui::DragFloat3("View Position", &viewPosition.x, 0.005f);
-	ImGui::SameLine();
-	ImGui::TextDisabled("(?)");
-	if (ImGui::BeginItemTooltip())
+	if (ImGui::Checkbox("Rotate Camera", &rotateCameraAround))
 	{
-		ImGui::TextUnformatted("Changes the camera position");
-		ImGui::EndTooltip();
+
+	}
+	else
+	{
+		ImGui::DragFloat3("Camera Position", &cameraPosition.x, 0.005f);
+		ImGui::DragFloat3("Target Position", &targetPosition.x, 0.005f);
+		ImGui::DragFloat3("Up Vector", &upVector.x, 0.005f);
 	}
 
 	if (ImGui::DragInt("Cube Count", &numCubes, 1))
@@ -149,11 +151,34 @@ void GLMLookAtCamera::Render()
 
 	Matrix4x4 model;
 
-	Matrix4x4 view;
-	view = Matrix4x4::Translation(view, viewPosition);
+	glm::mat4 view;
+	if (rotateCameraAround)
+	{
+
+	}
+	else
+	{
+		// glm::lookAt gives a matrix that points towards a point 
+		view = glm::lookAt(cameraPosition, targetPosition, upVector);
+	}
 
 	Matrix4x4 projection;
-	projection = Matrix4x4::CreateProjectionMatrix_FOV_LeftHanded(45.0f * (PI / 180), (float)viewportData.width, (float)viewportData.height, 0.1f, 100.0f);
+	projection = Matrix4x4::CreateProjectionMatrix_FOV(45.0f * (PI / 180), (float)viewportData.width, (float)viewportData.height, 0.1f, 100.0f);
+
+	// TODO: Replace and check the feel
+//	// Model Matrix
+//// Responsible for scaling, rotation and translation
+//	glm::mat4 model = glm::mat4(1.0f);
+//	model = glm::translate(model, glm::vec3(-0.35f, 0, 0 + 0.25f)); // Performed last on the vertices + adjust the pivot
+//	if (rotX || rotY || rotZ)
+//		model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(axisX, axisY, axisZ)); // Performed after scaling
+//	model = glm::scale(model, glm::vec3(0.5f, scaleSome, 0.5f)); // Performed first on the vertices
+//	model = glm::translate(model, glm::vec3(0, 0, -0.25f)); // We adjust the pivot first
+//
+//	// Projection Matrix
+//// Responsible for giving that 3D look using a square frustrum (perspective)
+//	glm::mat4 projection;
+//	projection = glm::perspective(glm::radians(fov), (float)viewportData.width / (float)viewportData.height, 0.1f, 100.0f);
 
 	for (int i = 0; i < cubes.size(); i++)
 	{
@@ -165,7 +190,7 @@ void GLMLookAtCamera::Render()
 
 		shader.Use();
 		shader.SetMat4_Custom("model", model.m);
-		shader.SetMat4_Custom("view", view.m);
+		shader.SetMat4("view", view);
 		shader.SetMat4_Custom("projection", projection.m);
 
 		glBindVertexArray(VAO);
