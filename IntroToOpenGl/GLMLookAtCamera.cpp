@@ -124,10 +124,11 @@ void GLMLookAtCamera::ImGuiRender(GLFWwindow* window)
 	);
 
 	ImGui::Begin("Level Specific", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
+	ImGui::Checkbox("Rotate Camera", &rotateCameraAround);
 
-	if (ImGui::Checkbox("Rotate Camera", &rotateCameraAround))
+	if (rotateCameraAround)
 	{
-
+		ImGui::DragFloat("Radius", &radius, 0.005f);
 	}
 	else
 	{
@@ -141,6 +142,13 @@ void GLMLookAtCamera::ImGuiRender(GLFWwindow* window)
 		InitializeCubes();
 	}
 
+	if(ImGui::Button("Reset Camera"))
+	{
+		cameraPosition = glm::vec3(0.0f, 0.0f, 5.0f);
+		targetPosition = glm::vec3(0.0f, 0.0f, 0.0f);
+		upVector = glm::vec3(0.0f, 1.0f, 0.0f);
+	}
+
 	ImGui::End();
 }
 
@@ -151,10 +159,13 @@ void GLMLookAtCamera::Render()
 
 	Matrix4x4 model;
 
-	glm::mat4 view;
+	glm::mat4 view = glm::mat4(1.0f);
 	if (rotateCameraAround)
 	{
-
+		float camX = sin(glfwGetTime()) * radius;
+		float camZ = cos(glfwGetTime()) * radius;
+		// TODO: Analyze whats happening
+		view = glm::lookAt(glm::vec3(camX, 0, camZ), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
 	}
 	else
 	{
@@ -165,28 +176,12 @@ void GLMLookAtCamera::Render()
 	Matrix4x4 projection;
 	projection = Matrix4x4::CreateProjectionMatrix_FOV(45.0f * (PI / 180), (float)viewportData.width, (float)viewportData.height, 0.1f, 100.0f);
 
-	// TODO: Replace and check the feel
-//	// Model Matrix
-//// Responsible for scaling, rotation and translation
-//	glm::mat4 model = glm::mat4(1.0f);
-//	model = glm::translate(model, glm::vec3(-0.35f, 0, 0 + 0.25f)); // Performed last on the vertices + adjust the pivot
-//	if (rotX || rotY || rotZ)
-//		model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(axisX, axisY, axisZ)); // Performed after scaling
-//	model = glm::scale(model, glm::vec3(0.5f, scaleSome, 0.5f)); // Performed first on the vertices
-//	model = glm::translate(model, glm::vec3(0, 0, -0.25f)); // We adjust the pivot first
-//
-//	// Projection Matrix
-//// Responsible for giving that 3D look using a square frustrum (perspective)
-//	glm::mat4 projection;
-//	projection = glm::perspective(glm::radians(fov), (float)viewportData.width / (float)viewportData.height, 0.1f, 100.0f);
-
-	for (int i = 0; i < cubes.size(); i++)
+	if (numCubes == 1)
 	{
 		model = Matrix4x4::Identity();
 
-		model = Matrix4x4::Translation(model, cubes[i].position);
-		model = Matrix4x4::Rotation(model, cubes[i].rotationAxis, (float)glfwGetTime() * cubes[i].rotationSpeed);
-		model = Matrix4x4::Scale(model, Vector3(0.3f, 0.3f, 0.3f));
+		model = Matrix4x4::Translation(model, Vector3(0.0f, 0.0f, 0.0f));
+		model = Matrix4x4::Scale(model, Vector3(1.0f, 1.0f, 1.0f));
 
 		shader.Use();
 		shader.SetMat4_Custom("model", model.m);
@@ -196,6 +191,26 @@ void GLMLookAtCamera::Render()
 		glBindVertexArray(VAO);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 	}
+	else
+	{
+		for (int i = 0; i < cubes.size(); i++)
+		{
+			model = Matrix4x4::Identity();
+
+			model = Matrix4x4::Translation(model, cubes[i].position);
+			model = Matrix4x4::Rotation(model, cubes[i].rotationAxis, (float)glfwGetTime() * cubes[i].rotationSpeed);
+			model = Matrix4x4::Scale(model, Vector3(0.3f, 0.3f, 0.3f));
+
+			shader.Use();
+			shader.SetMat4_Custom("model", model.m);
+			shader.SetMat4("view", view);
+			shader.SetMat4_Custom("projection", projection.m);
+
+			glBindVertexArray(VAO);
+			glDrawArrays(GL_TRIANGLES, 0, 36);
+		}
+	}
+
 
 	glBindVertexArray(0);
 

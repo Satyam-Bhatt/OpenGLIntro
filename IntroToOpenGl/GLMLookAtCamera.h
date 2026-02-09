@@ -33,10 +33,14 @@ private:
 
 	bool rotateCameraAround = false;
 
-	glm::vec3 cameraPosition = glm::vec3(0.0f, 0.0f, 5.0f), targetPosition = glm::vec3(0, 0, 0), upVector = glm::vec3(0, 1, 0);
+	glm::vec3 cameraPosition = glm::vec3(0.0f, 0.0f, 5.0f), 
+		targetPosition = glm::vec3(0, 0, 0), 
+		upVector = glm::vec3(0, 1, 0);
 
 	int numCubes = 25;
 	std::vector<CubeTransform> cubes;
+
+	float radius = 10.0f;
 
 	void InitializeCubes();
 };
