@@ -40,7 +40,7 @@ private:
 	int numCubes = 25;
 	std::vector<CubeTransform> cubes;
 
-	float radius = 10.0f;
+	float radius = 5.0f;
 
 	void InitializeCubes();
 };
