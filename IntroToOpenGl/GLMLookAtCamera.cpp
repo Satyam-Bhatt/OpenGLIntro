@@ -124,17 +124,29 @@ void GLMLookAtCamera::ImGuiRender(GLFWwindow* window)
 	);
 
 	ImGui::Begin("Level Specific", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
-	ImGui::Checkbox("Rotate Camera", &rotateCameraAround);
+	
+	ImGui::Checkbox("Use Look At Matrix", &useLookAt);
 
-	if (rotateCameraAround)
+
+	if (useLookAt)
 	{
-		ImGui::DragFloat("Radius", &radius, 0.005f);
+		ImGui::SameLine();
+		ImGui::Checkbox("Rotate Camera", &rotateCameraAround);
+
+		if (rotateCameraAround)
+		{
+			ImGui::DragFloat("Radius", &radius, 0.005f);
+		}
+		else
+		{
+			ImGui::DragFloat3("Camera Position", &cameraPosition.x, 0.005f);
+			ImGui::DragFloat3("Target Position", &targetPosition.x, 0.005f);
+			ImGui::DragFloat3("Up Vector", &upVector.x, 0.005f);
+		}
 	}
 	else
 	{
-		ImGui::DragFloat3("Camera Position", &cameraPosition.x, 0.005f);
-		ImGui::DragFloat3("Target Position", &targetPosition.x, 0.005f);
-		ImGui::DragFloat3("Up Vector", &upVector.x, 0.005f);
+		// TODO
 	}
 
 	if (ImGui::DragInt("Cube Count", &numCubes, 1))
@@ -142,7 +154,7 @@ void GLMLookAtCamera::ImGuiRender(GLFWwindow* window)
 		InitializeCubes();
 	}
 
-	if(ImGui::Button("Reset Camera"))
+	if (ImGui::Button("Reset Camera"))
 	{
 		cameraPosition = glm::vec3(0.0f, 0.0f, 5.0f);
 		targetPosition = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -160,18 +172,31 @@ void GLMLookAtCamera::Render()
 	Matrix4x4 model;
 
 	glm::mat4 view = glm::mat4(1.0f);
-	if (rotateCameraAround)
+	Matrix4x4 viewMatrix;
+	if (useLookAt)
 	{
-		float camX = sin(glfwGetTime()) * radius;
-		float camZ = cos(glfwGetTime()) * radius;
-		
-		// As one increases the other decreases hence giving a circle
-		view = glm::lookAt(glm::vec3(camX, 0, camZ), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
+		if (rotateCameraAround)
+		{
+			float camX = sin(glfwGetTime()) * radius;
+			float camZ = cos(glfwGetTime()) * radius;
+
+			// As one increases the other decreases hence giving a circle
+			view = glm::lookAt(glm::vec3(camX, 0, camZ), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
+		}
+		else
+		{
+			// glm::lookAt gives a matrix that points towards a point 
+			view = glm::lookAt(cameraPosition, targetPosition, upVector);
+		}
 	}
 	else
 	{
-		// glm::lookAt gives a matrix that points towards a point 
-		view = glm::lookAt(cameraPosition, targetPosition, upVector);
+		viewMatrix = Matrix4x4::Translation(viewMatrix, cameraTranslation);
+		Matrix4x4 rotationMatrix;
+		rotationMatrix = Matrix4x4::Rotation(rotationMatrix, Vector3(0.0f, 1.0f, 0.0f), cameraRotation.x);
+		rotationMatrix = Matrix4x4::Rotation(rotationMatrix, Vector3(1.0f, 0.0f, 0.0f), cameraRotation.y);
+		rotationMatrix = Matrix4x4::Rotation(rotationMatrix, Vector3(0.0f, 0.0f, 1.0f), cameraRotation.z);
+		viewMatrix = viewMatrix * rotationMatrix;
 	}
 
 	Matrix4x4 projection;
@@ -186,7 +211,10 @@ void GLMLookAtCamera::Render()
 
 		shader.Use();
 		shader.SetMat4_Custom("model", model.m);
-		shader.SetMat4("view", view);
+		if (useLookAt)
+			shader.SetMat4("view", view);
+		else
+			shader.SetMat4_Custom("view", viewMatrix.m);
 		shader.SetMat4_Custom("projection", projection.m);
 
 		glBindVertexArray(VAO);
