@@ -151,7 +151,9 @@ void CameraMain::RenderText(SubScene sceneName)
 {
 	if (sceneName == SubScene::GLMLookAtCamera)
 	{
-		ImGui::TextWrapped("Creating a loot at camera with the help of GLM.");
+		ImGui::TextWrapped("Creating a look at camera with the help of GLM. The camera always points towards the target position.");
+		ImGui::Dummy(ImVec2(0.0f, 10.0f));
+		ImGui::TextWrapped("When not using look matrix, the camera can be translated and rotated normally but it won't point towards the target position.");
 	}
 	else
 	{

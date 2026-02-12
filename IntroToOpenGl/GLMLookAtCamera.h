@@ -31,14 +31,16 @@ private:
 	uint32_t VAO = 0, VBO = 0;
 	uint32_t texture = 0;
 
-	bool useLookAt = false;
+	bool useLookAt = true;
 	bool rotateCameraAround = false;
 
+	// Look At camera variables
 	glm::vec3 cameraPosition = glm::vec3(0.0f, 0.0f, 5.0f), 
 		targetPosition = glm::vec3(0, 0, 0), 
 		upVector = glm::vec3(0, 1, 0);
 
-	Vector3 cameraTranslation = Vector3(0, 0, 0);
+	// When not using Look At camera
+	Vector3 cameraTranslation = Vector3(0, 0, -5);
 	Vector3 cameraRotation = Vector3(0, 0, 0);
 
 	int numCubes = 25;

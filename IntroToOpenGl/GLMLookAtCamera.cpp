@@ -107,160 +107,6 @@ void GLMLookAtCamera::Start()
 	InitializeCubes();
 }
 
-void GLMLookAtCamera::Update()
-{
-
-}
-
-void GLMLookAtCamera::ImGuiRender(GLFWwindow* window)
-{
-	GLint viewport[4];
-	glGetIntegerv(GL_VIEWPORT, viewport);
-
-	ImGui::SetNextWindowPos(
-		ImVec2(viewport[0] + viewport[2] / 2, viewport[3]),
-		ImGuiCond_Always,
-		ImVec2(0.5f, 1.0f)
-	);
-
-	ImGui::Begin("Level Specific", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
-	
-	ImGui::Checkbox("Use Look At Matrix", &useLookAt);
-
-
-	if (useLookAt)
-	{
-		ImGui::SameLine();
-		ImGui::Checkbox("Rotate Camera", &rotateCameraAround);
-
-		if (rotateCameraAround)
-		{
-			ImGui::DragFloat("Radius", &radius, 0.005f);
-		}
-		else
-		{
-			ImGui::DragFloat3("Camera Position", &cameraPosition.x, 0.005f);
-			ImGui::DragFloat3("Target Position", &targetPosition.x, 0.005f);
-			ImGui::DragFloat3("Up Vector", &upVector.x, 0.005f);
-		}
-	}
-	else
-	{
-		// TODO
-	}
-
-	if (ImGui::DragInt("Cube Count", &numCubes, 1))
-	{
-		InitializeCubes();
-	}
-
-	if (ImGui::Button("Reset Camera"))
-	{
-		cameraPosition = glm::vec3(0.0f, 0.0f, 5.0f);
-		targetPosition = glm::vec3(0.0f, 0.0f, 0.0f);
-		upVector = glm::vec3(0.0f, 1.0f, 0.0f);
-	}
-
-	ImGui::End();
-}
-
-void GLMLookAtCamera::Render()
-{
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, texture);
-
-	Matrix4x4 model;
-
-	glm::mat4 view = glm::mat4(1.0f);
-	Matrix4x4 viewMatrix;
-	if (useLookAt)
-	{
-		if (rotateCameraAround)
-		{
-			float camX = sin(glfwGetTime()) * radius;
-			float camZ = cos(glfwGetTime()) * radius;
-
-			// As one increases the other decreases hence giving a circle
-			view = glm::lookAt(glm::vec3(camX, 0, camZ), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
-		}
-		else
-		{
-			// glm::lookAt gives a matrix that points towards a point 
-			view = glm::lookAt(cameraPosition, targetPosition, upVector);
-		}
-	}
-	else
-	{
-		viewMatrix = Matrix4x4::Translation(viewMatrix, cameraTranslation);
-		Matrix4x4 rotationMatrix;
-		rotationMatrix = Matrix4x4::Rotation(rotationMatrix, Vector3(0.0f, 1.0f, 0.0f), cameraRotation.x);
-		rotationMatrix = Matrix4x4::Rotation(rotationMatrix, Vector3(1.0f, 0.0f, 0.0f), cameraRotation.y);
-		rotationMatrix = Matrix4x4::Rotation(rotationMatrix, Vector3(0.0f, 0.0f, 1.0f), cameraRotation.z);
-		viewMatrix = viewMatrix * rotationMatrix;
-	}
-
-	Matrix4x4 projection;
-	projection = Matrix4x4::CreateProjectionMatrix_FOV(45.0f * (PI / 180), (float)viewportData.width, (float)viewportData.height, 0.1f, 100.0f);
-
-	if (numCubes == 1)
-	{
-		model = Matrix4x4::Identity();
-
-		model = Matrix4x4::Translation(model, Vector3(0.0f, 0.0f, 0.0f));
-		model = Matrix4x4::Scale(model, Vector3(1.0f, 1.0f, 1.0f));
-
-		shader.Use();
-		shader.SetMat4_Custom("model", model.m);
-		if (useLookAt)
-			shader.SetMat4("view", view);
-		else
-			shader.SetMat4_Custom("view", viewMatrix.m);
-		shader.SetMat4_Custom("projection", projection.m);
-
-		glBindVertexArray(VAO);
-		glDrawArrays(GL_TRIANGLES, 0, 36);
-	}
-	else
-	{
-		for (int i = 0; i < cubes.size(); i++)
-		{
-			model = Matrix4x4::Identity();
-
-			model = Matrix4x4::Translation(model, cubes[i].position);
-			model = Matrix4x4::Rotation(model, cubes[i].rotationAxis, (float)glfwGetTime() * cubes[i].rotationSpeed);
-			model = Matrix4x4::Scale(model, Vector3(0.3f, 0.3f, 0.3f));
-
-			shader.Use();
-			shader.SetMat4_Custom("model", model.m);
-			shader.SetMat4("view", view);
-			shader.SetMat4_Custom("projection", projection.m);
-
-			glBindVertexArray(VAO);
-			glDrawArrays(GL_TRIANGLES, 0, 36);
-		}
-	}
-
-
-	glBindVertexArray(0);
-
-	glBindTexture(GL_TEXTURE_2D, 0);
-}
-
-void GLMLookAtCamera::Exit()
-{
-	if (VAO != 0) glDeleteVertexArrays(1, &VAO);
-	if (VBO != 0) glDeleteVertexArrays(1, &VBO);
-	if (texture != 0) glDeleteTextures(1, &texture);
-	if (shader.ID != 0) glDeleteProgram(shader.ID);
-
-	glDisable(GL_DEPTH_TEST);
-}
-
-GLMLookAtCamera* GLMLookAtCamera::GetInstance()
-{
-	return &instance;
-}
-
 void GLMLookAtCamera::InitializeCubes()
 {
 	std::random_device rd;
@@ -298,4 +144,182 @@ void GLMLookAtCamera::InitializeCubes()
 		cube.rotationSpeed = speedRange(gen);
 		cubes.push_back(cube);
 	}
+}
+
+void GLMLookAtCamera::Update()
+{
+
+}
+
+void GLMLookAtCamera::ImGuiRender(GLFWwindow* window)
+{
+	GLint viewport[4];
+	glGetIntegerv(GL_VIEWPORT, viewport);
+
+	ImGui::SetNextWindowPos(
+		ImVec2(viewport[0] + viewport[2] / 2, viewport[3]),
+		ImGuiCond_Always,
+		ImVec2(0.5f, 1.0f)
+	);
+
+	ImGui::Begin("Level Specific", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
+	
+	ImGui::Checkbox("Use Look At Matrix", &useLookAt);
+
+	// Which fields to show as per the boolean
+	if (useLookAt)
+	{
+		ImGui::SameLine();
+		ImGui::Checkbox("Rotate Camera Around", &rotateCameraAround);
+
+		if (rotateCameraAround)
+		{
+			ImGui::DragFloat("Radius", &radius, 0.005f);
+		}
+		else
+		{
+			ImGui::DragFloat3("Camera Position", &cameraPosition.x, 0.005f);
+			ImGui::DragFloat3("Target Position", &targetPosition.x, 0.005f);
+			ImGui::DragFloat3("Up Vector", &upVector.x, 0.005f);
+		}
+	}
+	else
+	{
+		ImGui::DragFloat3("Camera Translation", &cameraTranslation.x, 0.005f);
+		ImGui::DragFloat3("Camera Rotation", &cameraRotation.x, 0.005f);
+	}
+
+	if (ImGui::DragInt("Cube Count", &numCubes, 1))
+	{
+		InitializeCubes();
+	}
+
+	if (ImGui::Button("Reset Camera"))
+	{
+		cameraPosition = glm::vec3(0.0f, 0.0f, 5.0f);
+		targetPosition = glm::vec3(0.0f, 0.0f, 0.0f);
+		upVector = glm::vec3(0.0f, 1.0f, 0.0f);
+
+		cameraTranslation = Vector3(0, 0, -5);
+		cameraRotation = Vector3(0, 0, 0);
+	}
+
+	ImGui::End();
+}
+
+void GLMLookAtCamera::Render()
+{
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, texture);
+
+	Matrix4x4 model;
+
+	glm::mat4 view = glm::mat4(1.0f);
+	Matrix4x4 viewMatrix;
+	if (useLookAt)
+	{
+		if (rotateCameraAround)
+		{
+			float camX = sin(glfwGetTime()) * radius;
+			float camZ = cos(glfwGetTime()) * radius;
+
+			// As one increases the other decreases hence moving in a circle
+			// 1- Camera position -> Where the camera is
+			// 2- Target Position -> Where the camera is pointing
+			// 3- Up Vector -> Used in cross product to determine the axis
+			view = glm::lookAt(glm::vec3(camX, 0, camZ), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
+		}
+		else
+		{
+			// glm::lookAt gives a matrix that points towards a point 
+			view = glm::lookAt(cameraPosition, targetPosition, upVector);
+		}
+	}
+	else
+	{
+		// For normal translation and rotation of the camera.
+		// Basically there is no camera it is just the modle space is being translated and rotated
+		viewMatrix = Matrix4x4::Translation(viewMatrix, cameraTranslation);
+		Matrix4x4 rotationMatrix;
+		rotationMatrix = Matrix4x4::Rotation(rotationMatrix, Vector3(1.0f, 0.0f, 0.0f), cameraRotation.x);
+		rotationMatrix = Matrix4x4::Rotation(rotationMatrix, Vector3(0.0f, 1.0f, 0.0f), cameraRotation.y);
+		rotationMatrix = Matrix4x4::Rotation(rotationMatrix, Vector3(0.0f, 0.0f, 1.0f), cameraRotation.z);
+		viewMatrix = viewMatrix * rotationMatrix;
+	}
+
+	Matrix4x4 projection;
+	projection = Matrix4x4::CreateProjectionMatrix_FOV(45.0f * (PI / 180), (float)viewportData.width, (float)viewportData.height, 0.1f, 100.0f);
+
+	// If there is only one cube then spawn it in the center without any offset
+	if (numCubes == 1)
+	{
+		model = Matrix4x4::Identity();
+
+		model = Matrix4x4::Translation(model, Vector3(0.0f, 0.0f, 0.0f));
+		model = Matrix4x4::Scale(model, Vector3(1.0f, 1.0f, 1.0f));
+
+		shader.Use();
+		shader.SetMat4_Custom("model", model.m);
+		if (useLookAt)
+			shader.SetMat4("view", view);
+		else
+			shader.SetMat4_Custom("view", viewMatrix.m);
+		shader.SetMat4_Custom("projection", projection.m);
+
+		glBindVertexArray(VAO);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+	}
+	else
+	{
+		for (int i = 0; i < cubes.size(); i++)
+		{
+			model = Matrix4x4::Identity();
+
+			model = Matrix4x4::Translation(model, cubes[i].position);
+			model = Matrix4x4::Rotation(model, cubes[i].rotationAxis, (float)glfwGetTime() * cubes[i].rotationSpeed);
+			model = Matrix4x4::Scale(model, Vector3(0.3f, 0.3f, 0.3f));
+
+			shader.Use();
+			shader.SetMat4_Custom("model", model.m);
+			if (useLookAt)
+				shader.SetMat4("view", view);
+			else
+				shader.SetMat4_Custom("view", viewMatrix.m);
+			shader.SetMat4_Custom("projection", projection.m);
+
+			glBindVertexArray(VAO);
+			glDrawArrays(GL_TRIANGLES, 0, 36);
+		}
+	}
+
+
+	glBindVertexArray(0);
+
+	glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+void GLMLookAtCamera::Exit()
+{
+	if (VAO != 0) glDeleteVertexArrays(1, &VAO);
+	if (VBO != 0) glDeleteVertexArrays(1, &VBO);
+	if (texture != 0) glDeleteTextures(1, &texture);
+	if (shader.ID != 0) glDeleteProgram(shader.ID);
+
+	useLookAt = false;
+	rotateCameraAround = false;
+	cameraPosition = glm::vec3(0);
+	targetPosition = glm::vec3(0);
+	upVector = glm::vec3(0, 1, 0);
+	cameraTranslation = Vector3(0, 0, -5);
+	cameraRotation = Vector3(0, 0, 0);
+	numCubes = 25;
+	radius = 5;
+	cubes.clear();
+
+	glDisable(GL_DEPTH_TEST);
+}
+
+GLMLookAtCamera* GLMLookAtCamera::GetInstance()
+{
+	return &instance;
 }
