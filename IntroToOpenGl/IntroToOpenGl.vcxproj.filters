@@ -210,6 +210,9 @@
     <ClCompile Include="GLMLookAtCamera.cpp">
       <Filter>Source Files\Camera</Filter>
     </ClCompile>
+    <ClCompile Include="MyLookAtMatrix.cpp">
+      <Filter>Source Files\Camera</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameState.h">
@@ -362,6 +365,9 @@
     <ClInclude Include="GLMLookAtCamera.h">
       <Filter>Header Files\Camera</Filter>
     </ClInclude>
+    <ClInclude Include="MyLookAtMatrix.h">
+      <Filter>Header Files\Camera</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ShaderClass.shader">
@@ -437,6 +443,9 @@
       <Filter>Shader\Transformations</Filter>
     </None>
     <None Include="GLMLookAtCamera.shader">
+      <Filter>Shader\Camera</Filter>
+    </None>
+    <None Include="MyLookAtMatrix.shader">
       <Filter>Shader\Camera</Filter>
     </None>
   </ItemGroup>

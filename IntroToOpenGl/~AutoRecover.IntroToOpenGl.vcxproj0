@@ -257,7 +257,6 @@
     <None Include="MatrixGraphTransformation2.shader" />
     <None Include="MatrixUniform.shader" />
     <None Include="MipmapOptions.shader" />
-    <None Include="MyLookAtMatrix.shader" />
     <None Include="MyMatrixClass.shader" />
     <None Include="Right_LeftHanded.shader" />
     <None Include="ShaderClass.shader" />

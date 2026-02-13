@@ -145,6 +145,7 @@
   <ItemGroup>
     <ClCompile Include="GLMLookAtCamera.cpp" />
     <ClCompile Include="CameraMain.cpp" />
+    <ClCompile Include="MyLookAtMatrix.cpp" />
     <ClCompile Include="Right_LeftHanded.cpp" />
     <ClCompile Include="StitchingTest.cpp" />
     <ClCompile Include="TextureMapping_3D.cpp" />
@@ -195,6 +196,7 @@
   <ItemGroup>
     <ClInclude Include="GLMLookAtCamera.h" />
     <ClInclude Include="CameraMain.h" />
+    <ClInclude Include="MyLookAtMatrix.h" />
     <ClInclude Include="Right_LeftHanded.h" />
     <ClInclude Include="StitchingTest.h" />
     <ClInclude Include="TextureMapping_3D.h" />
@@ -255,6 +257,7 @@
     <None Include="MatrixGraphTransformation2.shader" />
     <None Include="MatrixUniform.shader" />
     <None Include="MipmapOptions.shader" />
+    <None Include="MyLookAtMatrix.shader" />
     <None Include="MyMatrixClass.shader" />
     <None Include="Right_LeftHanded.shader" />
     <None Include="ShaderClass.shader" />
