@@ -25,7 +25,7 @@ private:
 	enum SubScene
 	{
 		GLMLookAtCamera,
-		MyCamera,
+		MyLookAtMatrix,
 		COUNT
 	};
 

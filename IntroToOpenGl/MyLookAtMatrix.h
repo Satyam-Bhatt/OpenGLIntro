@@ -30,12 +30,12 @@ private:
 
 	bool myLookAt = false;
 
-	glm::vec3 cameraPosition = glm::vec3(0.0f, 0.0f, 3.0f);
+	glm::vec3 cameraPosition = glm::vec3(0.0f, 0.0f, 5.0f);
 	glm::vec3 targetPosition = glm::vec3(0.0f, 0.0f, 0.0f);
 	glm::vec3 upVector = glm::vec3(0.0f, 1.0f, 0.0f);
 
 	int numCubes = 25;
-	std::vector<CubeTransform> cubeTransforms;
+	std::vector<CubeTransform> cubes;
 	
 	void InitializeCubes();
 };

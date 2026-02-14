@@ -1,5 +1,6 @@
 #include "CameraMain.h"
 #include "GLMLookAtCamera.h"
+#include "MyLookAtMatrix.h"
 
 CameraMain* CameraMain::instance = nullptr;
 
@@ -7,6 +8,9 @@ CameraMain::CameraMain()
 {
 	sceneNames[SubScene::GLMLookAtCamera] = "GLM LookAt Camera";
 	sceneFactories[SubScene::GLMLookAtCamera] = []() -> CameraMain* {return GLMLookAtCamera::GetInstance(); };
+
+	sceneNames[SubScene::MyLookAtMatrix] = "My LookAt Matrix";
+	sceneFactories[SubScene::MyLookAtMatrix] = []() -> CameraMain* {return MyLookAtMatrix::GetInstance(); };
 }
 
 CameraMain::~CameraMain()
@@ -80,7 +84,7 @@ void CameraMain::ImGuiRender(GLFWwindow* window)
 void CameraMain::Render()
 {
 	currentProject->Render();
-	ChangeScene();
+	ChangeState();
 }
 
 void CameraMain::HandleInput(GLFWwindow* window)
@@ -154,6 +158,10 @@ void CameraMain::RenderText(SubScene sceneName)
 		ImGui::TextWrapped("Creating a look at camera with the help of GLM. The camera always points towards the target position.");
 		ImGui::Dummy(ImVec2(0.0f, 10.0f));
 		ImGui::TextWrapped("When not using look matrix, the camera can be translated and rotated normally but it won't point towards the target position.");
+	}
+	else if (sceneName == SubScene::MyLookAtMatrix)
+	{
+		ImGui::TextWrapped("Why rely on GLM?");
 	}
 	else
 	{

@@ -120,7 +120,6 @@ void GLMLookAtCamera::InitializeCubes()
 
 	float spacing = 0.6f; // Distance between cubes
 	int cubesPerRow = (int)std::ceil(std::sqrt((double)numCubes)); // number of columns
-	//int rows = (numCubes + cubesPerRow - 1) / cubesPerRow;         // number of rows (ceil division)
 
 	for (int i = 0; i < numCubes; i++)
 	{
