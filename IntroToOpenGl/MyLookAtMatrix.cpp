@@ -144,8 +144,6 @@ void MyLookAtMatrix::ImGuiRender(GLFWwindow* window)
 
 void MyLookAtMatrix::Render()
 {
-	std::cout << "MyLookAtMatrix::Render()" << std::endl;
-
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture);
 
@@ -235,7 +233,6 @@ MyLookAtMatrix* MyLookAtMatrix::GetInstance()
 	return &instance;
 }
 
-// TODO: make this a 3D grid
 void MyLookAtMatrix::InitializeCubes()
 {
 	std::random_device rd;
@@ -248,17 +245,22 @@ void MyLookAtMatrix::InitializeCubes()
 	cubes.clear();
 
 	float spacing = 0.6f; // Distance between cubes
-	int cubesPerRow = (int)std::ceil(std::sqrt((double)numCubes)); // number of columns
+	int cubesPerRow = 6;// (int)std::ceil(std::sqrt((double)numCubes)); // number of columns
 
 	for (int i = 0; i < numCubes; i++)
 	{
 		CubeTransform cube;
 
-		int row = i / cubesPerRow;
+		int row = (i / cubesPerRow) % cubesPerRow;
 		int col = i % cubesPerRow;
+		int layer = i / (cubesPerRow * cubesPerRow);
 
 		float offsetX = (cubesPerRow - 1) * spacing / 2.0f;
+		//float offsetY = ((numCubes / cubesPerRow) - 1) * spacing / 2.0f;
+		// TODO: numCubes makes it go downwards not in center
 		float offsetY = ((numCubes / cubesPerRow) - 1) * spacing / 2.0f;
+
+		std::cout << "row: " << row << " col: " << col << " layer: " << layer << std::endl;
 
 		//cube.position = Vector3(
 		//	col * spacing - offsetX + offsetRange(gen),
@@ -269,7 +271,7 @@ void MyLookAtMatrix::InitializeCubes()
 		cube.position = Vector3(
 			col * spacing - offsetX,
 			row * spacing - offsetY,
-			offsetRangeZ(gen)
+			layer
 		);
 
 		Vector3 axis = Vector3(axisRange(gen), axisRange(gen), axisRange(gen));
