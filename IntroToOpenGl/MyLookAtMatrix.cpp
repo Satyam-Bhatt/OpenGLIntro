@@ -125,6 +125,8 @@ void MyLookAtMatrix::ImGuiRender(GLFWwindow* window)
 	ImGui::Begin("Level Specific", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
 
 	ImGui::Checkbox("Use Look At Matrix", &myLookAt);
+	ImGui::SameLine();
+	ImGui::Checkbox("Rotate Cubes", &rotateCubes);
 
 	// Which fields to show as per the boolean
 	if (myLookAt == false)
@@ -190,7 +192,7 @@ void MyLookAtMatrix::Render()
 			model = Matrix4x4::Identity();
 
 			model = Matrix4x4::Translation(model, cubes[i].position);
-			model = Matrix4x4::Rotation(model, cubes[i].rotationAxis, (float)glfwGetTime() * cubes[i].rotationSpeed);
+			if(rotateCubes) model = Matrix4x4::Rotation(model, cubes[i].rotationAxis, (float)glfwGetTime() * cubes[i].rotationSpeed);
 			model = Matrix4x4::Scale(model, Vector3(0.3f, 0.3f, 0.3f));
 
 			shader.Use();
@@ -244,8 +246,8 @@ void MyLookAtMatrix::InitializeCubes()
 
 	cubes.clear();
 
-	float spacing = 0.6f; // Distance between cubes
-	int cubesPerRow = 6;// (int)std::ceil(std::sqrt((double)numCubes)); // number of columns
+	float spacing = 0.5f; // Distance between cubes
+	int cubesPerRow = 6; // number of cubes per row, column and layer
 
 	for (int i = 0; i < numCubes; i++)
 	{
@@ -255,23 +257,12 @@ void MyLookAtMatrix::InitializeCubes()
 		int col = i % cubesPerRow;
 		int layer = i / (cubesPerRow * cubesPerRow);
 
-		float offsetX = (cubesPerRow - 1) * spacing / 2.0f;
-		//float offsetY = ((numCubes / cubesPerRow) - 1) * spacing / 2.0f;
-		// TODO: numCubes makes it go downwards not in center
-		float offsetY = ((numCubes / cubesPerRow) - 1) * spacing / 2.0f;
-
-		std::cout << "row: " << row << " col: " << col << " layer: " << layer << std::endl;
-
-		//cube.position = Vector3(
-		//	col * spacing - offsetX + offsetRange(gen),
-		//	row * spacing - offsetY + offsetRange(gen),
-		//	offsetRangeZ(gen)
-		//);
+		float offset = (cubesPerRow - 1) * spacing / 2.0f;
 
 		cube.position = Vector3(
-			col * spacing - offsetX,
-			row * spacing - offsetY,
-			layer
+			col * spacing - offset,
+			row * spacing - offset,
+			-layer
 		);
 
 		Vector3 axis = Vector3(axisRange(gen), axisRange(gen), axisRange(gen));

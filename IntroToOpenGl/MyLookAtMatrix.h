@@ -29,12 +29,13 @@ private:
 	uint32_t texture = 0;
 
 	bool myLookAt = false;
+	bool rotateCubes = false;
 
 	glm::vec3 cameraPosition = glm::vec3(0.0f, 0.0f, 5.0f);
 	glm::vec3 targetPosition = glm::vec3(0.0f, 0.0f, 0.0f);
 	glm::vec3 upVector = glm::vec3(0.0f, 1.0f, 0.0f);
 
-	int numCubes = 72;
+	int numCubes = 108;
 	std::vector<CubeTransform> cubes;
 	
 	void InitializeCubes();
