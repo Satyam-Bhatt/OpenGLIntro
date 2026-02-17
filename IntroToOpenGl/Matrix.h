@@ -636,6 +636,13 @@ namespace Matrix
 			return result;
 		}
 
+		// Look At Matrix 
+		static Matrix4x4 CreateLookAtMatrix(Vector3 cameraPosition, Vector3 cameraTarget, Vector3 upVector)
+		{
+			Matrix4x4 result;
+			return result;
+		}
+
 		// Debug print function
 		void Print() const {
 			for (int i = 0; i < 4; i++) {
