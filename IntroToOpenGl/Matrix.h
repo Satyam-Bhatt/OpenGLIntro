@@ -640,6 +640,9 @@ namespace Matrix
 		static Matrix4x4 CreateLookAtMatrix(Vector3 cameraPosition, Vector3 cameraTarget, Vector3 upVector)
 		{
 			Matrix4x4 result;
+
+			Vector3 cameraDirection = (cameraTarget - cameraPosition).Normalize();
+
 			return result;
 		}
 
