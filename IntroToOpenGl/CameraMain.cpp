@@ -6,6 +6,9 @@
 // I am forever indebted to her and can never repay her at all
 // I am not even equal to spec of dust of her foot
 
+// I like to fake my git history
+// I am away but still commiting 
+// just because of my sister
 
 CameraMain* CameraMain::instance = nullptr;
 
