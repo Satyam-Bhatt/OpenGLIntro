@@ -642,6 +642,7 @@ namespace Matrix
 			Matrix4x4 result;
 
 			Vector3 cameraDirection = (cameraTarget - cameraPosition).Normalize();
+			Vector3 cameraRight = cameraDirection.Cross(upVector).Normalize();
 
 			return result;
 		}
