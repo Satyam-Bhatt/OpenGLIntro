@@ -643,6 +643,31 @@ namespace Matrix
 
 			Vector3 cameraDirection = (cameraTarget - cameraPosition).Normalize();
 			Vector3 cameraRight = cameraDirection.Cross(upVector).Normalize();
+			Vector3 cameraUp = cameraRight.Cross(cameraDirection).Normalize();
+
+			Matrix4x4 rotationMatrix;
+			rotationMatrix[0][0] = cameraRight.x;
+			rotationMatrix[0][1] = cameraUp.x;
+			rotationMatrix[0][2] = cameraDirection.x;
+			rotationMatrix[0][3] = 0.0f;
+
+			rotationMatrix[1][0] = cameraRight.y;
+			rotationMatrix[1][1] = cameraUp.y;
+			rotationMatrix[1][2] = cameraDirection.y;
+			rotationMatrix[1][3] = 0.0f;
+
+			rotationMatrix[2][0] = cameraRight.z;
+			rotationMatrix[2][1] = cameraUp.z;
+			rotationMatrix[2][2] = cameraDirection.z;
+			rotationMatrix[2][3] = 0.0f;
+
+			rotationMatrix[3][0] = 0.0f;
+			rotationMatrix[3][1] = 0.0f;
+			rotationMatrix[3][2] = 0.0f;
+			rotationMatrix[3][3] = 1.0f;
+
+			Matrix4x4 translationMatrix;
+
 
 			return result;
 		}
