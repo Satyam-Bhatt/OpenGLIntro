@@ -667,7 +667,16 @@ namespace Matrix
 			rotationMatrix[3][3] = 1.0f;
 
 			Matrix4x4 translationMatrix;
+			translationMatrix[0][0] = 1.0f;
+			translationMatrix[1][1] = 1.0f;
+			translationMatrix[2][2] = 1.0f;
+			translationMatrix[3][3] = 1.0f;
 
+			translationMatrix[0][3] = cameraPosition.x;
+			translationMatrix[1][3] = cameraPosition.y;
+			translationMatrix[2][3] = cameraPosition.z;
+
+			result = rotationMatrix * translationMatrix;
 
 			return result;
 		}
