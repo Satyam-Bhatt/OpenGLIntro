@@ -11,7 +11,7 @@ class MyLookAtMatrix : public CameraMain
 public:
 	MyLookAtMatrix();
 	~MyLookAtMatrix();
-	
+
 	void Start() override;
 	void Update() override;
 	void ImGuiRender(GLFWwindow* window) override;
@@ -35,9 +35,13 @@ private:
 	glm::vec3 targetPosition = glm::vec3(0.0f, 0.0f, 0.0f);
 	glm::vec3 upVector = glm::vec3(0.0f, 1.0f, 0.0f);
 
+	Vector3 myCameraPosition = Vector3(0, 0, 5);
+	Vector3 myTargetPosition = Vector3(0, 0, 0);
+	Vector3 myUpVector = Vector3(0, 1, 0);
+
 	int numCubes = 108;
 	std::vector<CubeTransform> cubes;
-	
+
 	void InitializeCubes();
 };
 

@@ -135,6 +135,12 @@ void MyLookAtMatrix::ImGuiRender(GLFWwindow* window)
 		ImGui::DragFloat3("Target Position", &targetPosition.x, 0.005f);
 		ImGui::DragFloat3("Up Vector", &upVector.x, 0.005f);
 	}
+	else
+	{
+		ImGui::DragFloat3("My Camera Position", &myCameraPosition.x, 0.005f);
+		ImGui::DragFloat3("My Target Position", &myTargetPosition.x, 0.005f);
+		ImGui::DragFloat3("My Up Vector", &myUpVector.x, 0.005f);
+	}
 
 	if (ImGui::DragInt("Cube Count", &numCubes, 1))
 	{
@@ -156,11 +162,11 @@ void MyLookAtMatrix::Render()
 	if (myLookAt == false)
 	{
 
-			view = glm::lookAt(cameraPosition, targetPosition, upVector);
+		view = glm::lookAt(cameraPosition, targetPosition, upVector);
 	}
 	else
 	{
-
+		viewMatrix = Matrix4x4::CreateLookAtMatrix(myCameraPosition, myTargetPosition, myUpVector);
 	}
 
 	Matrix4x4 projection;
@@ -192,7 +198,7 @@ void MyLookAtMatrix::Render()
 			model = Matrix4x4::Identity();
 
 			model = Matrix4x4::Translation(model, cubes[i].position);
-			if(rotateCubes) model = Matrix4x4::Rotation(model, cubes[i].rotationAxis, (float)glfwGetTime() * cubes[i].rotationSpeed);
+			if (rotateCubes) model = Matrix4x4::Rotation(model, cubes[i].rotationAxis, (float)glfwGetTime() * cubes[i].rotationSpeed);
 			model = Matrix4x4::Scale(model, Vector3(0.3f, 0.3f, 0.3f));
 
 			shader.Use();
