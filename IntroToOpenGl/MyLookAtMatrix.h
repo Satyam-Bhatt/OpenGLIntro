@@ -43,5 +43,6 @@ private:
 	std::vector<CubeTransform> cubes;
 
 	void InitializeCubes();
+	void ResetValues();
 };
 

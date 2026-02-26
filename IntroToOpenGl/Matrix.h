@@ -637,13 +637,13 @@ namespace Matrix
 		}
 
 		// Look At Matrix 
-		static Matrix4x4 CreateLookAtMatrix(Vector3 cameraPosition, Vector3 cameraTarget, Vector3 upVector)
+		static Matrix4x4 CreateLookAtMatrix(Vector::Vector3 cameraPosition, Vector::Vector3 cameraTarget, Vector::Vector3 upVector)
 		{
 			Matrix4x4 result;
 
-			Vector3 cameraDirection = (cameraTarget - cameraPosition).Normalize();
-			Vector3 cameraRight = cameraDirection.Cross(upVector).Normalize();
-			Vector3 cameraUp = cameraRight.Cross(cameraDirection).Normalize();
+			Vector::Vector3 cameraDirection = (cameraTarget - cameraPosition).Normalize();
+			Vector::Vector3 cameraRight = cameraDirection.Cross(upVector).Normalize();
+			Vector::Vector3 cameraUp = cameraRight.Cross(cameraDirection).Normalize();
 
 			Matrix4x4 rotationMatrix;
 			rotationMatrix[0][0] = cameraRight.x;
@@ -665,6 +665,8 @@ namespace Matrix
 			rotationMatrix[3][1] = 0.0f;
 			rotationMatrix[3][2] = 0.0f;
 			rotationMatrix[3][3] = 1.0f;
+
+			rotationMatrix = rotationMatrix.Transpose();
 
 			Matrix4x4 translationMatrix;
 			translationMatrix[0][0] = 1.0f;

@@ -124,7 +124,7 @@ void MyLookAtMatrix::ImGuiRender(GLFWwindow* window)
 
 	ImGui::Begin("Level Specific", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
 
-	ImGui::Checkbox("Use Look At Matrix", &myLookAt);
+	ImGui::Checkbox("Use My Look At Matrix", &myLookAt);
 	ImGui::SameLine();
 	ImGui::Checkbox("Rotate Cubes", &rotateCubes);
 
@@ -277,4 +277,15 @@ void MyLookAtMatrix::InitializeCubes()
 		cube.rotationSpeed = speedRange(gen);
 		cubes.push_back(cube);
 	}
+}
+
+void MyLookAtMatrix::ResetValues()
+{
+	cameraPosition = glm::vec3(0.0f, 0.0f, 5.0f);
+	targetPosition = glm::vec3(0.0f, 0.0f, 0.0f);
+	upVector = glm::vec3(0.0f, 1.0f, 0.0f);
+
+	myCameraPosition = Vector3(0, 0, 5);
+	myTargetPosition = Vector3(0, 0, 0);
+	myUpVector = Vector3(0, 1, 0);
 }
