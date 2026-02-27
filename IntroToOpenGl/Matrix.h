@@ -674,9 +674,9 @@ namespace Matrix
 			translationMatrix[2][2] = 1.0f;
 			translationMatrix[3][3] = 1.0f;
 
-			translationMatrix[0][3] = cameraPosition.x;
-			translationMatrix[1][3] = cameraPosition.y;
-			translationMatrix[2][3] = cameraPosition.z;
+			translationMatrix[0][3] = -cameraPosition.x;
+			translationMatrix[1][3] = -cameraPosition.y;
+			translationMatrix[2][3] = -cameraPosition.z;
 
 			result = rotationMatrix * translationMatrix;
 

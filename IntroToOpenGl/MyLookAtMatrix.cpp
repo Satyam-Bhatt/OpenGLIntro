@@ -147,6 +147,11 @@ void MyLookAtMatrix::ImGuiRender(GLFWwindow* window)
 		InitializeCubes();
 	}
 
+	if (ImGui::Button("Reset"))
+	{
+		ResetValues();
+	}
+
 	ImGui::End();
 }
 
@@ -170,7 +175,16 @@ void MyLookAtMatrix::Render()
 	}
 
 	Matrix4x4 projection;
-	projection = Matrix4x4::CreateProjectionMatrix_FOV(45.0f * (PI / 180), (float)viewportData.width, (float)viewportData.height, 0.1f, 100.0f);
+
+	if (myLookAt == false)
+	{
+		projection = Matrix4x4::CreateProjectionMatrix_FOV(45.0f * (PI / 180), (float)viewportData.width, (float)viewportData.height, 0.1f, 100.0f);
+	}
+	else
+	{
+		projection = Matrix4x4::CreateProjectionMatrix_FOV_LeftHanded(45.0f * (PI / 180), (float)viewportData.width, (float)viewportData.height, 0.1f, 100.0f);
+	}
+
 
 	// If there is only one cube then spawn it in the center without any offset
 	if (numCubes == 1)
