@@ -666,6 +666,8 @@ namespace Matrix
 			rotationMatrix[3][2] = 0.0f;
 			rotationMatrix[3][3] = 1.0f;
 
+			// TODO: Complete it
+			// We take transpose so that when we increase x the camera moves to the right
 			rotationMatrix = rotationMatrix.Transpose();
 
 			Matrix4x4 translationMatrix;
