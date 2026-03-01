@@ -171,7 +171,7 @@ void MyLookAtMatrix::Render()
 	}
 	else
 	{
-		viewMatrix = Matrix4x4::CreateLookAtMatrix(myCameraPosition, myTargetPosition, myUpVector);
+		viewMatrix = Matrix4x4::CreateLookAtMatrix_LeftHanded(myCameraPosition, myTargetPosition, myUpVector);
 	}
 
 	Matrix4x4 projection;
