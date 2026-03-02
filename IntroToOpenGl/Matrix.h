@@ -671,17 +671,21 @@ namespace Matrix
 			// We take transpose so that when we increase x the camera moves to the right
 			rotationMatrix = rotationMatrix.Transpose();
 
+			// X and Y we need to move the world in the opposite direction of the camera movement but in Z we need to move the world back in the positive direction as its in left hand coordinate system and +z is inside the screen
 			Matrix4x4 translationMatrix;
-			translationMatrix[0][0] = 1.0f;
-			translationMatrix[1][1] = 1.0f;
-			translationMatrix[2][2] = 1.0f;
-			translationMatrix[3][3] = 1.0f;
+			translationMatrix = Matrix4x4::Translation(translationMatrix, Vector::Vector3(-cameraPosition.x, -cameraPosition.y, cameraPosition.z));
 
-			translationMatrix[0][3] = -cameraPosition.x;
-			translationMatrix[1][3] = -cameraPosition.y;
-			translationMatrix[2][3] = -cameraPosition.z;
+			//translationMatrix[0][0] = 1.0f;
+			//translationMatrix[1][1] = 1.0f;
+			//translationMatrix[2][2] = 1.0f;
+			//translationMatrix[3][3] = 1.0f;
+
+			//translationMatrix[0][3] = -cameraPosition.x;
+			//translationMatrix[1][3] = -cameraPosition.y;
+			//translationMatrix[2][3] = -cameraPosition.z;
 
 			result = rotationMatrix * translationMatrix;
+			result = translationMatrix;
 
 			return result;
 		}
