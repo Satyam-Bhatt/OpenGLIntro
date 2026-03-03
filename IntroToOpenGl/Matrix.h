@@ -671,9 +671,9 @@ namespace Matrix
 			// We take transpose so that when we increase x the camera moves to the right
 			rotationMatrix = rotationMatrix.Transpose();
 
-			// X and Y we need to move the world in the opposite direction of the camera movement but in Z we need to move the world back in the positive direction as its in left hand coordinate system and +z is inside the screen
+			// X and Y we need to move the world in the opposite direction of the camera movement but in Z we need to move the world back in the positive direction as its in left hand coordinate system and +z is inside the screen. So if cameraPosition is 0,0,-5, we make it 0,0,5 to move the world back in the positive z direction. Basically there is no camera, we just move the world around.
 			Matrix4x4 translationMatrix;
-			translationMatrix = Matrix4x4::Translation(translationMatrix, Vector::Vector3(-cameraPosition.x, -cameraPosition.y, cameraPosition.z));
+			translationMatrix = Matrix4x4::Translation(translationMatrix, Vector::Vector3(-cameraPosition.x, -cameraPosition.y, -cameraPosition.z));
 
 			//translationMatrix[0][0] = 1.0f;
 			//translationMatrix[1][1] = 1.0f;
@@ -685,7 +685,7 @@ namespace Matrix
 			//translationMatrix[2][3] = -cameraPosition.z;
 
 			result = rotationMatrix * translationMatrix;
-			result = translationMatrix;
+			//result = translationMatrix;
 
 			return result;
 		}
