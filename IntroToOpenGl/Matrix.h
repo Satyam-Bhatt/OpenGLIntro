@@ -669,7 +669,7 @@ namespace Matrix
 			// TODO: Understand Gudiya
 			// Inverse of tha rotation matrix is its transpose because it is an orthogonal matrix as the camera right, up and direction vectors are orthogonal to each other and are unit vectors
 			// We take transpose so that when we increase x the camera moves to the right
-			rotationMatrix = rotationMatrix.Transpose();
+			//rotationMatrix = rotationMatrix.Transpose();
 
 			// X and Y we need to move the world in the opposite direction of the camera movement but in Z we need to move the world back in the positive direction as its in left hand coordinate system and +z is inside the screen. So if cameraPosition is 0,0,-5, we make it 0,0,5 to move the world back in the positive z direction. Basically there is no camera, we just move the world around.
 			Matrix4x4 translationMatrix;
