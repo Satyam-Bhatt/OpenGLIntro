@@ -636,7 +636,7 @@ namespace Matrix
 			return result;
 		}
 
-		// Look At Matrix 
+		// Look At Matrix Sill in WIP
 		static Matrix4x4 CreateLookAtMatrix_LeftHanded(Vector::Vector3 cameraPosition, Vector::Vector3 cameraTarget, Vector::Vector3 upVector)
 		{
 			Matrix4x4 result;
