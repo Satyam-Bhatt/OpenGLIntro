@@ -641,9 +641,26 @@ namespace Matrix
 		{
 			Matrix4x4 result;
 
+			// RIGHT HANDED
+			//X → Y → Z → X(going forward = positive result)
+
+			//	X × Y = Z  ✅
+			//	Y × Z = X  ✅
+			//	Z × X = Y  ✅
+
+			//	Y × X = -Z ❌(going backward = negative)
+
+			// LEFT HANDED
+			// X → Y → -Z → X (Z is flipped)
+
+			//	X × Y = -Z
+			//	Y × X = Z
+
 			Vector::Vector3 cameraDirection = (cameraTarget - cameraPosition).Normalize();
-			Vector::Vector3 cameraRight = cameraDirection.Cross(upVector).Normalize();
-			Vector::Vector3 cameraUp = cameraRight.Cross(cameraDirection).Normalize();
+			//Vector::Vector3 cameraRight = cameraDirection.Cross(upVector).Normalize(); // For Right Handed
+			Vector::Vector3 cameraRight = upVector.Cross(cameraDirection).Normalize(); // For Left Handed
+			//Vector::Vector3 cameraUp = cameraRight.Cross(cameraDirection).Normalize();
+			Vector::Vector3 cameraUp = cameraDirection.Cross(cameraRight).Normalize();
 
 			Matrix4x4 rotationMatrix;
 			rotationMatrix[0][0] = cameraRight.x;
@@ -669,7 +686,7 @@ namespace Matrix
 			// Inverse of tha rotation matrix is its transpose because it is an orthogonal matrix as the camera right, up and direction vectors are orthogonal to each other and are unit vectors
 			// We take transpose so that when we increase x the camera moves to the right
 			// Surprisingly I don't need to take the transpose I don't know why
-			// rotationMatrix = rotationMatrix.Transpose();
+			rotationMatrix = rotationMatrix.Transpose();
 
 			// X and Y we need to move the world in the opposite direction of the camera movement.
 			Matrix4x4 translationMatrix;
