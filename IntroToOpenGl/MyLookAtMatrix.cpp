@@ -171,8 +171,6 @@ void MyLookAtMatrix::Render()
 	}
 	else
 	{
-		//viewMatrix = Matrix4x4::Translation(viewMatrix, myCameraPosition);
-
 		viewMatrix = Matrix4x4::CreateLookAtMatrix_LeftHanded(myCameraPosition, myTargetPosition, myUpVector);
 	}
 
@@ -184,9 +182,7 @@ void MyLookAtMatrix::Render()
 	}
 	else
 	{
-		projection = Matrix4x4::CreateProjectionMatrix_FOV(45.0f * (PI / 180), (float)viewportData.width, (float)viewportData.height, 0.1f, 100.0f);
-
-		//projection = Matrix4x4::CreateProjectionMatrix_FOV_LeftHanded(45.0f * (PI / 180), (float)viewportData.width, (float)viewportData.height, 0.1f, 100.0f);
+		projection = Matrix4x4::CreateProjectionMatrix_FOV_LeftHanded(45.0f * (PI / 180), (float)viewportData.width, (float)viewportData.height, 0.1f, 100.0f);
 	}
 
 

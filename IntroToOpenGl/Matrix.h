@@ -636,57 +636,58 @@ namespace Matrix
 			return result;
 		}
 
-		// Look At Matrix
+		// Look At Matrix for left handed coordinate system basically the Z coordinate in camera position is -ve
 		// Basically there is no camera, its just we moving and rotating the world around.
-		//static Matrix4x4 CreateLookAtMatrix_LeftHanded(Vector::Vector3 cameraPosition, Vector::Vector3 cameraTarget, Vector::Vector3 upVector)
-		//{
-		//	Matrix4x4 result;
-
-		//	Vector::Vector3 cameraDirection = (cameraTarget - cameraPosition).Normalize();
-		//	Vector::Vector3 cameraRight = upVector.Cross(cameraDirection).Normalize();
-		//	Vector::Vector3 cameraUp = (cameraDirection).Cross(cameraRight).Normalize();
-
-		//	Matrix4x4 rotationMatrix;
-		//	rotationMatrix[0][0] = cameraRight.x;
-		//	rotationMatrix[1][0] = cameraRight.y;
-		//	rotationMatrix[2][0] = cameraRight.z;
-		//	rotationMatrix[3][0] = 0.0f;
-
-		//	rotationMatrix[0][1] = cameraUp.x;
-		//	rotationMatrix[1][1] = cameraUp.y;
-		//	rotationMatrix[2][1] = cameraUp.z;
-		//	rotationMatrix[3][1] = 0.0f;
-
-		//	rotationMatrix[0][2] = cameraDirection.x;
-		//	rotationMatrix[1][2] = cameraDirection.y;
-		//	rotationMatrix[2][2] = cameraDirection.z;
-		//	rotationMatrix[3][2] = 0.0f;
-
-		//	rotationMatrix[0][3] = 0.0f;
-		//	rotationMatrix[1][3] = 0.0f;
-		//	rotationMatrix[2][3] = 0.0f;
-		//	rotationMatrix[3][3] = 1.0f;
-
-		//	// Inverse of tha rotation matrix is its transpose because it is an orthogonal matrix as the camera right, up and direction vectors are orthogonal to each other and are unit vectors
-		//	// We take transpose so that when we increase X the world rotates in the opposite direction giving the feeling of camera movement to right. Similar for the Y axis.
-		//	rotationMatrix = rotationMatrix.Transpose();
-
-		//	// X and Y we need to move the world in the opposite direction of the camera movement so we make them negative. We take negative of Z because in the camera position Z is negative and we make it positive to move the world in the +Z direction.
-		//	Matrix4x4 translationMatrix;
-		//	translationMatrix = Matrix4x4::Translation(translationMatrix, Vector::Vector3(-cameraPosition.x, -cameraPosition.y, -cameraPosition.z));
-
-		//	result = rotationMatrix * translationMatrix;
-
-		//	return result;
-		//}
-
 		static Matrix4x4 CreateLookAtMatrix_LeftHanded(Vector::Vector3 cameraPosition, Vector::Vector3 cameraTarget, Vector::Vector3 upVector)
 		{
 			Matrix4x4 result;
 
 			Vector::Vector3 cameraDirection = (cameraTarget - cameraPosition).Normalize();
 			Vector::Vector3 cameraRight = upVector.Cross(cameraDirection).Normalize();
-			Vector::Vector3 cameraUp = cameraDirection.Cross(cameraRight).Normalize();
+			Vector::Vector3 cameraUp = (cameraDirection).Cross(cameraRight).Normalize();
+
+			Matrix4x4 rotationMatrix;
+			rotationMatrix[0][0] = cameraRight.x;
+			rotationMatrix[1][0] = cameraRight.y;
+			rotationMatrix[2][0] = cameraRight.z;
+			rotationMatrix[3][0] = 0.0f;
+
+			rotationMatrix[0][1] = cameraUp.x;
+			rotationMatrix[1][1] = cameraUp.y;
+			rotationMatrix[2][1] = cameraUp.z;
+			rotationMatrix[3][1] = 0.0f;
+
+			rotationMatrix[0][2] = cameraDirection.x;
+			rotationMatrix[1][2] = cameraDirection.y;
+			rotationMatrix[2][2] = cameraDirection.z;
+			rotationMatrix[3][2] = 0.0f;
+
+			rotationMatrix[0][3] = 0.0f;
+			rotationMatrix[1][3] = 0.0f;
+			rotationMatrix[2][3] = 0.0f;
+			rotationMatrix[3][3] = 1.0f;
+
+			// Inverse of tha rotation matrix is its transpose because it is an orthogonal matrix as the camera right, up and direction vectors are orthogonal to each other and are unit vectors
+			// We take transpose so that when we increase X the world rotates in the opposite direction giving the feeling of camera movement to right. Similar for the Y axis.
+			rotationMatrix = rotationMatrix.Transpose();
+
+			// X and Y we need to move the world in the opposite direction of the camera movement so we make them negative. We take negative of Z because in the camera position Z is negative and we make it positive to move the world in the +Z direction.
+			Matrix4x4 translationMatrix;
+			translationMatrix = Matrix4x4::Translation(translationMatrix, Vector::Vector3(-cameraPosition.x, -cameraPosition.y, -cameraPosition.z));
+
+			result = rotationMatrix * translationMatrix;
+
+			return result;
+		}
+
+		// Look at matrix how GLM does it.
+		static Matrix4x4 CreateLookAtMatrix_GLMCopy(Vector::Vector3 cameraPosition, Vector::Vector3 cameraTarget, Vector::Vector3 upVector)
+		{
+			Matrix4x4 result;
+
+			Vector::Vector3 cameraDirection = (cameraTarget - cameraPosition).Normalize();
+			Vector::Vector3 cameraRight = cameraDirection.Cross(upVector).Normalize();
+			Vector::Vector3 cameraUp = cameraRight.Cross(cameraDirection).Normalize();
 
 			Matrix4x4 rotationMatrix;
 			rotationMatrix[0][0] = cameraRight.x;
@@ -699,9 +700,16 @@ namespace Matrix
 			rotationMatrix[1][2] = cameraUp.z;
 			rotationMatrix[1][3] = 0.0f;
 
-			rotationMatrix[2][0] = cameraDirection.x;
-			rotationMatrix[2][1] = cameraDirection.y;
-			rotationMatrix[2][2] = cameraDirection.z;
+			// Why negate cameraDirection ?
+			// With cameraPosition = (0, 0, 5), cameraDirection = (0, 0, -1).
+			// Without negation, row 2 = (0, 0, -1) × translation col 3 = (0, 0, -5):
+			// (0 * 0) + (0 * 0) + (-1 * -5) + (0 * 1) = +5  ← WRONG +5 is BEHIND the camera → outside near/far plane → clipped → invisible
+			// With negation, row 2 = (0, 0, 1) × translation col 3 = (0, 0, -5):
+			// (0 * 0) + (0 * 0) + (1 * -5) + (0 * 1) = -5  ← CORRECT -5 is IN FRONT of the camera → between near(0.1) and far(100) → visible
+
+			rotationMatrix[2][0] = -cameraDirection.x;  // ← negated
+			rotationMatrix[2][1] = -cameraDirection.y;  // ← negated
+			rotationMatrix[2][2] = -cameraDirection.z;  // ← negated
 			rotationMatrix[2][3] = 0.0f;
 
 			rotationMatrix[3][0] = 0.0f;

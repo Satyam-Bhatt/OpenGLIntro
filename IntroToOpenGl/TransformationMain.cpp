@@ -138,7 +138,8 @@ void TransformationMain::HandleInput(GLFWwindow* window)
 
 void TransformationMain::Exit()
 {
-	currentProject->Exit();
+	if (currentProject != nullptr)
+		currentProject->Exit();
 }
 
 TransformationMain* TransformationMain::GetInstance()
