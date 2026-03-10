@@ -28,7 +28,7 @@ private:
 	uint32_t VAO = 0, VBO = 0;
 	uint32_t texture = 0;
 
-	bool myLookAt = false;
+	bool useMyLookAtMatrix = false;
 	bool rotateCubes = false;
 
 	glm::vec3 cameraPosition = glm::vec3(0.0f, 0.0f, 5.0f);

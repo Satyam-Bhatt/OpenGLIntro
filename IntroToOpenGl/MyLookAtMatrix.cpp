@@ -124,12 +124,12 @@ void MyLookAtMatrix::ImGuiRender(GLFWwindow* window)
 
 	ImGui::Begin("Level Specific", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
 
-	ImGui::Checkbox("Use My Look At Matrix", &myLookAt);
+	ImGui::Checkbox("Use My Look At Matrix - Left Handed", &useMyLookAtMatrix);
 	ImGui::SameLine();
 	ImGui::Checkbox("Rotate Cubes", &rotateCubes);
 
 	// Which fields to show as per the boolean
-	if (myLookAt == false)
+	if (useMyLookAtMatrix == false)
 	{
 		ImGui::DragFloat3("Camera Position", &cameraPosition.x, 0.005f);
 		ImGui::DragFloat3("Target Position", &targetPosition.x, 0.005f);
@@ -164,7 +164,7 @@ void MyLookAtMatrix::Render()
 
 	glm::mat4 view = glm::mat4(1.0f);
 	Matrix4x4 viewMatrix;
-	if (myLookAt == false)
+	if (useMyLookAtMatrix == false)
 	{
 
 		view = glm::lookAt(cameraPosition, targetPosition, upVector);
@@ -176,7 +176,7 @@ void MyLookAtMatrix::Render()
 
 	Matrix4x4 projection;
 
-	if (myLookAt == false)
+	if (useMyLookAtMatrix == false)
 	{
 		projection = Matrix4x4::CreateProjectionMatrix_FOV(45.0f * (PI / 180), (float)viewportData.width, (float)viewportData.height, 0.1f, 100.0f);
 	}
@@ -196,7 +196,7 @@ void MyLookAtMatrix::Render()
 
 		shader.Use();
 		shader.SetMat4_Custom("model", model.m);
-		if (myLookAt == false)
+		if (useMyLookAtMatrix == false)
 			shader.SetMat4("view", view);
 		else
 			shader.SetMat4_Custom("view", viewMatrix.m);
@@ -217,7 +217,7 @@ void MyLookAtMatrix::Render()
 
 			shader.Use();
 			shader.SetMat4_Custom("model", model.m);
-			if (myLookAt == false)
+			if (useMyLookAtMatrix == false)
 				shader.SetMat4("view", view);
 			else
 				shader.SetMat4_Custom("view", viewMatrix.m);
@@ -240,7 +240,7 @@ void MyLookAtMatrix::Exit()
 	if (texture != 0) glDeleteTextures(1, &texture);
 	if (shader.ID != 0) glDeleteProgram(shader.ID);
 
-	myLookAt = false;
+	useMyLookAtMatrix = false;
 	cameraPosition = glm::vec3(0);
 	targetPosition = glm::vec3(0);
 	upVector = glm::vec3(0, 1, 0);
