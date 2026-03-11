@@ -161,7 +161,9 @@ void CameraMain::RenderText(SubScene sceneName)
 	}
 	else if (sceneName == SubScene::MyLookAtMatrix)
 	{
-		ImGui::TextWrapped("Why rely on GLM?");
+		ImGui::TextWrapped("Creating my own look at matrix so that camera is in Left Hand Coordinate Systems");
+		ImGui::Dummy(ImVec2(0.0f, 10.0f));
+		ImGui::TextWrapped("When switching between regular GLM look at matrix and my matrix, the side sprites of the cube also switch. GLM Look At matrix is right handed so switching over to my look at matrix is basically looking from the camera placed in the opposite direction but facing towards the target position and vice versa. This is also the reason why the rotation is also flipped when we turn on camera rotation.");
 	}
 	else
 	{

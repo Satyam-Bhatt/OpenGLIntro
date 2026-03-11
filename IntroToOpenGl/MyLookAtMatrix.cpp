@@ -122,6 +122,7 @@ void MyLookAtMatrix::ImGuiRender(GLFWwindow* window)
 		ImVec2(0.5f, 1.0f)
 	);
 
+
 	ImGui::Begin("Level Specific", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
 
 	ImGui::Checkbox("Use My Look At Matrix - Left Handed", &useMyLookAtMatrix);
@@ -142,9 +143,18 @@ void MyLookAtMatrix::ImGuiRender(GLFWwindow* window)
 		ImGui::DragFloat3("My Up Vector", &myUpVector.x, 0.005f);
 	}
 
+
 	if (ImGui::DragInt("Cube Count", &numCubes, 1))
 	{
 		InitializeCubes();
+	}
+
+	ImGui::Checkbox("Rotate Camera Around", &rotateCamera);
+	if (rotateCamera)
+	{
+		ImGui::SameLine();
+		ImGui::SetNextItemWidth(70.0f);
+		ImGui::DragFloat("Camera Radius", &radius, 0.005f);
 	}
 
 	if (ImGui::Button("Reset"))
@@ -166,12 +176,29 @@ void MyLookAtMatrix::Render()
 	Matrix4x4 viewMatrix;
 	if (useMyLookAtMatrix == false)
 	{
-
-		view = glm::lookAt(cameraPosition, targetPosition, upVector);
+		if (rotateCamera)
+		{
+			float camX = sin(glfwGetTime()) * radius;
+			float camZ = cos(glfwGetTime()) * radius;
+			view = glm::lookAt(glm::vec3(camX, cameraPosition.y, camZ), targetPosition, upVector);
+		}
+		else
+		{
+			view = glm::lookAt(cameraPosition, targetPosition, upVector);
+		}
 	}
 	else
 	{
-		viewMatrix = Matrix4x4::CreateLookAtMatrix_LeftHanded(myCameraPosition, myTargetPosition, myUpVector);
+		if (rotateCamera)
+		{
+			float camX = sin(glfwGetTime()) * radius;
+			float camZ = cos(glfwGetTime()) * radius;
+			viewMatrix = Matrix4x4::CreateLookAtMatrix_LeftHanded(Vector3(camX, myCameraPosition.y, camZ), myTargetPosition, myUpVector);
+		}
+		else
+		{
+			viewMatrix = Matrix4x4::CreateLookAtMatrix_LeftHanded(myCameraPosition, myTargetPosition, myUpVector);
+		}
 	}
 
 	Matrix4x4 projection;
@@ -241,9 +268,15 @@ void MyLookAtMatrix::Exit()
 	if (shader.ID != 0) glDeleteProgram(shader.ID);
 
 	useMyLookAtMatrix = false;
+	rotateCubes = false;
+	rotateCamera = false;
 	cameraPosition = glm::vec3(0);
 	targetPosition = glm::vec3(0);
 	upVector = glm::vec3(0, 1, 0);
+	myCameraPosition = Vector3(0, 0, -7);
+	myTargetPosition = Vector3(0, 0, 0);
+	myUpVector = Vector3(0, 1, 0);
+	radius = 108;
 	numCubes = 25;
 	cubes.clear();
 
