@@ -143,6 +143,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="FirstPersonCamera.cpp" />
     <ClCompile Include="GLMLookAtCamera.cpp" />
     <ClCompile Include="CameraMain.cpp" />
     <ClCompile Include="MyLookAtMatrix.cpp" />
@@ -194,6 +195,7 @@
     <ClCompile Include="ViewMatrix.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="FirstPersonCamera.h" />
     <ClInclude Include="GLMLookAtCamera.h" />
     <ClInclude Include="CameraMain.h" />
     <ClInclude Include="MyLookAtMatrix.h" />
@@ -247,6 +249,7 @@
     <ClInclude Include="ViewMatrix.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="FirstPersonCamera.shader" />
     <None Include="GLMLookAtCamera.shader" />
     <None Include="CoordinateSystem2.shader" />
     <None Include="CoordinateSystems.shader" />

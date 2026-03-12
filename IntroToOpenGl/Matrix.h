@@ -668,7 +668,7 @@ namespace Matrix
 			rotationMatrix[3][3] = 1.0f;
 
 			// Inverse of tha rotation matrix is its transpose because it is an orthogonal matrix as the camera right, up and direction vectors are orthogonal to each other and are unit vectors
-			// We take transpose so that when we increase X the world rotates in the opposite direction giving the feeling of camera movement to right. Similar for the Y axis.
+			// We take transpose so that when we increase X the world rotates in the opposite direction giving the feeling of camera movement to right. Similar for the Y and Z axis.
 			rotationMatrix = rotationMatrix.Transpose();
 
 			// X and Y we need to move the world in the opposite direction of the camera movement so we make them negative. We take negative of Z because in the camera position Z is negative and we make it positive to move the world in the +Z direction.
