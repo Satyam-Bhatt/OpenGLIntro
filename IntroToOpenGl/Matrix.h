@@ -667,11 +667,17 @@ namespace Matrix
 			rotationMatrix[2][3] = 0.0f;
 			rotationMatrix[3][3] = 1.0f;
 
-			// Inverse of tha rotation matrix is its transpose because it is an orthogonal matrix as the camera right, up and direction vectors are orthogonal to each other and are unit vectors
-			// We take transpose---
-			//rotationMatrix = rotationMatrix.Transpose();
+			// Inverse of the rotation matrix is its transpose because it is an orthogonal matrix as the camera right, up and direction vectors are orthogonal to each other and are unit vectors
+			// We take transpose because we want to convert world space coordinates to camera space coordinates. 
+			// Basically taking a transpose and multiplying it with the world space coordinate is like a dot product of the world space coordinate with the camera right, up and direction vectors which gives us the coordinates in camera space.
+			// x' = dot(worldPoint, [right.x, right.y, right.z])  ← how far along camera's right axis?
+			// y' = dot(worldPoint, [up.x,    up.y,    up.z   ])  ← how far along camera's up axis?
+			// z' = dot(worldPoint, [dir.x,   dir.y,   dir.z  ])  ← how far along camera's forward axis?
+			rotationMatrix = rotationMatrix.Transpose();
 
+			// To bring the camera to origin, we shift the world by (-cameraPosition.x, -cameraPosition.y, -cameraPosition.z).
 			// X and Y we need to move the world in the opposite direction of the camera movement so we make them negative. We take negative of Z because in the camera position Z is negative and we make it positive to move the world in the +Z direction.
+			// if we move the world in the same direction as the camera movement then (not negate it) objects will appear even further than it should be  
 			Matrix4x4 translationMatrix;
 			translationMatrix = Matrix4x4::Translation(translationMatrix, Vector::Vector3(-cameraPosition.x, -cameraPosition.y, -cameraPosition.z));
 
