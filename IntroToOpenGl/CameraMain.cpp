@@ -1,6 +1,7 @@
 #include "CameraMain.h"
 #include "GLMLookAtCamera.h"
 #include "MyLookAtMatrix.h"
+#include "FirstPersonCamera.h"
 
 CameraMain* CameraMain::instance = nullptr;
 
@@ -11,6 +12,9 @@ CameraMain::CameraMain()
 
 	sceneNames[SubScene::MyLookAtMatrix] = "My LookAt Matrix";
 	sceneFactories[SubScene::MyLookAtMatrix] = []() -> CameraMain* {return MyLookAtMatrix::GetInstance(); };
+
+	sceneNames[SubScene::FirstPersonCamera] = "First Person Camera";
+	sceneFactories[SubScene::FirstPersonCamera] = []() -> CameraMain* {return FirstPersonCamera::GetInstance(); };
 }
 
 CameraMain::~CameraMain()
@@ -164,6 +168,10 @@ void CameraMain::RenderText(SubScene sceneName)
 		ImGui::TextWrapped("Creating my own look at matrix so that camera is in Left Hand Coordinate Systems");
 		ImGui::Dummy(ImVec2(0.0f, 10.0f));
 		ImGui::TextWrapped("When switching between regular GLM look at matrix and my matrix, the side sprites of the cube also switch. GLM Look At matrix is right handed so switching over to my look at matrix is basically looking from the camera placed in the opposite direction but facing towards the target position and vice versa. This is also the reason why the rotation is also flipped when we turn on camera rotation.");
+	}
+	else if (sceneName == SubScene::FirstPersonCamera)
+	{
+		ImGui::TextWrapped("Creating a first person camera using my own look at matrix. Move around the scene");
 	}
 	else
 	{

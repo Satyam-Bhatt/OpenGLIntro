@@ -26,6 +26,7 @@ private:
 	{
 		GLMLookAtCamera,
 		MyLookAtMatrix,
+		FirstPersonCamera,
 		COUNT
 	};
 
