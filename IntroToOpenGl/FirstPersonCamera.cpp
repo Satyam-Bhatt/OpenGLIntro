@@ -122,9 +122,10 @@ void FirstPersonCamera::ImGuiRender(GLFWwindow* window)
 
 	ImGui::Begin("Level Specific", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
 
-	ImGui::DragFloat3("My Camera Position", &myCameraPosition.x, 0.005f);
-	ImGui::DragFloat3("My Target Position", &myTargetPosition.x, 0.005f);
-	ImGui::DragFloat3("My Up Vector", &myUpVector.x, 0.005f);
+	ImGui::DragFloat3("My Camera Position", &cameraPosition.x, 0.005f);
+	ImGui::DragFloat3("My Target Position", &cameraFront.x, 0.005f);
+	ImGui::DragFloat3("My Up Vector", &cameraUp.x, 0.005f);
+	ImGui::DragFloat("Camera Speed", &cameraSpeed, 0.005f);
 
 	ImGui::End();
 }
@@ -141,7 +142,7 @@ void FirstPersonCamera::Render()
 	model = Matrix4x4::Translation(model, Vector3(0.0f, 0.0f, 0.0f));
 	model = Matrix4x4::Scale(model, Vector3(1.0f, 1.0f, 1.0f));
 
-	view = Matrix4x4::CreateLookAtMatrix_LeftHanded(myCameraPosition, myTargetPosition, myUpVector);
+	view = Matrix4x4::CreateLookAtMatrix_LeftHanded(cameraPosition, cameraPosition + cameraFront, cameraUp);
 
 	projection = Matrix4x4::CreateProjectionMatrix_FOV_LeftHanded(45.0f * (PI / 180), (float)viewportData.width, (float)viewportData.height, 0.1f, 100.0f);
 
@@ -155,7 +156,16 @@ void FirstPersonCamera::Render()
 }
 
 void FirstPersonCamera::HandleInput(GLFWwindow* window)
-{}
+{
+	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+		cameraPosition += cameraSpeed * cameraFront;
+	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+		cameraPosition -= cameraSpeed * cameraFront;
+	if(glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+		cameraPosition -= Vector3::Cross(cameraFront, cameraUp).Normalize() * cameraSpeed; // To get the right vector. Right vector can change as camera front changes 
+	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+		cameraPosition += Vector3::Cross(cameraFront, cameraUp).Normalize() * cameraSpeed; // To get the right vector. Right vector can change as camera front changes
+}
 
 void FirstPersonCamera::Exit()
 {
