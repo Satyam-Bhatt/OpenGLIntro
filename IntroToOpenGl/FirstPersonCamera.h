@@ -1,6 +1,7 @@
 #pragma once
 #include "CameraMain.h"
 
+
 class FirstPersonCamera : public CameraMain
 {
 public:
@@ -19,7 +20,7 @@ public:
 private:
 	static FirstPersonCamera instance;
 
-	float cameraSpeed = 0.05f;
+	float cameraSpeed = 5;
 
 	Shader shader;
 

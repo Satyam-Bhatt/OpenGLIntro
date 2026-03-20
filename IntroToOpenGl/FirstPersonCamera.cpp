@@ -158,13 +158,17 @@ void FirstPersonCamera::Render()
 void FirstPersonCamera::HandleInput(GLFWwindow* window)
 {
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-		cameraPosition += cameraSpeed * cameraFront;
+		cameraPosition += cameraSpeed * cameraFront * deltaTime;
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-		cameraPosition -= cameraSpeed * cameraFront;
+		cameraPosition -= cameraSpeed * cameraFront * deltaTime;
 	if(glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-		cameraPosition -= Vector3::Cross(cameraFront, cameraUp).Normalize() * cameraSpeed; // To get the right vector. Right vector can change as camera front changes 
+		cameraPosition -= Vector3::Cross(cameraUp, cameraFront).Normalize() * cameraSpeed * deltaTime; // To get the right vector. Right vector can change as camera front changes 
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-		cameraPosition += Vector3::Cross(cameraFront, cameraUp).Normalize() * cameraSpeed; // To get the right vector. Right vector can change as camera front changes
+		cameraPosition += Vector3::Cross(cameraUp, cameraFront).Normalize() * cameraSpeed * deltaTime; // To get the right vector. Right vector can change as camera front changes
+	if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
+		cameraPosition += cameraSpeed * cameraUp * deltaTime;
+	if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
+		cameraPosition -= cameraSpeed * cameraUp * deltaTime;
 }
 
 void FirstPersonCamera::Exit()
