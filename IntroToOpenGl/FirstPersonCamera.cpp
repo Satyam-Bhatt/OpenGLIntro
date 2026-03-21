@@ -106,7 +106,8 @@ void FirstPersonCamera::Start()
 }
 
 void FirstPersonCamera::Update()
-{}
+{
+}
 
 void FirstPersonCamera::ImGuiRender(GLFWwindow* window)
 {
