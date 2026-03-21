@@ -30,5 +30,7 @@ private:
 	Vector3 cameraPosition = Vector3(0, 0, -7);
 	Vector3 cameraFront = Vector3(0, 0, 1); // Direction Vector
 	Vector3 cameraUp = Vector3(0, 1, 0);
+
+	Vector3 direction = Vector3(0, 0, 0);
 };
 
