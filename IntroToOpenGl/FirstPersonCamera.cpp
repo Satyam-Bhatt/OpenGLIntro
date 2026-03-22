@@ -107,6 +107,11 @@ void FirstPersonCamera::Start()
 
 void FirstPersonCamera::Update()
 {
+	// Worked on derivation of this
+	float yaw, pitch;
+	direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+	direction.y = sin(glm::radians(pitch));
+	direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
 }
 
 void FirstPersonCamera::ImGuiRender(GLFWwindow* window)
