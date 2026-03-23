@@ -22,7 +22,7 @@ void FirstPersonCamera::Start()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
 	int width, height, nChannels;
-	unsigned char* data = stbi_load("Images/awesomeface.png", &width, &height, &nChannels, 0);
+	unsigned char* data = stbi_load("Images/MYawesomeface.png", &width, &height, &nChannels, 0);
 
 	if (data)
 	{
@@ -108,7 +108,7 @@ void FirstPersonCamera::Start()
 void FirstPersonCamera::Update()
 {
 	// Worked on derivation of this
-	float yaw, pitch;
+	float yaw = 0, pitch = 0;
 	direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
 	direction.y = sin(glm::radians(pitch));
 	direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
