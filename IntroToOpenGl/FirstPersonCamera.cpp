@@ -103,6 +103,9 @@ void FirstPersonCamera::Start()
 
 	shader.Use();
 	shader.SetTexture("myTexture", 0);
+
+	// This ensures when the window is in focus our cursor is not visible
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 }
 
 void FirstPersonCamera::Update()
@@ -112,6 +115,12 @@ void FirstPersonCamera::Update()
 	direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
 	direction.y = sin(glm::radians(pitch));
 	direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+
+	// This is how we register a function to mouse events. When the mouse moves this function would also be called.
+	// The function needs to be static because glfw is a C library and expects a plain function with this signature
+	// -> void (*)(GLFWwindow*, double, double)
+	// If its non static then the signature looks different as it has hidden this parameter
+	glfwSetCursorPosCallback(window, mouse_callback);
 }
 
 void FirstPersonCamera::ImGuiRender(GLFWwindow* window)
@@ -124,7 +133,6 @@ void FirstPersonCamera::ImGuiRender(GLFWwindow* window)
 		ImGuiCond_Always,
 		ImVec2(0.5f, 1.0f)
 	);
-
 
 	ImGui::Begin("Level Specific", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
 
@@ -175,6 +183,19 @@ void FirstPersonCamera::HandleInput(GLFWwindow* window)
 		cameraPosition += cameraSpeed * cameraUp * deltaTime;
 	if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
 		cameraPosition -= cameraSpeed * cameraUp * deltaTime;
+
+	if (glfwGetKey(window, GLFW_KEY_M) == GLFW_PRESS)
+	{
+		if (mouseVisible)
+		{
+			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+		}
+		else
+		{
+			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		}
+		mouseVisible = !mouseVisible;
+	}
 }
 
 void FirstPersonCamera::Exit()
@@ -183,9 +204,17 @@ void FirstPersonCamera::Exit()
 	if (VBO != 0) glDeleteVertexArrays(1, &VBO);
 	if (texture != 0) glDeleteTextures(1, &texture);
 	if (shader.ID != 0) glDeleteProgram(shader.ID);
+
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 }
 
 FirstPersonCamera* FirstPersonCamera::GetInstance()
 {
 	return &instance;
 }
+
+// GLFW listens to mouse movement events using this function
+// xpos and ypos are the current mouse position
+// We need to to register this callback fucntion with GLFW each time mouse moves
+void FirstPersonCamera::mouse_callback(GLFWwindow* window, double xpos, double ypos)
+{}

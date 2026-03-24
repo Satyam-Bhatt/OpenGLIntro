@@ -100,7 +100,8 @@ void CameraMain::HandleInput(GLFWwindow* window)
 
 void CameraMain::Exit()
 {
-	currentProject->Exit();
+	if(currentProject != nullptr)
+		currentProject->Exit();
 }
 
 CameraMain* CameraMain::GetInstance()

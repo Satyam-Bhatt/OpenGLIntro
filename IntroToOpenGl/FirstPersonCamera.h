@@ -32,5 +32,9 @@ private:
 	Vector3 cameraUp = Vector3(0, 1, 0);
 
 	Vector3 direction = Vector3(0, 0, 0);
+
+	bool mouseVisible = false;
+
+	static void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 };
 
