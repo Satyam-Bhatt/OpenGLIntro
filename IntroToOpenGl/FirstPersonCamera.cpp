@@ -216,5 +216,35 @@ FirstPersonCamera* FirstPersonCamera::GetInstance()
 // GLFW listens to mouse movement events using this function
 // xpos and ypos are the current mouse position
 // We need to to register this callback fucntion with GLFW each time mouse moves
-void FirstPersonCamera::mouse_callback(GLFWwindow* window, double xpos, double ypos)
-{}
+void FirstPersonCamera::mouse_callback(GLFWwindow* window, double xPos, double yPos)
+{
+	float xOffset = xPos - instance.lastX;
+	float yOffset = yPos - instance.lastY;
+	instance.lastX = xPos;
+	instance.lastY = yPos;
+
+	// Should we use delta time here
+	const float senstivity = 0.1f;
+	xOffset *= senstivity;
+	yOffset *= senstivity;
+
+	instance.yaw += xOffset;
+	instance.pitch += yOffset;
+
+	// So that we don't run into issues
+	// TODO: Try turning this off
+	if (instance.pitch > 89.0f)
+		instance.pitch = 89.0f;
+	if (instance.pitch < -89.0f)
+		instance.pitch = -89.0f;
+
+	float yaw = instance.yaw * (PI / 180.0f);
+	float pitch = instance.pitch * (PI / 180.0f);
+
+	Vector3 direction;
+	direction.x = cos(yaw) * cos(pitch);
+	direction.y = sin(pitch);
+	direction.z = sin(yaw) * cos(pitch);
+
+	instance.cameraFront = direction.Normalize();
+}

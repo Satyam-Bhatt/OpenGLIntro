@@ -31,10 +31,12 @@ private:
 	Vector3 cameraFront = Vector3(0, 0, 1); // Direction Vector
 	Vector3 cameraUp = Vector3(0, 1, 0);
 
-	Vector3 direction = Vector3(0, 0, 0);
+	float lastX = 400, lastY = 300, pitch = 0, 
+		// By default the camera points to the positive X axis and we need to rotate it by 90 degrees so that it points towards positive Z axis
+		yaw = 90;
 
 	bool mouseVisible = false;
 
-	static void mouse_callback(GLFWwindow* window, double xpos, double ypos);
+	static void mouse_callback(GLFWwindow* window, double xPos, double yPos);
 };
 
