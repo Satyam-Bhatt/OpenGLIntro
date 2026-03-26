@@ -110,12 +110,6 @@ void FirstPersonCamera::Start()
 
 void FirstPersonCamera::Update()
 {
-	// Worked on derivation of this
-	float yaw = 0, pitch = 0;
-	direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-	direction.y = sin(glm::radians(pitch));
-	direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-
 	// This is how we register a function to mouse events. When the mouse moves this function would also be called.
 	// The function needs to be static because glfw is a C library and expects a plain function with this signature
 	// -> void (*)(GLFWwindow*, double, double)
@@ -218,13 +212,20 @@ FirstPersonCamera* FirstPersonCamera::GetInstance()
 // We need to to register this callback fucntion with GLFW each time mouse moves
 void FirstPersonCamera::mouse_callback(GLFWwindow* window, double xPos, double yPos)
 {
+	if (instance.firstMouse)
+	{
+		instance.lastX = xPos;
+		instance.lastY = yPos;
+		instance.firstMouse = false;
+	}
+
 	float xOffset = xPos - instance.lastX;
 	float yOffset = yPos - instance.lastY;
 	instance.lastX = xPos;
 	instance.lastY = yPos;
 
 	// Should we use delta time here
-	const float senstivity = 0.1f;
+	const float senstivity = 50.0f * deltaTime;
 	xOffset *= senstivity;
 	yOffset *= senstivity;
 

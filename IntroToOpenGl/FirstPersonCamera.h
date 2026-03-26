@@ -35,7 +35,7 @@ private:
 		// By default the camera points to the positive X axis and we need to rotate it by 90 degrees so that it points towards positive Z axis
 		yaw = 90;
 
-	bool mouseVisible = false;
+	bool mouseVisible = false, firstMouse = true;
 
 	static void mouse_callback(GLFWwindow* window, double xPos, double yPos);
 };
