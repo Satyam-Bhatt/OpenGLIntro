@@ -115,6 +115,9 @@ void FirstPersonCamera::Update()
 	// -> void (*)(GLFWwindow*, double, double)
 	// If its non static then the signature looks different as it has hidden this parameter
 	glfwSetCursorPosCallback(window, mouse_callback);
+
+	// Scroll callback functions register
+	glfwSetScrollCallback(window, scroll_callback);
 }
 
 void FirstPersonCamera::ImGuiRender(GLFWwindow* window)
@@ -152,7 +155,7 @@ void FirstPersonCamera::Render()
 
 	view = Matrix4x4::CreateLookAtMatrix_LeftHanded(cameraPosition, cameraPosition + cameraFront, cameraUp);
 
-	projection = Matrix4x4::CreateProjectionMatrix_FOV_LeftHanded(45.0f * (PI / 180), (float)viewportData.width, (float)viewportData.height, 0.1f, 100.0f);
+	projection = Matrix4x4::CreateProjectionMatrix_FOV_LeftHanded(fov * (PI / 180), (float)viewportData.width, (float)viewportData.height, 0.1f, 100.0f);
 
 	shader.Use();
 	shader.SetMat4_Custom("model", model.m);
@@ -248,4 +251,13 @@ void FirstPersonCamera::mouse_callback(GLFWwindow* window, double xPos, double y
 	direction.z = sin(yaw) * cos(pitch);
 
 	instance.cameraFront = direction.Normalize();
+}
+
+void FirstPersonCamera::scroll_callback(GLFWwindow* window, double xOffset, double yOffset)
+{
+	instance.fov -= (float)yOffset;
+	if (instance.fov < 1.0f)
+		instance.fov = 1.0f;
+	if (instance.fov > 89.0f)
+		instance.fov = 89.0f;
 }
