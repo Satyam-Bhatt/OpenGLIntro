@@ -7,6 +7,7 @@ CameraMain* CameraMain::instance = nullptr;
 
 // Mein ye kyun kar rahi hoon 
 // Jo mein krra hu
+// Last formality
 
 CameraMain::CameraMain()
 {
