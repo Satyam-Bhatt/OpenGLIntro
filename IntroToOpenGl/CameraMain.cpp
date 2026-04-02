@@ -5,11 +5,6 @@
 
 CameraMain* CameraMain::instance = nullptr;
 
-// Mein ye kyun kar rahi hoon 
-// Jo mein krra hu
-// Last formality
-// ye tang kar raha hai
-// Shit not ending
 CameraMain::CameraMain()
 {
 	sceneNames[SubScene::GLMLookAtCamera] = "GLM LookAt Camera";
