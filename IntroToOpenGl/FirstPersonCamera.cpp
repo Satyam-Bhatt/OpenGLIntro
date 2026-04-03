@@ -161,9 +161,26 @@ void FirstPersonCamera::Render()
 	shader.SetMat4_Custom("model", model.m);
 	shader.SetMat4_Custom("view", view.m);
 	shader.SetMat4_Custom("projection", projection.m);
+	shader.SetBool("useColor", false);
 
 	glBindVertexArray(VAO);
 	glDrawArrays(GL_TRIANGLES, 0, 36);
+
+	model = Matrix4x4::Identity();
+
+	model = Matrix4x4::Translation(model, Vector3(1.0f, 0.0f, 0.0f));
+	model = Matrix4x4::Scale(model, Vector3(1.0f, 1.0f, 10.0f));
+
+	shader.Use();
+	shader.SetMat4_Custom("model", model.m);
+	shader.SetMat4_Custom("view", view.m);
+	shader.SetMat4_Custom("projection", projection.m);
+	shader.SetBool("useColor", true);
+
+	glBindVertexArray(VAO);
+	glDrawArrays(GL_TRIANGLES, 0, 36);
+
+
 }
 
 void FirstPersonCamera::HandleInput(GLFWwindow* window)
@@ -228,12 +245,13 @@ void FirstPersonCamera::mouse_callback(GLFWwindow* window, double xPos, double y
 	instance.lastY = yPos;
 
 	// Should we use delta time here
-	const float senstivity = 50.0f * deltaTime;
+	const float senstivity = 100.0f * deltaTime;
 	xOffset *= senstivity;
 	yOffset *= senstivity;
 
-	instance.yaw += xOffset;
-	instance.pitch += yOffset;
+	// Negate it as we are in left handed space
+	instance.yaw -= xOffset;
+	instance.pitch -= yOffset;
 
 	// So that we don't run into issues
 	// TODO: Try turning this off
@@ -258,6 +276,6 @@ void FirstPersonCamera::scroll_callback(GLFWwindow* window, double xOffset, doub
 	instance.fov -= (float)yOffset;
 	if (instance.fov < 1.0f)
 		instance.fov = 1.0f;
-	if (instance.fov > 89.0f)
-		instance.fov = 89.0f;
+	if (instance.fov > 45.0f)
+		instance.fov = 45.0f;
 }
