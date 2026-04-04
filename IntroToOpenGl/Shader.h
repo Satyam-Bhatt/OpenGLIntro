@@ -40,7 +40,7 @@ public:
     void SetFloat(const std::string& name, float value);
     void SetVec2(const std::string& name, float x, float y);
     void SetVec3(const std::string& name, Vector::Vector3 vector);
-    void SetVec4(const std::string& name, ImVec4 vector);
+    void SetVec4(const std::string& name, Vector::Vector4 vector);
     void SetTexture(const std::string& name, int slot);
     void SetMat4(const std::string& name, glm::mat4 matrix);
     void SetMat4_Custom(const std::string& name, float (&a)[4][4]);

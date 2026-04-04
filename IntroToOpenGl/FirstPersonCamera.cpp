@@ -149,7 +149,6 @@ void FirstPersonCamera::Render()
 	Matrix4x4 model, view, projection;
 
 	model = Matrix4x4::Identity();
-
 	model = Matrix4x4::Translation(model, Vector3(0.0f, 0.0f, 0.0f));
 	model = Matrix4x4::Scale(model, Vector3(1.0f, 1.0f, 1.0f));
 
@@ -166,25 +165,86 @@ void FirstPersonCamera::Render()
 	glBindVertexArray(VAO);
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 
+	// RIGHT
 	model = Matrix4x4::Identity();
-
-	model = Matrix4x4::Translation(model, Vector3(1.0f, 0.0f, 0.0f));
-	model = Matrix4x4::Scale(model, Vector3(1.0f, 1.0f, 10.0f));
+	model = Matrix4x4::Translation(model, Vector3(5.0f, 0.0f, 0.0f));
+	model = Matrix4x4::Scale(model, Vector3(1.0f, 5.0f, 20.0f));
 
 	shader.Use();
 	shader.SetMat4_Custom("model", model.m);
 	shader.SetMat4_Custom("view", view.m);
 	shader.SetMat4_Custom("projection", projection.m);
 	shader.SetBool("useColor", true);
+	shader.SetVec4("color", Vector4(1,1,0,1));
 
 	glBindVertexArray(VAO);
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 
+	// LEFT
+	model = Matrix4x4::Identity();
+	model = Matrix4x4::Translation(model, Vector3(-5.0f, 0.0f, 0.0f));
+	model = Matrix4x4::Scale(model, Vector3(1.0f, 5.0f, 20.0f));
 
+	shader.Use();
+	shader.SetMat4_Custom("model", model.m);
+	shader.SetMat4_Custom("view", view.m);
+	shader.SetMat4_Custom("projection", projection.m);
+	shader.SetBool("useColor", true);
+	shader.SetVec4("color", Vector4(1, 1, 0, 1));
+
+	glBindVertexArray(VAO);
+	glDrawArrays(GL_TRIANGLES, 0, 36);
+
+	// BACK
+	model = Matrix4x4::Identity();
+	model = Matrix4x4::Translation(model, Vector3(0.0f, 0.0f, -10.0f));
+	model = Matrix4x4::Scale(model, Vector3(9.0f, 5.0f, 1.0f));
+
+	shader.Use();
+	shader.SetMat4_Custom("model", model.m);
+	shader.SetMat4_Custom("view", view.m);
+	shader.SetMat4_Custom("projection", projection.m);
+	shader.SetBool("useColor", true);
+	shader.SetVec4("color", Vector4(1, 0, 0, 1));
+
+	glBindVertexArray(VAO);
+	glDrawArrays(GL_TRIANGLES, 0, 36);
+
+	// FRONT
+	model = Matrix4x4::Identity();
+	model = Matrix4x4::Translation(model, Vector3(0.0f, 0.0f, 10.0f));
+	model = Matrix4x4::Scale(model, Vector3(9.0f, 5.0f, 1.0f));
+
+	shader.Use();
+	shader.SetMat4_Custom("model", model.m);
+	shader.SetMat4_Custom("view", view.m);
+	shader.SetMat4_Custom("projection", projection.m);
+	shader.SetBool("useColor", true);
+	shader.SetVec4("color", Vector4(0, 1, 0, 1));
+
+	glBindVertexArray(VAO);
+	glDrawArrays(GL_TRIANGLES, 0, 36);
+
+	// DOWN
+	model = Matrix4x4::Identity();
+	model = Matrix4x4::Translation(model, Vector3(0.0f, -3.0f, 0.0f));
+	model = Matrix4x4::Scale(model, Vector3(10.0f, 1.0f, 20.0f));
+
+	shader.Use();
+	shader.SetMat4_Custom("model", model.m);
+	shader.SetMat4_Custom("view", view.m);
+	shader.SetMat4_Custom("projection", projection.m);
+	shader.SetBool("useColor", true);
+	shader.SetVec4("color", Vector4(0, 0, 1, 1));
+
+	glBindVertexArray(VAO);
+	glDrawArrays(GL_TRIANGLES, 0, 36);
 }
 
 void FirstPersonCamera::HandleInput(GLFWwindow* window)
 {
+	Vector3 storeCameraPosition = cameraPosition;
+
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 		cameraPosition += cameraSpeed * cameraFront * deltaTime;
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
@@ -197,6 +257,13 @@ void FirstPersonCamera::HandleInput(GLFWwindow* window)
 		cameraPosition += cameraSpeed * cameraUp * deltaTime;
 	if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
 		cameraPosition -= cameraSpeed * cameraUp * deltaTime;
+
+	if (cameraPosition.x > 4.0f || cameraPosition.x < -4.0f)
+		cameraPosition = storeCameraPosition;
+	if (cameraPosition.z > 9.0f || cameraPosition.z < -9.0f)
+		cameraPosition = storeCameraPosition;
+	if (cameraPosition.y < -2.0f)
+		cameraPosition = storeCameraPosition;
 
 	if (glfwGetKey(window, GLFW_KEY_M) == GLFW_PRESS)
 	{

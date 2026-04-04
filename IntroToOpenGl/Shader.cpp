@@ -168,7 +168,7 @@ void Shader::SetVec3(const std::string& name, Vector::Vector3 vector)
 	glUniform3f(GetUniformLocation(name), vector.x, vector.y, vector.z);
 }
 
-void Shader::SetVec4(const std::string& name, ImVec4 vector)
+void Shader::SetVec4(const std::string& name, Vector::Vector4 vector)
 {
 	glUniform4f(GetUniformLocation(name), vector.x, vector.y, vector.z, vector.w);
 }
