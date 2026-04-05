@@ -106,10 +106,9 @@ void FirstPersonCamera::Start()
 
 	// This ensures when the window is in focus our cursor is not visible
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-}
 
-void FirstPersonCamera::Update()
-{
+	// Both the functions below store the function pointer and in the while loop when we call glfwPollEvents() these functions are also called. So we need to only call these 2 once to register them
+
 	// This is how we register a function to mouse events. When the mouse moves this function would also be called.
 	// The function needs to be static because glfw is a C library and expects a plain function with this signature
 	// -> void (*)(GLFWwindow*, double, double)
@@ -118,6 +117,10 @@ void FirstPersonCamera::Update()
 
 	// Scroll callback functions register
 	glfwSetScrollCallback(window, scroll_callback);
+}
+
+void FirstPersonCamera::Update()
+{
 }
 
 void FirstPersonCamera::ImGuiRender(GLFWwindow* window)
@@ -132,11 +135,13 @@ void FirstPersonCamera::ImGuiRender(GLFWwindow* window)
 	);
 
 	ImGui::Begin("Level Specific", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
+	ImGui::TextWrapped("WASD to move || Q go up || E go down");
+	ImGui::TextWrapped("M to get/remove the mouse");
 
-	ImGui::DragFloat3("My Camera Position", &cameraPosition.x, 0.005f);
-	ImGui::DragFloat3("My Target Position", &cameraFront.x, 0.005f);
-	ImGui::DragFloat3("My Up Vector", &cameraUp.x, 0.005f);
+	ImGui::Dummy(ImVec2(0, 10));
+	ImGui::TextWrapped("==============");
 	ImGui::DragFloat("Camera Speed", &cameraSpeed, 0.005f);
+	ImGui::DragFloat("Senstivity", &senstivity, 0.1f);
 
 	ImGui::End();
 }
@@ -175,7 +180,7 @@ void FirstPersonCamera::Render()
 	shader.SetMat4_Custom("view", view.m);
 	shader.SetMat4_Custom("projection", projection.m);
 	shader.SetBool("useColor", true);
-	shader.SetVec4("color", Vector4(1,1,0,1));
+	shader.SetVec4("color", Vector4(1, 1, 0, 1));
 
 	glBindVertexArray(VAO);
 	glDrawArrays(GL_TRIANGLES, 0, 36);
@@ -243,13 +248,28 @@ void FirstPersonCamera::Render()
 
 void FirstPersonCamera::HandleInput(GLFWwindow* window)
 {
+	if (glfwGetKey(window, GLFW_KEY_M) == GLFW_PRESS)
+	{
+		if (mouseVisible)
+		{
+			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+		}
+		else
+		{
+			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		}
+		mouseVisible = !mouseVisible;
+	}
+
+	if (mouseVisible) return;
+
 	Vector3 storeCameraPosition = cameraPosition;
 
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 		cameraPosition += cameraSpeed * cameraFront * deltaTime;
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
 		cameraPosition -= cameraSpeed * cameraFront * deltaTime;
-	if(glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
 		cameraPosition -= Vector3::Cross(cameraUp, cameraFront).Normalize() * cameraSpeed * deltaTime; // To get the right vector. Right vector can change as camera front changes 
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
 		cameraPosition += Vector3::Cross(cameraUp, cameraFront).Normalize() * cameraSpeed * deltaTime; // To get the right vector. Right vector can change as camera front changes
@@ -264,19 +284,6 @@ void FirstPersonCamera::HandleInput(GLFWwindow* window)
 		cameraPosition = storeCameraPosition;
 	if (cameraPosition.y < -2.0f)
 		cameraPosition = storeCameraPosition;
-
-	if (glfwGetKey(window, GLFW_KEY_M) == GLFW_PRESS)
-	{
-		if (mouseVisible)
-		{
-			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-		}
-		else
-		{
-			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-		}
-		mouseVisible = !mouseVisible;
-	}
 }
 
 void FirstPersonCamera::Exit()
@@ -299,6 +306,8 @@ FirstPersonCamera* FirstPersonCamera::GetInstance()
 // We need to to register this callback fucntion with GLFW each time mouse moves
 void FirstPersonCamera::mouse_callback(GLFWwindow* window, double xPos, double yPos)
 {
+	if (instance.mouseVisible) return;
+
 	if (instance.firstMouse)
 	{
 		instance.lastX = xPos;
@@ -311,10 +320,9 @@ void FirstPersonCamera::mouse_callback(GLFWwindow* window, double xPos, double y
 	instance.lastX = xPos;
 	instance.lastY = yPos;
 
-	// Should we use delta time here
-	const float senstivity = 100.0f * deltaTime;
-	xOffset *= senstivity;
-	yOffset *= senstivity;
+	// We don't use delta time as mouse input is frame rate independent. 
+	xOffset *= instance.senstivity;
+	yOffset *= instance.senstivity;
 
 	// Negate it as we are in left handed space
 	instance.yaw -= xOffset;
@@ -340,6 +348,8 @@ void FirstPersonCamera::mouse_callback(GLFWwindow* window, double xPos, double y
 
 void FirstPersonCamera::scroll_callback(GLFWwindow* window, double xOffset, double yOffset)
 {
+	if (instance.mouseVisible) return;
+
 	instance.fov -= (float)yOffset;
 	if (instance.fov < 1.0f)
 		instance.fov = 1.0f;

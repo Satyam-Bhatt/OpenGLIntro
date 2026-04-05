@@ -35,7 +35,7 @@ private:
 		// By default the camera points to the positive X axis and we need to rotate it by 90 degrees so that it points towards positive Z axis
 		yaw = 90;
 
-	float fov = 45.0f;
+	float fov = 45.0f, senstivity = 0.1f;
 
 	bool mouseVisible = false, firstMouse = true;
 
