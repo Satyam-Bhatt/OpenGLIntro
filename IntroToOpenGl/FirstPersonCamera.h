@@ -37,7 +37,7 @@ private:
 
 	float fov = 45.0f, senstivity = 0.1f;
 
-	bool mouseVisible = false, firstMouse = true;
+	bool mouseVisible = false, firstMouse = true, mKeyHeld = false;
 
 	static void mouse_callback(GLFWwindow* window, double xPos, double yPos);
 	static void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);

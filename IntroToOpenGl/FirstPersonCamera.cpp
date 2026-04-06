@@ -120,8 +120,7 @@ void FirstPersonCamera::Start()
 }
 
 void FirstPersonCamera::Update()
-{
-}
+{}
 
 void FirstPersonCamera::ImGuiRender(GLFWwindow* window)
 {
@@ -141,7 +140,7 @@ void FirstPersonCamera::ImGuiRender(GLFWwindow* window)
 	ImGui::Dummy(ImVec2(0, 10));
 	ImGui::TextWrapped("==============");
 	ImGui::DragFloat("Camera Speed", &cameraSpeed, 0.005f);
-	ImGui::DragFloat("Senstivity", &senstivity, 0.1f);
+	ImGui::DragFloat("Senstivity", &senstivity, 0.005f);
 
 	ImGui::End();
 }
@@ -248,18 +247,25 @@ void FirstPersonCamera::Render()
 
 void FirstPersonCamera::HandleInput(GLFWwindow* window)
 {
-	if (glfwGetKey(window, GLFW_KEY_M) == GLFW_PRESS)
+	// Even if pressing once we can get multiple press calls, this is why we have the mKeyHelp bool to help us know that we take the input only once
+	if (glfwGetKey(window, GLFW_KEY_M) == GLFW_PRESS && !mKeyHeld)
 	{
+		mKeyHeld = true;
+		mouseVisible = !mouseVisible;
+
 		if (mouseVisible)
 		{
 			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+			firstMouse = true; // Reset so camera doesn't snap when re-entering
 		}
 		else
 		{
 			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 		}
-		mouseVisible = !mouseVisible;
 	}
+
+	if (glfwGetKey(window, GLFW_KEY_M) == GLFW_RELEASE)
+		mKeyHeld = false;
 
 	if (mouseVisible) return;
 
@@ -306,6 +312,10 @@ FirstPersonCamera* FirstPersonCamera::GetInstance()
 // We need to to register this callback fucntion with GLFW each time mouse moves
 void FirstPersonCamera::mouse_callback(GLFWwindow* window, double xPos, double yPos)
 {
+	// glfwSetCursorPosCallback only allows one callback. Since ours overwrites ImGui's,
+	// we manually forward the event so ImGui still receives mouse position data.
+	ImGui_ImplGlfw_CursorPosCallback(window, xPos, yPos);
+
 	if (instance.mouseVisible) return;
 
 	if (instance.firstMouse)
@@ -348,6 +358,10 @@ void FirstPersonCamera::mouse_callback(GLFWwindow* window, double xPos, double y
 
 void FirstPersonCamera::scroll_callback(GLFWwindow* window, double xOffset, double yOffset)
 {
+	// glfwSetCursorPosCallback only allows one callback. Since ours overwrites ImGui's,
+	// we manually forward the event so ImGui still receives mouse position data.
+	ImGui_ImplGlfw_ScrollCallback(window, xOffset, yOffset);
+
 	if (instance.mouseVisible) return;
 
 	instance.fov -= (float)yOffset;
