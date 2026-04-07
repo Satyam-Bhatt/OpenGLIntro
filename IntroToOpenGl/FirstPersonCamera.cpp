@@ -134,8 +134,9 @@ void FirstPersonCamera::ImGuiRender(GLFWwindow* window)
 	);
 
 	ImGui::Begin("Level Specific", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
-	ImGui::TextWrapped("WASD to move || Q go up || E go down");
+	ImGui::TextWrapped("WASD to move || E go up || Q go down");
 	ImGui::TextWrapped("M to get/remove the mouse");
+	ImGui::TextWrapped("Scroll Wheel to Zoom In/Out");
 
 	ImGui::Dummy(ImVec2(0, 10));
 	ImGui::TextWrapped("==============");
@@ -169,7 +170,7 @@ void FirstPersonCamera::Render()
 	glBindVertexArray(VAO);
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 
-	// RIGHT
+	// RIGHT WALL
 	model = Matrix4x4::Identity();
 	model = Matrix4x4::Translation(model, Vector3(5.0f, 0.0f, 0.0f));
 	model = Matrix4x4::Scale(model, Vector3(1.0f, 5.0f, 20.0f));
@@ -184,7 +185,7 @@ void FirstPersonCamera::Render()
 	glBindVertexArray(VAO);
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 
-	// LEFT
+	// LEFT WALL
 	model = Matrix4x4::Identity();
 	model = Matrix4x4::Translation(model, Vector3(-5.0f, 0.0f, 0.0f));
 	model = Matrix4x4::Scale(model, Vector3(1.0f, 5.0f, 20.0f));
@@ -199,7 +200,7 @@ void FirstPersonCamera::Render()
 	glBindVertexArray(VAO);
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 
-	// BACK
+	// BACK WALL
 	model = Matrix4x4::Identity();
 	model = Matrix4x4::Translation(model, Vector3(0.0f, 0.0f, -10.0f));
 	model = Matrix4x4::Scale(model, Vector3(9.0f, 5.0f, 1.0f));
@@ -214,7 +215,7 @@ void FirstPersonCamera::Render()
 	glBindVertexArray(VAO);
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 
-	// FRONT
+	// FRONT WALL
 	model = Matrix4x4::Identity();
 	model = Matrix4x4::Translation(model, Vector3(0.0f, 0.0f, 10.0f));
 	model = Matrix4x4::Scale(model, Vector3(9.0f, 5.0f, 1.0f));
@@ -229,7 +230,7 @@ void FirstPersonCamera::Render()
 	glBindVertexArray(VAO);
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 
-	// DOWN
+	// DOWN WALL
 	model = Matrix4x4::Identity();
 	model = Matrix4x4::Translation(model, Vector3(0.0f, -3.0f, 0.0f));
 	model = Matrix4x4::Scale(model, Vector3(10.0f, 1.0f, 20.0f));
@@ -284,6 +285,7 @@ void FirstPersonCamera::HandleInput(GLFWwindow* window)
 	if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
 		cameraPosition -= cameraSpeed * cameraUp * deltaTime;
 
+	// To restrict the movement into the walls
 	if (cameraPosition.x > 4.0f || cameraPosition.x < -4.0f)
 		cameraPosition = storeCameraPosition;
 	if (cameraPosition.z > 9.0f || cameraPosition.z < -9.0f)
@@ -298,6 +300,20 @@ void FirstPersonCamera::Exit()
 	if (VBO != 0) glDeleteVertexArrays(1, &VBO);
 	if (texture != 0) glDeleteTextures(1, &texture);
 	if (shader.ID != 0) glDeleteProgram(shader.ID);
+
+	cameraPosition = Vector3(0, 0, -7);
+	cameraFront = Vector3(0, 0, 1);
+	cameraUp = Vector3(0, 1, 0);
+	lastX = 400;
+	lastY = 300;
+	pitch = 0;
+	yaw = 90;
+	fov = 45.0f;
+	senstivity = 0.1f;
+	cameraSpeed = 5;
+	mouseVisible = true;
+	firstMouse = true;
+	mKeyHeld = false;
 
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 }
@@ -338,8 +354,7 @@ void FirstPersonCamera::mouse_callback(GLFWwindow* window, double xPos, double y
 	instance.yaw -= xOffset;
 	instance.pitch -= yOffset;
 
-	// So that we don't run into issues
-	// TODO: Try turning this off
+	// So that we don't run into issues regarding gimbal lock
 	if (instance.pitch > 89.0f)
 		instance.pitch = 89.0f;
 	if (instance.pitch < -89.0f)
@@ -348,6 +363,20 @@ void FirstPersonCamera::mouse_callback(GLFWwindow* window, double xPos, double y
 	float yaw = instance.yaw * (PI / 180.0f);
 	float pitch = instance.pitch * (PI / 180.0f);
 
+	// There are these 2 triangles. 
+	// Triangle 1 has angle pitch and respective projection on Y axis as sin(pitch) and projection on XZ plane as cos(pitch)
+	// Triangle 2 has angle yaw with X axis and has the hypotenuse cos(pitch) (1 unit vector) created by the projection of pitch on XZ plane. 
+	// Angle is yaw hence giving us cos(yaw) = base/cos(pitch) => base(X-Axis) = cos(yaw) * cos(pitch)
+	// To get the perpendicular sin(yaw) = perpendicular/cos(pitch) => perpendicular(Z-Axis) = sin(yaw) * cos(pitch)
+	// Triangle 1 — in the vertical plane (Y vs XZ):
+	//   Hypotenuse = 1 (unit vector)
+	//   Y component (up)           = sin(pitch)
+	//   XZ plane projection (flat) = cos(pitch)
+	//
+	// Triangle 2 — in the horizontal XZ plane:
+	//   Hypotenuse = cos(pitch)  (the flat projection from Triangle 1)
+	//   X component (right)  = cos(yaw) * cos(pitch)
+	//   Z component (forward) = sin(yaw) * cos(pitch)
 	Vector3 direction;
 	direction.x = cos(yaw) * cos(pitch);
 	direction.y = sin(pitch);
