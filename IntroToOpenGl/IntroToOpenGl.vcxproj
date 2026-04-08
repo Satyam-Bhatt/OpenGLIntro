@@ -195,6 +195,7 @@
     <ClCompile Include="ViewMatrix.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="FirstPersonCamera.h" />
     <ClInclude Include="GLMLookAtCamera.h" />
     <ClInclude Include="CameraMain.h" />
