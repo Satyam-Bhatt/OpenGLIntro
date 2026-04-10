@@ -22,4 +22,9 @@ const float SPEED = 5;
 const float SENSTIVITY = 0.1f;
 const float ZOOM = 45.0f;
 
+class Camera
+{
+public:
+};
+
 #endif
