@@ -109,6 +109,8 @@ void FirstPersonCamera::Start()
 
 	// Both the functions below store the function pointer and in the while loop when we call glfwPollEvents() these functions are also called. So we need to only call these 2 once to register them
 
+	// This is also dirty as having it in a class is not good. Its better to have these variables global. This is my personal opinion that anyone should have access to these like delta time. Moreover a camera class that can be intialized and it just handles for all the other scenes in the game is better.
+
 	// This is how we register a function to mouse events. When the mouse moves this function would also be called.
 	// The function needs to be static because glfw is a C library and expects a plain function with this signature
 	// -> void (*)(GLFWwindow*, double, double)
