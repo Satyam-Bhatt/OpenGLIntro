@@ -6,6 +6,9 @@
 #include "Vector.h"
 #include "Matrix.h"
 
+using namespace Matrix;
+using namespace Vector;
+
 // Defines several possible options for camera movement.
 enum Camera_Movement {
 	FORWARD,
@@ -25,6 +28,7 @@ const float ZOOM = 45.0f;
 class Camera
 {
 public:
+	Vector3 CameraPosition;
 };
 
 #endif
