@@ -28,7 +28,19 @@ const float ZOOM = 45.0f;
 class Camera
 {
 public:
+	//Camera
 	Vector3 CameraPosition;
+	Vector3 CameraFront;
+	Vector3 CameraUp;
+	Vector3 CameraRight;
+	Vector3 WorldUp;
+	// Euler Angels
+	float Yaw;
+	float Pitch;
+	// Camera options
+	float MovemenetSpeed;
+	float MouseSenstivity;
+	float Zoom;
 };
 
 #endif
