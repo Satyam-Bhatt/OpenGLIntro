@@ -41,6 +41,27 @@ public:
 	float MovemenetSpeed;
 	float MouseSenstivity;
 	float Zoom;
+
+	// Constructor
+	Camera(Vector3 cameraPostion = Vector3(0, 0, 0), Vector3 worldUp = Vector3(0, 1, 0), float yaw = YAW, float pitch = PITCH)
+	{
+		CameraFront = Vector3(0, 0, 1);
+		MovemenetSpeed = SPEED;
+		MouseSenstivity = SENSTIVITY;
+		Zoom = ZOOM;
+
+		CameraPosition = cameraPostion;
+		WorldUp = worldUp;
+		Yaw = yaw;
+		Pitch = pitch;
+	}
+
+private:
+	// calculate the fron vector from the Camera's (updated) Euler Angles
+	void UpdateCameraVectors()
+	{
+
+	}
 };
 
 #endif
