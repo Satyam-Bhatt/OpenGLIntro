@@ -5,6 +5,7 @@
 #include <glm.hpp>
 #include "Vector.h"
 #include "Matrix.h"
+#include "constants.h"
 
 using namespace Matrix;
 using namespace Vector;
@@ -56,11 +57,48 @@ public:
 		Pitch = pitch;
 	}
 
+	// Returns the view matrix calculated using euler angles and the look at matrix
+	Matrix4x4 GetViewMatrix()
+	{
+		return Matrix4x4::CreateLookAtMatrix_LeftHanded(CameraPosition, CameraPosition + CameraFront, CameraUp);
+	}
+
+	// Process Input received from any keyboard like input system. Accepts Input parameter in the form of camera defined ENUM
+	void ProcessKeyboard(Camera_Movement direction)
+	{
+		float velocity = MovemenetSpeed * deltaTime;
+		if (direction == FORWARD)
+			CameraPosition += CameraFront * velocity;
+		if (direction == BACKWARD)
+			CameraPosition -= CameraFront * velocity;
+		if (direction == LEFT)
+			CameraPosition -= CameraRight * velocity;
+		if (direction == RIGHT)
+			CameraPosition += CameraRight * velocity;
+	}
+
+	void ProcessMouseMovement(float xoffset, float yoffset)
+	{
+		
+	}
+
 private:
 	// calculate the fron vector from the Camera's (updated) Euler Angles
 	void UpdateCameraVectors()
 	{
+		float yaw = Yaw * (PI / 180.0f);
+		float pitch = Pitch * (PI / 180.0f);
 
+		// New front vector
+		Vector3 direction;
+		direction.x = cos(yaw) * cos(pitch);
+		direction.y = sin(pitch);
+		direction.z = sin(yaw) * cos(pitch);
+		CameraFront = direction;
+
+		// Recalculate Camera Right and Camera Up vector
+		CameraRight = Vector3::Cross(WorldUp, CameraFront).Normalize();
+		CameraUp = Vector3::Cross(CameraFront, CameraRight).Normalize();
 	}
 };
 
