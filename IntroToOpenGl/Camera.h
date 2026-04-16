@@ -55,6 +55,8 @@ public:
 		WorldUp = worldUp;
 		Yaw = yaw;
 		Pitch = pitch;
+
+		UpdateCameraVectors();
 	}
 
 	// Returns the view matrix calculated using euler angles and the look at matrix
@@ -77,9 +79,31 @@ public:
 			CameraPosition += CameraRight * velocity;
 	}
 
+	// Process input received from a mouse input system. Expects the offset value in both the x and y direction
 	void ProcessMouseMovement(float xoffset, float yoffset)
 	{
-		
+		xoffset *= MouseSenstivity;
+		yoffset *= MouseSenstivity;
+
+		Yaw += xoffset;
+		Pitch += yoffset;
+
+		if (Pitch > 89.0f)
+			Pitch = 89.0f;
+		if (Pitch < -89.0f)
+			Pitch = -89.0f;
+
+		UpdateCameraVectors();
+	}
+
+	// processes input received from a mouse scroll-wheel event. Only requires input on the vertical wheel-axis
+	void ProcessMouseScroll(float yoffset)
+	{
+		Zoom -= yoffset;
+		if (Zoom < 1.0f)
+			Zoom = 1.0f;
+		if (Zoom > 45.0f)
+			Zoom = 45.0f;
 	}
 
 private:
