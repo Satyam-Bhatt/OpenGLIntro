@@ -14,8 +14,17 @@ struct ViewportData {
     int height;
 };
 
+struct MouseValues{
+    float lastMouseX;
+    float lastMouseY;
+    float mouseXOffset;
+    float mouseYOffset;
+    bool firstMouse;
+};
+
 // Don't initialize extern variables in a header file
 extern ViewportData viewportData;
+extern MouseValues mouseValues;
 extern GLFWwindow* window;
 extern float deltaTime;
 

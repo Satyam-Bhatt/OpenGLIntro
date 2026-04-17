@@ -50,6 +50,27 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 	viewportData.width = viewportWidth;
 }
 
+void mouse_callback(GLFWwindow* window, double xPos, double yPos)
+{
+	if(mouseValues.firstMouse)
+		std::cout << "X-Pos: " << xPos << " || Y Pos: " << yPos << std::endl;
+
+	if (mouseValues.firstMouse)
+	{
+		mouseValues.lastMouseX = xPos;
+		mouseValues.lastMouseY = yPos;
+		mouseValues.firstMouse = false;
+	}
+
+	float xOffset = xPos - mouseValues.lastMouseX;
+	float yOffset = yPos - mouseValues.lastMouseY;
+	mouseValues.lastMouseX = xPos;
+	mouseValues.lastMouseY = yPos;
+
+	mouseValues.mouseXOffset = xOffset;
+	mouseValues.mouseYOffset = yOffset;
+}
+
 bool Initialize()
 {
 	bool success = true;
@@ -91,6 +112,8 @@ bool Initialize()
 
 	//Set the function to be called when the window is resized. Bind it once and GLFW will call it whenever the window is resized
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+
+	glfwSetCursorPosCallback(window, mouse_callback);
 
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
