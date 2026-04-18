@@ -156,6 +156,7 @@ void Shaders::ChangeScene()
 	auto it = sceneFactories.find(current_SubScene);
 	if (it != sceneFactories.end())//Checks if we found something
 	{
+		mouseValues.firstMouse = true;
 		SetNextState(it->second());//If we found something then get the second value as the first value is the key and second value is the value
 	}
 }
