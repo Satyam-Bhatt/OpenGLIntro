@@ -152,6 +152,7 @@ void CameraMain::ChangeScene()
 	auto it = sceneFactories.find(current_SubScene);
 	if (it != sceneFactories.end())
 	{
+		mouseValues.firstMouse = true;
 		SetNextState(it->second());
 	}
 }
