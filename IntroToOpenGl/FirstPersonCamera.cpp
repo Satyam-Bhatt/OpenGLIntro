@@ -348,6 +348,10 @@ void FirstPersonCamera::mouse_callback(GLFWwindow* window, double xPos, double y
 	instance.lastX = xPos;
 	instance.lastY = yPos;
 
+	// TODO: Test and remove the entire callback thing
+	xOffset = mouseValues.mouseXOffset;
+	yOffset = mouseValues.mouseYOffset;
+
 	// We don't use delta time as mouse input is frame rate independent. 
 	xOffset *= instance.senstivity;
 	yOffset *= instance.senstivity;
