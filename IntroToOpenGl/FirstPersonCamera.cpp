@@ -348,7 +348,7 @@ void FirstPersonCamera::mouse_callback(GLFWwindow* window, double xPos, double y
 	instance.lastX = xPos;
 	instance.lastY = yPos;
 
-	// TODO: Test and remove the entire callback thing
+	// TODO: Test and remove the entire callback thing and test
 	xOffset = mouseValues.mouseXOffset;
 	yOffset = mouseValues.mouseYOffset;
 
