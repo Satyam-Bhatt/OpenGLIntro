@@ -144,6 +144,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="FirstPersonCamera.cpp" />
+    <ClCompile Include="GameState.cpp" />
     <ClCompile Include="GLMLookAtCamera.cpp" />
     <ClCompile Include="CameraMain.cpp" />
     <ClCompile Include="MyLookAtMatrix.cpp" />

@@ -30,5 +30,6 @@ public:
 	virtual void ImGuiRender(GLFWwindow* window) = 0;
 	virtual void Render() = 0;
 	virtual void HandleInput(GLFWwindow* window) = 0;
+	virtual void OnMouseMove(float xOffset, float yOffset);
 	virtual void Exit() = 0;
 };

@@ -115,14 +115,16 @@ void FirstPersonCamera::Start()
 	// The function needs to be static because glfw is a C library and expects a plain function with this signature
 	// -> void (*)(GLFWwindow*, double, double)
 	// If its non static then the signature looks different as it has hidden this parameter
-	glfwSetCursorPosCallback(window, mouse_callback);
+	//glfwSetCursorPosCallback(window, mouse_callback);
 
 	// Scroll callback functions register
 	glfwSetScrollCallback(window, scroll_callback);
 }
 
 void FirstPersonCamera::Update()
-{}
+{
+
+}
 
 void FirstPersonCamera::ImGuiRender(GLFWwindow* window)
 {

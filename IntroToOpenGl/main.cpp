@@ -50,9 +50,12 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 	viewportData.width = viewportWidth;
 }
 
+// GLFW listens to mouse movement events using this function
+// xpos and ypos are the current mouse position
+// We need to to register this callback fucntion with GLFW each time mouse moves
 void mouse_callback(GLFWwindow* window, double xPos, double yPos)
 {
-	if(mouseValues.firstMouse)
+	if (mouseValues.firstMouse)
 		std::cout << "X-Pos: " << xPos << " || Y Pos: " << yPos << std::endl;
 
 	if (mouseValues.firstMouse)
@@ -69,6 +72,8 @@ void mouse_callback(GLFWwindow* window, double xPos, double yPos)
 
 	mouseValues.mouseXOffset = xOffset;
 	mouseValues.mouseYOffset = yOffset;
+
+	currentState->OnMouseMove(xOffset, yOffset);
 }
 
 bool Initialize()
@@ -113,6 +118,10 @@ bool Initialize()
 	//Set the function to be called when the window is resized. Bind it once and GLFW will call it whenever the window is resized
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
+	// This is how we register a function to mouse events. When the mouse moves this function would also be called.
+	// The function needs to be static because glfw is a C library and expects a plain function with this signature
+	// -> void (*)(GLFWwindow*, double, double)
+	// If its non static then the signature looks different as it has hidden this parameter
 	glfwSetCursorPosCallback(window, mouse_callback);
 
 	IMGUI_CHECKVERSION();
@@ -215,7 +224,7 @@ int main()
 		//State Using function
 		// Clear the color buffer at the end of the frame. We need to clear other buffers too if we have them like depth buffer or stencil buffer.
 		// Clear the depth buffer at the end of the frame as we update the depth buffer every frame
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		//Event Handling mostly for Input.
 		glfwPollEvents();
