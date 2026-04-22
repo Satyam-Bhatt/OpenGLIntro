@@ -13,6 +13,8 @@ public:
 	void ImGuiRender(GLFWwindow* window) override;
 	void Render() override;
 	void HandleInput(GLFWwindow* window) override;
+	void OnMouseMove(float xOffset, float yOffset) override;
+	void OnScroll(float xOffset, float yOffset) override;
 	void Exit() override;
 
 	static CameraMain* GetInstance();

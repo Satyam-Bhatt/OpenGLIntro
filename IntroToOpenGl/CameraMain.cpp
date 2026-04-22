@@ -98,6 +98,20 @@ void CameraMain::HandleInput(GLFWwindow* window)
 	}
 }
 
+void CameraMain::OnMouseMove(float xOffset, float yOffset)
+{
+	if (currentProject != nullptr) {
+		currentProject->OnMouseMove(xOffset, yOffset);
+	}
+}
+
+void CameraMain::OnScroll(float xOffset, float yOffset)
+{
+	if (currentProject != nullptr) {
+		currentProject->OnScroll(xOffset, yOffset);
+	}
+}
+
 void CameraMain::Exit()
 {
 	if(currentProject != nullptr)

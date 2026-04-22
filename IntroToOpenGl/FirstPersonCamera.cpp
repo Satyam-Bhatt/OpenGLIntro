@@ -106,19 +106,6 @@ void FirstPersonCamera::Start()
 
 	// This ensures when the window is in focus our cursor is not visible
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-
-	// Both the functions below store the function pointer and in the while loop when we call glfwPollEvents() these functions are also called. So we need to only call these 2 once to register them
-
-	// This is also dirty as having it in a class is not good. Its better to have these variables global. This is my personal opinion that anyone should have access to these like delta time. Moreover a camera class that can be intialized and it just handles for all the other scenes in the game is better.
-
-	// This is how we register a function to mouse events. When the mouse moves this function would also be called.
-	// The function needs to be static because glfw is a C library and expects a plain function with this signature
-	// -> void (*)(GLFWwindow*, double, double)
-	// If its non static then the signature looks different as it has hidden this parameter
-	//glfwSetCursorPosCallback(window, mouse_callback);
-
-	// Scroll callback functions register
-	glfwSetScrollCallback(window, scroll_callback);
 }
 
 void FirstPersonCamera::Update()
@@ -298,6 +285,65 @@ void FirstPersonCamera::HandleInput(GLFWwindow* window)
 		cameraPosition = storeCameraPosition;
 }
 
+void FirstPersonCamera::OnMouseMove(float xOffset, float yOffset)
+{
+	if (mouseVisible) return;
+
+	// We don't use delta time as mouse input is frame rate independent. 
+	xOffset *= senstivity;
+	yOffset *= senstivity;
+
+	// Negate it as we are in left handed space
+	yaw -= xOffset;
+	pitch -= yOffset;
+
+	// So that we don't run into issues regarding gimbal lock
+	if (pitch > 89.0f)
+		pitch = 89.0f;
+	if (pitch < -89.0f)
+		pitch = -89.0f;
+
+	float yaw_Rad = yaw * (PI / 180.0f);
+	float pitch_Rad = pitch * (PI / 180.0f);
+
+	// There are these 2 triangles. 
+	// Triangle 1 has angle pitch and respective projection on Y axis as sin(pitch) and projection on XZ plane as cos(pitch)
+	// Triangle 2 has angle yaw with X axis and has the hypotenuse cos(pitch) (1 unit vector) created by the projection of pitch on XZ plane. 
+	// Angle is yaw hence giving us cos(yaw) = base/cos(pitch) => base(X-Axis) = cos(yaw) * cos(pitch)
+	// To get the perpendicular sin(yaw) = perpendicular/cos(pitch) => perpendicular(Z-Axis) = sin(yaw) * cos(pitch)
+	// Triangle 1 — in the vertical plane (Y vs XZ):
+	//   Hypotenuse = 1 (unit vector)
+	//   Y component (up)           = sin(pitch)
+	//   XZ plane projection (flat) = cos(pitch)
+	//
+	// Triangle 2 — in the horizontal XZ plane:
+	//   Hypotenuse = cos(pitch)  (the flat projection from Triangle 1)
+	//   X component (right)  = cos(yaw) * cos(pitch)
+	//   Z component (forward) = sin(yaw) * cos(pitch)
+	Vector3 direction;
+	direction.x = cos(yaw_Rad) * cos(pitch_Rad);
+	direction.y = sin(pitch_Rad);
+	direction.z = sin(yaw_Rad) * cos(pitch_Rad);
+
+	cameraFront = direction.Normalize();
+
+	// If you want to move up as per the rotation then keep this
+// But if you want to directly go up and down regardless of the rotation the comment it 
+	Vector3 cameraRight = Vector3::Cross(Vector3(0, 1, 0), instance.cameraFront).Normalize();
+	instance.cameraUp = Vector3::Cross(instance.cameraFront, cameraRight).Normalize();
+}
+
+void FirstPersonCamera::OnScroll(float xOffset, float yOffset)
+{
+	if (mouseVisible) return;
+
+	fov -= (float)yOffset;
+	if (fov < 1.0f)
+		fov = 1.0f;
+	if (fov > 45.0f)
+		fov = 45.0f;
+}
+
 void FirstPersonCamera::Exit()
 {
 	if (VAO != 0) glDeleteVertexArrays(1, &VAO);
@@ -325,90 +371,4 @@ void FirstPersonCamera::Exit()
 FirstPersonCamera* FirstPersonCamera::GetInstance()
 {
 	return &instance;
-}
-
-// GLFW listens to mouse movement events using this function
-// xpos and ypos are the current mouse position
-// We need to to register this callback fucntion with GLFW each time mouse moves
-void FirstPersonCamera::mouse_callback(GLFWwindow* window, double xPos, double yPos)
-{
-	// glfwSetCursorPosCallback only allows one callback. Since ours overwrites ImGui's,
-	// we manually forward the event so ImGui still receives mouse position data.
-	ImGui_ImplGlfw_CursorPosCallback(window, xPos, yPos);
-
-	if (instance.mouseVisible) return;
-
-	if (instance.firstMouse)
-	{
-		instance.lastX = xPos;
-		instance.lastY = yPos;
-		instance.firstMouse = false;
-	}
-
-	float xOffset = xPos - instance.lastX;
-	float yOffset = yPos - instance.lastY;
-	instance.lastX = xPos;
-	instance.lastY = yPos;
-
-	// TODO: Test and remove the entire callback thing and test
-	xOffset = mouseValues.mouseXOffset;
-	yOffset = mouseValues.mouseYOffset;
-
-	// We don't use delta time as mouse input is frame rate independent. 
-	xOffset *= instance.senstivity;
-	yOffset *= instance.senstivity;
-
-	// Negate it as we are in left handed space
-	instance.yaw -= xOffset;
-	instance.pitch -= yOffset;
-
-	// So that we don't run into issues regarding gimbal lock
-	if (instance.pitch > 89.0f)
-		instance.pitch = 89.0f;
-	if (instance.pitch < -89.0f)
-		instance.pitch = -89.0f;
-
-	float yaw = instance.yaw * (PI / 180.0f);
-	float pitch = instance.pitch * (PI / 180.0f);
-
-	// There are these 2 triangles. 
-	// Triangle 1 has angle pitch and respective projection on Y axis as sin(pitch) and projection on XZ plane as cos(pitch)
-	// Triangle 2 has angle yaw with X axis and has the hypotenuse cos(pitch) (1 unit vector) created by the projection of pitch on XZ plane. 
-	// Angle is yaw hence giving us cos(yaw) = base/cos(pitch) => base(X-Axis) = cos(yaw) * cos(pitch)
-	// To get the perpendicular sin(yaw) = perpendicular/cos(pitch) => perpendicular(Z-Axis) = sin(yaw) * cos(pitch)
-	// Triangle 1 — in the vertical plane (Y vs XZ):
-	//   Hypotenuse = 1 (unit vector)
-	//   Y component (up)           = sin(pitch)
-	//   XZ plane projection (flat) = cos(pitch)
-	//
-	// Triangle 2 — in the horizontal XZ plane:
-	//   Hypotenuse = cos(pitch)  (the flat projection from Triangle 1)
-	//   X component (right)  = cos(yaw) * cos(pitch)
-	//   Z component (forward) = sin(yaw) * cos(pitch)
-	Vector3 direction;
-	direction.x = cos(yaw) * cos(pitch);
-	direction.y = sin(pitch);
-	direction.z = sin(yaw) * cos(pitch);
-
-	instance.cameraFront = direction.Normalize();
-
-	// If you want to move up as per the rotation then keep this
-	// But if you want to directly go up and down regardless of the rotation the comment it 
-	Vector3 cameraRight = Vector3::Cross(Vector3(0,1,0), instance.cameraFront).Normalize();
-	instance.cameraUp = Vector3::Cross(instance.cameraFront, cameraRight).Normalize();
-}
-
-void FirstPersonCamera::scroll_callback(GLFWwindow* window, double xOffset, double yOffset)
-{
-	// glfwSetCursorPosCallback only allows one callback. Since ours overwrites ImGui's,
-	// we manually forward the event so ImGui still receives mouse position data.
-	ImGui_ImplGlfw_ScrollCallback(window, xOffset, yOffset);
-
-	if (instance.mouseVisible) return;
-
-	instance.fov -= (float)yOffset;
-	if (instance.fov < 1.0f)
-		instance.fov = 1.0f;
-	if (instance.fov > 45.0f)
-		instance.fov = 45.0f;
 }

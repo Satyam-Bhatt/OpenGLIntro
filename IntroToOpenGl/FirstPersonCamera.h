@@ -13,6 +13,8 @@ public:
 	void ImGuiRender(GLFWwindow* window) override;
 	void Render() override;
 	void HandleInput(GLFWwindow* window) override;
+	void OnMouseMove(float xOffset, float yOffset) override;
+	void OnScroll(float xOffset, float yOffset) override;
 	void Exit() override;
 
 	static FirstPersonCamera* GetInstance();
@@ -38,8 +40,5 @@ private:
 	float fov = 45.0f, senstivity = 0.1f;
 
 	bool mouseVisible = false, firstMouse = true, mKeyHeld = false;
-
-	static void mouse_callback(GLFWwindow* window, double xPos, double yPos);
-	static void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 };
 

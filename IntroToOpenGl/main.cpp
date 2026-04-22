@@ -56,9 +56,6 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 void mouse_callback(GLFWwindow* window, double xPos, double yPos)
 {
 	if (mouseValues.firstMouse)
-		std::cout << "X-Pos: " << xPos << " || Y Pos: " << yPos << std::endl;
-
-	if (mouseValues.firstMouse)
 	{
 		mouseValues.lastMouseX = xPos;
 		mouseValues.lastMouseY = yPos;
@@ -74,6 +71,11 @@ void mouse_callback(GLFWwindow* window, double xPos, double yPos)
 	mouseValues.mouseYOffset = yOffset;
 
 	currentState->OnMouseMove(xOffset, yOffset);
+}
+
+void scroll_callback(GLFWwindow* window, double xOffset, double yOffset)
+{
+	currentState->OnScroll(xOffset, yOffset);
 }
 
 bool Initialize()
@@ -123,6 +125,9 @@ bool Initialize()
 	// -> void (*)(GLFWwindow*, double, double)
 	// If its non static then the signature looks different as it has hidden this parameter
 	glfwSetCursorPosCallback(window, mouse_callback);
+
+	// Scroll callback functions register
+	glfwSetScrollCallback(window, scroll_callback);
 
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
