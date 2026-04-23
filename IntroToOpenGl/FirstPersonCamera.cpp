@@ -130,7 +130,6 @@ void FirstPersonCamera::ImGuiRender(GLFWwindow* window)
 	ImGui::TextWrapped("Scroll Wheel to Zoom In/Out");
 
 	ImGui::Dummy(ImVec2(0, 10));
-	ImGui::TextWrapped("==============");
 	ImGui::DragFloat("Camera Speed", &cameraSpeed, 0.005f);
 	ImGui::DragFloat("Senstivity", &senstivity, 0.005f);
 

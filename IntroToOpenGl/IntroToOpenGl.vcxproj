@@ -264,6 +264,9 @@
     <None Include="MipmapOptions.shader" />
     <None Include="MyLookAtMatrix.shader" />
     <None Include="MyMatrixClass.shader" />
+    <None Include="RenderColor_PerVertex.shader" />
+    <None Include="RenderSingleColor.shader" />
+    <None Include="RenderTexture.shader" />
     <None Include="Right_LeftHanded.shader" />
     <None Include="ShaderClass.shader" />
     <None Include="SierpinskiTriangle.shader" />

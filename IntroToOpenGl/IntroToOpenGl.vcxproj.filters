@@ -64,6 +64,9 @@
     <Filter Include="Shader\Camera">
       <UniqueIdentifier>{e6053661-a07c-446f-8604-82e991a295d7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shader\CommonShaders">
+      <UniqueIdentifier>{afa70134-10e7-408a-84fc-c1cd3955aa9e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -460,6 +463,15 @@
     <None Include="MyLookAtMatrix.shader">
       <Filter>Shader\Camera</Filter>
     </None>
-    <None Include="FirstPersonCamera.shader" />
+    <None Include="FirstPersonCamera.shader">
+      <Filter>Shader\Camera</Filter>
+    </None>
+    <None Include="RenderTexture.shader">
+      <Filter>Shader\CommonShaders</Filter>
+    </None>
+    <None Include="RenderColor_PerVertex.shader">
+      <Filter>Shader\CommonShaders</Filter>
+    </None>
+    <None Include="RenderSingleColor.shader" />
   </ItemGroup>
 </Project>
