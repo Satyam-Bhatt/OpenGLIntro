@@ -383,6 +383,9 @@
     <ClInclude Include="Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="RegularShapes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ShaderClass.shader">
@@ -472,6 +475,8 @@
     <None Include="RenderColor_PerVertex.shader">
       <Filter>Shader\CommonShaders</Filter>
     </None>
-    <None Include="RenderSingleColor.shader" />
+    <None Include="RenderSingleColor.shader">
+      <Filter>Shader\CommonShaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

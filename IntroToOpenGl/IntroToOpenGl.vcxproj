@@ -201,6 +201,7 @@
     <ClInclude Include="GLMLookAtCamera.h" />
     <ClInclude Include="CameraMain.h" />
     <ClInclude Include="MyLookAtMatrix.h" />
+    <ClInclude Include="RegularShapes.h" />
     <ClInclude Include="Right_LeftHanded.h" />
     <ClInclude Include="StitchingTest.h" />
     <ClInclude Include="TextureMapping_3D.h" />
