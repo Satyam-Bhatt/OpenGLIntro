@@ -52,4 +52,58 @@ Mesh::~Mesh()
 
 // Bind VAO, VBO, EBO and also relevant attributes as per vertex struct
 void Mesh::Setup()
-{}
+{
+	glGenVertexArrays(1, &VAO);
+	glGenBuffers(1, &VBO);
+	glGenBuffers(1, &EBO);
+
+	glBindVertexArray(VAO);
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	// arg 2 -> vertices.size() gives the number of elements and sizeof(Vertex) gives the size of each element in bytes. Multiply to get the entire size in bytes
+	// sizeof(veritces) give us the size of std::vector which is 24 bytes
+	// Roughly what std::vector looks like under the hood
+	// struct vector {
+	// 	  Vertex* data;     // 8 bytes — pointer to heap allocated array
+	// 	  size_t   size;     // 8 bytes — number of elements
+	// 	  size_t   capacity; // 8 bytes — how much space is allocated
+	// };
+	// total = 24 bytes, always
+	// 
+	// arg 3 -> glBufferData is a C function and expects raw pointer not a C++ object
+	// vertices is a std::vector - a C++ object and openGL does not know what std::vector is
+	// vertices.data() is a raw pointer to the first element giving Vertex*
+	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), vertices.data(), GL_STATIC_DRAW);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(uint32_t), indices.data(), GL_STATIC_DRAW);
+
+	// These are fragile in the case of a struct as we assume that compiler packs them with 0 padding
+	// glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0); 
+	// glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(3 * sizeof(float)));
+	// glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(6 * sizeof(float)));
+	// glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(8 * sizeof(float)));
+
+	// location 0 — position (vec3)
+	// arg 6 -> offsetof is a macro which looks like this --> #define offsetof(Type, field) (size_t)&(((Type*)0)->field)
+	// (Type*)0 hypothetical places the struct at memory address 0 and then find out the address of a particular field. This allows to figure out the offsets in memoory of each field in a struct
+	// If field is uv then (Vertex*)0)->uv would return 24 as uv sits at 24 byte (0-11(position) || 12-23(normal) || 24-31(uv) || 32-47(color))
+	// &(...) gives the address as 24 as the address starts at 0
+	// (size_t) casts the pointer to a number
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, position));
+	glEnableVertexAttribArray(0);
+
+	// location 1 — normal (vec3)
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, normal));
+	glEnableVertexAttribArray(1);
+
+	// location 2 — uv (vec2)
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, uv));
+	glEnableVertexAttribArray(2);
+
+	// location 3 — color (vec4)
+	glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, color));
+	glEnableVertexAttribArray(3);
+
+	glBindVertexArray(0);
+}
