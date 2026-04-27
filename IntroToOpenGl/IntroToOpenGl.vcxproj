@@ -145,6 +145,7 @@
   <ItemGroup>
     <ClCompile Include="FirstPersonCamera.cpp" />
     <ClCompile Include="GameState.cpp" />
+    <ClCompile Include="geometry.cpp" />
     <ClCompile Include="GLMLookAtCamera.cpp" />
     <ClCompile Include="CameraMain.cpp" />
     <ClCompile Include="Mesh.cpp" />
@@ -199,6 +200,7 @@
   <ItemGroup>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="FirstPersonCamera.h" />
+    <ClInclude Include="geometry.h" />
     <ClInclude Include="GLMLookAtCamera.h" />
     <ClInclude Include="CameraMain.h" />
     <ClInclude Include="Mesh.h" />
