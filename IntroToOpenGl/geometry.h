@@ -89,7 +89,7 @@ namespace Geometry
     }
 
     // TODO: How does this shit work
-    Mesh Sphere(uint32_t stacks, uint32_t slices) {
+    Mesh Geometry::Sphere(uint32_t stacks, uint32_t slices) {
         std::vector<Vertex> verts;
         std::vector<uint32_t> indices;
 
@@ -102,8 +102,12 @@ namespace Geometry
                     std::cos(phi),
                     std::sin(phi) * std::sin(theta)
                 };
-                verts.push_back({ pos * 0.5f, pos.Normalize(),
-                                  { (float)j / slices, (float)i / stacks } });
+                verts.push_back({
+                    pos * 0.5f,
+                    pos.Normalize(),
+                    { (float)j / slices, (float)i / stacks },
+                    { 1, 1, 1, 1 }   
+                    });
             }
         }
 
