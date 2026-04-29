@@ -1,4 +1,4 @@
-//Always include glad before glfw otherwise it will give include error. Do this for all the includes that require OpenGL
+//Always include glad before glfw otherwise it will give include error. Do this for all the includes that require OpenGL.
 #include <glad.h>
 #include <GLFW/glfw3.h>
 #include <stdio.h>
