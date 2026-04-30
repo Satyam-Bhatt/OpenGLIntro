@@ -88,7 +88,7 @@ namespace Geometry
         return Mesh(verts, indices);
     }
 
-    // TODO: How does this shit work something on terms with yaw and pitch
+    // TODO:
     Mesh Geometry::Sphere(uint32_t stacks, uint32_t slices) {
         std::vector<Vertex> verts;
         std::vector<uint32_t> indices;
