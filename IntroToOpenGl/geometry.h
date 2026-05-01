@@ -98,9 +98,9 @@ namespace Geometry
             for (uint32_t j = 0; j <= slices; j++) {
                 float theta = 2.0f * PI * j / slices;
                 Vector3 pos = {
-                    std::sin(phi) * std::cos(theta),
-                    std::cos(phi),
-                    std::sin(phi) * std::sin(theta)
+                    std::sin(phi) * std::cos(theta), // Radius * X axis component in XZ plane
+                    std::cos(phi), // Y axis component
+                    std::sin(phi) * std::sin(theta) // Radius * Z axis component in XZ plane
                 };
                 verts.push_back({
                     pos * 0.5f,
