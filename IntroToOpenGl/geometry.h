@@ -88,14 +88,32 @@ namespace Geometry
         return Mesh(verts, indices);
     }
 
-    // TODO:
     Mesh Geometry::Sphere(uint32_t stacks, uint32_t slices) {
         std::vector<Vertex> verts;
         std::vector<uint32_t> indices;
 
+        // Plot points from top to bottom
         for (uint32_t i = 0; i <= stacks; i++) {
+            // cos(phi) - when i is 0 then value is 1 || when i is stacks/2 then value is 0 || when i = stacks then value is -1
+            // This maps exactly to how we want the Y-axis to vary from top to bottom
+            // sin(phi) - when i is 0 then value is 0 || when i is stacks/2 then value is 1 || when i = stacks then vale is 0
+            // This maps exactly to how we want the radius to fluctuate at different values. 0 at top and bottom and maximum at the center
+            // We multiplu PI because it shrinks the cos curve and gives us integer values
             float phi = PI * i / stacks;
+
+            // Plot points to create a 2D cirlce around the points in Y axis
             for (uint32_t j = 0; j <= slices; j++) {
+                // Helps to create a 2D circle. We need 2*PI so that all the points are spread in 360 degrees 
+                // cos(theta) - projection on X axis in XZ plane 
+                // sin(theta) - projection on Y axis in XZ plane
+                // cos and sin are offsetted by PI/2 so we get these values
+                //   x  cos(x)  sin(x)
+                //   0    1       0
+                //  pi/2  0       1
+                //  pi    -1      0
+                //  3pi/2  0     -1
+                //  2pi    1      0
+                // As both are offsetted the values in between when plotted on XZ plane helps to create a circle. Values at 0 = values at 2pi hence making an entire rotation and giving us a cirle
                 float theta = 2.0f * PI * j / slices;
                 Vector3 pos = {
                     std::sin(phi) * std::cos(theta), // Radius * X axis component in XZ plane
