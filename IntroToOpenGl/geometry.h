@@ -121,10 +121,10 @@ namespace Geometry
                     std::sin(phi) * std::sin(theta) // Radius * Z axis component in XZ plane
                 };
                 verts.push_back({
-                    pos * 0.5f,
-                    pos.Normalize(),
-                    { (float)j / slices, (float)i / stacks },
-                    { 1, 1, 1, 1 }   
+                    pos * 0.5f, // Multiply with 0.5 to get diameter as 1 and radius as 0.5. Before it was diameter 2 and radius 1
+                    pos.Normalize(), // Normal
+                    { (float)j / slices, (float)i / stacks }, // uv - 0 to 1 across the surface
+                    { 1, 1, 1, 1 } // Color
                     });
             }
         }
