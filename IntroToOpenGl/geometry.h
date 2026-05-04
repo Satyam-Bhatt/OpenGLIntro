@@ -129,10 +129,32 @@ namespace Geometry
             }
         }
 
+        // If stacks=2, slices=2
+        // j=0   j=1   j=2
+        //  0  -  1  -  2   i = 0  (top ring)
+        //  |     |     |
+        //  3  -  4  -  5   i = 1  (middle ring)
+        //  |     |     |
+        //  6  -  7  -  8   i = 2  (bottom ring)
         // 
+        // if i=0,j=0
+        // a = 0 * (2 + 1) + 0 = 0
+        // b = 0 + 2 + 1 = 3
+        // 
+        // 0 --- 1
+        // |   / |
+        // |  /  |
+        // | /   |
+        // 3 --- 4
+        // 
+        // Triangle 1: a, b, a + 1 → 0, 3, 1
+        // Triangle 2 : b, b + 1, a + 1 → 3, 4, 1
+        //  
+        // If the slices increase then the vertex numbering would be different
         for (uint32_t i = 0; i < stacks; i++) {
             for (uint32_t j = 0; j < slices; j++) {
-                uint32_t a = i * (slices + 1) + j, b = a + slices + 1;
+                uint32_t a = i * (slices + 1) + j;
+                uint32_t b = a + slices + 1;
                 indices.insert(indices.end(), { a,b,a + 1, b,b + 1,a + 1 });
             }
         }
