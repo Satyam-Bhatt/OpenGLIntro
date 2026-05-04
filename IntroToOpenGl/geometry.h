@@ -129,6 +129,7 @@ namespace Geometry
             }
         }
 
+        // 
         for (uint32_t i = 0; i < stacks; i++) {
             for (uint32_t j = 0; j < slices; j++) {
                 uint32_t a = i * (slices + 1) + j, b = a + slices + 1;
