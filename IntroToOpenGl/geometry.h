@@ -74,8 +74,6 @@ namespace Geometry
         return Mesh(verts, indices);
 	}
 
-
-
     Mesh Plane(float size = 1.0f) {
         float h = size * 0.5f;
         std::vector<Vertex> verts = {
@@ -88,7 +86,7 @@ namespace Geometry
         return Mesh(verts, indices);
     }
 
-    Mesh Geometry::Sphere(uint32_t stacks, uint32_t slices) {
+    Mesh Sphere(uint32_t stacks, uint32_t slices) {
         std::vector<Vertex> verts;
         std::vector<uint32_t> indices;
 
@@ -157,6 +155,51 @@ namespace Geometry
                 uint32_t b = a + slices + 1;
                 indices.insert(indices.end(), { a,b,a + 1, b,b + 1,a + 1 });
             }
+        }
+
+        return Mesh(verts, indices);
+    }
+
+    Mesh ColoredCube()
+    {
+        std::vector<Vertex> verts = {
+            // position                  normal          uv          color
+            // Front (Red)
+            {{ -0.5f, -0.5f,  0.5f }, {  0,  0,  1 }, { 0, 0 }, { 1,0,0,1 }},
+            {{  0.5f, -0.5f,  0.5f }, {  0,  0,  1 }, { 1, 0 }, { 1,0,0,1 }},
+            {{  0.5f,  0.5f,  0.5f }, {  0,  0,  1 }, { 1, 1 }, { 1,0,0,1 }},
+            {{ -0.5f,  0.5f,  0.5f }, {  0,  0,  1 }, { 0, 1 }, { 1,0,0,1 }},
+            // Back (Green)
+            {{  0.5f, -0.5f, -0.5f }, {  0,  0, -1 }, { 0, 0 }, { 0,1,0,1 }},
+            {{ -0.5f, -0.5f, -0.5f }, {  0,  0, -1 }, { 1, 0 }, { 0,1,0,1 }},
+            {{ -0.5f,  0.5f, -0.5f }, {  0,  0, -1 }, { 1, 1 }, { 0,1,0,1 }},
+            {{  0.5f,  0.5f, -0.5f }, {  0,  0, -1 }, { 0, 1 }, { 0,1,0,1 }},
+            // Left (Blue)
+            {{ -0.5f, -0.5f, -0.5f }, { -1,  0,  0 }, { 0, 0 }, { 0,0,1,1 }},
+            {{ -0.5f, -0.5f,  0.5f }, { -1,  0,  0 }, { 1, 0 }, { 0,0,1,1 }},
+            {{ -0.5f,  0.5f,  0.5f }, { -1,  0,  0 }, { 1, 1 }, { 0,0,1,1 }},
+            {{ -0.5f,  0.5f, -0.5f }, { -1,  0,  0 }, { 0, 1 }, { 0,0,1,1 }},
+            // Right (Yellow)
+            {{  0.5f, -0.5f,  0.5f }, {  1,  0,  0 }, { 0, 0 }, { 1,1,0,1 }},
+            {{  0.5f, -0.5f, -0.5f }, {  1,  0,  0 }, { 1, 0 }, { 1,1,0,1 }},
+            {{  0.5f,  0.5f, -0.5f }, {  1,  0,  0 }, { 1, 1 }, { 1,1,0,1 }},
+            {{  0.5f,  0.5f,  0.5f }, {  1,  0,  0 }, { 0, 1 }, { 1,1,0,1 }},
+            // Top (Cyan)
+            {{ -0.5f,  0.5f,  0.5f }, {  0,  1,  0 }, { 0, 0 }, { 0,1,1,1 }},
+            {{  0.5f,  0.5f,  0.5f }, {  0,  1,  0 }, { 1, 0 }, { 0,1,1,1 }},
+            {{  0.5f,  0.5f, -0.5f }, {  0,  1,  0 }, { 1, 1 }, { 0,1,1,1 }},
+            {{ -0.5f,  0.5f, -0.5f }, {  0,  1,  0 }, { 0, 1 }, { 0,1,1,1 }},
+            // Bottom (Magenta)
+            {{ -0.5f, -0.5f, -0.5f }, {  0, -1,  0 }, { 0, 0 }, { 1,0,1,1 }},
+            {{  0.5f, -0.5f, -0.5f }, {  0, -1,  0 }, { 1, 0 }, { 1,0,1,1 }},
+            {{  0.5f, -0.5f,  0.5f }, {  0, -1,  0 }, { 1, 1 }, { 1,0,1,1 }},
+            {{ -0.5f, -0.5f,  0.5f }, {  0, -1,  0 }, { 0, 1 }, { 1,0,1,1 }},
+        };
+
+        std::vector<uint32_t> indices;
+        for (uint32_t f = 0; f < 6; f++) {
+            uint32_t b = f * 4;
+            indices.insert(indices.end(), { b,b + 1,b + 2, b + 2,b + 3,b });
         }
 
         return Mesh(verts, indices);
