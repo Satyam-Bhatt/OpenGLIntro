@@ -67,6 +67,12 @@
     <Filter Include="Shader\CommonShaders">
       <UniqueIdentifier>{afa70134-10e7-408a-84fc-c1cd3955aa9e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\TestScenes">
+      <UniqueIdentifier>{2541177d-5498-4385-910e-240e0d1a7f08}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\TestScenes">
+      <UniqueIdentifier>{c71e2133-9fec-424b-bfc3-798111b34776}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -227,6 +233,12 @@
     </ClCompile>
     <ClCompile Include="geometry.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TestScene_Main.cpp">
+      <Filter>Source Files\TestScenes</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshSpawner.cpp">
+      <Filter>Source Files\TestScenes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -394,6 +406,12 @@
     </ClInclude>
     <ClInclude Include="geometry.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TestScene_Main.h">
+      <Filter>Header Files\TestScenes</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshSpawner.h">
+      <Filter>Header Files\TestScenes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
