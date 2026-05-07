@@ -20,9 +20,9 @@ enum Camera_Movement {
 
 // Default camera values
 // By default the camera points to the positive X axis and we need to rotate it by 90 degrees so that it points towards positive Z axis
-const float YAW = 90,
-const float PITCH = 0;
-const float SPEED = 5;
+const float YAW = 90.0f;
+const float PITCH = 0.0f;
+const float SPEED = 5.0f;
 const float SENSTIVITY = 0.1f;
 const float ZOOM = 45.0f;
 
@@ -122,6 +122,9 @@ private:
 
 		// Recalculate Camera Right and Camera Up vector
 		CameraRight = Vector3::Cross(WorldUp, CameraFront).Normalize();
+
+		// If you want to move up as per the rotation then keep this
+		// But if you want to directly go up and down regardless of the rotation the comment it 
 		CameraUp = Vector3::Cross(CameraFront, CameraRight).Normalize();
 	}
 };

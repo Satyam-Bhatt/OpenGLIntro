@@ -16,6 +16,7 @@
 #include "TextureMain.h"
 #include "TransformationMain.h"
 #include "CameraMain.h"
+#include "TestScene_Main.h"
 
 // STL
 #include <unordered_map>
@@ -47,6 +48,7 @@ private:
 		TextureMain,
 		TransformationMain,
 		CameraMain,
+		TestScenes,
 		COUNT
 	};
 

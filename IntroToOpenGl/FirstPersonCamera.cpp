@@ -327,9 +327,9 @@ void FirstPersonCamera::OnMouseMove(float xOffset, float yOffset)
 	cameraFront = direction.Normalize();
 
 	// If you want to move up as per the rotation then keep this
-// But if you want to directly go up and down regardless of the rotation the comment it 
-	Vector3 cameraRight = Vector3::Cross(Vector3(0, 1, 0), instance.cameraFront).Normalize();
-	instance.cameraUp = Vector3::Cross(instance.cameraFront, cameraRight).Normalize();
+	// But if you want to directly go up and down regardless of the rotation the comment it 
+	Vector3 cameraRight = Vector3::Cross(Vector3(0, 1, 0), cameraFront).Normalize();
+	cameraUp = Vector3::Cross(cameraFront, cameraRight).Normalize();
 }
 
 void FirstPersonCamera::OnScroll(float xOffset, float yOffset)

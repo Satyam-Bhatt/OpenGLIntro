@@ -202,7 +202,7 @@
   <ItemGroup>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="FirstPersonCamera.h" />
-    <ClInclude Include="geometry.h" />
+    <ClInclude Include="Geometry.h" />
     <ClInclude Include="GLMLookAtCamera.h" />
     <ClInclude Include="CameraMain.h" />
     <ClInclude Include="Mesh.h" />

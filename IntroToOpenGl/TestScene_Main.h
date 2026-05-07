@@ -33,12 +33,12 @@ private:
 	TestScene_Main* currentProject = NULL;
 	TestScene_Main* nextProject = NULL;
 
-	SubScene currect_SubScene = MeshSpawner;
+	SubScene current_SubScene = MeshSpawner;
 	SubScene previous_SubScene = MeshSpawner;
 
 	bool openScene[SubScene::COUNT] = {true};
 
-	std::unordered_map<int, std::string> sceneName;
+	std::unordered_map<int, std::string> sceneNames;
 	std::unordered_map<int, std::function<TestScene_Main* ()>> sceneFactories;
 
 	std::string SceneToString(SubScene scene);

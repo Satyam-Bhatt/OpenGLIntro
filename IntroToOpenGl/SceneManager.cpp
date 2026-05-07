@@ -40,6 +40,11 @@ SceneManager::SceneManager()
 	sceneNames[Scenes::CameraMain] = "Camera";
 	sceneFactories[Scenes::CameraMain] = []() -> GameState* {return CameraMain::GetInstance(); };
 	sceneDestructors[Scenes::CameraMain] = []() -> void {CameraMain::DeleteInstance(); };
+
+	// Test Scne
+	sceneNames[Scenes::TestScenes] = "Test Scenes";
+	sceneFactories[Scenes::TestScenes] = []() -> GameState* {return TestScene_Main::GetInstance(); };
+	sceneDestructors[Scenes::TestScenes] = []() -> void {TestScene_Main::GetInstance(); };
 }
 
 void SceneManager::ImGuiRender(GLFWwindow* window)
