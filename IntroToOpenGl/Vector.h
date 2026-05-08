@@ -534,6 +534,6 @@ namespace Vector {
 		return vector * scalar;
 	}
 
-} // namespace Vector
+}
 
 #endif // VECTOR_H

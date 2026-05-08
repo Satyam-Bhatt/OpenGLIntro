@@ -1,4 +1,12 @@
 #include "Mesh.h"
+#include <glad.h>
+
+Mesh::Mesh()
+{
+	VAO = 0;
+	VBO = 0;
+	EBO = 0;
+}
 
 Mesh::Mesh(std::vector<Vertex> _vertices, std::vector<uint32_t> _indices)
 {
@@ -38,16 +46,16 @@ void Mesh::Draw() const
 
 void Mesh::CleanUp() const
 {
-	glDeleteVertexArrays(1, &VAO);
-	glDeleteBuffers(1, &VBO);
-	glDeleteBuffers(1, &EBO);
+	if(VAO) glDeleteVertexArrays(1, &VAO);
+	if(VBO) glDeleteBuffers(1, &VBO);
+	if(EBO) glDeleteBuffers(1, &EBO);
 }
 
 Mesh::~Mesh()
 {
-	glDeleteVertexArrays(1, &VAO);
-	glDeleteBuffers(1, &VBO);
-	glDeleteBuffers(1, &EBO);
+	if (VAO) glDeleteVertexArrays(1, &VAO);
+	if (VBO) glDeleteBuffers(1, &VBO);
+	if (EBO) glDeleteBuffers(1, &EBO);
 }
 
 // Bind VAO, VBO, EBO and also relevant attributes as per vertex struct

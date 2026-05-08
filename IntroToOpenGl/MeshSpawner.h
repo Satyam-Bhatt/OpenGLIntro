@@ -1,6 +1,5 @@
 #pragma once
 #include "TestScene_Main.h"
-//#include "Geometry.h"
 
 class MeshSpawner : public TestScene_Main
 {
@@ -21,6 +20,7 @@ private:
 	static MeshSpawner instance;
 
 	Camera cam;
-	//Mesh plane = Plane();
+	Shader singleColorShader;
+	Mesh plane;
 };
 

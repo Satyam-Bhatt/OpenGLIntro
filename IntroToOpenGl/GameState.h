@@ -16,12 +16,12 @@
 #include "stb_image.h"
 #include "Matrix.h"
 #include "constants.h"
-//#include "Geometry.h"
+#include "Geometry.h"
 #include "Camera.h"
 
 using namespace Matrix;
 using namespace Vector;
-//using namespace Geometry;
+using namespace Geometry;
 
 class GameState
 {

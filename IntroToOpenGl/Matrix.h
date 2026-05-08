@@ -670,9 +670,9 @@ namespace Matrix
 			// Inverse of the rotation matrix is its transpose because it is an orthogonal matrix as the camera right, up and direction vectors are orthogonal to each other and are unit vectors
 			// We take transpose because we want to convert world space coordinates to camera space coordinates. 
 			// Basically taking a transpose and multiplying it with the world space coordinate is like a dot product of the world space coordinate with the camera right, up and direction vectors which gives us the coordinates in camera space.
-			// x' = dot(worldPoint, [right.x, right.y, right.z])  ← how far along camera's right axis?
-			// y' = dot(worldPoint, [up.x,    up.y,    up.z   ])  ← how far along camera's up axis?
-			// z' = dot(worldPoint, [dir.x,   dir.y,   dir.z  ])  ← how far along camera's forward axis?
+			// x' = dot(worldPoint.x, [right.x, right.y, right.z])  ← how far along camera's right axis?
+			// y' = dot(worldPoint.y, [up.x,    up.y,    up.z   ])  ← how far along camera's up axis?
+			// z' = dot(worldPoint.z, [dir.x,   dir.y,   dir.z  ])  ← how far along camera's forward axis?
 			rotationMatrix = rotationMatrix.Transpose();
 
 			// To bring the camera to origin, we shift the world by (-cameraPosition.x, -cameraPosition.y, -cameraPosition.z).

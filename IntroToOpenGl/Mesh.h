@@ -1,7 +1,6 @@
 #pragma once
 #include <vector>
 #include <cstdint>
-#include <glad.h>
 #include "Vector.h"
 
 using namespace Vector;
@@ -23,6 +22,7 @@ public:
 	uint32_t VAO, VBO, EBO;
 
 	// Constructor
+	Mesh();
 	Mesh(std::vector<Vertex> _vertices, std::vector<uint32_t> _indices);
 
 	void Bind() const;
