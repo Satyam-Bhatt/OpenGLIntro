@@ -26,6 +26,9 @@ void MeshSpawner::Render()
 {
 	Matrix4x4 model, view, projection;
 
+	model = Matrix4x4::Translation(model, Vector3(0,0,0));
+	model = Matrix4x4::Scale(model, Vector3(1,1,1));
+
 	view = Matrix4x4::Translation(view, Vector3(0,0,10));
 
 	projection = Matrix4x4::CreateProjectionMatrix_FOV_LeftHanded(45.0f * (PI / 180), (float)viewportData.width, (float)viewportData.height, 0.1f, 100.0f);
