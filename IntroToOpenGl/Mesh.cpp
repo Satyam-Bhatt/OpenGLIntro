@@ -115,3 +115,28 @@ void Mesh::Setup()
 
 	glBindVertexArray(0);
 }
+
+// Mesh.cpp
+Mesh& Mesh::operator=(Mesh&& other) noexcept
+{
+	if (this == &other) return *this;
+
+	// Clean up existing handles first
+	if (VAO) glDeleteVertexArrays(1, &VAO);
+	if (VBO) glDeleteBuffers(1, &VBO);
+	if (EBO) glDeleteBuffers(1, &EBO);
+
+	// Steal the handles from other
+	VAO = other.VAO;
+	VBO = other.VBO;
+	EBO = other.EBO;
+	vertices = std::move(other.vertices);
+	indices = std::move(other.indices);
+
+	// Zero out other so its destructor doesn't delete our handles
+	other.VAO = 0;
+	other.VBO = 0;
+	other.EBO = 0;
+
+	return *this;
+}

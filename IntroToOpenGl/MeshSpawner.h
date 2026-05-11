@@ -3,7 +3,7 @@
 
 class MeshSpawner : public TestScene_Main
 {
-public: 
+public:
 	MeshSpawner();
 	~MeshSpawner();
 
@@ -22,5 +22,11 @@ private:
 	Camera cam;
 	Shader singleColorShader;
 	Mesh plane;
+	Mesh cube, sphere;
+
+	Vector3 position;
+	Vector3 scale = Vector3(1, 1, 1);
+	Vector3 camPos = Vector3(0,0,10);
+	float angle = 0;
 };
 

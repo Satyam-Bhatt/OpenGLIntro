@@ -32,6 +32,9 @@ public:
 
 	~Mesh();
 
+	// Mesh.h
+	Mesh& operator=(Mesh&& other) noexcept;
+
 private:
 	void Setup();
 };
