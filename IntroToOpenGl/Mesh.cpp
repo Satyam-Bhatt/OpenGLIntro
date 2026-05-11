@@ -116,7 +116,6 @@ void Mesh::Setup()
 	glBindVertexArray(0);
 }
 
-// Mesh.cpp
 Mesh& Mesh::operator=(Mesh&& other) noexcept
 {
 	if (this == &other) return *this;

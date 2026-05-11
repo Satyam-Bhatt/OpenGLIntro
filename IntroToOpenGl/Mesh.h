@@ -30,10 +30,10 @@ public:
 	void Draw() const;
 	void CleanUp() const;
 
-	~Mesh();
-
-	// Mesh.h
+	// Assignment Operator
 	Mesh& operator=(Mesh&& other) noexcept;
+
+	~Mesh();
 
 private:
 	void Setup();
