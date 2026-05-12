@@ -116,6 +116,27 @@ void Mesh::Setup()
 	glBindVertexArray(0);
 }
 
+// We need this because
+// When we do 
+// Mesh plane; // default constructor → VAO=0, VBO=0, EBO=0
+// plane = Geometry::Plane(); // Plane() creates a NEW Mesh with VAO=1, VBO=2, EBO=3
+// without assignment operator VAO,VBO and EBO values are copied to plane
+// Geometry::Plane() returns a temporary mesh that is assigned to plane and values got copied
+// When Geometry::Plane() goes out of scope the destructor runs and Vertex Arrays and Buffers assigned in the GPU are deleted
+// Now plane has those VAO,VBO and EBO values but the GPU handle is destroyed. 
+// So the assignment operator zeros out the VAO,VBO and EBO so that the temporary destructor does not destroy the GPU handles as destructor checks if VAO, VBO and EBO are equal to 0 before destroying
+
+// We use noexcept as we know that this won't throw any exception so its like a promise to the compiler just to speed up copying of the vector
+
+// Usage of Mesh&& in the parameters
+// As we are working with a temporary object, it is an rvalue and for rvalue we use &&
+// If it was something that would persist and had a name then it would have been an lvalue and we would have used &
+// Mesh& operator=(Mesh& other)    // only accepts named variables
+// Mesh& operator=(Mesh&& other)   // only accepts temporaries
+// lvalue  — has a name, persists   → use&
+// rvalue  — temporary, dies soon   → use&&
+
+// We use && as we want to make changes to original object not to a copy of the object
 Mesh& Mesh::operator=(Mesh&& other) noexcept
 {
 	if (this == &other) return *this;
