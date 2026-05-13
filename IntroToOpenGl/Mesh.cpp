@@ -120,13 +120,12 @@ void Mesh::Setup()
 // When we do 
 // Mesh plane; // default constructor → VAO=0, VBO=0, EBO=0
 // plane = Geometry::Plane(); // Plane() creates a NEW Mesh with VAO=1, VBO=2, EBO=3
-// without assignment operator VAO,VBO and EBO values are copied to plane
-// Geometry::Plane() returns a temporary mesh that is assigned to plane and values got copied
-// When Geometry::Plane() goes out of scope the destructor runs and Vertex Arrays and Buffers assigned in the GPU are deleted
+// without a move assignment operator, the default assignment just copies the integer  values of VAO,VBO,EBO to plane — but both plane and the temporary(Geometry::Plane()) now point to the SAME GPU handles. When the temporary(Geometry::Plane()) destructs it deletes those handles, leaving plane with valid looking values but destroyed GPU resources — a dangling handle.
 // Now plane has those VAO,VBO and EBO values but the GPU handle is destroyed. 
 // So the assignment operator zeros out the VAO,VBO and EBO so that the temporary destructor does not destroy the GPU handles as destructor checks if VAO, VBO and EBO are equal to 0 before destroying
 
-// We use noexcept as we know that this won't throw any exception so its like a promise to the compiler just to speed up copying of the vector
+// We use noexcept as a promise to the compiler that this function will never throw
+// This allows the compiler to optimize better and std containers like std::vector will use move instead of falling back to copy when resizing
 
 // Usage of Mesh&& in the parameters
 // As we are working with a temporary object, it is an rvalue and for rvalue we use &&
