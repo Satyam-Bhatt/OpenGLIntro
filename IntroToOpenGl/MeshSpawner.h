@@ -3,6 +3,33 @@
 
 class MeshSpawner : public TestScene_Main
 {
+	enum ShaderTypes
+	{
+		Texture,
+		SingleColor,
+		VertexColor,
+		COUNT
+	};
+
+	enum MeshTypes
+	{
+		m_Cube,
+		m_ColoredCube,
+		m_Sphere,
+		m_Plane,
+		COUNT
+	};
+
+	struct Transform{
+		Vector3 position;
+		Vector3 rotation;
+		Vector3 scale;
+		Vector4 color;
+		ShaderTypes shaderToUse;
+		MeshTypes meshToUse;
+	};
+
+
 public:
 	MeshSpawner();
 	~MeshSpawner();
@@ -23,6 +50,10 @@ private:
 	Shader singleColorShader;
 	Mesh plane;
 	Mesh cube, sphere;
+
+	Shader shaders[3];
+	Mesh meshes[4];
+	std::vector<Transform> transforms;
 
 	Vector3 position;
 	Vector3 scale = Vector3(1, 1, 1);

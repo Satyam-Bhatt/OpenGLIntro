@@ -16,10 +16,20 @@ void MeshSpawner::Start()
 	plane = Plane();
 	cube = Cube();
 	sphere = Sphere();
+
+	shaders[0] = Shader("RenderTexture.shader");
+	shaders[1] = Shader("RenderSingleColor.shader");
+	shaders[3] = Shader("RenderColor_PerVertex.shader");
+
+	meshes[0] = Cube();
+	meshes[1] = ColoredCube();
+	meshes[2] = Sphere();
+	meshes[3] = Plane();
 }
 
 void MeshSpawner::Update()
-{}
+{
+}
 
 void MeshSpawner::ImGuiRender(GLFWwindow * window)
 {
