@@ -19,7 +19,7 @@ void MeshSpawner::Start()
 
 	shaders[0] = Shader("RenderTexture.shader");
 	shaders[1] = Shader("RenderSingleColor.shader");
-	shaders[3] = Shader("RenderColor_PerVertex.shader");
+	shaders[2] = Shader("RenderColor_PerVertex.shader");
 
 	meshes[0] = Cube();
 	meshes[1] = ColoredCube();
@@ -47,6 +47,22 @@ void MeshSpawner::ImGuiRender(GLFWwindow * window)
 	ImGui::DragFloat3("Scale", &scale.x, 0.005f);
 	ImGui::DragFloat3("cam", &camPos.x, 0.005f);
 	ImGui::DragFloat("rot", &angle, 0.005f);
+
+	ImGui::RadioButton("Texture", &shaderSelection, 0);
+	ImGui::RadioButton("Single Color", &shaderSelection, 1);
+	ImGui::RadioButton("Vertex Color", &shaderSelection, 2);
+
+	ImGui::RadioButton("Cube", &meshSelection, 0);
+	ImGui::RadioButton("Colored Cube", &meshSelection, 1);
+	ImGui::RadioButton("Sphere", &meshSelection, 2);
+	ImGui::RadioButton("Plane", &meshSelection, 3);
+
+	if (ImGui::Button("Click to Check"))
+	{
+		std::cout << shaderSelection << std::endl;
+		std::cout << meshSelection << std::endl;
+	}
+
 		 
 	ImGui::End();
 }
