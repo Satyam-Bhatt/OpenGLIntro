@@ -3,8 +3,6 @@
 
 class MeshSpawner : public TestScene_Main
 {
-
-
 	struct Transform{
 		Vector3 position;
 		Vector3 rotation;
@@ -40,6 +38,7 @@ private:
 	Mesh meshes[4];
 	std::vector<Transform> transforms;
 	int shaderSelection, meshSelection;
+	float magicWork;
 
 	Vector3 position;
 	Vector3 scale = Vector3(1, 1, 1);

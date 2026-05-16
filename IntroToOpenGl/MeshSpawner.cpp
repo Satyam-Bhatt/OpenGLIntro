@@ -46,6 +46,7 @@ void MeshSpawner::ImGuiRender(GLFWwindow * window)
 	ImGui::DragFloat3("Position", &position.x, 0.005f);
 	ImGui::DragFloat3("Scale", &scale.x, 0.005f);
 	ImGui::DragFloat3("cam", &camPos.x, 0.005f);
+	ImGui::ColorEdit4("Color Pick", &magicWork);
 	ImGui::DragFloat("rot", &angle, 0.005f);
 
 	ImGui::RadioButton("Texture", &shaderSelection, 0);
