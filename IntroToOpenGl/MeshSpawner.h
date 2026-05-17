@@ -12,7 +12,6 @@ class MeshSpawner : public TestScene_Main
 		int meshToUse;
 	};
 
-
 public:
 	MeshSpawner();
 	~MeshSpawner();
