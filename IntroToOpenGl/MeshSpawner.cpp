@@ -43,11 +43,14 @@ void MeshSpawner::ImGuiRender(GLFWwindow * window)
 	);
 
 	ImGui::Begin("Level Specific", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
-	ImGui::DragFloat3("Position", &position.x, 0.005f);
-	ImGui::DragFloat3("Scale", &scale.x, 0.005f);
+
 	ImGui::DragFloat3("cam", &camPos.x, 0.005f);
-	ImGui::ColorEdit4("Color Pick", &magicWork);
 	ImGui::DragFloat("rot", &angle, 0.005f);
+
+	ImGui::DragFloat3("Position", &position.x, 0.005f);
+	ImGui::DragFloat3("Rotation", &rotation.x, 0.005f);
+	ImGui::DragFloat3("Scale", &scale.x, 0.005f);
+	ImGui::ColorEdit3("Color Pick", (float*)&color);
 
 	ImGui::RadioButton("Texture", &shaderSelection, 0);
 	ImGui::RadioButton("Single Color", &shaderSelection, 1);
@@ -60,8 +63,15 @@ void MeshSpawner::ImGuiRender(GLFWwindow * window)
 
 	if (ImGui::Button("Click to Check"))
 	{
-		std::cout << shaderSelection << std::endl;
-		std::cout << meshSelection << std::endl;
+		Transform t;
+		t.position = position;
+		t.rotation = rotation;
+		t.scale = scale;
+		t.color = color;
+		t.meshToUse = meshSelection;
+		t.shaderToUse = shaderSelection;
+
+		transforms.push_back(t);
 	}
 
 		 

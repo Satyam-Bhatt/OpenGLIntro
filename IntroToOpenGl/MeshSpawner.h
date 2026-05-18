@@ -36,11 +36,12 @@ private:
 	Shader shaders[3];
 	Mesh meshes[4];
 	std::vector<Transform> transforms;
-	int shaderSelection, meshSelection;
-	float magicWork;
-
 	Vector3 position;
 	Vector3 scale = Vector3(1, 1, 1);
+	Vector3 rotation = Vector3(0, 0, 0);
+	Vector4 color;
+	int shaderSelection, meshSelection;
+
 	Vector3 camPos = Vector3(0,0,10);
 	float angle = 0;
 };
