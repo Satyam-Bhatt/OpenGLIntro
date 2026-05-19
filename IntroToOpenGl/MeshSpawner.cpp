@@ -61,7 +61,7 @@ void MeshSpawner::ImGuiRender(GLFWwindow * window)
 	ImGui::RadioButton("Sphere", &meshSelection, 2);
 	ImGui::RadioButton("Plane", &meshSelection, 3);
 
-	if (ImGui::Button("Click to Check"))
+	if (ImGui::Button("Click to Add"))
 	{
 		Transform t;
 		t.position = position;
@@ -97,6 +97,27 @@ void MeshSpawner::Render()
 	singleColorShader.SetVec4("color", Vector4(1, 0, 0, 1));
 	plane.Draw();
 	sphere.Draw();
+
+	for (int i = 0; i < transforms.size(); i++)
+	{
+		Transform t = transforms[i];
+
+		model = Matrix4x4::Identity();
+
+		model = Matrix4x4::Translation(model, t.position);
+		model = Matrix4x4::Rotation(model, Vector3(1, 0, 0), t.rotation.x * (PI / 180));
+		model = Matrix4x4::Rotation(model, Vector3(0, 1, 0), t.rotation.y * (PI / 180));
+		model = Matrix4x4::Rotation(model, Vector3(0, 0, 1), t.rotation.z * (PI / 180));
+		model = Matrix4x4::Scale(model, t.scale);
+
+		shaders[t.shaderToUse].Use();
+		shaders[t.shaderToUse].SetMat4_Custom("model", model.m);
+		shaders[t.shaderToUse].SetMat4_Custom("view", view.m);
+		shaders[t.shaderToUse].SetMat4_Custom("projection", projection.m);
+		shaders[t.shaderToUse].SetVec4("color", t.color);
+
+		meshes[t.meshToUse].Draw();
+	}
 }
 
 void MeshSpawner::HandleInput(GLFWwindow * window)
