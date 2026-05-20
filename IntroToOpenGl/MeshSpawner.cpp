@@ -73,7 +73,6 @@ void MeshSpawner::ImGuiRender(GLFWwindow * window)
 
 		transforms.push_back(t);
 	}
-
 		 
 	ImGui::End();
 }
@@ -89,14 +88,6 @@ void MeshSpawner::Render()
 	view = Matrix4x4::Translation(view, camPos);
 
 	projection = Matrix4x4::CreateProjectionMatrix_FOV_LeftHanded(45.0f * (PI / 180), (float)viewportData.width, (float)viewportData.height, 0.1f, 100.0f);
-
-	singleColorShader.Use();
-	singleColorShader.SetMat4_Custom("model", model.m);
-	singleColorShader.SetMat4_Custom("view", view.m);
-	singleColorShader.SetMat4_Custom("projection", projection.m);
-	singleColorShader.SetVec4("color", Vector4(1, 0, 0, 1));
-	plane.Draw();
-	sphere.Draw();
 
 	for (int i = 0; i < transforms.size(); i++)
 	{
