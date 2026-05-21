@@ -105,7 +105,10 @@ void MeshSpawner::Render()
 		shaders[t.shaderToUse].SetMat4_Custom("model", model.m);
 		shaders[t.shaderToUse].SetMat4_Custom("view", view.m);
 		shaders[t.shaderToUse].SetMat4_Custom("projection", projection.m);
-		shaders[t.shaderToUse].SetVec4("color", t.color);
+		if (t.shaderToUse == 1)
+		{
+			shaders[t.shaderToUse].SetVec4("color", t.color);
+		}
 
 		meshes[t.meshToUse].Draw();
 	}
