@@ -12,6 +12,31 @@ MeshSpawner::~MeshSpawner()
 
 void MeshSpawner::Start()
 {
+	glEnable(GL_DEPTH_TEST);
+
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+	int width, height, nChannels;
+	unsigned char* data = stbi_load("Images/MYawesomeface.png", &width, &height, &nChannels, 0);
+
+	if (data)
+	{
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+		glGenerateMipmap(GL_TEXTURE_2D);
+	}
+	else
+	{
+		std::cout << "Error loading texture" << std::endl;
+	}
+
+	stbi_image_free(data);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
 	singleColorShader = Shader("RenderSingleColor.shader");
 	plane = Plane();
 	cube = Cube();
@@ -25,6 +50,9 @@ void MeshSpawner::Start()
 	meshes[1] = ColoredCube();
 	meshes[2] = Sphere();
 	meshes[3] = Plane();
+
+	shaders[0].Use();
+	shaders[0].SetTexture("myTexture", 0);
 }
 
 void MeshSpawner::Update()
@@ -79,6 +107,9 @@ void MeshSpawner::ImGuiRender(GLFWwindow * window)
 
 void MeshSpawner::Render()
 {
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, texture);
+
 	Matrix4x4 model, view, projection;
 
 	model = Matrix4x4::Translation(model, position);

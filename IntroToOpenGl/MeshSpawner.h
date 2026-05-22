@@ -28,6 +28,8 @@ public:
 private:
 	static MeshSpawner instance;
 
+	uint32_t texture;
+
 	Camera cam;
 	Shader singleColorShader;
 	Mesh plane;
