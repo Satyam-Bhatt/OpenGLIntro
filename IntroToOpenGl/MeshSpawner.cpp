@@ -150,7 +150,14 @@ void MeshSpawner::HandleInput(GLFWwindow * window)
 
 void MeshSpawner::Exit()
 {
-	plane.CleanUp();
+	glDisable(GL_DEPTH_TEST);
+
+	for(Mesh &m : meshes)
+	{
+		m.CleanUp();
+	}
+
+	transforms.clear();
 }
 
 MeshSpawner* MeshSpawner::GetInstance()

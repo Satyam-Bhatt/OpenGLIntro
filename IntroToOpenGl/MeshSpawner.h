@@ -32,8 +32,6 @@ private:
 
 	Camera cam;
 	Shader singleColorShader;
-	Mesh plane;
-	Mesh cube, sphere;
 
 	Shader shaders[3];
 	Mesh meshes[4];

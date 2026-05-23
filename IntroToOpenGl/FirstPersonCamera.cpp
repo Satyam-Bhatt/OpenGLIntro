@@ -345,6 +345,8 @@ void FirstPersonCamera::OnScroll(float xOffset, float yOffset)
 
 void FirstPersonCamera::Exit()
 {
+	glDisable(GL_DEPTH_TEST);
+
 	if (VAO != 0) glDeleteVertexArrays(1, &VAO);
 	if (VBO != 0) glDeleteVertexArrays(1, &VBO);
 	if (texture != 0) glDeleteTextures(1, &texture);
