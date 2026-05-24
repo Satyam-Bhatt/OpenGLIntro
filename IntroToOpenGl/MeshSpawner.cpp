@@ -158,6 +158,8 @@ void MeshSpawner::Exit()
 	}
 
 	transforms.clear();
+
+	scale = Vector3(1, 1, 1);
 }
 
 MeshSpawner* MeshSpawner::GetInstance()
