@@ -56,10 +56,9 @@ void MeshSpawner::Start()
 }
 
 void MeshSpawner::Update()
-{
-}
+{}
 
-void MeshSpawner::ImGuiRender(GLFWwindow * window)
+void MeshSpawner::ImGuiRender(GLFWwindow* window)
 {
 	GLint viewport[4];
 	glGetIntegerv(GL_VIEWPORT, viewport);
@@ -73,7 +72,6 @@ void MeshSpawner::ImGuiRender(GLFWwindow * window)
 	ImGui::Begin("Level Specific", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
 
 	ImGui::DragFloat3("cam", &camPos.x, 0.005f);
-	ImGui::DragFloat("rot", &angle, 0.005f);
 
 	ImGui::DragFloat3("Position", &position.x, 0.005f);
 	ImGui::DragFloat3("Rotation", &rotation.x, 0.005f);
@@ -84,10 +82,16 @@ void MeshSpawner::ImGuiRender(GLFWwindow * window)
 	ImGui::RadioButton("Single Color", &shaderSelection, 1);
 	ImGui::RadioButton("Vertex Color", &shaderSelection, 2);
 
-	ImGui::RadioButton("Cube", &meshSelection, 0);
-	ImGui::RadioButton("Colored Cube", &meshSelection, 1);
-	ImGui::RadioButton("Sphere", &meshSelection, 2);
-	ImGui::RadioButton("Plane", &meshSelection, 3);
+	if (shaderSelection == 0 || shaderSelection == 1)
+	{
+		ImGui::RadioButton("Cube", &meshSelection, 0);
+		ImGui::RadioButton("Sphere", &meshSelection, 2);
+		ImGui::RadioButton("Plane", &meshSelection, 3);
+	}
+	else if (shaderSelection == 2)
+	{
+		ImGui::RadioButton("Colored Cube", &meshSelection, 1);
+	}
 
 	if (ImGui::Button("Click to Add"))
 	{
@@ -101,7 +105,7 @@ void MeshSpawner::ImGuiRender(GLFWwindow * window)
 
 		transforms.push_back(t);
 	}
-		 
+
 	ImGui::End();
 }
 
@@ -111,10 +115,6 @@ void MeshSpawner::Render()
 	glBindTexture(GL_TEXTURE_2D, texture);
 
 	Matrix4x4 model, view, projection;
-
-	model = Matrix4x4::Translation(model, position);
-	model = Matrix4x4::Rotation(model, Vector3(1, 0, 0), angle);
-	model = Matrix4x4::Scale(model, scale);
 
 	view = Matrix4x4::Translation(view, camPos);
 
@@ -145,14 +145,14 @@ void MeshSpawner::Render()
 	}
 }
 
-void MeshSpawner::HandleInput(GLFWwindow * window)
+void MeshSpawner::HandleInput(GLFWwindow* window)
 {}
 
 void MeshSpawner::Exit()
 {
 	glDisable(GL_DEPTH_TEST);
 
-	for(Mesh &m : meshes)
+	for (Mesh& m : meshes)
 	{
 		m.CleanUp();
 	}
