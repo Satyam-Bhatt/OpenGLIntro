@@ -78,10 +78,20 @@ void MeshSpawner::ImGuiRender(GLFWwindow* window)
 	ImGui::DragFloat3("Scale", &scale.x, 0.005f);
 	ImGui::ColorEdit3("Color Pick", (float*)&color);
 
+	ImGui::Columns(2, "shader_mesh_columns", false);
+
+	// Column 1: Shader selection
+	ImGui::Text("Shader");
+	ImGui::Separator();
 	ImGui::RadioButton("Texture", &shaderSelection, 0);
 	ImGui::RadioButton("Single Color", &shaderSelection, 1);
 	ImGui::RadioButton("Vertex Color", &shaderSelection, 2);
 
+	ImGui::NextColumn();
+
+	// Column 2: Mesh selection
+	ImGui::Text("Mesh");
+	ImGui::Separator();
 	if (shaderSelection == 0 || shaderSelection == 1)
 	{
 		ImGui::RadioButton("Cube", &meshSelection, 0);
@@ -92,6 +102,8 @@ void MeshSpawner::ImGuiRender(GLFWwindow* window)
 	{
 		ImGui::RadioButton("Colored Cube", &meshSelection, 1);
 	}
+
+	ImGui::Columns(1);
 
 	if (ImGui::Button("Click to Add"))
 	{
