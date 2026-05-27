@@ -7,7 +7,6 @@ MeshSpawner::MeshSpawner()
 
 MeshSpawner::~MeshSpawner()
 {
-	plane.CleanUp();
 }
 
 void MeshSpawner::Start()
