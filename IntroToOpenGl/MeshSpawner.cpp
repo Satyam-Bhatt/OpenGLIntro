@@ -37,11 +37,6 @@ void MeshSpawner::Start()
 	stbi_image_free(data);
 	glBindTexture(GL_TEXTURE_2D, 0);
 
-	singleColorShader = Shader("RenderSingleColor.shader");
-	plane = Plane();
-	cube = Cube();
-	sphere = Sphere();
-
 	shaders[0] = Shader("RenderTexture.shader");
 	shaders[1] = Shader("RenderSingleColor.shader");
 	shaders[2] = Shader("RenderColor_PerVertex.shader");

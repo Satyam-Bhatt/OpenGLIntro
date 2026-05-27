@@ -31,7 +31,6 @@ private:
 	uint32_t texture;
 
 	Camera cam;
-	Shader singleColorShader;
 
 	Shader shaders[3];
 	Mesh meshes[4];
