@@ -63,7 +63,6 @@ void MeshSpawner::ImGuiRender(GLFWwindow* window)
 		ImVec2(0.5f, 1.0f)
 	);
 
-	// Weird issue with columns
 	ImGui::Begin("Level Specific", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
 
 	ImGui::DragFloat3("cam", &camPos.x, 0.005f);
