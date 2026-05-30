@@ -47,6 +47,8 @@ void MeshSpawner::Start()
 
 	shaders[0].Use();
 	shaders[0].SetTexture("myTexture", 0);
+
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 }
 
 void MeshSpawner::Update()
@@ -122,7 +124,7 @@ void MeshSpawner::Render()
 
 	Matrix4x4 model, view, projection;
 
-	view = Matrix4x4::Translation(view, camPos);
+	view = cam.GetViewMatrix();
 
 	projection = Matrix4x4::CreateProjectionMatrix_FOV_LeftHanded(45.0f * (PI / 180), (float)viewportData.width, (float)viewportData.height, 0.1f, 100.0f);
 
@@ -152,7 +154,16 @@ void MeshSpawner::Render()
 }
 
 void MeshSpawner::HandleInput(GLFWwindow* window)
-{}
+{
+	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+		cam.ProcessKeyboard(Camera_Movement::FORWARD);
+	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+		cam.ProcessKeyboard(Camera_Movement::BACKWARD);
+	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+		cam.ProcessKeyboard(Camera_Movement::RIGHT);
+	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+		cam.ProcessKeyboard(Camera_Movement::LEFT);
+}
 
 void MeshSpawner::Exit()
 {
