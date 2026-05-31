@@ -90,6 +90,20 @@ void TestScene_Main::HandleInput(GLFWwindow* window)
 	}
 }
 
+void TestScene_Main::OnMouseMove(float xOffset, float yOffset)
+{
+	if (currentProject != nullptr) {
+		currentProject->OnMouseMove(xOffset, yOffset);
+	}
+}
+
+void TestScene_Main::OnScroll(float xOffset, float yOffset)
+{
+	if (currentProject != nullptr) {
+		currentProject->OnScroll(xOffset, yOffset);
+	}
+}
+
 void TestScene_Main::Exit()
 {
 	if (currentProject != nullptr)

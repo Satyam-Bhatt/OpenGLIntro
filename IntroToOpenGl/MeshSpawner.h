@@ -21,9 +21,11 @@ public:
 	void ImGuiRender(GLFWwindow* window) override;
 	void Render() override;
 	void HandleInput(GLFWwindow* window) override;
+	void OnMouseMove(float xOffset, float yOffset) override;
+	void OnScroll(float xOffset, float yOffset)override;
 	void Exit() override;
 
-	static MeshSpawner* GetInstance();
+	static MeshSpawner* GetInstance(); 
 
 private:
 	static MeshSpawner instance;
@@ -40,6 +42,8 @@ private:
 	Vector3 rotation = Vector3(0, 0, 0);
 	Vector4 color;
 	int shaderSelection = 0, meshSelection = 0;
+
+	bool camMoveRotate = false;
 
 	Vector3 camPos = Vector3(0,0,10);
 	float angle = 0;

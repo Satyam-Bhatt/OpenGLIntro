@@ -3,7 +3,9 @@
 MeshSpawner MeshSpawner::instance;
 
 MeshSpawner::MeshSpawner()
-{}
+{
+	cam = Camera(Vector3(0, 0, -10));
+}
 
 MeshSpawner::~MeshSpawner()
 {
@@ -48,7 +50,15 @@ void MeshSpawner::Start()
 	shaders[0].Use();
 	shaders[0].SetTexture("myTexture", 0);
 
-	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	Transform t;
+	t.position = position;
+	t.rotation = rotation;
+	t.scale = scale;
+	t.color = color;
+	t.meshToUse = meshSelection;
+	t.shaderToUse = shaderSelection;
+
+	transforms.push_back(t);
 }
 
 void MeshSpawner::Update()
@@ -155,14 +165,43 @@ void MeshSpawner::Render()
 
 void MeshSpawner::HandleInput(GLFWwindow* window)
 {
-	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-		cam.ProcessKeyboard(Camera_Movement::FORWARD);
-	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-		cam.ProcessKeyboard(Camera_Movement::BACKWARD);
-	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-		cam.ProcessKeyboard(Camera_Movement::RIGHT);
-	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-		cam.ProcessKeyboard(Camera_Movement::LEFT);
+	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT))
+	{
+		camMoveRotate = true;
+	}
+	else
+	{
+		camMoveRotate = false;
+	}
+
+	if (camMoveRotate)
+	{
+		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+			cam.ProcessKeyboard(Camera_Movement::FORWARD);
+		if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+			cam.ProcessKeyboard(Camera_Movement::BACKWARD);
+		if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+			cam.ProcessKeyboard(Camera_Movement::LEFT);
+		if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+			cam.ProcessKeyboard(Camera_Movement::RIGHT);
+		if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
+			cam.ProcessKeyboard(Camera_Movement::UP);
+		if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
+			cam.ProcessKeyboard(Camera_Movement::DOWN);
+	}
+
+}
+
+void MeshSpawner::OnMouseMove(float xOffset, float yOffset)
+{
+	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT))
+		cam.ProcessMouseMovement(xOffset, yOffset);
+}
+
+void MeshSpawner::OnScroll(float xOffset, float yOffset)
+{
+	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT))
+		cam.ProcessMouseScroll(yOffset);
 }
 
 void MeshSpawner::Exit()
