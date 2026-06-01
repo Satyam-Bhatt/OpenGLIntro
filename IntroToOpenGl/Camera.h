@@ -28,6 +28,7 @@ const float SPEED = 5.0f;
 const float SENSTIVITY = 0.1f;
 const float ZOOM = 45.0f;
 
+// Works by just including
 class Camera
 {
 public:
