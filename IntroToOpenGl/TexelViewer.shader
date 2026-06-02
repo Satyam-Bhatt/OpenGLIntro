@@ -14,6 +14,7 @@ void main()
 
 #Satyam fragment
 
+#version 330 core
 in vec2 TexCoords;
 
 uniform sampler2D ourTexture;
