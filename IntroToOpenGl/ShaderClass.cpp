@@ -79,14 +79,6 @@ void ShaderClass::Render()
 	{
 		value -= 2.0f * deltaTime;
 	}
-	else if (value >= 1.0f)
-	{
-		value = 1.0f;
-	}
-	else if (value <= 0.0f)
-	{
-		value = 0.0f;
-	}
 	
 	// == Drawing ==
 	if (wireframeMode)
