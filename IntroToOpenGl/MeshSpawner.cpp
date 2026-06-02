@@ -77,8 +77,6 @@ void MeshSpawner::ImGuiRender(GLFWwindow* window)
 
 	ImGui::Begin("Level Specific", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
 
-	ImGui::DragFloat3("cam", &camPos.x, 0.005f);
-
 	ImGui::DragFloat3("Position", &position.x, 0.005f);
 	ImGui::DragFloat3("Rotation", &rotation.x, 0.005f);
 	ImGui::DragFloat3("Scale", &scale.x, 0.005f);
@@ -165,7 +163,7 @@ void MeshSpawner::Render()
 
 void MeshSpawner::HandleInput(GLFWwindow* window)
 {
-	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT))
+	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT))
 	{
 		camMoveRotate = true;
 	}
@@ -192,15 +190,17 @@ void MeshSpawner::HandleInput(GLFWwindow* window)
 
 }
 
-void MeshSpawner::OnMouseMove(float xOffset, float yOffset)
+void MeshSpawner::OnMouseMove(float xOffset, float yOffset, float xPos, float yPos)
 {
-	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT))
+	if (camMoveRotate)
 		cam.ProcessMouseMovement(xOffset, yOffset);
+
+	std::cout << "Mouse Move - xOffset: " << xOffset << ", yOffset: " << yOffset << ", xPos: " << xPos << ", yPos: " << yPos << std::endl;
 }
 
 void MeshSpawner::OnScroll(float xOffset, float yOffset)
 {
-	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT))
+	if (camMoveRotate)
 		cam.ProcessMouseScroll(yOffset);
 }
 

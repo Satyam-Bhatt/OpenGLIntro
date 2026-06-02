@@ -70,7 +70,7 @@ void mouse_callback(GLFWwindow* window, double xPos, double yPos)
 	mouseValues.mouseXOffset = xOffset;
 	mouseValues.mouseYOffset = yOffset;
 
-	currentState->OnMouseMove(xOffset, yOffset);
+	currentState->OnMouseMove(xOffset, yOffset, xPos, yPos);
 }
 
 void scroll_callback(GLFWwindow* window, double xOffset, double yOffset)

@@ -284,7 +284,7 @@ void FirstPersonCamera::HandleInput(GLFWwindow* window)
 		cameraPosition = storeCameraPosition;
 }
 
-void FirstPersonCamera::OnMouseMove(float xOffset, float yOffset)
+void FirstPersonCamera::OnMouseMove(float xOffset, float yOffset, float xPos, float yPos)
 {
 	if (mouseVisible) return;
 

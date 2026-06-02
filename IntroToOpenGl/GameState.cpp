@@ -1,6 +1,6 @@
 #include "GameState.h"
 
-void GameState::OnMouseMove(float xOffset, float yOffset)
+void GameState::OnMouseMove(float xOffset, float yOffset, float xPos, float yPos)
 {
 }
 
