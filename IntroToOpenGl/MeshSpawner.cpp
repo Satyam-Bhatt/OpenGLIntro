@@ -195,7 +195,23 @@ void MeshSpawner::OnMouseMove(float xOffset, float yOffset, float xPos, float yP
 	if (camMoveRotate)
 		cam.ProcessMouseMovement(xOffset, yOffset);
 
-	std::cout << "Mouse Move - xOffset: " << xOffset << ", yOffset: " << yOffset << ", xPos: " << xPos << ", yPos: " << yPos << std::endl;
+	//std::cout << "Mouse Move - xOffset: " << xOffset << ", yOffset: " << yOffset << ", xPos: " << xPos << ", yPos: " << yPos << std::endl;
+
+	GLint viewport[4];
+	glGetIntegerv(GL_VIEWPORT, viewport);
+
+	float leftIMGUIWindowWidth = viewport[2] - (float)viewportData.width;
+
+	Vector3 mouseSome = Vector3(xPos, yPos, 1);
+	Matrix4x4 someMat;
+	someMat[0][2] = leftIMGUIWindowWidth;
+	someMat[0][0] = viewportData.width/(viewportData.width + leftIMGUIWindowWidth);
+	someMat.Print();
+	std::cout << someMat[0][0] << " || " << viewportData.width << " || " << leftIMGUIWindowWidth << std::endl; // Left IMGI Windo widht is showing 0 what nonsense
+
+	Vector3 mousePosInWorld = someMat * mouseSome;
+
+	//std::cout << "Mouse Position in World: (" << mousePosInWorld.x << ", " << mousePosInWorld.y << ", " << mousePosInWorld.z << ")" << std::endl;
 }
 
 void MeshSpawner::OnScroll(float xOffset, float yOffset)
