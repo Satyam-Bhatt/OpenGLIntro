@@ -207,7 +207,7 @@ void MeshSpawner::OnMouseMove(float xOffset, float yOffset, float xPos, float yP
 	someMat[0][2] = leftIMGUIWindowWidth;
 	someMat[0][0] = viewportData.width/(viewportData.width + leftIMGUIWindowWidth);
 	someMat.Print();
-	std::cout << someMat[0][0] << " || " << viewportData.width << " || " << leftIMGUIWindowWidth << std::endl; // Left IMGI Windo widht is showing 0 what nonsense my shit life churdhar
+	std::cout << someMat[0][0] << " || " << viewportData.width << " || " << leftIMGUIWindowWidth << std::endl; // Left IMGI Windo widht is showing 0 what nonsense my shit life churdhar back
 
 	Vector3 mousePosInWorld = someMat * mouseSome;
 
