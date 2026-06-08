@@ -48,6 +48,8 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 
 	viewportData.height = height;
 	viewportData.width = viewportWidth;
+	viewportData.leftPanel = viewportStartPos;
+	viewportData.totalWidth = width;
 }
 
 // GLFW listens to mouse movement events using this function
@@ -116,6 +118,8 @@ bool Initialize()
 
 	viewportData.height = display_h;
 	viewportData.width = viewportWidth;
+	viewportData.leftPanel = viewportStartPos;
+	viewportData.totalWidth = display_w;
 
 	//Set the function to be called when the window is resized. Bind it once and GLFW will call it whenever the window is resized
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);

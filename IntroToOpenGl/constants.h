@@ -12,6 +12,8 @@ constexpr int VIEWPORT = 75;
 struct ViewportData {
     int width;
     int height;
+    int leftPanel;
+    int totalWidth;
 };
 
 struct MouseValues{

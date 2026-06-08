@@ -8,8 +8,7 @@ MeshSpawner::MeshSpawner()
 }
 
 MeshSpawner::~MeshSpawner()
-{
-}
+{}
 
 void MeshSpawner::Start()
 {
@@ -106,7 +105,7 @@ void MeshSpawner::ImGuiRender(GLFWwindow* window)
 
 	ImGui::Columns(1);
 
-	if(shaderSelection == 1)
+	if (shaderSelection == 1)
 		ImGui::ColorEdit3("Color Pick", (float*)&color);
 
 	if (ImGui::Button("Click to Add"))
@@ -195,23 +194,50 @@ void MeshSpawner::OnMouseMove(float xOffset, float yOffset, float xPos, float yP
 	if (camMoveRotate)
 		cam.ProcessMouseMovement(xOffset, yOffset);
 
-	//std::cout << "Mouse Move - xOffset: " << xOffset << ", yOffset: " << yOffset << ", xPos: " << xPos << ", yPos: " << yPos << std::endl;
+	std::cout << "xPos: " << xPos << ", yPos: " << yPos << std::endl;
 
 	GLint viewport[4];
 	glGetIntegerv(GL_VIEWPORT, viewport);
 
-	float leftIMGUIWindowWidth = viewport[2] - (float)viewportData.width;
+	float panelWidth = (float)viewportData.leftPanel;
 
 	Vector3 mouseSome = Vector3(xPos, yPos, 1);
 	Matrix4x4 someMat;
-	someMat[0][2] = leftIMGUIWindowWidth;
-	someMat[0][0] = viewportData.width/(viewportData.width + leftIMGUIWindowWidth);
-	someMat.Print();
-	std::cout << someMat[0][0] << " || " << viewportData.width << " || " << leftIMGUIWindowWidth << std::endl; // Left IMGI Windo widht is showing 0 what nonsense my shit life churdhar back
+	// x = ( xPos - ((lengthWin + leftIMGUIWindowWidth)/2) ) * (2 / (lengthWin - leftIMGUIWindowWidth))
+	// y = ( yPos + ((lengthWin - leftIMGUIWindowWidth)/2)) * (2 / (lengthWin - leftIMGUIWindowWidth))
+	someMat[0][2] = panelWidth;
+	someMat[0][0] = viewportData.width / (viewportData.width + panelWidth); // X Scale
+	someMat[1][1] = 1 / viewportData.height;
+	someMat[1][2] = -viewportData.height / 2;
+	//someMat.Print();
+	//std::cout << someMat[0][0] << " || " << viewportData.width << " || " << leftIMGUIWindowWidth << std::endl; // Left IMGI Windo widht is showing 0
 
-	Vector3 mousePosInWorld = someMat * mouseSome;
+	// KANISHKA
 
-	//std::cout << "Mouse Position in World: (" << mousePosInWorld.x << ", " << mousePosInWorld.y << ", " << mousePosInWorld.z << ")" << std::endl;
+	float xNew = (xPos - ((float)viewportData.totalWidth + panelWidth) / 2) * (2 / ((float)viewportData.totalWidth - panelWidth));
+	float yNew = (-yPos + (float)viewportData.height / 2) * (2 / (float)viewportData.height);
+
+	float xScale = 2 / ((float)viewportData.totalWidth - panelWidth);
+	float xShift = -((float)viewportData.totalWidth + panelWidth) / 2 * (2 / ((float)viewportData.totalWidth - panelWidth));
+
+	float yScale = -2 / (float)viewportData.height;
+	float yShift = ((float)viewportData.height / 2) * (2 / (float)viewportData.height);
+
+	Matrix4x4 kanishkaMatrix;
+	kanishkaMatrix[0][0] = xScale;
+	kanishkaMatrix[0][2] = xShift;
+	kanishkaMatrix[1][1] = yScale;
+	kanishkaMatrix[1][2] = yShift;
+	kanishkaMatrix[3][3] = 0;
+
+	std::cout << "X: " << xNew << " ||  Y:" << yNew << std::endl;
+	//std::cout << "Left Panel Width: " << panelWidth << " || ViewPort Width: " << viewportData.width << " || Total Width: " << viewportData.totalWidth << " || Height: " << viewportData.height << std::endl;
+
+	////
+
+	Vector3 mousePosInWorld = kanishkaMatrix * mouseSome;
+
+	std::cout << "Mouse Position in World: (" << mousePosInWorld.x << ", " << mousePosInWorld.y << ", " << mousePosInWorld.z << ")" << std::endl;
 }
 
 void MeshSpawner::OnScroll(float xOffset, float yOffset)
