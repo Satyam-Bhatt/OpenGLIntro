@@ -202,13 +202,7 @@ void MeshSpawner::OnMouseMove(float xOffset, float yOffset, float xPos, float yP
 	float panelWidth = (float)viewportData.leftPanel;
 
 	Vector3 mouseSome = Vector3(xPos, yPos, 1);
-	Matrix4x4 someMat;
-	// x = ( xPos - ((lengthWin + leftIMGUIWindowWidth)/2) ) * (2 / (lengthWin - leftIMGUIWindowWidth))
-	// y = ( yPos + ((lengthWin - leftIMGUIWindowWidth)/2)) * (2 / (lengthWin - leftIMGUIWindowWidth))
-	someMat[0][2] = panelWidth;
-	someMat[0][0] = viewportData.width / (viewportData.width + panelWidth); // X Scale
-	someMat[1][1] = 1 / viewportData.height;
-	someMat[1][2] = -viewportData.height / 2;
+
 	//someMat.Print();
 	//std::cout << someMat[0][0] << " || " << viewportData.width << " || " << leftIMGUIWindowWidth << std::endl; // Left IMGI Windo widht is showing 0
 
@@ -235,7 +229,11 @@ void MeshSpawner::OnMouseMove(float xOffset, float yOffset, float xPos, float yP
 
 	////
 
+	Matrix4x4 view = cam.GetViewMatrix();
+	Matrix4x4 projection = Matrix4x4::CreateProjectionMatrix_FOV_LeftHanded(45.0f * (PI / 180), (float)viewportData.width, (float)viewportData.height, 0.1f, 100.0f);
+
 	Vector3 mousePosInWorld = kanishkaMatrix * mouseSome;
+	mousePosInWorld = projection * view * mousePosInWorld;
 
 	std::cout << "Mouse Position in World: (" << mousePosInWorld.x << ", " << mousePosInWorld.y << ", " << mousePosInWorld.z << ")" << std::endl;
 }
