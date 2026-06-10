@@ -264,6 +264,16 @@ namespace Matrix
 			return result;
 		}
 
+		Vector::Vector4 operator*(const Vector::Vector4& vec) const {
+			Vector::Vector4 result;
+			result.x = m[0][0] * vec.x + m[0][1] * vec.y + m[0][2] * vec.z + m[0][3] * vec.w;
+			result.y = m[1][0] * vec.x + m[1][1] * vec.y + m[1][2] * vec.z + m[1][3] * vec.w;
+			result.z = m[2][0] * vec.x + m[2][1] * vec.y + m[2][2] * vec.z + m[2][3] * vec.w;
+			result.w = m[3][0] * vec.x + m[3][1] * vec.y + m[3][2] * vec.z + m[3][3] * vec.w;
+
+			return result;
+		}
+
 		Vector::Vector3 operator*(const Vector::Vector3& vec) const {
 			Vector::Vector3 result;
 			result.x = m[0][0] * vec.x + m[0][1] * vec.y + m[0][2] * vec.z + m[0][3] * 1.0f;
