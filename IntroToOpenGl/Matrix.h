@@ -376,6 +376,58 @@ namespace Matrix
 			return result;
 		}
 
+		Matrix4x4 Inverse() const
+		{
+			// Compute 2x2 sub-determinants (cofactors) that get reused
+			float s0 = m[0][0] * m[1][1] - m[1][0] * m[0][1];
+			float s1 = m[0][0] * m[1][2] - m[1][0] * m[0][2];
+			float s2 = m[0][0] * m[1][3] - m[1][0] * m[0][3];
+			float s3 = m[0][1] * m[1][2] - m[1][1] * m[0][2];
+			float s4 = m[0][1] * m[1][3] - m[1][1] * m[0][3];
+			float s5 = m[0][2] * m[1][3] - m[1][2] * m[0][3];
+
+			float c5 = m[2][2] * m[3][3] - m[3][2] * m[2][3];
+			float c4 = m[2][1] * m[3][3] - m[3][1] * m[2][3];
+			float c3 = m[2][1] * m[3][2] - m[3][1] * m[2][2];
+			float c2 = m[2][0] * m[3][3] - m[3][0] * m[2][3];
+			float c1 = m[2][0] * m[3][2] - m[3][0] * m[2][2];
+			float c0 = m[2][0] * m[3][1] - m[3][0] * m[2][1];
+
+			float det = s0 * c5 - s1 * c4 + s2 * c3 + s3 * c2 - s4 * c1 + s5 * c0;
+
+			if (std::abs(det) < 1e-6f)
+			{
+				std::cout << "Matrix is not invertible (det ~ 0)" << std::endl;
+				return Matrix4x4::Identity(); // fallback
+			}
+
+			float invDet = 1.0f / det;
+
+			Matrix4x4 result;
+
+			result[0][0] = (m[1][1] * c5 - m[1][2] * c4 + m[1][3] * c3) * invDet;
+			result[0][1] = (-m[0][1] * c5 + m[0][2] * c4 - m[0][3] * c3) * invDet;
+			result[0][2] = (m[3][1] * s5 - m[3][2] * s4 + m[3][3] * s3) * invDet;
+			result[0][3] = (-m[2][1] * s5 + m[2][2] * s4 - m[2][3] * s3) * invDet;
+
+			result[1][0] = (-m[1][0] * c5 + m[1][2] * c2 - m[1][3] * c1) * invDet;
+			result[1][1] = (m[0][0] * c5 - m[0][2] * c2 + m[0][3] * c1) * invDet;
+			result[1][2] = (-m[3][0] * s5 + m[3][2] * s2 - m[3][3] * s1) * invDet;
+			result[1][3] = (m[2][0] * s5 - m[2][2] * s2 + m[2][3] * s1) * invDet;
+
+			result[2][0] = (m[1][0] * c4 - m[1][1] * c2 + m[1][3] * c0) * invDet;
+			result[2][1] = (-m[0][0] * c4 + m[0][1] * c2 - m[0][3] * c0) * invDet;
+			result[2][2] = (m[3][0] * s4 - m[3][1] * s2 + m[3][3] * s0) * invDet;
+			result[2][3] = (-m[2][0] * s4 + m[2][1] * s2 - m[2][3] * s0) * invDet;
+
+			result[3][0] = (-m[1][0] * c3 + m[1][1] * c1 - m[1][2] * c0) * invDet;
+			result[3][1] = (m[0][0] * c3 - m[0][1] * c1 + m[0][2] * c0) * invDet;
+			result[3][2] = (-m[3][0] * s3 + m[3][1] * s1 - m[3][2] * s0) * invDet;
+			result[3][3] = (m[2][0] * s3 - m[2][1] * s1 + m[2][2] * s0) * invDet;
+
+			return result;
+		}
+
 		static Matrix4x4 Identity() {
 			Matrix4x4 result;
 			for (int i = 0; i < 4; i++) {

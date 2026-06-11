@@ -6,6 +6,10 @@
 
 namespace Vector {
 
+	// Forward declaration - Promise to complier that it will get these things later. In case Vector3 has Vector4 but Vector4 comes after Vector3
+	struct Vector3;
+	struct Vector4;
+
 	struct Vector2 {
 		float x;
 		float y;
@@ -190,6 +194,9 @@ namespace Vector {
 
 		// Copy constructor
 		Vector3(const Vector3& other) : x(other.x), y(other.y), z(other.z) {}
+
+		// Its declaration is at the bottom after Vector4 struct has been defined
+		explicit Vector3(const Vector4& a);
 
 		// Assignment operator
 		Vector3& operator=(const Vector3& other) {
@@ -534,6 +541,7 @@ namespace Vector {
 		return vector * scalar;
 	}
 
+	inline Vector3::Vector3(const Vector4& a) : x(a.x), y(a.y), z(a.z) {}
 }
 
 #endif // VECTOR_H

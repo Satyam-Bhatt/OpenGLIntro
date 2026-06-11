@@ -205,8 +205,37 @@ void MeshSpawner::OnMouseMove(float xOffset, float yOffset, float xPos, float yP
 
 	// KANISHKA
 
-	float xNew = (xPos - ((float)viewportData.totalWidth + panelWidth) / 2) * (2 / ((float)viewportData.totalWidth - panelWidth));
-	float yNew = (-yPos + (float)viewportData.height / 2) * (2 / (float)viewportData.height);
+	//float xNew = (xPos - ((float)viewportData.totalWidth + panelWidth) / 2) * (2 / ((float)viewportData.totalWidth - panelWidth));
+	//float yNew = (-yPos + (float)viewportData.height / 2) * (2 / (float)viewportData.height);
+
+	float ndcX = (xPos - viewportData.leftPanel) / viewportData.width * 2.0f - 1.0f;
+	float ndcY = 1.0f - (yPos / viewportData.height) * 2.0f;
+	
+	Vector4 nearPoint = Vector4(ndcX, ndcY, 0, 1);
+	Vector4 farPoint = Vector4(ndcX, ndcY, 1, 1);
+
+	//Clip to world
+	Matrix4x4 view = cam.GetViewMatrix();
+	Matrix4x4 projection = Matrix4x4::CreateProjectionMatrix_FOV_LeftHanded(45.0f * (PI / 180), (float)viewportData.width, (float)viewportData.height, 0.1f, 100.0f);
+
+	Matrix4x4 inVP = (projection * view).Inverse();
+
+	Vector4 worldNear = inVP * nearPoint;
+	Vector4 worldFar = inVP * farPoint;
+
+	// Perspective divide
+	// TODO: Test values without
+	worldNear /= worldNear.w;
+	worldFar /= worldFar.w;
+
+	Vector3 rayOrigin = Vector3(worldNear.x, worldNear.y, worldNear.z);
+	Vector3 rayDirection = Vector3(worldFar - worldNear).Normalize();
+
+	std::cout << "X: " << ndcX << " ||  Y:" << ndcY << std::endl;
+	std::cout << "world near: ";
+	worldNear.Print();
+	std::cout << "world FAR: ";
+	worldFar.Print();
 
 	float xScale = 2 / ((float)viewportData.totalWidth - panelWidth);
 	float xShift = -((float)viewportData.totalWidth + panelWidth) / 2 * (2 / ((float)viewportData.totalWidth - panelWidth));
@@ -220,19 +249,16 @@ void MeshSpawner::OnMouseMove(float xOffset, float yOffset, float xPos, float yP
 	kanishkaMatrix[1][1] = yScale;
 	kanishkaMatrix[1][3] = yShift;
 	kanishkaMatrix[3][3] = 0;
-
-	std::cout << "X: " << xNew << " ||  Y:" << yNew << std::endl;
 	//std::cout << "Left Panel Width: " << panelWidth << " || ViewPort Width: " << viewportData.width << " || Total Width: " << viewportData.totalWidth << " || Height: " << viewportData.height << std::endl;
 
 	////
 
-	Matrix4x4 view = cam.GetViewMatrix();
-	Matrix4x4 projection = Matrix4x4::CreateProjectionMatrix_FOV_LeftHanded(45.0f * (PI / 180), (float)viewportData.width, (float)viewportData.height, 0.1f, 100.0f);
+
 
 	Vector4 mousePosInWorld = kanishkaMatrix * mouseSome;
 	mousePosInWorld = projection * view * mousePosInWorld;
 
-	std::cout << "Mouse Position in World: (" << mousePosInWorld.x << ", " << mousePosInWorld.y << ", " << mousePosInWorld.z << ", " << mousePosInWorld.w << ")" << std::endl;
+	//std::cout << "Mouse Position in World: (" << mousePosInWorld.x << ", " << mousePosInWorld.y << ", " << mousePosInWorld.z << ", " << mousePosInWorld.w << ")" << std::endl;
 }
 
 void MeshSpawner::OnScroll(float xOffset, float yOffset)
