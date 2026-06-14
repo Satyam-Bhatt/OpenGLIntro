@@ -230,7 +230,7 @@ void MeshSpawner::OnMouseMove(float xOffset, float yOffset, float xPos, float yP
 
 	// Perspective divide
 	// Divide by w so that the w component comes back to be 1
-	// TODO: Why
+	// TODO: Why don't
 	worldNear /= worldNear.w;
 	worldFar /= worldFar.w;
 
