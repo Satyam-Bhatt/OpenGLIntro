@@ -222,17 +222,32 @@ void MeshSpawner::OnMouseMove(float xOffset, float yOffset, float xPos, float yP
 	Matrix4x4 view = cam.GetViewMatrix();
 	Matrix4x4 projection = Matrix4x4::CreateProjectionMatrix_FOV_LeftHanded(45.0f * (PI / 180), (float)viewportData.width, (float)viewportData.height, 0.1f, 100.0f);
 
-	// TODO: Why
+	// clipPoint = projection * view * worldPoint
+	// Suppose projection * view is M
+	// clipPoint = M * worldPoint;
+	// M⁻¹ * clip = M⁻¹ * M * world
+	// M⁻¹* clip = I * world
+	// M⁻¹ * clip = world
+	// Hence  world = M⁻¹ * clip
+	// M⁻¹ First undoes the projection — expands the cube back into a frustum. Then undoes the view — moves everything back to where the camera actually is in the world
 	Matrix4x4 inVP = (projection * view).Inverse();
 
+	// Convert clip to world space
 	Vector4 worldNear = inVP * nearPoint;
 	Vector4 worldFar = inVP * farPoint;
 
 	// Perspective divide
+	// This converts homogenous to cartesian coordinates
 	// Divide by w so that the w component comes back to be 1
-	// TODO: Why don't
+	// W is the bottom most row of the matrix 4x4
+	// w kinda scales things up thats it I guess
+	// TODO: Sister Times
+	std::cout << "World Far: ";
+	worldFar.Print();
 	worldNear /= worldNear.w;
 	worldFar /= worldFar.w;
+	std::cout << "World Far  2: ";
+	worldFar.Print();
 
 	Vector3 rayOrigin = Vector3(worldNear.x, worldNear.y, worldNear.z);
 	Vector3 rayDirection = Vector3(worldFar - worldNear).Normalize();

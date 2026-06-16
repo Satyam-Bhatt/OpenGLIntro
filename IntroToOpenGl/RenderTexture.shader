@@ -31,5 +31,5 @@ uniform sampler2D myTexture;
 
 void main()
 {
-[[[[[[[[[[[[[[	FragColor = texture(myTexture, UV);
+	FragColor = texture(myTexture, UV);
 }
