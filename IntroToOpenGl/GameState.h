@@ -18,10 +18,12 @@
 #include "constants.h"
 #include "Geometry.h"
 #include "Camera.h"
+#include "RayUtils.h"
 
 using namespace Matrix;
 using namespace Vector;
 using namespace Geometry;
+using namespace RayUtils;
 
 class GameState
 {

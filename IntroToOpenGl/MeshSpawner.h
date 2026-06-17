@@ -47,5 +47,7 @@ private:
 
 	Vector3 camPos = Vector3(0,0,10);
 	float angle = 0;
+
+	Matrix4x4 view, projection;
 };
 
