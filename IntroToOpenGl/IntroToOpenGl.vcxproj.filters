@@ -511,5 +511,6 @@
     <None Include="RenderSingleColor.shader">
       <Filter>Shader\CommonShaders</Filter>
     </None>
+    <None Include="PickingShader.shader" />
   </ItemGroup>
 </Project>

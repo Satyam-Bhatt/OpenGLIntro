@@ -49,5 +49,15 @@ private:
 	float angle = 0;
 
 	Matrix4x4 view, projection;
+
+	// Allocate buffer (Frame Buffer Object) for Render IDs
+	GLuint pickingFBO;
+	GLuint pickingTexture;
+	GLuint pickingDepth;
+
+	void SetupPickingBuffer();
+	void RenderPickingPass();
+
+	Shader pickingShader;
 };
 

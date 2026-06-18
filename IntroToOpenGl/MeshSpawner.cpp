@@ -37,6 +37,8 @@ void MeshSpawner::Start()
 	stbi_image_free(data);
 	glBindTexture(GL_TEXTURE_2D, 0);
 
+	SetupPickingBuffer();
+
 	shaders[0] = Shader("RenderTexture.shader");
 	shaders[1] = Shader("RenderSingleColor.shader");
 	shaders[2] = Shader("RenderColor_PerVertex.shader");
@@ -61,6 +63,37 @@ void MeshSpawner::Start()
 
 	projection = Matrix4x4::CreateProjectionMatrix_FOV_LeftHanded(45.0f * (PI / 180), (float)viewportData.width, (float)viewportData.height, 0.1f, 100.0f);
 }
+
+void MeshSpawner::SetupPickingBuffer()
+{
+	glGenFramebuffers(1, &pickingFBO);
+	glBindFramebuffer(GL_FRAMEBUFFER, pickingFBO);
+
+	// Color Texture - stores object IDs
+	glGenTextures(1, &pickingTexture);
+	glBindTexture(GL_TEXTURE_2D, pickingTexture);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, viewportData.width, viewportData.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, pickingTexture, 0);
+
+	// Depth buffer - still need depth testing
+	// TODO: Why need picking depth?
+	glGenRenderbuffers(1, &pickingDepth);
+	glBindRenderbuffer(GL_RENDERBUFFER, pickingDepth);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, viewportData.width, viewportData.height);
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, pickingDepth);
+
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+		std::cout << "Picking FBO not complete!" << std::endl;
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	pickingShader = Shader("PickingShader.shader");
+}
+
+void MeshSpawner::RenderPickingPass()
+{}
 
 void MeshSpawner::Update()
 {}
@@ -234,3 +267,5 @@ MeshSpawner* MeshSpawner::GetInstance()
 {
 	return &instance;
 }
+
+
