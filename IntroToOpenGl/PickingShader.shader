@@ -25,8 +25,11 @@ uniform int objectID;
 
 void main()
 {
-	// Encode ID into RGBA
-	// R channel is enough for up to 255 objects
-	// Can use more channels for larger scenes
-	FragColor = vec4(float(objectID) / 255.0, 0,0,1.0);
+	// Supports up to 2^32 objects
+	FragColor = vec4(
+    float((objectID)       & 0xFF) / 255.0,
+    float((objectID >> 8)  & 0xFF) / 255.0,
+    float((objectID >> 16) & 0xFF) / 255.0,
+    float((objectID >> 24) & 0xFF) / 255.0
+);
 }

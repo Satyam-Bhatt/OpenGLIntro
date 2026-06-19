@@ -57,6 +57,7 @@ private:
 
 	void SetupPickingBuffer();
 	void RenderPickingPass();
+	int GetObjectIDAtMouse(float xPos, float yPos);
 
 	Shader pickingShader;
 };

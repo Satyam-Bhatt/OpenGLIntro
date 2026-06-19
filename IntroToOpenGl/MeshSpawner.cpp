@@ -92,9 +92,6 @@ void MeshSpawner::SetupPickingBuffer()
 	pickingShader = Shader("PickingShader.shader");
 }
 
-void MeshSpawner::RenderPickingPass()
-{}
-
 void MeshSpawner::Update()
 {}
 
@@ -161,6 +158,8 @@ void MeshSpawner::ImGuiRender(GLFWwindow* window)
 
 void MeshSpawner::Render()
 {
+	RenderPickingPass(); // Before main render
+
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture);
 
@@ -193,6 +192,37 @@ void MeshSpawner::Render()
 	}
 }
 
+void MeshSpawner::RenderPickingPass()
+{
+	glBindFramebuffer(GL_FRAMEBUFFER, pickingFBO);
+	glClearColor(1.0f, 1.0f, 1.0f, 1.0f); // white = no object (ID 255)
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	pickingShader.Use();
+	pickingShader.SetMat4_Custom("view", view.m);
+	pickingShader.SetMat4_Custom("projection", projection.m);
+
+	for (int i = 0; i < transforms.size(); i++)
+	{
+		Transform t = transforms[i];
+
+		Matrix4x4 model = Matrix4x4::Identity();
+		model = Matrix4x4::Translation(model, t.position);
+		model = Matrix4x4::Rotation(model, Vector3(1, 0, 0), t.rotation.x * (PI / 180));
+		model = Matrix4x4::Rotation(model, Vector3(0, 1, 0), t.rotation.y * (PI / 180));
+		model = Matrix4x4::Rotation(model, Vector3(0, 0, 1), t.rotation.z * (PI / 180));
+		model = Matrix4x4::Scale(model, t.scale);
+
+		pickingShader.SetMat4_Custom("model", model.m);
+		pickingShader.SetInt("objectID", i);
+
+		meshes[t.meshToUse].Draw();
+	}
+
+	// Unbind the buffer
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
 void MeshSpawner::HandleInput(GLFWwindow* window)
 {
 	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT))
@@ -220,6 +250,19 @@ void MeshSpawner::HandleInput(GLFWwindow* window)
 			cam.ProcessKeyboard(Camera_Movement::DOWN);
 	}
 
+	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
+	{
+		double xPos, yPos;
+		glfwGetCursorPos(window, &xPos, &yPos);
+
+		int id = GetObjectIDAtMouse((float)xPos, (float)yPos);
+
+		if (id >= 0 && id < transforms.size())
+			std::cout << "Clicked object: " << id << std::endl;
+		else
+			std::cout << "Clicked Empty Space" << std::endl;
+	}
+
 }
 
 void MeshSpawner::OnMouseMove(float xOffset, float yOffset, float xPos, float yPos)
@@ -234,6 +277,7 @@ void MeshSpawner::OnMouseMove(float xOffset, float yOffset, float xPos, float yP
 	// if mouse is over left panel then don't process the world location and selection
 	if (xPos < viewportData.leftPanel) return;
 
+
 	Ray ray = ScreenToRay(xPos, yPos, view, projection);
 
 	// Check Intersection
@@ -241,6 +285,27 @@ void MeshSpawner::OnMouseMove(float xOffset, float yOffset, float xPos, float yP
 	float dot = ray.direction.Dot(toObject);
 
 	std::cout << "Dot with object: " << dot << std::endl;
+}
+
+int MeshSpawner::GetObjectIDAtMouse(float xPos, float yPos)
+{
+	glBindFramebuffer(GL_FRAMEBUFFER, pickingFBO);
+
+	// OpenGL y is flipped vs screen y
+	float flippedY = viewportData.height - yPos;
+
+	unsigned char pixel[4];
+	glReadPixels((int)xPos - viewportData.leftPanel, (int)flippedY, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, pixel);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	// Check for white pixel (no object)
+	if (pixel[0] == 255 && pixel[1] == 255 && pixel[2] == 255 && pixel[3] == 255)
+		return -1;
+
+	int id = pixel[0] | (pixel[1] << 8) | (pixel[2] << 16) | (pixel[3] << 24);
+
+	return id;
 }
 
 void MeshSpawner::OnScroll(float xOffset, float yOffset)
