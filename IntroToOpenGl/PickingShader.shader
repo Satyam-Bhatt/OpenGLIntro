@@ -25,11 +25,11 @@ uniform int objectID;
 
 void main()
 {
-	// Supports up to 2^32 objects
-	FragColor = vec4(
-    float((objectID)       & 0xFF) / 255.0,
-    float((objectID >> 8)  & 0xFF) / 255.0,
-    float((objectID >> 16) & 0xFF) / 255.0,
-    float((objectID >> 24) & 0xFF) / 255.0
-);
+    int id = objectID;  // explicit int
+    FragColor = vec4(
+        float((id)       & 0xFF) / 255.0,
+        float((id >> 8)  & 0xFF) / 255.0,
+        float((id >> 16) & 0xFF) / 255.0,
+        float((id >> 24) & 0xFF) / 255.0
+    );
 }

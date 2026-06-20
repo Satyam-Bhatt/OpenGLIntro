@@ -90,6 +90,9 @@ void MeshSpawner::SetupPickingBuffer()
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	pickingShader = Shader("PickingShader.shader");
+
+	std::cout << "FBO Status: " << glCheckFramebufferStatus(GL_FRAMEBUFFER) << std::endl;
+	// Should print 36053 which is GL_FRAMEBUFFER_COMPLETE
 }
 
 void MeshSpawner::Update()
@@ -158,14 +161,14 @@ void MeshSpawner::ImGuiRender(GLFWwindow* window)
 
 void MeshSpawner::Render()
 {
+	view = cam.GetViewMatrix();
+	
 	RenderPickingPass(); // Before main render
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture);
 
 	Matrix4x4 model;
-
-	view = cam.GetViewMatrix();
 
 	for (int i = 0; i < transforms.size(); i++)
 	{
@@ -195,6 +198,7 @@ void MeshSpawner::Render()
 void MeshSpawner::RenderPickingPass()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, pickingFBO);
+	glViewport(0, 0, viewportData.width, viewportData.height); // TODO: Why does this work
 	glClearColor(1.0f, 1.0f, 1.0f, 1.0f); // white = no object (ID 255)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -221,6 +225,21 @@ void MeshSpawner::RenderPickingPass()
 
 	// Unbind the buffer
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	glViewport(viewportData.leftPanel, 0, viewportData.width, viewportData.height); // TODO: Why does this work
+
+	// DEBUG — read center pixel immediately after pass
+	glBindFramebuffer(GL_FRAMEBUFFER, pickingFBO);
+	unsigned char debugPixel[4];
+	glReadPixels(viewportData.width / 2, viewportData.height / 2,
+		1, 1, GL_RGBA, GL_UNSIGNED_BYTE, debugPixel);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	//std::cout << "Center pixel: "
+	//	<< (int)debugPixel[0] << ", "
+	//	<< (int)debugPixel[1] << ", "
+	//	<< (int)debugPixel[2] << ", "
+	//	<< (int)debugPixel[3] << std::endl;
 }
 
 void MeshSpawner::HandleInput(GLFWwindow* window)
@@ -284,27 +303,32 @@ void MeshSpawner::OnMouseMove(float xOffset, float yOffset, float xPos, float yP
 	Vector3 toObject = (transforms[0].position - ray.origin).Normalize();
 	float dot = ray.direction.Dot(toObject);
 
-	std::cout << "Dot with object: " << dot << std::endl;
+	//std::cout << "Dot with object: " << dot << std::endl;
 }
 
 int MeshSpawner::GetObjectIDAtMouse(float xPos, float yPos)
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, pickingFBO);
 
-	// OpenGL y is flipped vs screen y
 	float flippedY = viewportData.height - yPos;
 
 	unsigned char pixel[4];
-	glReadPixels((int)xPos - viewportData.leftPanel, (int)flippedY, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, pixel);
+	glReadPixels((int)xPos - viewportData.leftPanel, (int)flippedY,
+		1, 1, GL_RGBA, GL_UNSIGNED_BYTE, pixel);
+
+	// ✅ Print actual pixel values
+	std::cout << "Pixel RGBA: "
+		<< (int)pixel[0] << ", "
+		<< (int)pixel[1] << ", "
+		<< (int)pixel[2] << ", "
+		<< (int)pixel[3] << std::endl;
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-	// Check for white pixel (no object)
 	if (pixel[0] == 255 && pixel[1] == 255 && pixel[2] == 255 && pixel[3] == 255)
 		return -1;
 
 	int id = pixel[0] | (pixel[1] << 8) | (pixel[2] << 16) | (pixel[3] << 24);
-
 	return id;
 }
 
@@ -316,6 +340,10 @@ void MeshSpawner::OnScroll(float xOffset, float yOffset)
 
 void MeshSpawner::Exit()
 {
+	glDeleteFramebuffers(1, &pickingFBO);
+	glDeleteTextures(1, &pickingTexture);
+	glDeleteRenderbuffers(1, &pickingDepth);
+
 	glDisable(GL_DEPTH_TEST);
 
 	for (Mesh& m : meshes)
