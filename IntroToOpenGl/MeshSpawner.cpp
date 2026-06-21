@@ -198,7 +198,7 @@ void MeshSpawner::Render()
 void MeshSpawner::RenderPickingPass()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, pickingFBO);
-	glViewport(0, 0, viewportData.width, viewportData.height); // TODO: Why does this work
+	glViewport(0, 0, viewportData.width, viewportData.height); // TODO: Why does this work need to understand
 	glClearColor(1.0f, 1.0f, 1.0f, 1.0f); // white = no object (ID 255)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
