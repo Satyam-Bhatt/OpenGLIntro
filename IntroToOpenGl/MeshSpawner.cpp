@@ -90,9 +90,6 @@ void MeshSpawner::SetupPickingBuffer()
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	pickingShader = Shader("PickingShader.shader");
-
-	std::cout << "FBO Status: " << glCheckFramebufferStatus(GL_FRAMEBUFFER) << std::endl;
-	// Should print 36053 which is GL_FRAMEBUFFER_COMPLETE
 }
 
 void MeshSpawner::Update()
@@ -161,12 +158,10 @@ void MeshSpawner::ImGuiRender(GLFWwindow* window)
 
 void MeshSpawner::Render()
 {
-	view = cam.GetViewMatrix();
-	
-	RenderPickingPass(); // Before main render
-
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture);
+
+	view = cam.GetViewMatrix();
 
 	Matrix4x4 model;
 
@@ -195,10 +190,33 @@ void MeshSpawner::Render()
 	}
 }
 
+
+// 1. glBindFramebuffer(pickingFBO)
+//                         ↓
+// 2. glViewport(0, 0, width, height)  — reset so cube renders at correct pixel
+//                         ↓
+// 3. Render all objects with unique ID colors
+//                         ↓
+// 4. glBindFramebuffer(0)  — FBO now holds the ID texture in memory
+//                         ↓
+// 5. User clicks at screen xPos = 750, yPos = 400
+//                         ↓
+// 6. xPos - leftPanel = 750 - 300 = 450  — convert screen coords to FBO coords
+// flippedY = height - yPos = 800 - 400 = 400  — flip Y
+//                         ↓
+// 7. glReadPixels(450, 400, ...)  — read that pixel from FBO
+//                         ↓
+// 8. Decode RGBA → object ID
 void MeshSpawner::RenderPickingPass()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, pickingFBO);
-	glViewport(0, 0, viewportData.width, viewportData.height); // TODO: Why does this work need to understand
+	// The FBO is its own blank canvas - it doesn't inherit your screen layout, so you have to reset the viewport to match it.
+	// FBO doesn't know about the left panel offset
+	// For FBO rendering starts from (0,0)
+	// When viewport state is carried over from glViewport(leftPanel, 0, width, height) the texture shifts to the right
+	// This is why when writing to the buffer we want to reset the viewport so that the object doesn't shift to the right
+	// 
+	glViewport(0, 0, viewportData.width, viewportData.height); // TODO: Why does this work
 	glClearColor(1.0f, 1.0f, 1.0f, 1.0f); // white = no object (ID 255)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -226,20 +244,8 @@ void MeshSpawner::RenderPickingPass()
 	// Unbind the buffer
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
+	// This tells OpenGL to start rendering from viewportData.leftPanel
 	glViewport(viewportData.leftPanel, 0, viewportData.width, viewportData.height); // TODO: Why does this work
-
-	// DEBUG — read center pixel immediately after pass
-	glBindFramebuffer(GL_FRAMEBUFFER, pickingFBO);
-	unsigned char debugPixel[4];
-	glReadPixels(viewportData.width / 2, viewportData.height / 2,
-		1, 1, GL_RGBA, GL_UNSIGNED_BYTE, debugPixel);
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-	//std::cout << "Center pixel: "
-	//	<< (int)debugPixel[0] << ", "
-	//	<< (int)debugPixel[1] << ", "
-	//	<< (int)debugPixel[2] << ", "
-	//	<< (int)debugPixel[3] << std::endl;
 }
 
 void MeshSpawner::HandleInput(GLFWwindow* window)
@@ -271,6 +277,8 @@ void MeshSpawner::HandleInput(GLFWwindow* window)
 
 	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
 	{
+		RenderPickingPass(); // Before main render
+
 		double xPos, yPos;
 		glfwGetCursorPos(window, &xPos, &yPos);
 
