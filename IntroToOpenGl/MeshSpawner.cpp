@@ -72,7 +72,10 @@ void MeshSpawner::SetupPickingBuffer()
 	// Color Texture - stores object IDs
 	glGenTextures(1, &pickingTexture);
 	glBindTexture(GL_TEXTURE_2D, pickingTexture);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, viewportData.width, viewportData.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+	// We want viewportData.width + viewportData.leftPanel because FBO doesn't know about the viewport offset and starts from 0,0 not from viewport.leftPanel,0
+	// This makes the entire screen size texture we render to
+	// If we just have viewportData.width then FBO starts from 0,0 on the left and ends on whatever the width is hence leaving the right side a size of viewportData.leftPanel not written to, hence we do not get exact points unless in the glReadPixel we offset out xPos by the width of left panel by subtracting it.
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, viewportData.width + viewportData.leftPanel, viewportData.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, pickingTexture, 0);
@@ -81,7 +84,7 @@ void MeshSpawner::SetupPickingBuffer()
 	// TODO: Why need picking depth?
 	glGenRenderbuffers(1, &pickingDepth);
 	glBindRenderbuffer(GL_RENDERBUFFER, pickingDepth);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, viewportData.width, viewportData.height);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, viewportData.width + viewportData.leftPanel, viewportData.height);
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, pickingDepth);
 
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
@@ -190,33 +193,20 @@ void MeshSpawner::Render()
 	}
 }
 
-
 // 1. glBindFramebuffer(pickingFBO)
 //                         ↓
-// 2. glViewport(0, 0, width, height)  — reset so cube renders at correct pixel
+// 2. Render all objects with unique ID colors
 //                         ↓
-// 3. Render all objects with unique ID colors
+// 3. glBindFramebuffer(0)  — FBO now holds the ID texture in memory
 //                         ↓
-// 4. glBindFramebuffer(0)  — FBO now holds the ID texture in memory
+// 4. User clicks at screen xPos = 750, yPos = 400
 //                         ↓
-// 5. User clicks at screen xPos = 750, yPos = 400
+// 5. glReadPixels(750, 400, ...)  — read that pixel from FBO
 //                         ↓
-// 6. xPos - leftPanel = 750 - 300 = 450  — convert screen coords to FBO coords
-// flippedY = height - yPos = 800 - 400 = 400  — flip Y
-//                         ↓
-// 7. glReadPixels(450, 400, ...)  — read that pixel from FBO
-//                         ↓
-// 8. Decode RGBA → object ID
+// 6. Decode RGBA → object ID
 void MeshSpawner::RenderPickingPass()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, pickingFBO);
-	// The FBO is its own blank canvas - it doesn't inherit your screen layout, so you have to reset the viewport to match it.
-	// FBO doesn't know about the left panel offset
-	// For FBO rendering starts from (0,0)
-	// When viewport state is carried over from glViewport(leftPanel, 0, width, height) the texture shifts to the right
-	// This is why when writing to the buffer we want to reset the viewport so that the object doesn't shift to the right
-	// 
-	glViewport(0, 0, viewportData.width, viewportData.height); // TODO: Why does this work
 	glClearColor(1.0f, 1.0f, 1.0f, 1.0f); // white = no object (ID 255)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -244,8 +234,6 @@ void MeshSpawner::RenderPickingPass()
 	// Unbind the buffer
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-	// This tells OpenGL to start rendering from viewportData.leftPanel
-	glViewport(viewportData.leftPanel, 0, viewportData.width, viewportData.height); // TODO: Why does this work
 }
 
 void MeshSpawner::HandleInput(GLFWwindow* window)
@@ -304,7 +292,6 @@ void MeshSpawner::OnMouseMove(float xOffset, float yOffset, float xPos, float yP
 	// if mouse is over left panel then don't process the world location and selection
 	if (xPos < viewportData.leftPanel) return;
 
-
 	Ray ray = ScreenToRay(xPos, yPos, view, projection);
 
 	// Check Intersection
@@ -321,8 +308,7 @@ int MeshSpawner::GetObjectIDAtMouse(float xPos, float yPos)
 	float flippedY = viewportData.height - yPos;
 
 	unsigned char pixel[4];
-	glReadPixels((int)xPos - viewportData.leftPanel, (int)flippedY,
-		1, 1, GL_RGBA, GL_UNSIGNED_BYTE, pixel);
+	glReadPixels((int)xPos, (int)flippedY, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, pixel);
 
 	// ✅ Print actual pixel values
 	std::cout << "Pixel RGBA: "
