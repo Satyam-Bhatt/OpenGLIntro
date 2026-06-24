@@ -37,5 +37,6 @@ public:
 	virtual void HandleInput(GLFWwindow* window) = 0;
 	virtual void OnMouseMove(float xOffset, float yOffset, float xPos, float yPos);
 	virtual void OnScroll(float xOffset, float yOffset);
+	virtual void OnScreenSizeUpdate(int width, int height);
 	virtual void Exit() = 0;
 };
