@@ -2,6 +2,8 @@
 #include <functional>
 #include <unordered_map>
 
+// Formality
+
 // WHY Args... INSTEAD OF T?
 //
 // With a single T, every event can only pass one argument:
