@@ -8,11 +8,7 @@
 template<typename... Args>
 class Event
 {
-    // Handler is now a callable that accepts whatever Args... expands to.
-    //
-    // Event<int, int>  → std::function<void(int, int)>
-    // Event<float>     → std::function<void(float)>
-    // Event<>          → std::function<void()>
+    // Handler is a short form of writing std::function<void(Args...)> so that we don't have to write this big line repeatedly
     using Handler = std::function<void(Args...)>;
 
     // Maps a unique int token → the stored callable.
@@ -22,41 +18,54 @@ class Event
     int nextID = 0;
 
 public:
-    // subscribe() accepts any callable matching void(Args...) and stores it.
-    // Returns a token the caller holds onto for unsubscribing.
-    //
-    // LAMBDA RECAP:
-    //   A lambda is an anonymous function you write inline.
+    // Subscribe takes in a lambda function of similar type as the handler. So basically it is a function calling another function. It returns an int which is useful for unsubscribing the function
+    // Lamda function is an anonymous function you don't need to define seperately
     //   [&](int w, int h) { ... }
     //    ^   ^              ^
     //    |   arguments      body
     //    capture list: [&] = capture everything from outer scope by reference
     //                  [=] = capture by value (copy)
     //                  []  = capture nothing
+    // EXAMPLE:
     //
-    // The compiler turns a lambda into a small hidden struct with operator().
-    // std::function<void(Args...)> wraps that struct so we can store it.
-    // std::move(h) transfers it into the map without copying.
+    //  Event<int, int> onWindowResize;
+    //  int token = onWindowResize.subscribe(
+    //      [&](int w, int h) <-- This creates a funciton that takes in 2 ints passed by value and passes it to two functions(resize and setAspect) sequentially calling them. Both the ints are received from emit function
+    //                        <-- [&] ensures that idBuffer and camera (2 classes) are passed by reference 
+    //      {
+    //         idBuffer.resize(w, h); <-- Calls this function
+    //         camera.setAspect((float)w / h); <-- and calls this function
+    //      });
+    // 
+    //  UNDER THE HOOD? -  The compiler transforms a lambda into a hidden struct behind the scenes like defined below
+    //  struct __Lambda_xyz
+    //  {
+    //      // [&] — captured variables stored as references inside the struct
+    //      IDBuffer& idBuffer;
+    //      Camera& camera;
+
+    //      // (int w, int h) — the parameters become arguments to operator()
+    //      void operator()(int w, int h) const
+    //      {
+    //          idBuffer.resize(w, h);
+    //          camera.setAspect((float)w / h);
+    //      }
+    //  };
+    // 
+    // ====================== MORE EXAMPLES ================================
     //
-    // EXAMPLES:
+    //  Event<float> onUpdate;
+    //  int token = onUpdate.subscribe([&](float dt) {
+    //      player.update(dt);
+    //  });
     //
-    //   Event<int, int> onWindowResize;
-    //   int token = onWindowResize.subscribe([&](int w, int h) {
-    //       idBuffer.resize(w, h);
-    //       camera.setAspect((float)w / h);
-    //   });
-    //
-    //   Event<float> onUpdate;
-    //   int token = onUpdate.subscribe([&](float dt) {
-    //       player.update(dt);
-    //   });
-    //
-    //   Event<> onShutdown;
-    //   int token = onShutdown.subscribe([&]() {
-    //       saveGameState();
-    //   });
+    //  Event<> onShutdown;
+    //  int token = onShutdown.subscribe([&]() {
+    //      saveGameState();
+    //  });
     int subscribe(Handler h)
     {
+        // Move the h into the map without copying it
         handlers[nextID] = std::move(h);
         return nextID++;
     }
