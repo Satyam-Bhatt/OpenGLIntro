@@ -2,29 +2,8 @@
 #include <functional>
 #include <unordered_map>
 
-// Formality
-
-// WHY Args... INSTEAD OF T?
-//
-// With a single T, every event can only pass one argument:
-//   Event<int>         fires with one int
-//   Event<float>       fires with one float
-//
-// But real events often need multiple arguments:
-//   onWindowResize     needs width AND height  → void(int, int)
-//   onMouseClick       needs x, y AND button   → void(int, int, int)
-//   onShutdown         needs nothing at all    → void()
-//
-// You could work around T by packing data into a struct,
-// but that means writing a new struct for every event type.
-//
-// Args... (a "parameter pack") lets T expand to any number of types:
-//   Event<>            → Handler is std::function<void()>
-//   Event<int>         → Handler is std::function<void(int)>
-//   Event<int, int>    → Handler is std::function<void(int, int)>
-//   Event<float, bool> → Handler is std::function<void(float, bool)>
-//
-// The compiler generates the right class for each combination you use.
+// Genrally we use Typename T but if we want to pass in multiple arguments then we need these 3 dots(...) and then we can pass multiple arguments. Args is just a name and can be anything.
+// One work around if we don't want to have 3 dots is to pass a struct but that just means writing a new struct everytime.
 
 template<typename... Args>
 class Event
