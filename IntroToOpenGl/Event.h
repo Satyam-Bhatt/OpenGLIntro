@@ -31,7 +31,7 @@ public:
     //  Event<int, int> onWindowResize;
     //  int token = onWindowResize.subscribe(
     //      [&](int w, int h) <-- This creates a funciton that takes in 2 ints passed by value and passes it to two functions(resize and setAspect) sequentially calling them. Both the ints are received from emit function
-    //                        <-- [&] ensures that idBuffer and camera (2 classes) are passed by reference 
+    //                        <-- [&] ensures that idBuffer and camera (2 objects) are passed by reference 
     //      {
     //         idBuffer.resize(w, h); <-- Calls this function
     //         camera.setAspect((float)w / h); <-- and calls this function
@@ -70,36 +70,13 @@ public:
         return nextID++;
     }
 
-    // unsubscribe() removes the handler with the given token.
-    // After this, emit() will skip that handler entirely.
-    //
-    // EXAMPLE:
-    //   // A loading screen subscribes to resize during loading only
-    //   int token = onWindowResize.subscribe([&](int w, int h) {
-    //       loadingScreen.reflow(w, h);
-    //   });
-    //
-    //   // Once loading is done, we no longer need to reflow it
-    //   onWindowResize.unsubscribe(token);
+    // Unsubscribe just removes the function from the hashmap
+    // token that is provided is used for this
     void unsubscribe(int id) {
         handlers.erase(id);
     }
 
-    // emit() fires the event — calls every stored handler with the given args.
-    //
-    // Args&&... and std::forward are used here for perfect forwarding:
-    // this passes arguments exactly as they came in (preserving move semantics)
-    // rather than always copying them. Matters if you ever fire an event
-    // passing a large struct or a unique_ptr.
-    //
-    // auto& [id, h] is C++17 structured bindings —
-    // unpacks each map entry into id (the token) and h (the handler)
-    // so you don't have to write entry.first / entry.second.
-    //
-    // EXAMPLES:
-    //   onWindowResize.emit(1920, 1080);
-    //   onUpdate.emit(0.016f);
-    //   onShutdown.emit();
+    // Triggers all the functions that are stored in the hashmap by looping over each token and calling the relevant function
     void emit(Args... args)
     {
         for (auto& [id, h] : handlers) h(args...);

@@ -5,6 +5,27 @@
 #include <string>
 #include <array>
 
+// TEMPLATES
+#pragma region TEMPLATES
+
+template<typename T>
+void Print(T val)
+{
+	std::cout << val << std::endl;
+}
+
+int main()
+{
+	Print<int>(1);
+	Print<std::string>("String");
+	Print<float>(5.5f);
+
+	return 0;
+}
+
+#pragma endregion
+
+// ARRAYS
 #pragma region  ARRAYS
 
 //void PassArry(int a[], int length);
@@ -295,6 +316,7 @@
 
 #pragma endregion
 
+// MAPS
 #pragma region  MAPS
 //struct CityRecord
 //{
