@@ -8,48 +8,48 @@
 // TEMPLATES
 #pragma region TEMPLATES
 
-template<typename T>
-void Print(T val)
-{
-	std::cout << val << std::endl;
-}
-
-template<typename T, int N>
-class Array
-{
-private:
-	T m_Array[N];
-public:
-	int GetSize() const { return N; }
-};
-
-// Used for one argument
-template <typename T>
-T Sum(T arg)
-{
-	return arg;
-}
-
-// Works recursively to add stuff
-template <typename T, typename... Args>
-T Sum(T start, Args... args)
-{
-	return start + Sum(args...);
-}
-
-int main()
-{
-	std::cout << Sum(1, 2, 3, 4) << std::endl;
-
-
-	Array<std::string, 5> a;
-
-	Print<int>(1);
-	Print<std::string>("String");
-	Print<float>(5.5f);
-
-	return 0;
-}
+//template<typename T>
+//void Print(T val)
+//{
+//	std::cout << val << std::endl;
+//}
+//
+//template<typename T, int N>
+//class Array
+//{
+//private:
+//	T m_Array[N];
+//public:
+//	int GetSize() const { return N; }
+//};
+//
+//// Used for one argument
+//template <typename T>
+//T Sum(T arg)
+//{
+//	return arg;
+//}
+//
+//// Works recursively to add stuff
+//template <typename T, typename... Args>
+//T Sum(T start, Args... args)
+//{
+//	return start + Sum(args...);
+//}
+//
+//int main()
+//{
+//	std::cout << Sum(1, 2, 3, 4) << std::endl;
+//
+//
+//	Array<std::string, 5> a;
+//
+//	Print<int>(1);
+//	Print<std::string>("String");
+//	Print<float>(5.5f);
+//
+//	return 0;
+//}
 
 #pragma endregion
 
