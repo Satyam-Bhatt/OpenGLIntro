@@ -19,6 +19,7 @@
 #include "Geometry.h"
 #include "Camera.h"
 #include "RayUtils.h"
+#include "Event.h"
 
 using namespace Matrix;
 using namespace Vector;

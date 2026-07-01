@@ -62,6 +62,12 @@ void MeshSpawner::Start()
 	transforms.push_back(t);
 
 	projection = Matrix4x4::CreateProjectionMatrix_FOV_LeftHanded(45.0f * (PI / 180), (float)viewportData.width, (float)viewportData.height, 0.1f, 100.0f);
+
+	token = onWindowResize.subscribe([&](int width, int height, int leftPanel)
+		{
+			projection = Matrix4x4::CreateProjectionMatrix_FOV_LeftHanded(45.0f * (PI / 180), (float)viewportData.width, (float)viewportData.height, 0.1f, 100.0f);
+			SetupPickingBuffer();
+		});
 }
 
 void MeshSpawner::SetupPickingBuffer()
