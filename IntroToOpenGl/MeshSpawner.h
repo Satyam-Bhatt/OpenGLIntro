@@ -1,7 +1,6 @@
 #pragma once
 #include "TestScene_Main.h"
 
-extern Event<int, int, int> onWindowResize;
 class MeshSpawner : public TestScene_Main
 {
 	struct Transform{

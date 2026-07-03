@@ -14,12 +14,11 @@
 #include "GameState.h"
 #include "SceneManager.h"
 #include "constants.h"
-#include "Event.h"
+#include "EngineEvents.h"
 
 GameState* currentState = NULL;
 GameState* nextState = NULL;
 ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-Event<int, int, int> onWindowResize;
 
 // Callback function called when the window is resized
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
@@ -52,7 +51,6 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 	viewportData.width = viewportWidth;
 	viewportData.leftPanel = viewportStartPos;
 	viewportData.totalWidth = width;
-	std::cout << "IT WORKS 0 " << std::endl;
 
 	onWindowResize.emit(viewportData.height, viewportData.width, viewportData.leftPanel);
 }
