@@ -37,6 +37,7 @@ void MeshSpawner::Start()
 	stbi_image_free(data);
 	glBindTexture(GL_TEXTURE_2D, 0);
 
+	// Configure the Frame Buffer object
 	SetupPickingBuffer();
 
 	shaders[0] = Shader("RenderTexture.shader");
@@ -63,6 +64,7 @@ void MeshSpawner::Start()
 
 	projection = Matrix4x4::CreateProjectionMatrix_FOV_LeftHanded(45.0f * (PI / 180), (float)viewportData.width, (float)viewportData.height, 0.1f, 100.0f);
 
+	// When window is resized recalculate the projection matrix and also setup the Frame Buffer Object
 	token = onWindowResize.subscribe([&](int width, int height, int leftPanel)
 		{
 			projection = Matrix4x4::CreateProjectionMatrix_FOV_LeftHanded(45.0f * (PI / 180), (float)viewportData.width, (float)viewportData.height, 0.1f, 100.0f);
@@ -167,6 +169,8 @@ void MeshSpawner::ImGuiRender(GLFWwindow* window)
 
 void MeshSpawner::Render()
 {
+	RenderPickingPass(); // Before main render
+
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture);
 
@@ -271,8 +275,6 @@ void MeshSpawner::HandleInput(GLFWwindow* window)
 
 	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
 	{
-		RenderPickingPass(); // Before main render
-
 		double xPos, yPos;
 		glfwGetCursorPos(window, &xPos, &yPos);
 
@@ -286,6 +288,8 @@ void MeshSpawner::HandleInput(GLFWwindow* window)
 
 }
 
+// Not used
+// Earilier was used to project a ray and get the object using the dot product
 void MeshSpawner::OnMouseMove(float xOffset, float yOffset, float xPos, float yPos)
 {
 	if (camMoveRotate)
@@ -354,6 +358,8 @@ void MeshSpawner::Exit()
 	transforms.clear();
 
 	scale = Vector3(1, 1, 1);
+
+	onWindowResize.unsubscribe(token);
 }
 
 MeshSpawner* MeshSpawner::GetInstance()
