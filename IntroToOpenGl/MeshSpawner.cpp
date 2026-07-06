@@ -74,6 +74,12 @@ void MeshSpawner::Start()
 
 void MeshSpawner::SetupPickingBuffer()
 {
+	// A Framebuffer Object(FBO) is an offscreen render target
+	// Normally OpenGL renders to default framebuffer which is the screen
+	// FBO lets you render into a texture or render buffer instead
+	// This is used for post proccessing, shadows, reflections, picking etc
+	// The FBO is just a container - it holds attachments (textures/renderbuffers)
+	// It has two attachment slots - color (what gets drawn) and depth (how deep each pixel is)
 	glGenFramebuffers(1, &pickingFBO);
 	glBindFramebuffer(GL_FRAMEBUFFER, pickingFBO);
 
@@ -100,6 +106,7 @@ void MeshSpawner::SetupPickingBuffer()
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
+	// Responsible for converting object ID to integer
 	pickingShader = Shader("PickingShader.shader");
 }
 
@@ -288,7 +295,7 @@ void MeshSpawner::HandleInput(GLFWwindow* window)
 
 }
 
-// Not used
+// NOT USED
 // Earilier was used to project a ray and get the object using the dot product
 void MeshSpawner::OnMouseMove(float xOffset, float yOffset, float xPos, float yPos)
 {
@@ -320,7 +327,7 @@ int MeshSpawner::GetObjectIDAtMouse(float xPos, float yPos)
 	unsigned char pixel[4];
 	glReadPixels((int)xPos, (int)flippedY, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, pixel);
 
-	// ✅ Print actual pixel values
+	// Print actual pixel values
 	std::cout << "Pixel RGBA: "
 		<< (int)pixel[0] << ", "
 		<< (int)pixel[1] << ", "
