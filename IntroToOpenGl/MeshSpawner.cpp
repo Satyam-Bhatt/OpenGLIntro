@@ -72,6 +72,7 @@ void MeshSpawner::Start()
 		});
 }
 
+// FBO is the core of deferred rendering, SSAO, Shadow Mapping, Motion Blur, Post Processing and Bloom as it stores data into multiple textures in one pass and then combine them in the next pass
 void MeshSpawner::SetupPickingBuffer()
 {
 	// A Framebuffer Object(FBO) is an offscreen render target
@@ -81,24 +82,58 @@ void MeshSpawner::SetupPickingBuffer()
 	// The FBO is just a container - it holds attachments (textures/renderbuffers)
 	// It has two attachment slots - color (what gets drawn) and depth (how deep each pixel is)
 	glGenFramebuffers(1, &pickingFBO);
+
+	// Binding FBO makes it as an active render target
+	// All subsequent draw calls will render into the FBO, not onto the screen
+	// It does not store the texture - it justs points to them 
 	glBindFramebuffer(GL_FRAMEBUFFER, pickingFBO);
 
-	// Color Texture - stores object IDs
+	// Color Texture - stores object IDs as colors
+	// When we render into FBO, fragment shader output goes into this texture
 	glGenTextures(1, &pickingTexture);
 	glBindTexture(GL_TEXTURE_2D, pickingTexture);
+
+	// Allocates an empty texture on the GPU
 	// We want viewportData.width + viewportData.leftPanel because FBO doesn't know about the viewport offset and starts from 0,0 not from viewport.leftPanel,0
 	// This makes the entire screen size texture we render to
 	// If we just have viewportData.width then FBO starts from 0,0 on the left and ends on whatever the width is hence leaving the right side a size of viewportData.leftPanel not written to, hence we do not get exact points unless in the glReadPixel we offset out xPos by the width of left panel by subtracting it.
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, viewportData.width + viewportData.leftPanel, viewportData.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+
+	// Texture Filtering
+	// We need everything to be crisp that is why we use GL_NEAREST
+	// If we interpolate then the color would mismatch hence giving us weird object IDs
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+	// Attach the texture to FBO's color slot
+	// Now when we render to FBO, pixel color would go into pickingTexture
+	// 1 -> Which Framebuffer to attach to (currently bound one)
+	// 2 -> Attachment slot: which slot in the FBO to attach to. There are multiple slots (8 in total) and can be used to store color, normal, position texture etc. Mostly used for deferred rendering, post processing etc.
+	// 3 -> What kind of texture are we storing
+	// 4 -> The actual texture object to attach
+	// 5 -> Which mipmap level to render into
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, pickingTexture, 0);
 
-	// Depth buffer - still need depth testing
-	// TODO: Why need picking depth?
+	// Depth buffer - Helps to identify which object is in front
+	// For eg Object 0 is behing Object 1 but Object 0 is drawn after Object 1
+	// In this case we will always pickup Object 0 although its behind.
+	// Depth buffer won't render Object 0 as its behind
+	// ==============================================
+	// Renderbuffer is like a texture but has only write only operations
+	// You cannot read a renderbuffer in a shader like we can read textures
+	// It is faster than a texture for attachments because you only write to it which makes it ideal for depth buffer
 	glGenRenderbuffers(1, &pickingDepth);
 	glBindRenderbuffer(GL_RENDERBUFFER, pickingDepth);
+
+	// Allocate GPU memory for the render buffer
+	// GL_DEPTH_COMPONENT tells OpenGL that this stores depth values not color values
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, viewportData.width + viewportData.leftPanel, viewportData.height);
+
+	// Attach the render buffer to the FBO's depth slot
+	// GL_DEPTH_COMPONENT tells the FBO this is the depth buffer not a color buffer
+	// Now the FBO has both slots filled:
+	//   GL_COLOR_ATTACHMENT0 -> pickingTexture  (stores ID colors)
+	//   GL_DEPTH_ATTACHMENT  -> pickingDepth    (stores depth for correct overlap)
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, pickingDepth);
 
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
@@ -223,6 +258,9 @@ void MeshSpawner::Render()
 // 6. Decode RGBA → object ID
 void MeshSpawner::RenderPickingPass()
 {
+	// Binding FBO makes it as an active render target
+	// All subsequent draw calls will render into the FBO, not onto the screen
+	// It does not store the texture - it justs points to them 
 	glBindFramebuffer(GL_FRAMEBUFFER, pickingFBO);
 	glClearColor(1.0f, 1.0f, 1.0f, 1.0f); // white = no object (ID 255)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -320,6 +358,7 @@ void MeshSpawner::OnMouseMove(float xOffset, float yOffset, float xPos, float yP
 
 int MeshSpawner::GetObjectIDAtMouse(float xPos, float yPos)
 {
+	// How does the read happen from FBO and not the screen?
 	glBindFramebuffer(GL_FRAMEBUFFER, pickingFBO);
 
 	float flippedY = viewportData.height - yPos;
