@@ -1,5 +1,6 @@
 #include "TestScene_Main.h"
 #include "MeshSpawner.h"
+#include "BillBoardShader.h"
 
 TestScene_Main* TestScene_Main::instance = nullptr;
 
@@ -7,6 +8,9 @@ TestScene_Main::TestScene_Main()
 {
 	sceneNames[SubScene::MeshSpawner] = "Mesh Spawner";
 	sceneFactories[SubScene::MeshSpawner] = []() -> TestScene_Main* {return MeshSpawner::GetInstance(); };
+
+	sceneNames[SubScene::BillBoardShader] = "Bill Board Spawner";
+	sceneFactories[SubScene::BillBoardShader] = []() -> TestScene_Main* {return BillBoardShader::GetInstance(); };
 }
 
 TestScene_Main::~TestScene_Main()
@@ -168,6 +172,10 @@ void TestScene_Main::RenderText(SubScene sceneName)
 	if (sceneName == SubScene::MeshSpawner)
 	{
 		ImGui::TextWrapped("Checking out my new mesh classes");
+	}
+	else if (sceneName == SubScene::BillBoardShader)
+	{
+		ImGui::TextWrapped("Creating a billboard shader as the concept was easy");
 	}
 	else
 	{

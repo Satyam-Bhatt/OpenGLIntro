@@ -27,6 +27,7 @@ private:
 	enum SubScene
 	{
 		MeshSpawner,
+		BillBoardShader,
 		COUNT
 	};
 
@@ -38,7 +39,7 @@ private:
 	SubScene current_SubScene = MeshSpawner;
 	SubScene previous_SubScene = MeshSpawner;
 
-	bool openScene[SubScene::COUNT] = {true};
+	bool openScene[SubScene::COUNT] = {true, false};
 
 	std::unordered_map<int, std::string> sceneNames;
 	std::unordered_map<int, std::function<TestScene_Main* ()>> sceneFactories;

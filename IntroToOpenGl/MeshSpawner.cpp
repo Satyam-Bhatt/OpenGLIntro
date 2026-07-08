@@ -243,6 +243,8 @@ void MeshSpawner::Render()
 
 		meshes[t.meshToUse].Draw();
 	}
+
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 // 1. glBindFramebuffer(pickingFBO)

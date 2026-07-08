@@ -335,7 +335,7 @@ void MyLookAtMatrix::ResetValues()
 	targetPosition = glm::vec3(0.0f, 0.0f, 0.0f);
 	upVector = glm::vec3(0.0f, 1.0f, 0.0f);
 
-	myCameraPosition = Vector3(0, 0, 5);
+	myCameraPosition = Vector3(0, 0, -7);
 	myTargetPosition = Vector3(0, 0, 0);
 	myUpVector = Vector3(0, 1, 0);
 }

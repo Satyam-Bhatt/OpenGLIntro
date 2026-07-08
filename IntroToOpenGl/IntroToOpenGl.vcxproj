@@ -143,6 +143,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BillBoardShader.cpp" />
     <ClCompile Include="EngineEvents.cpp" />
     <ClCompile Include="FirstPersonCamera.cpp" />
     <ClCompile Include="GameState.cpp" />
@@ -202,6 +203,7 @@
     <ClCompile Include="ViewMatrix.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BillBoardShader.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="EngineEvents.h" />
     <ClInclude Include="Event.h" />
@@ -264,6 +266,7 @@
     <ClInclude Include="ViewMatrix.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="BillBoardShader.shader" />
     <None Include="FirstPersonCamera.shader" />
     <None Include="GLMLookAtCamera.shader" />
     <None Include="CoordinateSystem2.shader" />

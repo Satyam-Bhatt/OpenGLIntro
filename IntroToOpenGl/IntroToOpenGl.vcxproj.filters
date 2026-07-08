@@ -73,6 +73,9 @@
     <Filter Include="Header Files\TestScenes">
       <UniqueIdentifier>{c71e2133-9fec-424b-bfc3-798111b34776}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shader\TestScenes">
+      <UniqueIdentifier>{b8bde49f-9421-4fa4-82e7-25063b8af5d7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -245,6 +248,9 @@
     </ClCompile>
     <ClCompile Include="EngineEvents.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BillBoardShader.cpp">
+      <Filter>Source Files\TestScenes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -428,6 +434,9 @@
     <ClInclude Include="EngineEvents.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="BillBoardShader.h">
+      <Filter>Header Files\TestScenes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ShaderClass.shader">
@@ -520,6 +529,11 @@
     <None Include="RenderSingleColor.shader">
       <Filter>Shader\CommonShaders</Filter>
     </None>
-    <None Include="PickingShader.shader" />
+    <None Include="BillBoardShader.shader">
+      <Filter>Shader\TestScenes</Filter>
+    </None>
+    <None Include="PickingShader.shader">
+      <Filter>Shader\TestScenes</Filter>
+    </None>
   </ItemGroup>
 </Project>
