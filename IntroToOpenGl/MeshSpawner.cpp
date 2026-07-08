@@ -265,7 +265,8 @@ void MeshSpawner::RenderPickingPass()
 	glClearColor(1.0f, 1.0f, 1.0f, 1.0f); // white = no object (ID 255)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	pickingShader.Use();
+	// This is a custom shader which takes the i value and colors the object accordingly in the fragment shader
+	pickingShader.Use(); 
 	pickingShader.SetMat4_Custom("view", view.m);
 	pickingShader.SetMat4_Custom("projection", projection.m);
 
@@ -281,6 +282,7 @@ void MeshSpawner::RenderPickingPass()
 		model = Matrix4x4::Scale(model, t.scale);
 
 		pickingShader.SetMat4_Custom("model", model.m);
+		// Setting up this uniform helps us to color the object
 		pickingShader.SetInt("objectID", i);
 
 		meshes[t.meshToUse].Draw();
@@ -318,6 +320,8 @@ void MeshSpawner::HandleInput(GLFWwindow* window)
 			cam.ProcessKeyboard(Camera_Movement::DOWN);
 	}
 
+
+	// This is where we get the ID when the player clicks on the screen
 	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
 	{
 		double xPos, yPos;
@@ -356,6 +360,7 @@ void MeshSpawner::OnMouseMove(float xOffset, float yOffset, float xPos, float yP
 	//std::cout << "Dot with object: " << dot << std::endl;
 }
 
+// Getting the Object using the FBO by reading the pixel when the mouse is clicked
 int MeshSpawner::GetObjectIDAtMouse(float xPos, float yPos)
 {
 	// How does the read happen from FBO and not the screen?
