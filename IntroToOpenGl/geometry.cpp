@@ -81,6 +81,19 @@ Mesh Geometry::Plane(float size)
     return Mesh(verts, indices);
 }
 
+Mesh Geometry::PlaneY(float size)
+{
+    float h = size * 0.5f;
+    std::vector<Vertex> verts = {
+        {{ -h, -h, 0 }, { 0, 0, -1 }, { 0, 0 }, { 1,1,1,1 }},
+        {{  h, -h, 0 }, { 0, 0, -1 }, { 1, 0 }, { 1,1,1,1 }},
+        {{  h, h,  0 }, { 0, 0, -1 }, { 1, 1 }, { 1,1,1,1 }},
+        {{ -h, h,  0 }, { 0, 0, -1 }, { 0, 1 }, { 1,1,1,1 }},
+    };
+    std::vector<uint32_t> indices = { 0,1,2, 2,3,0 };
+    return Mesh(verts, indices);
+}
+
 Mesh Geometry::Sphere(uint32_t stacks, uint32_t slices)
 {
     std::vector<Vertex> verts;

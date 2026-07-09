@@ -10,6 +10,8 @@ namespace Geometry
 
     Mesh Plane(float size = 1.0f);
 
+    Mesh PlaneY(float size = 1.0f);
+
     Mesh Sphere(uint32_t stacks = 12, uint32_t slices = 12);
 
     Mesh ColoredCube();

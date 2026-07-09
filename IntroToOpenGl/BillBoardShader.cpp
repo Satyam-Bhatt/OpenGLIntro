@@ -38,7 +38,7 @@ void BillBoardShader::Start()
 	glBindTexture(GL_TEXTURE_2D, 0);
 
 	shader = Shader("BillBoardShader.shader");
-	mesh = Cube();
+	mesh = PlaneY();
 
 	shader.Use();
 	shader.SetTexture("myTexture", 0);
