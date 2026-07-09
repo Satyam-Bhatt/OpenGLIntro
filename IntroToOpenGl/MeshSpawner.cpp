@@ -287,6 +287,7 @@ void MeshSpawner::RenderPickingPass()
 		// Setting up this uniform helps us to color the object
 		pickingShader.SetInt("objectID", i);
 
+		// Render Each thing onto the FBO
 		meshes[t.meshToUse].Draw();
 	}
 
@@ -365,13 +366,25 @@ void MeshSpawner::OnMouseMove(float xOffset, float yOffset, float xPos, float yP
 // Getting the Object using the FBO by reading the pixel when the mouse is clicked
 int MeshSpawner::GetObjectIDAtMouse(float xPos, float yPos)
 {
-	// How does the read happen from FBO and not the screen?
+	// When you bind the Frame Buffer Object then glReadPixel reads from the framebuffer that is currently bound
 	glBindFramebuffer(GL_FRAMEBUFFER, pickingFBO);
 
+	// The viewport starts from top left (0,0) (y increases down) but in OpenGL/FBO texture coordinates start from bottom left (0,0) (y increases up)
+	// This is why we flip the yPos we get.
 	float flippedY = viewportData.height - yPos;
 
+	// Contains the RGBA values
 	unsigned char pixel[4];
-	glReadPixels((int)xPos, (int)flippedY, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, pixel);
+	// Copies the pixel's RGBA values into the into pixel[4] array from the FBO texture at (xPos, flippedY)
+	glReadPixels(
+		(int)xPos,          // x pixel coordinate to start reading from
+		(int)flippedY,      // y pixel coordinate to start reading from
+		1,                  // width: how many pixels to read horizontally
+		1,                  // height: how many pixels to read vertically
+		GL_RGBA,            // format: read all 4 channels
+		GL_UNSIGNED_BYTE,   // type: each channel comes back as 0-255
+		pixel               // destination: CPU memory to write into
+	);
 
 	// Print actual pixel values
 	std::cout << "Pixel RGBA: "
@@ -380,6 +393,7 @@ int MeshSpawner::GetObjectIDAtMouse(float xPos, float yPos)
 		<< (int)pixel[2] << ", "
 		<< (int)pixel[3] << std::endl;
 
+	// Unbind the buffer
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	if (pixel[0] == 255 && pixel[1] == 255 && pixel[2] == 255 && pixel[3] == 255)
