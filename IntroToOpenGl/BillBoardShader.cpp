@@ -117,8 +117,8 @@ void BillBoardShader::Render()
 			model = Matrix4x4::Identity();
 
 			model = Matrix4x4::Translation(model, cubes[i].position);
-			//	model = Matrix4x4::Rotation(model, cubes[i].rotationAxis, 0);
-			model = Matrix4x4::Scale(model, Vector3(0.3f, 0.3f, 0.3f));
+			model = Matrix4x4::Rotation(model, cubes[i].rotationAxis, cubes[i].rotation);
+			model = Matrix4x4::Scale(model, Vector3(cubes[i].scale, cubes[i].scale, cubes[i].scale));
 
 			shader.Use();
 			shader.SetMat4_Custom("model", model.m);
@@ -150,6 +150,8 @@ void BillBoardShader::InitializeCubes()
 	std::uniform_real_distribution<float> axisRange(0.0f, 1.0f);       // rotation axis components
 	std::uniform_real_distribution<float> speedRange(0.5f, 2.0f);    // rotation Speed
 	std::uniform_real_distribution<float> offsetRangeZ(-3.0f, 0.2f); // offset in Z direction
+	std::uniform_real_distribution<float> rotationRange(-30.0f, 30.0f); // Rotation
+	std::uniform_real_distribution<float> scaleRange(0.5f, 1.0f); // Scale
 
 	cubes.clear();
 
@@ -176,7 +178,10 @@ void BillBoardShader::InitializeCubes()
 		cube.rotationAxis = axis.Normalize();
 
 		cube.rotationSpeed = speedRange(gen);
+		cube.rotation = rotationRange(gen);		
+		cube.scale = scaleRange(gen);
 		cubes.push_back(cube);
+
 	}
 }
 

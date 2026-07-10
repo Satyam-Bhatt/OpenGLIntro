@@ -7,6 +7,8 @@ class BillBoardShader : public TestScene_Main
 		Vector3 position;
 		Vector3 rotationAxis;
 		float rotationSpeed = 0.0f;
+		float rotation = 0;
+		float scale = 1.0f;
 	};
 
 public:
