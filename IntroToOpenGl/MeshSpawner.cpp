@@ -399,6 +399,7 @@ int MeshSpawner::GetObjectIDAtMouse(float xPos, float yPos)
 	if (pixel[0] == 255 && pixel[1] == 255 && pixel[2] == 255 && pixel[3] == 255)
 		return -1;
 
+	// OR operator to add all the bits
 	int id = pixel[0] | (pixel[1] << 8) | (pixel[2] << 16) | (pixel[3] << 24);
 	return id;
 }
