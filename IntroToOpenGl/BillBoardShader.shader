@@ -38,14 +38,41 @@ void main()
 	//               + camUp    * aPos.y;
 	// vec4 pos = projection * view * vec4(worldPos, 1.0);
 
-	//  Approach 3 - Apply counter rotation so that when look at matrix rotates the world then this shader cancels out the rotation
-	mat3 viewRotationMatrix = mat3(view);
-	mat3 billboardRot = transpose(viewRotationMatrix);
-	mat3 modelRotScale = mat3(model);
-	vec3 modelPos = modelRotScale * aPos;
-	vec3 rotatedPos = billboardRot * modelPos;
-	vec3 worldPos = rotatedPos + vec3(model[3]); 
-	vec4 pos = projection * view * vec4(worldPos, 1.0);
+	//  Approach 3 - Use the model matrix to preserve the rotation and scale
+	// mat3 viewRotationMatrix = mat3(view);
+	// mat3 billboardRot = transpose(viewRotationMatrix);
+	// mat3 modelRotScale = mat3(model);
+	// vec3 modelPos = modelRotScale * aPos;
+	// vec3 rotatedPos = billboardRot * modelPos;
+	// vec3 worldPos = rotatedPos + vec3(model[3]); 
+	// vec4 pos = projection * view * vec4(worldPos, 1.0);
+
+	// Approach 4 - Angle Clamping
+    vec3 camForward = normalize(vec3(view[0][2], view[1][2], view[2][2]));
+
+    vec3 worldUp = vec3(0.0, 1.0, 0.0);
+    vec3 horizontalDir = normalize(vec3(camForward.x, 0.0, camForward.z)); // yaw direction as yaw is y axis
+
+    float actualPitch = asin(clamp(camForward.y, -1.0, 1.0)); // Get the pitch with Y component. We clamp for safety
+	float maxPitchAngle = radians(-30.0);
+	float clampedPitch = clamp(actualPitch, -maxPitchAngle, maxPitchAngle);
+    vec3 clampedForward = horizontalDir * cos(clampedPitch) + worldUp * sin(clampedPitch); // New vector with clamped values
+
+    // New axis for the camera
+    vec3 camRight = normalize(cross(worldUp, clampedForward));
+    vec3 camUp    = cross(clampedForward, camRight);
+
+    vec3 billboardWorldPos = vec3(model[3]);
+    vec3 worldPos = billboardWorldPos
+                  + camRight * aPos.x
+                  + camUp    * aPos.y;
+	 vec4 pos = projection * view * vec4(worldPos, 1.0);
+
+	 //WHAT NEXT?
+	 // - Normal Texture for 3D
+	 // - A compute shader to spawn then 
+	 // - Fade at base for blending
+	 // 
 
 	//vec4 pos = projection * view * model * vec4(aPos, 1.0);
 	gl_Position = pos;
