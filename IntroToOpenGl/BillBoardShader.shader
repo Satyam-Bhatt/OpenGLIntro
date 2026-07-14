@@ -19,6 +19,7 @@ void main()
 {
 	UV = aUV;
 
+	if()
 	// // Approach 1 - Apply counter rotation so that when look at matrix rotates the world then this shader cancels out the rotation
 	// mat3 viewRotationMatrix = mat3(view);
 	// mat3 billboardRot = transpose(viewRotationMatrix);
