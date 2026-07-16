@@ -23,6 +23,8 @@ void main()
 	{}
 	else if(billBoardType == 2)
 	{}
+	else if(billBoardType == 3)
+	{}
 	// // Approach 1 - Apply counter rotation so that when look at matrix rotates the world then this shader cancels out the rotation
 	// mat3 viewRotationMatrix = mat3(view);
 	// mat3 billboardRot = transpose(viewRotationMatrix);
