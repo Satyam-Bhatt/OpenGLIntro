@@ -15,7 +15,7 @@ uniform mat4 view;
 uniform mat4 projection;
 uniform int billBoardType;
 
-// Shifting almost
+// Shifting almost DONE
 void main()
 {
 	UV = aUV;
