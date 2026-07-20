@@ -32,14 +32,17 @@ private:
 	Shader shader;
 	uint32_t VAO = 0, VBO = 0;
 
-
 	Vector3 myCameraPosition = Vector3(0, 0, -7);
 	Vector3 myTargetPosition = Vector3(0, 0, 0);
 	Vector3 myUpVector = Vector3(0, 1, 0);
 
 	int numCubes = 108;
 	float radius = 5.0f;
+	float maxPitchAngle = 30.0f;
 	std::vector<CubeTransform> cubes;
+
+	const char* BILLBOARD_TYPES[4] = {"General", "More Performant", "Preserve Rotation and Scale", "Angle Clamping"};
+	int billBoardTypeIndex = 0;
 
 	void InitializeCubes();
 	void ResetValues();

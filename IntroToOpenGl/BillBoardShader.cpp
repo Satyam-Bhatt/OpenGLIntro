@@ -67,6 +67,10 @@ void BillBoardShader::ImGuiRender(GLFWwindow* window)
 	ImGui::DragFloat3("My Target Position", &myTargetPosition.x, 0.005f);
 	ImGui::DragFloat3("My Up Vector", &myUpVector.x, 0.005f);
 
+	ImGui::Combo("BillBoard Type", &billBoardTypeIndex, BILLBOARD_TYPES, IM_ARRAYSIZE(BILLBOARD_TYPES));
+
+	if (billBoardTypeIndex == 3) ImGui::DragFloat("Max Pitch Angle", &maxPitchAngle, 0.005f);
+
 	if (ImGui::DragInt("Cube Count", &numCubes, 1))
 	{
 		InitializeCubes();
@@ -107,6 +111,7 @@ void BillBoardShader::Render()
 		shader.SetMat4_Custom("model", model.m);
 		shader.SetMat4_Custom("view", viewMatrix.m);
 		shader.SetMat4_Custom("projection", projection.m);
+		shader.SetInt("billBoardType", billBoardTypeIndex);
 
 		mesh.Draw();
 	}
@@ -124,6 +129,8 @@ void BillBoardShader::Render()
 			shader.SetMat4_Custom("model", model.m);
 			shader.SetMat4_Custom("view", viewMatrix.m);
 			shader.SetMat4_Custom("projection", projection.m);
+			shader.SetInt("billBoardType", billBoardTypeIndex);
+			shader.SetFloat("u_MaxPitchAngle", maxPitchAngle);
 
 			mesh.Draw();
 		}
