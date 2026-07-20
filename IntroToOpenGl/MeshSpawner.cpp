@@ -374,6 +374,8 @@ int MeshSpawner::GetObjectIDAtMouse(float xPos, float yPos)
 	float flippedY = viewportData.height - yPos;
 
 	// Contains the RGBA values
+	// NOTE: GPU stores each channel of color values as 8 bit integer 0-255 and it is defined by GL_UNSIGNED_BYTE which is specified when we create a texture in glTexImage2D
+	// So GPU automatically does this float -> byte = value * 255.0 -> round to nearest integer
 	unsigned char pixel[4];
 	// Copies the pixel's RGBA values into the into pixel[4] array from the FBO texture at (xPos, flippedY)
 	glReadPixels(
@@ -396,6 +398,7 @@ int MeshSpawner::GetObjectIDAtMouse(float xPos, float yPos)
 	// Unbind the buffer
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
+	// If all the values are 1 or white or 255 then return as its an empty space
 	if (pixel[0] == 255 && pixel[1] == 255 && pixel[2] == 255 && pixel[3] == 255)
 		return -1;
 
