@@ -342,6 +342,7 @@ void MeshSpawner::HandleInput(GLFWwindow* window)
 
 // NOT USED
 // Earilier was used to project a ray and get the object using the dot product
+// If the dot product is within a certain threshold then select that obect
 void MeshSpawner::OnMouseMove(float xOffset, float yOffset, float xPos, float yPos)
 {
 	if (camMoveRotate)
@@ -357,10 +358,17 @@ void MeshSpawner::OnMouseMove(float xOffset, float yOffset, float xPos, float yP
 	Ray ray = ScreenToRay(xPos, yPos, view, projection);
 
 	// Check Intersection
-	Vector3 toObject = (transforms[0].position - ray.origin).Normalize();
-	float dot = ray.direction.Dot(toObject);
+	// Core logic currently commented out because not being used
+	int index = 0;
+	//for (auto const &t : transforms)
+	//{
+	//	Vector3 toObject = (t.position - ray.origin).Normalize();
+	//	float dot = ray.direction.Dot(toObject);
 
-	//std::cout << "Dot with object: " << dot << std::endl;
+	//	std::cout << "Dot with object " << index << ": " << dot << std::endl;
+
+	//	index++;
+	//}
 }
 
 // Getting the Object using the FBO by reading the pixel when the mouse is clicked
@@ -388,7 +396,7 @@ int MeshSpawner::GetObjectIDAtMouse(float xPos, float yPos)
 		pixel               // destination: CPU memory to write into
 	);
 
-	// Print actual pixel values
+	// Print actual pixel values for Debugging
 	std::cout << "Pixel RGBA: "
 		<< (int)pixel[0] << ", "
 		<< (int)pixel[1] << ", "
@@ -402,8 +410,41 @@ int MeshSpawner::GetObjectIDAtMouse(float xPos, float yPos)
 	if (pixel[0] == 255 && pixel[1] == 255 && pixel[2] == 255 && pixel[3] == 255)
 		return -1;
 
-	// OR operator to add all the bits
-	int id = pixel[0] | (pixel[1] << 8) | (pixel[2] << 16) | (pixel[3] << 24);
+	// This the opposite of what we are doing in the shader
+	// Each pixel has RGBA values in the form of bytes. We are using bit operators to reverse the encoding we have done
+	// 
+	// << (left shift operator) moves the bits to the left by appropriate ammount so that we get the correct data
+	// 
+	// | (OR operator) helps to add all the values together so that we can get the corract value back
+	//
+	// EXAMPLE
+	// id = 305419896 
+	// GPU stores it as R - 120, G - 86, B - 52, A - 18
+	// glReadPixel populates pixel array as such pixel[0] - 120, pixel[1] - 86, pixel[2] - 52, pixel[3] - 18
+	// We shift the bits to appropriate places using left bit shift operator(<<)
+	// 
+	//   // pixel[0] = 120 = byte 0, already in correct position
+	//  pixel[0] = 00000000 00000000 00000000 01111000 = 120
+	//	 // pixel[1] = 86 = byte 1, needs to move to bits 8-15
+	//	pixel[1] << 8 = 00000000 00000000 01010110 00000000 = 22016
+	//	 // pixel[2] = 52 = byte 2, needs to move to bits 16-23
+	//	pixel[2] << 16 = 00000000 00110100 00000000 00000000 = 3407872
+	//	 // pixel[3] = 18 = byte 3, needs to move to bits 24-31
+	//	pixel[3] << 24 = 00010010 00000000 00000000 00000000 = 301989888
+	// 
+	// Now we use the OR operator to merge all the bytes and get the final value
+	//
+	// int id = pixel[0]         // 00000000 00000000 00000000 01111000
+	//        | (pixel[1] << 8)  // 00000000 00000000 01010110 00000000
+	//	      | (pixel[2] << 16) // 00000000 00110100 00000000 00000000
+	//	      | (pixel[3] << 24);// 00010010 00000000 00000000 00000000
+	//                           // ─────────────────────────────────────
+	//                           // 00010010 00110100 01010110 01111000
+	//								= 305419896
+	// Hence we get the same value
+	// --------------
+	// NOTE: Here I am explicitly converting char datatype to int. This is not needed as C++ automatically does it when we perform any bitwise operation. It is called as integer promotion. But its always good to be explicit
+	int id = (int)pixel[0] | ((int)pixel[1] << 8) | ((int)pixel[2] << 16) | ((int)pixel[3] << 24);
 	return id;
 }
 
