@@ -175,7 +175,15 @@ void TestScene_Main::RenderText(SubScene sceneName)
 	}
 	else if (sceneName == SubScene::BillBoardShader)
 	{
-		ImGui::TextWrapped("Creating a billboard shader as the concept was easy");
+		ImGui::TextWrapped("Creating a billboard shader. Also created a few variations.");
+		ImGui::Bullet();
+		ImGui::TextWrapped("Usual Implementation by reversing the rotation");
+		ImGui::Bullet();
+		ImGui::TextWrapped("Simple and Efficient approach - Moving the vertices along camera axis");
+		ImGui::Bullet();
+		ImGui::TextWrapped("Rotation and Scale are preserved in this approach. Done by applying the model matrix as well");
+		ImGui::Bullet();
+		ImGui::TextWrapped("Rotation can be clamped. Done by calculating new camera axis");
 	}
 	else
 	{

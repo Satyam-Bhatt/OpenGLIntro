@@ -20,6 +20,8 @@ void main()
 {
 	UV = aUV;
 
+	vec4 pos = vec4(0,0,0,0);
+
 	// Approach 1 - Apply counter rotation so that when look at matrix rotates the world then this shader cancels out the rotation. Most common Approach
 	if(billBoardType == 0)
 	{
@@ -27,7 +29,7 @@ void main()
 		mat3 billboardRot = transpose(viewRotationMatrix);
 		vec3 rotatedPos = billboardRot * aPos; // Counter rotate
 		vec3 worldPos = rotatedPos + vec3(model[3]); // Adding so that it positions itself correctly in world space
-		vec4 pos = projection * view * vec4(worldPos, 1.0); // view tries to rotate but the worldPos is counter rotated(inverse)	
+		pos = projection * view * vec4(worldPos, 1.0); // view tries to rotate but the worldPos is counter rotated(inverse)	
 	}
 
 	// Approach 2 - SIMPLE & EFFICIENT. Just get the camera axis and move the verices accordingly
@@ -43,7 +45,7 @@ void main()
 		vec3 worldPos = billboardWorldPos
 					  + camRight * aPos.x 
 					  + camUp    * aPos.y;
-		vec4 pos = projection * view * vec4(worldPos, 1.0);	
+		pos = projection * view * vec4(worldPos, 1.0);	
 	}
 
 	//Approach 3 - Use the model matrix to preserve the rotation and scale
@@ -57,7 +59,7 @@ void main()
 		vec3 modelPos = modelRotScale * aPos; 
 		vec3 rotatedPos = billboardRot * modelPos; // Counter rotate
 		vec3 worldPos = rotatedPos + vec3(model[3]); // Orient in the world space
-		vec4 pos = projection * view * vec4(worldPos, 1.0);	
+		pos = projection * view * vec4(worldPos, 1.0);	
 	}
 	else if (billBoardType == 3)
 	{
@@ -80,7 +82,7 @@ void main()
 		vec3 worldPos = billboardWorldPos
 					  + camRight * aPos.x
 					  + camUp    * aPos.y;
-		vec4 pos = projection * view * vec4(worldPos, 1.0);
+		pos = projection * view * vec4(worldPos, 1.0);
 	}
 
 	gl_Position = pos;

@@ -299,13 +299,9 @@ void MeshSpawner::RenderPickingPass()
 void MeshSpawner::HandleInput(GLFWwindow* window)
 {
 	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT))
-	{
 		camMoveRotate = true;
-	}
 	else
-	{
 		camMoveRotate = false;
-	}
 
 	if (camMoveRotate)
 	{

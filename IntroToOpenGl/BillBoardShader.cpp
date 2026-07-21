@@ -5,7 +5,9 @@
 BillBoardShader BillBoardShader::instance;
 
 BillBoardShader::BillBoardShader()
-{}
+{
+	cam = Camera(Vector3(0, 0, -10));
+}
 
 BillBoardShader::~BillBoardShader()
 {}
@@ -62,10 +64,7 @@ void BillBoardShader::ImGuiRender(GLFWwindow* window)
 
 	ImGui::Begin("Level Specific", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
 
-	// Which fields to show as per the boolean
-	ImGui::DragFloat3("My Camera Position", &myCameraPosition.x, 0.005f);
-	ImGui::DragFloat3("My Target Position", &myTargetPosition.x, 0.005f);
-	ImGui::DragFloat3("My Up Vector", &myUpVector.x, 0.005f);
+	ImGui::TextWrapped("Hold RMB and use WASD to move around the scene");
 
 	ImGui::Combo("BillBoard Type", &billBoardTypeIndex, BILLBOARD_TYPES, IM_ARRAYSIZE(BILLBOARD_TYPES));
 
@@ -74,11 +73,6 @@ void BillBoardShader::ImGuiRender(GLFWwindow* window)
 	if (ImGui::DragInt("Cube Count", &numCubes, 1))
 	{
 		InitializeCubes();
-	}
-
-	if (ImGui::Button("Reset"))
-	{
-		ResetValues();
 	}
 
 	ImGui::End();
@@ -92,7 +86,7 @@ void BillBoardShader::Render()
 	Matrix4x4 model;
 
 	Matrix4x4 viewMatrix;
-	viewMatrix = Matrix4x4::CreateLookAtMatrix_LeftHanded(myCameraPosition, myTargetPosition, myUpVector);
+	viewMatrix = cam.GetViewMatrix();
 
 	Matrix4x4 projection;
 
@@ -112,6 +106,7 @@ void BillBoardShader::Render()
 		shader.SetMat4_Custom("view", viewMatrix.m);
 		shader.SetMat4_Custom("projection", projection.m);
 		shader.SetInt("billBoardType", billBoardTypeIndex);
+		shader.SetFloat("u_MaxPitchAngle", maxPitchAngle);
 
 		mesh.Draw();
 	}
@@ -137,6 +132,41 @@ void BillBoardShader::Render()
 	}
 
 	glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+void BillBoardShader::HandleInput(GLFWwindow* window)
+{
+	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT))
+		camMoveRotate = true;
+	else
+		camMoveRotate = false;
+
+	if (camMoveRotate)
+	{
+		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+			cam.ProcessKeyboard(Camera_Movement::FORWARD);
+		if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+			cam.ProcessKeyboard(Camera_Movement::BACKWARD);
+		if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+			cam.ProcessKeyboard(Camera_Movement::LEFT);
+		if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+			cam.ProcessKeyboard(Camera_Movement::RIGHT);
+		if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
+			cam.ProcessKeyboard(Camera_Movement::UP);
+		if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
+			cam.ProcessKeyboard(Camera_Movement::DOWN);
+	}
+}
+
+void BillBoardShader::OnMouseMove(float xOffset, float yOffset, float xPos, float yPos)
+{
+	if (camMoveRotate) cam.ProcessMouseMovement(xOffset, yOffset);
+}
+
+void BillBoardShader::OnScroll(float xOffset, float yOffset)
+{
+	if (camMoveRotate)
+		cam.ProcessMouseScroll(yOffset);
 }
 
 void BillBoardShader::Exit()
@@ -190,11 +220,4 @@ void BillBoardShader::InitializeCubes()
 		cubes.push_back(cube);
 
 	}
-}
-
-void BillBoardShader::ResetValues()
-{
-	myCameraPosition = Vector3(0, 0, -7);
-	myTargetPosition = Vector3(0, 0, 0);
-	myUpVector = Vector3(0, 1, 0);
 }

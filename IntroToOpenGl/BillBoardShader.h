@@ -19,6 +19,9 @@ public:
 	void Update() override;
 	void ImGuiRender(GLFWwindow* window) override;
 	void Render() override;
+	void HandleInput(GLFWwindow* window) override;
+	void OnMouseMove(float xOffset, float yOffset, float xPos, float yPos) override;
+	void OnScroll(float xOffset, float yOffset) override;
 	void Exit() override;
 
 	static BillBoardShader* GetInstance();
@@ -44,8 +47,9 @@ private:
 	const char* BILLBOARD_TYPES[4] = {"General", "More Performant", "Preserve Rotation and Scale", "Angle Clamping"};
 	int billBoardTypeIndex = 0;
 
-	void InitializeCubes();
-	void ResetValues();
+	Camera cam;
+	bool camMoveRotate = false;
 
+	void InitializeCubes();
 };
 
