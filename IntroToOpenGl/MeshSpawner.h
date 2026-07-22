@@ -40,10 +40,15 @@ private:
 	Vector3 position = Vector3(0,0,0);
 	Vector3 scale = Vector3(1, 1, 1);
 	Vector3 rotation = Vector3(0, 0, 0);
+	
+	Transform* currentSelectedTransform;
+	int selectedTranformIndex;
+
 	Vector4 color;
 	int shaderSelection = 0, meshSelection = 0;
 
 	bool camMoveRotate = false;
+	bool mKeyHeld = false;
 
 	Vector3 camPos = Vector3(0,0,10);
 	float angle = 0;
@@ -58,6 +63,7 @@ private:
 	void SetupPickingBuffer();
 	void RenderPickingPass();
 	int GetObjectIDAtMouse(float xPos, float yPos);
+	void PopulateSelectedTransform(int selectedIndex);
 
 	Shader pickingShader;
 

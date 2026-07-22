@@ -162,7 +162,7 @@ void MeshSpawner::ImGuiRender(GLFWwindow* window)
 	ImGui::Begin("Level Specific", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
 
 	ImGui::DragFloat3("Position", &position.x, 0.005f);
-	ImGui::DragFloat3("Rotation", &rotation.x, 0.005f);
+	ImGui::DragFloat3("Rotation", &rotation.x, 0.5f);
 	ImGui::DragFloat3("Scale", &scale.x, 0.005f);
 
 	ImGui::Columns(2, "shader_mesh_columns", false);
@@ -321,18 +321,28 @@ void MeshSpawner::HandleInput(GLFWwindow* window)
 
 
 	// This is where we get the ID when the player clicks on the screen
-	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
+	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && !mKeyHeld)
 	{
+		mKeyHeld = true;
 		double xPos, yPos;
 		glfwGetCursorPos(window, &xPos, &yPos);
 
 		int id = GetObjectIDAtMouse((float)xPos, (float)yPos);
 
 		if (id >= 0 && id < transforms.size())
+		{
 			std::cout << "Clicked object: " << id << std::endl;
+			PopulateSelectedTransform(id);
+		}
 		else
+		{
 			std::cout << "Clicked Empty Space" << std::endl;
+			currentSelectedTransform = nullptr;
+		}
 	}
+
+	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_RELEASE)
+		mKeyHeld = false;
 
 }
 
@@ -442,6 +452,14 @@ int MeshSpawner::GetObjectIDAtMouse(float xPos, float yPos)
 	// NOTE: Here I am explicitly converting char datatype to int. This is not needed as C++ automatically does it when we perform any bitwise operation. It is called as integer promotion. But its always good to be explicit
 	int id = (int)pixel[0] | ((int)pixel[1] << 8) | ((int)pixel[2] << 16) | ((int)pixel[3] << 24);
 	return id;
+}
+
+void MeshSpawner::PopulateSelectedTransform(int selectedIndex)
+{
+	currentSelectedTransform = &transforms[selectedIndex];
+
+	currentSelectedTransform->position.Print();
+	currentSelectedTransform->rotation.Print();
 }
 
 void MeshSpawner::OnScroll(float xOffset, float yOffset)
