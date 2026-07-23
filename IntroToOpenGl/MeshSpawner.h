@@ -64,6 +64,7 @@ private:
 	void RenderPickingPass();
 	int GetObjectIDAtMouse(float xPos, float yPos);
 	void PopulateSelectedTransform(int selectedIndex);
+	bool WorldToScreen(const Vector3& worldPos, float& outScreenX, float& outScreenY);
 
 	Shader pickingShader;
 

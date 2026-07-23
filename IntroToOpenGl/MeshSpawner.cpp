@@ -207,6 +207,36 @@ void MeshSpawner::ImGuiRender(GLFWwindow* window)
 	}
 
 	ImGui::End();
+
+	// Floating inspector window that hovers above whichever object was clicked
+	if (currentSelectedTransform != nullptr)
+	{
+		float screenX, screenY;
+		if (WorldToScreen(currentSelectedTransform->position, screenX, screenY))
+		{
+			// Pivot (0.5, 1.0) = bottom-center of the window sits at the point,
+			// so the window appears floating just above the object instead of centered on it
+			ImGui::SetNextWindowPos(ImVec2(screenX, screenY - 20.0f), ImGuiCond_Always, ImVec2(0.5f, 1.0f));
+			ImGui::SetNextWindowBgAlpha(0.85f);
+
+			ImGui::Begin("Selected Object", nullptr,
+				ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoFocusOnAppearing);
+
+			// ## suffixes keep these IDs distinct from the widgets in "Level Specific"
+			// so ImGui doesn't confuse the two Position/Rotation/Scale controls
+			ImGui::DragFloat3("Position##sel", &currentSelectedTransform->position.x, 0.005f);
+			ImGui::DragFloat3("Rotation##sel", &currentSelectedTransform->rotation.x, 0.5f);
+			ImGui::DragFloat3("Scale##sel", &currentSelectedTransform->scale.x, 0.005f);
+
+			if (currentSelectedTransform->shaderToUse == 1)
+				ImGui::ColorEdit3("Color##sel", (float*)&currentSelectedTransform->color);
+
+			if (ImGui::Button("Deselect"))
+				currentSelectedTransform = nullptr;
+
+			ImGui::End();
+		}
+	}
 }
 
 void MeshSpawner::Render()
@@ -491,6 +521,32 @@ void MeshSpawner::Exit()
 MeshSpawner* MeshSpawner::GetInstance()
 {
 	return &instance;
+}
+
+// Projects a world position through view/projection to get its screen-space pixel coordinate.
+// Returns false if the point is behind the camera (so we don't draw a window in a nonsensical spot).
+bool MeshSpawner::WorldToScreen(const Vector3& worldPos, float& outScreenX, float& outScreenY)
+{
+	// Column-vector convention (matches your Matrix4x4 * Vector4 operator and shader order):
+	// clip = projection * view * worldPos  -- NOT view * projection
+	Matrix4x4 viewProjection = projection * view;
+
+	Vector::Vector4 clip = viewProjection * Vector::Vector4(worldPos.x, worldPos.y, worldPos.z, 1.0f);
+
+	// Point is behind the camera - projecting it would give a mirrored/garbage screen position
+	if (clip.w <= 0.0f)
+		return false;
+
+	// Perspective divide: clip space -> NDC (-1 to 1 on each axis)
+	float ndcX = clip.x / clip.w;
+	float ndcY = clip.y / clip.w;
+
+	// NDC -> screen pixels, offset by leftPanel same as SetupPickingBuffer does
+	outScreenX = viewportData.leftPanel + (ndcX * 0.5f + 0.5f) * viewportData.width;
+	// Flip Y: NDC +1 is "up" but screen/ImGui +Y is down
+	outScreenY = (1.0f - (ndcY * 0.5f + 0.5f)) * viewportData.height;
+
+	return true;
 }
 
 
