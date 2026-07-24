@@ -231,8 +231,25 @@ void MeshSpawner::ImGuiRender(GLFWwindow* window)
 			if (currentSelectedTransform->shaderToUse == 1)
 				ImGui::ColorEdit3("Color##sel", (float*)&currentSelectedTransform->color);
 
-			if (ImGui::Button("Deselect"))
-				currentSelectedTransform = nullptr;
+			ImGui::Text("Shader");
+			ImGui::RadioButton("Texture", &currentSelectedTransform->shaderToUse, 0);
+			ImGui::RadioButton("Single Color", &currentSelectedTransform->shaderToUse, 1);
+			ImGui::RadioButton("Vertex Color", &currentSelectedTransform->shaderToUse, 2);
+
+			ImGui::NextColumn();
+
+			// Column 2: Mesh selection
+			ImGui::Text("Mesh");
+			if (shaderSelection == 0 || shaderSelection == 1)
+			{
+				ImGui::RadioButton("Cube", &currentSelectedTransform->meshToUse, 0);
+				ImGui::RadioButton("Sphere", &currentSelectedTransform->meshToUse, 2);
+				ImGui::RadioButton("Plane", &currentSelectedTransform->meshToUse, 3);
+			}
+			else if (shaderSelection == 2)
+			{
+				ImGui::RadioButton("Colored Cube", &currentSelectedTransform->meshToUse, 1);
+			}
 
 			ImGui::End();
 		}
@@ -353,6 +370,9 @@ void MeshSpawner::HandleInput(GLFWwindow* window)
 	// This is where we get the ID when the player clicks on the screen
 	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && !mKeyHeld)
 	{
+		if (ImGui::GetIO().WantCaptureMouse)
+			return;
+
 		mKeyHeld = true;
 		double xPos, yPos;
 		glfwGetCursorPos(window, &xPos, &yPos);
