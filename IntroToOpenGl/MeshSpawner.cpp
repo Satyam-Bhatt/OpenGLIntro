@@ -214,16 +214,14 @@ void MeshSpawner::ImGuiRender(GLFWwindow* window)
 		float screenX, screenY;
 		if (WorldToScreen(currentSelectedTransform->position, screenX, screenY))
 		{
-			// Pivot (0.5, 1.0) = bottom-center of the window sits at the point,
-			// so the window appears floating just above the object instead of centered on it
+			// Pivot (0.5, 1.0) = bottom-center of the window sits at the point, so the window appears floating just above the object instead of centered on it
 			ImGui::SetNextWindowPos(ImVec2(screenX, screenY - 20.0f), ImGuiCond_Always, ImVec2(0.5f, 1.0f));
 			ImGui::SetNextWindowBgAlpha(0.85f);
 
 			ImGui::Begin("Selected Object", nullptr,
 				ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoFocusOnAppearing);
 
-			// ## suffixes keep these IDs distinct from the widgets in "Level Specific"
-			// so ImGui doesn't confuse the two Position/Rotation/Scale controls
+			// ## suffixes keep these IDs distinct from the widgets in "Level Specific" so ImGui doesn't confuse the two Position/Rotation/Scale controls
 			ImGui::DragFloat3("Position##sel", &currentSelectedTransform->position.x, 0.005f);
 			ImGui::DragFloat3("Rotation##sel", &currentSelectedTransform->rotation.x, 0.5f);
 			ImGui::DragFloat3("Scale##sel", &currentSelectedTransform->scale.x, 0.005f);
@@ -231,24 +229,26 @@ void MeshSpawner::ImGuiRender(GLFWwindow* window)
 			if (currentSelectedTransform->shaderToUse == 1)
 				ImGui::ColorEdit3("Color##sel", (float*)&currentSelectedTransform->color);
 
+			ImGui::Columns(2, "shader_mesh_columns_Transform", false);
+
 			ImGui::Text("Shader");
-			ImGui::RadioButton("Texture", &currentSelectedTransform->shaderToUse, 0);
-			ImGui::RadioButton("Single Color", &currentSelectedTransform->shaderToUse, 1);
-			ImGui::RadioButton("Vertex Color", &currentSelectedTransform->shaderToUse, 2);
+			ImGui::RadioButton("Texture##sel", &currentSelectedTransform->shaderToUse, 0);
+			ImGui::RadioButton("Single Color##sel", &currentSelectedTransform->shaderToUse, 1);
+			ImGui::RadioButton("Vertex Color##sel", &currentSelectedTransform->shaderToUse, 2);
 
 			ImGui::NextColumn();
 
 			// Column 2: Mesh selection
 			ImGui::Text("Mesh");
-			if (shaderSelection == 0 || shaderSelection == 1)
+			if (currentSelectedTransform->shaderToUse == 0 || currentSelectedTransform->shaderToUse == 1)
 			{
-				ImGui::RadioButton("Cube", &currentSelectedTransform->meshToUse, 0);
-				ImGui::RadioButton("Sphere", &currentSelectedTransform->meshToUse, 2);
-				ImGui::RadioButton("Plane", &currentSelectedTransform->meshToUse, 3);
+				ImGui::RadioButton("Cube##sel", &currentSelectedTransform->meshToUse, 0);
+				ImGui::RadioButton("Sphere##sel", &currentSelectedTransform->meshToUse, 2);
+				ImGui::RadioButton("Plane##sel", &currentSelectedTransform->meshToUse, 3);
 			}
-			else if (shaderSelection == 2)
+			else if (currentSelectedTransform->shaderToUse == 2)
 			{
-				ImGui::RadioButton("Colored Cube", &currentSelectedTransform->meshToUse, 1);
+				ImGui::RadioButton("Colored Cube##sel", &currentSelectedTransform->meshToUse, 1);
 			}
 
 			ImGui::End();
@@ -370,6 +370,7 @@ void MeshSpawner::HandleInput(GLFWwindow* window)
 	// This is where we get the ID when the player clicks on the screen
 	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && !mKeyHeld)
 	{
+		// Check if ImGui is using the mouse first
 		if (ImGui::GetIO().WantCaptureMouse)
 			return;
 
@@ -543,17 +544,14 @@ MeshSpawner* MeshSpawner::GetInstance()
 	return &instance;
 }
 
-// Projects a world position through view/projection to get its screen-space pixel coordinate.
-// Returns false if the point is behind the camera (so we don't draw a window in a nonsensical spot).
+// Convert World Space to Screen Space
 bool MeshSpawner::WorldToScreen(const Vector3& worldPos, float& outScreenX, float& outScreenY)
 {
-	// Column-vector convention (matches your Matrix4x4 * Vector4 operator and shader order):
-	// clip = projection * view * worldPos  -- NOT view * projection
 	Matrix4x4 viewProjection = projection * view;
 
 	Vector::Vector4 clip = viewProjection * Vector::Vector4(worldPos.x, worldPos.y, worldPos.z, 1.0f);
 
-	// Point is behind the camera - projecting it would give a mirrored/garbage screen position
+	// Point is behind the camera
 	if (clip.w <= 0.0f)
 		return false;
 
@@ -561,9 +559,12 @@ bool MeshSpawner::WorldToScreen(const Vector3& worldPos, float& outScreenX, floa
 	float ndcX = clip.x / clip.w;
 	float ndcY = clip.y / clip.w;
 
-	// NDC -> screen pixels, offset by leftPanel same as SetupPickingBuffer does
+	// ndcX * 0.5f + 0.5f -> Converts the ndcX from -1-1 to 0-1
+	// * viewportData.width -> Multiply with normalized ndcX to get the value in the viewport. 0 is left || 0.5 is in middle(half of viewport width) || 1 is on the right
+	// viewportData.leftPanel + -> Adding the offset
 	outScreenX = viewportData.leftPanel + (ndcX * 0.5f + 0.5f) * viewportData.width;
-	// Flip Y: NDC +1 is "up" but screen/ImGui +Y is down
+	// Similar to what is happening above
+	// Inverse the Y coordinates as Screen Space increases downwards
 	outScreenY = (1.0f - (ndcY * 0.5f + 0.5f)) * viewportData.height;
 
 	return true;
