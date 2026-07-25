@@ -6,11 +6,14 @@ BillBoardShader BillBoardShader::instance;
 
 BillBoardShader::BillBoardShader()
 {
+	texture = 0;
 	cam = Camera(Vector3(0, 0, -10));
 }
 
 BillBoardShader::~BillBoardShader()
-{}
+{
+	Exit();
+}
 
 void BillBoardShader::Start()
 {
@@ -171,7 +174,19 @@ void BillBoardShader::OnScroll(float xOffset, float yOffset)
 
 void BillBoardShader::Exit()
 {
+	if (texture != 0) glDeleteTextures(1, &texture);
+	if (shader.ID != 0) glDeleteProgram(shader.ID);
+
+	numCubes = 108;
+	radius = 5.0f;
+	maxPitchAngle = 30.0f;
+	cubes.clear();
+	billBoardTypeIndex = 0;
+	camMoveRotate = false;
+
 	mesh.CleanUp();
+
+	glDisable(GL_DEPTH_TEST);
 }
 
 BillBoardShader* BillBoardShader::GetInstance()

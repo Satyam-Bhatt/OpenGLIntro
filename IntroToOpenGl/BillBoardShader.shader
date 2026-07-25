@@ -1,4 +1,3 @@
-// For rendering a texture/image on different faces depending on texture coordinates
 #Satyam vertex
 
 #version 330 core
