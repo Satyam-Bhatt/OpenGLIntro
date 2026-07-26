@@ -44,11 +44,11 @@ void Mesh::Draw() const
 	Unbind();
 }
 
-void Mesh::CleanUp() const
+void Mesh::CleanUp()
 {
-	if(VAO) glDeleteVertexArrays(1, &VAO);
-	if(VBO) glDeleteBuffers(1, &VBO);
-	if(EBO) glDeleteBuffers(1, &EBO);
+	if (VAO) { glDeleteVertexArrays(1, &VAO); VAO = 0; }
+	if (VBO) { glDeleteBuffers(1, &VBO); VBO = 0; }
+	if (EBO) { glDeleteBuffers(1, &EBO); EBO = 0; }
 }
 
 Mesh::~Mesh()

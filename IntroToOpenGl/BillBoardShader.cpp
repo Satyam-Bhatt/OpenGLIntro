@@ -49,6 +49,7 @@ void BillBoardShader::Start()
 	shader.SetTexture("myTexture", 0);
 
 	InitializeCubes();
+
 }
 
 void BillBoardShader::Update()
@@ -174,8 +175,8 @@ void BillBoardShader::OnScroll(float xOffset, float yOffset)
 
 void BillBoardShader::Exit()
 {
-	if (texture != 0) glDeleteTextures(1, &texture);
-	if (shader.ID != 0) glDeleteProgram(shader.ID);
+	if (texture != 0) { glDeleteTextures(1, &texture); texture = 0; }
+	if (shader.ID != 0) { glDeleteProgram(shader.ID); shader.ID = 0; }
 
 	numCubes = 108;
 	radius = 5.0f;
@@ -230,7 +231,7 @@ void BillBoardShader::InitializeCubes()
 		cube.rotationAxis = axis.Normalize();
 
 		cube.rotationSpeed = speedRange(gen);
-		cube.rotation = rotationRange(gen);		
+		cube.rotation = rotationRange(gen);
 		cube.scale = scaleRange(gen);
 		cubes.push_back(cube);
 

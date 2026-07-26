@@ -30,7 +30,7 @@ public:
 private:
 	static MeshSpawner instance;
 
-	uint32_t texture;
+	uint32_t texture = 0;
 
 	Camera cam;
 
@@ -41,8 +41,7 @@ private:
 	Vector3 scale = Vector3(1, 1, 1);
 	Vector3 rotation = Vector3(0, 0, 0);
 	
-	Transform* currentSelectedTransform;
-	int selectedTranformIndex;
+	Transform* currentSelectedTransform = nullptr;
 
 	Vector4 color;
 	int shaderSelection = 0, meshSelection = 0;
@@ -56,9 +55,9 @@ private:
 	Matrix4x4 view, projection;
 
 	// Allocate buffer (Frame Buffer Object) for Render IDs
-	GLuint pickingFBO;
-	GLuint pickingTexture;
-	GLuint pickingDepth;
+	GLuint pickingFBO = 0;
+	GLuint pickingTexture = 0;
+	GLuint pickingDepth = 0;
 
 	void SetupPickingBuffer();
 	void RenderPickingPass();

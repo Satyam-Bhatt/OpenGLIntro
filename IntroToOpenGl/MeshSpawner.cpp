@@ -8,7 +8,9 @@ MeshSpawner::MeshSpawner()
 }
 
 MeshSpawner::~MeshSpawner()
-{}
+{
+	Exit();
+}
 
 void MeshSpawner::Start()
 {
@@ -521,9 +523,13 @@ void MeshSpawner::OnScroll(float xOffset, float yOffset)
 
 void MeshSpawner::Exit()
 {
-	glDeleteFramebuffers(1, &pickingFBO);
-	glDeleteTextures(1, &pickingTexture);
-	glDeleteRenderbuffers(1, &pickingDepth);
+	glDeleteFramebuffers(1, &pickingFBO); 
+	pickingFBO = 0;
+	glDeleteTextures(1, &pickingTexture); 
+	pickingTexture = 0;
+	glDeleteRenderbuffers(1, &pickingDepth); 
+	pickingDepth = 0;
+	if (texture != 0) { glDeleteTextures(1, &texture); texture = 0; }
 
 	glDisable(GL_DEPTH_TEST);
 
@@ -532,9 +538,26 @@ void MeshSpawner::Exit()
 		m.CleanUp();
 	}
 
-	transforms.clear();
+	for (Shader& s : shaders)
+	{
+		if (s.ID != 0) glDeleteProgram(s.ID);
+	}
 
+	if (pickingShader.ID != 0) glDeleteProgram(pickingShader.ID);
+
+	currentSelectedTransform = nullptr;
+	transforms.clear();
+	shaderSelection = 0;
+	meshSelection = 0;
+
+	camMoveRotate = false;
+	mKeyHeld = false;
+
+	position = Vector3(0, 0, 0);
+	rotation = Vector3(0, 0, 0);
 	scale = Vector3(1, 1, 1);
+
+	token = 0;
 
 	onWindowResize.unsubscribe(token);
 }

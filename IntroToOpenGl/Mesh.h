@@ -28,7 +28,7 @@ public:
 	void Bind() const;
 	void Unbind() const;
 	void Draw() const;
-	void CleanUp() const;
+	void CleanUp();
 
 	// Assignment Operator
 	Mesh& operator=(Mesh&& other) noexcept;
