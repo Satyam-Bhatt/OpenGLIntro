@@ -91,8 +91,8 @@ public:
 		xoffset *= MouseSenstivity;
 		yoffset *= MouseSenstivity;
 
-		Yaw += xoffset;
-		Pitch += yoffset;
+		Yaw -= xoffset;
+		Pitch -= yoffset;
 
 		if (Pitch > 89.0f)
 			Pitch = 89.0f;
@@ -110,6 +110,15 @@ public:
 			Zoom = 1.0f;
 		if (Zoom > 45.0f)
 			Zoom = 45.0f;
+	}
+
+	void Cleanup(Vector3 cameraPostion = Vector3(0, 0, -10))
+	{
+		CameraPosition = cameraPostion;
+		WorldUp = Vector3(0, 1, 0);
+		Yaw = YAW;
+		Pitch = PITCH;
+		UpdateCameraVectors();
 	}
 
 private:

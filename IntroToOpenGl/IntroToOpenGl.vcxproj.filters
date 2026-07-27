@@ -252,6 +252,9 @@
     <ClCompile Include="BillBoardShader.cpp">
       <Filter>Source Files\TestScenes</Filter>
     </ClCompile>
+    <ClCompile Include="Utils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameState.h">
@@ -436,6 +439,9 @@
     </ClInclude>
     <ClInclude Include="BillBoardShader.h">
       <Filter>Header Files\TestScenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

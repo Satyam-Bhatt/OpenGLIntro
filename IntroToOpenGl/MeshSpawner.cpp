@@ -556,10 +556,10 @@ void MeshSpawner::Exit()
 	position = Vector3(0, 0, 0);
 	rotation = Vector3(0, 0, 0);
 	scale = Vector3(1, 1, 1);
-
-	token = 0;
+	cam.Cleanup();
 
 	onWindowResize.unsubscribe(token);
+	token = 0;
 }
 
 MeshSpawner* MeshSpawner::GetInstance()
