@@ -3,6 +3,7 @@
 
 #include "Vector.h"
 #include "Matrix.h"
+#include "constants.h"
 
 namespace Utils
 {

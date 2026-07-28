@@ -213,11 +213,11 @@ void MeshSpawner::ImGuiRender(GLFWwindow* window)
 	// Floating inspector window that hovers above whichever object was clicked
 	if (currentSelectedTransform != nullptr)
 	{
-		float screenX, screenY;
-		if (WorldToScreen(currentSelectedTransform->position, screenX, screenY))
+		Vector2 screenXY;
+		if (Utils::WorldToScreen(currentSelectedTransform->position, view, projection, screenXY))
 		{
 			// Pivot (0.5, 1.0) = bottom-center of the window sits at the point, so the window appears floating just above the object instead of centered on it
-			ImGui::SetNextWindowPos(ImVec2(screenX, screenY - 20.0f), ImGuiCond_Always, ImVec2(0.5f, 1.0f));
+			ImGui::SetNextWindowPos(ImVec2(screenXY.x, screenXY.y - 20.0f), ImGuiCond_Always, ImVec2(0.5f, 1.0f));
 			ImGui::SetNextWindowBgAlpha(0.85f);
 
 			ImGui::Begin("Selected Object", nullptr,
@@ -565,32 +565,6 @@ void MeshSpawner::Exit()
 MeshSpawner* MeshSpawner::GetInstance()
 {
 	return &instance;
-}
-
-// Convert World Space to Screen Space
-bool MeshSpawner::WorldToScreen(const Vector3& worldPos, float& outScreenX, float& outScreenY)
-{
-	Matrix4x4 viewProjection = projection * view;
-
-	Vector::Vector4 clip = viewProjection * Vector::Vector4(worldPos.x, worldPos.y, worldPos.z, 1.0f);
-
-	// Point is behind the camera
-	if (clip.w <= 0.0f)
-		return false;
-
-	// Perspective divide: clip space -> NDC (-1 to 1 on each axis)
-	float ndcX = clip.x / clip.w;
-	float ndcY = clip.y / clip.w;
-
-	// ndcX * 0.5f + 0.5f -> Converts the ndcX from -1-1 to 0-1
-	// * viewportData.width -> Multiply with normalized ndcX to get the value in the viewport. 0 is left || 0.5 is in middle(half of viewport width) || 1 is on the right
-	// viewportData.leftPanel + -> Adding the offset
-	outScreenX = viewportData.leftPanel + (ndcX * 0.5f + 0.5f) * viewportData.width;
-	// Similar to what is happening above
-	// Inverse the Y coordinates as Screen Space increases downwards
-	outScreenY = (1.0f - (ndcY * 0.5f + 0.5f)) * viewportData.height;
-
-	return true;
 }
 
 

@@ -21,11 +21,13 @@
 #include "RayUtils.h"
 #include "Event.h"
 #include "EngineEvents.h"
+#include "Utils.h"
 
 using namespace Matrix;
 using namespace Vector;
 using namespace Geometry;
 using namespace RayUtils;
+using namespace Utils;
 
 class GameState
 {
