@@ -40,6 +40,8 @@ private:
 	Vector3 position = Vector3(0,0,0);
 	Vector3 scale = Vector3(1, 1, 1);
 	Vector3 rotation = Vector3(0, 0, 0);
+
+	Mesh planeMesh;
 	
 	Transform* currentSelectedTransform = nullptr;
 
@@ -63,7 +65,6 @@ private:
 	void RenderPickingPass();
 	int GetObjectIDAtMouse(float xPos, float yPos);
 	void PopulateSelectedTransform(int selectedIndex);
-	bool WorldToScreen(const Vector3& worldPos, float& outScreenX, float& outScreenY);
 
 	Shader pickingShader;
 

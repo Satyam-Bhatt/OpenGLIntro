@@ -64,6 +64,8 @@ void MeshSpawner::Start()
 
 	transforms.push_back(t);
 
+	planeMesh = Plane();
+
 	projection = Matrix4x4::CreateProjectionMatrix_FOV_LeftHanded(45.0f * (PI / 180), (float)viewportData.width, (float)viewportData.height, 0.1f, 100.0f);
 
 	// When window is resized recalculate the projection matrix and also setup the Frame Buffer Object
