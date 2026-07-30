@@ -42,6 +42,7 @@ private:
 	Vector3 rotation = Vector3(0, 0, 0);
 
 	Mesh planeMesh;
+	Shader planeShader;
 	
 	Transform* currentSelectedTransform = nullptr;
 

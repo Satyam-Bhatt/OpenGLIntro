@@ -541,5 +541,8 @@
     <None Include="PickingShader.shader">
       <Filter>Shader\TestScenes</Filter>
     </None>
+    <None Include="GridPlane.shader">
+      <Filter>Shader\TestScenes</Filter>
+    </None>
   </ItemGroup>
 </Project>

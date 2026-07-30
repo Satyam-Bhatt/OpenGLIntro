@@ -270,6 +270,7 @@
   <ItemGroup>
     <None Include="BillBoardShader.shader" />
     <None Include="FirstPersonCamera.shader" />
+    <None Include="GridPlane.shader" />
     <None Include="GLMLookAtCamera.shader" />
     <None Include="CoordinateSystem2.shader" />
     <None Include="CoordinateSystems.shader" />

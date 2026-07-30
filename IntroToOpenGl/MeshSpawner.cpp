@@ -64,6 +64,7 @@ void MeshSpawner::Start()
 
 	transforms.push_back(t);
 
+	planeShader = Shader("GridPlane.shader");
 	planeMesh = Plane();
 
 	projection = Matrix4x4::CreateProjectionMatrix_FOV_LeftHanded(45.0f * (PI / 180), (float)viewportData.width, (float)viewportData.height, 0.1f, 100.0f);
@@ -294,6 +295,15 @@ void MeshSpawner::Render()
 
 		meshes[t.meshToUse].Draw();
 	}
+
+	model = Matrix4x4::Identity();
+	model = Matrix4x4::Scale(model, Vector3(10, 10, 10));
+
+	planeShader.Use();
+	planeShader.SetMat4_Custom("model", model.m);
+	planeShader.SetMat4_Custom("view", view.m);
+	planeShader.SetMat4_Custom("projection", projection.m);
+	planeMesh.Draw();
 
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
