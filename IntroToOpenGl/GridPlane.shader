@@ -25,38 +25,23 @@ void main()
 in vec2 UV;
 out vec4 FragColor;
 
+float sdBox( vec2 p, vec2 b )
+{
+    vec2 d = abs(p)-b;
+    return length(max(d,0.0)) + min(max(d.x,d.y),0.0);
+}
+
 void main()
 {
 	vec2 uv = UV;
-	vec2 newUV = (uv * 2 - 1) * cells;
-
-	// Parsing x and y coordinates separately for non-linear effects to the graph
-	if(nonLinearEffect1)
-	{
-		// Periodic distortion
-		newUV = vec2(newUV.x + sin(Time) * sin(newUV.y), newUV.y + sin(Time) * cos(newUV.x));
-	}
-
-	if(nonLinearEffect2)
-	{
-		// Something cool
-		newUV.x += sin(newUV.y * 6.28 + Time) * 0.2;
-		newUV.y += cos(newUV.x * 6.28 + Time * 0.7) * 0.2;
-	}
-
-	if(nonLinearEffect3)
-	{
-		// All Ways Up
-		newUV.x += sin(newUV.y * 4.0 + Time) * cos(newUV.x * 3.0 + Time * 0.5) * 0.3;
-		newUV.y += cos(newUV.x * 4.0 + Time * 0.7) * sin(newUV.y * 3.0 + Time) * 0.3;
-	}
+	vec2 newUV = (uv * 2 - 1) * 1000;
 
 	vec2 repeatedUV = fract(newUV);
 	
 	// SDF of the box just to make the lines a bit blurry and also have a hollow effect if fade < 0
 	float box = 1-sdBox(repeatedUV, vec2(0.9));
-	box = pow(box, fade);
+	box = pow(box, 3);
 	box = clamp(box, 0.0, 1.0);
 
-	FragColor = vec4(box, box, box, 1.0f);
+	FragColor = vec4(1, 1, 1, 1.0 - box);
 }

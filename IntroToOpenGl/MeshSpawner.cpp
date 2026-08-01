@@ -265,6 +265,9 @@ void MeshSpawner::Render()
 {
 	RenderPickingPass(); // Before main render
 
+	// Render all the opaques with depth write on
+	glDepthMask(GL_TRUE); 
+
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture);
 
@@ -296,8 +299,13 @@ void MeshSpawner::Render()
 		meshes[t.meshToUse].Draw();
 	}
 
+	// Render transparent objects after depth writes off
+	glDepthMask(GL_FALSE);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 	model = Matrix4x4::Identity();
-	model = Matrix4x4::Scale(model, Vector3(10, 10, 10));
+	model = Matrix4x4::Scale(model, Vector3(1000, 1000, 1000));
 
 	planeShader.Use();
 	planeShader.SetMat4_Custom("model", model.m);
@@ -306,6 +314,10 @@ void MeshSpawner::Render()
 	planeMesh.Draw();
 
 	glBindTexture(GL_TEXTURE_2D, 0);
+
+	// Restore state
+	glDepthMask(GL_TRUE);
+	glDisable(GL_BLEND);
 }
 
 // 1. glBindFramebuffer(pickingFBO)
