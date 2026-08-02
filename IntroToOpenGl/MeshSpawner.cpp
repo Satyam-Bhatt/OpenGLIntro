@@ -4,7 +4,7 @@ MeshSpawner MeshSpawner::instance;
 
 MeshSpawner::MeshSpawner()
 {
-	cam = Camera(Vector3(0, 0, -10));
+	cam = Camera(Vector3(0, 2, -10), Vector3(0, 1, 0), 90, -15);
 }
 
 MeshSpawner::~MeshSpawner()
@@ -54,6 +54,7 @@ void MeshSpawner::Start()
 	shaders[0].Use();
 	shaders[0].SetTexture("myTexture", 0);
 
+	// Adds a cube to the scene
 	Transform t;
 	t.position = position;
 	t.rotation = rotation;
@@ -80,6 +81,13 @@ void MeshSpawner::Start()
 // FBO is the core of deferred rendering, SSAO, Shadow Mapping, Motion Blur, Post Processing and Bloom as it stores data into multiple textures in one pass and then combine them in the next pass
 void MeshSpawner::SetupPickingBuffer()
 {
+	if (pickingFBO != 0)
+	{
+		glDeleteFramebuffers(1, &pickingFBO);
+		glDeleteTextures(1, &pickingTexture);
+		glDeleteRenderbuffers(1, &pickingDepth);
+	}
+
 	// A Framebuffer Object(FBO) is an offscreen render target
 	// Normally OpenGL renders to default framebuffer which is the screen
 	// FBO lets you render into a texture or render buffer instead
@@ -164,7 +172,9 @@ void MeshSpawner::ImGuiRender(GLFWwindow* window)
 		ImVec2(0.5f, 1.0f)
 	);
 
-	ImGui::Begin("Level Specific", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
+	ImGui::Begin("Spawn New Objects", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
+
+	ImGui::TextWrapped("Hold RMB and use WASD to move around the scene. QE helps to go up and down");
 
 	ImGui::DragFloat3("Position", &position.x, 0.005f);
 	ImGui::DragFloat3("Rotation", &rotation.x, 0.5f);
@@ -277,7 +287,8 @@ void MeshSpawner::Render()
 
 	for (int i = 0; i < transforms.size(); i++)
 	{
-		Transform t = transforms[i];
+		// We get a refrence because we don't want to copy it 
+		const Transform& t = transforms[i];
 
 		model = Matrix4x4::Identity();
 
@@ -307,6 +318,7 @@ void MeshSpawner::Render()
 	model = Matrix4x4::Identity();
 	model = Matrix4x4::Scale(model, Vector3(1000, 1000, 1000));
 
+	// Draws a huge plane with grid for a sense of space
 	planeShader.Use();
 	planeShader.SetMat4_Custom("model", model.m);
 	planeShader.SetMat4_Custom("view", view.m);
@@ -347,7 +359,8 @@ void MeshSpawner::RenderPickingPass()
 
 	for (int i = 0; i < transforms.size(); i++)
 	{
-		Transform t = transforms[i];
+		// We get a refrence because we don't want to copy it 
+		const Transform& t = transforms[i];
 
 		Matrix4x4 model = Matrix4x4::Identity();
 		model = Matrix4x4::Translation(model, t.position);
@@ -548,12 +561,9 @@ void MeshSpawner::OnScroll(float xOffset, float yOffset)
 void MeshSpawner::Exit()
 {
 	glDeleteFramebuffers(1, &pickingFBO); 
-	pickingFBO = 0;
 	glDeleteTextures(1, &pickingTexture); 
-	pickingTexture = 0;
 	glDeleteRenderbuffers(1, &pickingDepth); 
-	pickingDepth = 0;
-	if (texture != 0) { glDeleteTextures(1, &texture); texture = 0; }
+	if (texture != 0) glDeleteTextures(1, &texture);
 
 	glDisable(GL_DEPTH_TEST);
 
@@ -584,6 +594,9 @@ void MeshSpawner::Exit()
 
 	onWindowResize.unsubscribe(token);
 	token = 0;
+
+	planeMesh.CleanUp();
+	if(planeShader.ID != 0) glDeleteProgram(planeShader.ID);
 }
 
 MeshSpawner* MeshSpawner::GetInstance()

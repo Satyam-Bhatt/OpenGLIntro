@@ -68,7 +68,7 @@ void BillBoardShader::ImGuiRender(GLFWwindow* window)
 
 	ImGui::Begin("Level Specific", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
 
-	ImGui::TextWrapped("Hold RMB and use WASD to move around the scene");
+	ImGui::TextWrapped("Hold RMB and use WASD to move around the scene. QE helps to go up and down");
 
 	ImGui::Combo("BillBoard Type", &billBoardTypeIndex, BILLBOARD_TYPES, IM_ARRAYSIZE(BILLBOARD_TYPES));
 

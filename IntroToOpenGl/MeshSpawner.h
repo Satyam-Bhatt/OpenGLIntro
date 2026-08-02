@@ -52,9 +52,6 @@ private:
 	bool camMoveRotate = false;
 	bool mKeyHeld = false;
 
-	Vector3 camPos = Vector3(0,0,10);
-	float angle = 0;
-
 	Matrix4x4 view, projection;
 
 	// Allocate buffer (Frame Buffer Object) for Render IDs

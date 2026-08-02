@@ -171,7 +171,7 @@ void TestScene_Main::RenderText(SubScene sceneName)
 {
 	if (sceneName == SubScene::MeshSpawner)
 	{
-		ImGui::TextWrapped("Checking out my new mesh classes");
+		ImGui::TextWrapped("Spawn different meshes with different shaders. Also you can select a mesh and update it in realtime.");
 	}
 	else if (sceneName == SubScene::BillBoardShader)
 	{
