@@ -144,6 +144,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BillBoardShader.cpp" />
+    <ClCompile Include="CubeDodgeGame.cpp" />
     <ClCompile Include="EngineEvents.cpp" />
     <ClCompile Include="FirstPersonCamera.cpp" />
     <ClCompile Include="GameState.cpp" />
@@ -206,6 +207,7 @@
   <ItemGroup>
     <ClInclude Include="BillBoardShader.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="CubeDodgeGame.h" />
     <ClInclude Include="EngineEvents.h" />
     <ClInclude Include="Event.h" />
     <ClInclude Include="FirstPersonCamera.h" />

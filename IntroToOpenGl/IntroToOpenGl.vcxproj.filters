@@ -255,6 +255,9 @@
     <ClCompile Include="Utils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CubeDodgeGame.cpp">
+      <Filter>Source Files\TestScenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameState.h">
@@ -442,6 +445,9 @@
     </ClInclude>
     <ClInclude Include="Utils.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CubeDodgeGame.h">
+      <Filter>Header Files\TestScenes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
