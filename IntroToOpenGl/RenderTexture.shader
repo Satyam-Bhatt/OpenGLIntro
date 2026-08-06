@@ -9,6 +9,7 @@ layout(location = 2) in vec2 aUV;
 layout(location = 3) in vec4 aColor;
 
 out vec2 UV;
+out vec4 _Color;
 
 uniform mat4 model;
 uniform mat4 view;
@@ -17,6 +18,7 @@ uniform mat4 projection;
 void main()
 {
 	UV = aUV;
+	_Color = aColor;
 	vec4 pos = projection * view * model * vec4(aPos, 1.0);
 	gl_Position = pos;
 }
@@ -25,11 +27,12 @@ void main()
 #version 330 core
 
 in vec2 UV;
+in vec4 _Color;
 out vec4 FragColor;
 
 uniform sampler2D myTexture;
 
 void main()
 {
-	FragColor = texture(myTexture, UV);
+	FragColor = _Color * texture(myTexture, UV);
 }
