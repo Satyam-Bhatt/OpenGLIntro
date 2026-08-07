@@ -1,6 +1,7 @@
 #include "TestScene_Main.h"
 #include "MeshSpawner.h"
 #include "BillBoardShader.h"
+#include "CubeDodgeGame.h"
 
 TestScene_Main* TestScene_Main::instance = nullptr;
 
@@ -11,6 +12,9 @@ TestScene_Main::TestScene_Main()
 
 	sceneNames[SubScene::BillBoardShader] = "Bill Board Spawner";
 	sceneFactories[SubScene::BillBoardShader] = []() -> TestScene_Main* {return BillBoardShader::GetInstance(); };
+
+	sceneNames[SubScene::CubeDodgeGame] = "Cube Dodge Game";
+	sceneFactories[SubScene::CubeDodgeGame] = []() -> TestScene_Main* {return CubeDodgeGame::GetInstance(); };
 }
 
 TestScene_Main::~TestScene_Main()
@@ -184,6 +188,10 @@ void TestScene_Main::RenderText(SubScene sceneName)
 		ImGui::TextWrapped("Rotation and Scale are preserved in this approach. Done by applying the model matrix as well");
 		ImGui::Bullet();
 		ImGui::TextWrapped("Rotation can be clamped. Done by calculating new camera axis");
+	}
+	else if (sceneName == SubScene::CubeDodgeGame)
+	{
+		ImGui::TextWrapped("High Score Time");
 	}
 	else
 	{

@@ -28,6 +28,7 @@ private:
 	{
 		MeshSpawner,
 		BillBoardShader,
+		CubeDodgeGame,
 		COUNT
 	};
 

@@ -38,6 +38,13 @@ private:
 
 	uint32_t texture = 0;
 	Mesh cube;
-	Shader colorShader;
+	Shader textureShader;
+
+	std::vector<Transform> transforms;
+
+	Matrix4x4 projection;
+
+	bool camMoveRotate = false;
+	bool mKeyHeld = false;
 };
 

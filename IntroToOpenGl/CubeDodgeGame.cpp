@@ -37,28 +37,99 @@ void CubeDodgeGame::Start()
 
 	stbi_image_free(data);
 
+	cube = Cube();
+	textureShader = Shader("RenderTexture.shader");
+
+	textureShader.Use();
+	textureShader.SetTexture("myTexture", 0);
+
+	Transform t;
+	t.position = Vector3(0, 0, 0);
+	t.scale = Vector3(1, 1, 1);
+	t.shaderType = ShaderType::Color;
+
+	transforms.push_back(t);
+
+	projection = Matrix4x4::CreateProjectionMatrix_FOV_LeftHanded(45.0f * (PI / 180), (float)viewportData.width, (float)viewportData.height, 0.1f, 100.0f);
 }
 
 void CubeDodgeGame::Update()
 {}
 
 void CubeDodgeGame::ImGuiRender(GLFWwindow * window)
-{}
+{
+	GLint viewport[4];
+	glGetIntegerv(GL_VIEWPORT, viewport);
+
+	ImGui::SetNextWindowPos(
+		ImVec2(viewport[0] + viewport[2] / 2, viewport[3]),
+		ImGuiCond_Always,
+		ImVec2(0.5f, 1.0f)
+	);
+
+	ImGui::Begin("Spawn New Objects", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
+
+	ImGui::End();
+}
 
 void CubeDodgeGame::Render()
-{}
+{
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, texture);
+
+	Matrix4x4 view = cam.GetViewMatrix();
+
+	Matrix4x4 model;
+
+	for (int i = 0; i < transforms.size(); i++)
+	{
+		// We get a refrence because we don't want to copy it 
+		const Transform& t = transforms[i];
+
+		model = Matrix4x4::Identity();
+
+		model = Matrix4x4::Translation(model, t.position);
+		model = Matrix4x4::Scale(model, t.scale);
+
+		if (t.shaderType == ShaderType::Texture)
+			textureShader.Use();
+		textureShader.SetMat4_Custom("model", model.m);
+		textureShader.SetMat4_Custom("view", view.m);
+		textureShader.SetMat4_Custom("projection", projection.m);
+		textureShader.SetVec4("_Color", t.color);
+
+		cube.Draw();
+	}
+}
 
 void CubeDodgeGame::HandleInput(GLFWwindow * window)
 {}
 
 void CubeDodgeGame::OnMouseMove(float xOffset, float yOffset, float xPos, float yPos)
-{}
+{
+	if (camMoveRotate)
+		cam.ProcessMouseMovement(xOffset, yOffset);
+}
 
 void CubeDodgeGame::OnScroll(float xOffset, float yOffset)
 {}
 
 void CubeDodgeGame::Exit()
-{}
+{
+	if (texture != 0) {
+		glDeleteTextures(1, &texture);
+		texture = 0;
+	}
+
+	if (textureShader.ID != 0) glDeleteProgram(textureShader.ID);
+	transforms.clear();
+
+	camMoveRotate = false;
+	mKeyHeld = false;
+
+	cube.CleanUp();
+	cam.Cleanup();
+}
 
 CubeDodgeGame* CubeDodgeGame::GetInstance()
 {
