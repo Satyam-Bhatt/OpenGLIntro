@@ -46,5 +46,7 @@ private:
 
 	bool camMoveRotate = false;
 	bool mKeyHeld = false;
+
+	Vector4 tillingAndOffset = Vector4(1, 1, 1, 1);
 };
 

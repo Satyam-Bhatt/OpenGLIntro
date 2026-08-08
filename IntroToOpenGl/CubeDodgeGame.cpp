@@ -23,7 +23,7 @@ void CubeDodgeGame::Start()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
 	int width, height, nChannels;
-	unsigned char* data = stbi_load("Images/MYawesomeface.png", &width, &height, &nChannels, 0);
+	unsigned char* data = stbi_load("Images/WhiteCheck.png", &width, &height, &nChannels, 0);
 
 	if (data)
 	{
@@ -46,6 +46,7 @@ void CubeDodgeGame::Start()
 	Transform t;
 	t.position = Vector3(0, 0, 0);
 	t.scale = Vector3(1, 1, 1);
+	t.color = Vector4(1, 1, 1, 1);
 	t.shaderType = ShaderType::Color;
 
 	transforms.push_back(t);
@@ -68,6 +69,8 @@ void CubeDodgeGame::ImGuiRender(GLFWwindow * window)
 	);
 
 	ImGui::Begin("Spawn New Objects", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
+
+	ImGui::DragFloat4("Tiling and Offset", &tillingAndOffset.x, 0.05f);
 
 	ImGui::End();
 }
@@ -97,13 +100,44 @@ void CubeDodgeGame::Render()
 		textureShader.SetMat4_Custom("view", view.m);
 		textureShader.SetMat4_Custom("projection", projection.m);
 		textureShader.SetVec4("_Color", t.color);
+		textureShader.SetVec4("tillingOffset", tillingAndOffset);
 
 		cube.Draw();
 	}
 }
 
 void CubeDodgeGame::HandleInput(GLFWwindow * window)
-{}
+{
+	if (glfwGetKey(window, GLFW_KEY_M) == GLFW_PRESS && !mKeyHeld)
+	{
+		camMoveRotate = !camMoveRotate;
+
+		if (camMoveRotate)
+			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		else
+			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+
+		mKeyHeld = true;
+	}
+	if (glfwGetKey(window, GLFW_KEY_M) == GLFW_RELEASE && mKeyHeld)
+		mKeyHeld = false;
+
+	if (camMoveRotate)
+	{
+		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+			cam.ProcessKeyboard(Camera_Movement::FORWARD);
+		if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+			cam.ProcessKeyboard(Camera_Movement::BACKWARD);
+		if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+			cam.ProcessKeyboard(Camera_Movement::LEFT);
+		if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+			cam.ProcessKeyboard(Camera_Movement::RIGHT);
+		if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
+			cam.ProcessKeyboard(Camera_Movement::UP);
+		if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
+			cam.ProcessKeyboard(Camera_Movement::DOWN);
+	}
+}
 
 void CubeDodgeGame::OnMouseMove(float xOffset, float yOffset, float xPos, float yPos)
 {

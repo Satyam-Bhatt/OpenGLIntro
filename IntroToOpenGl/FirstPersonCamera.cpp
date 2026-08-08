@@ -363,7 +363,7 @@ void FirstPersonCamera::Exit()
 	senstivity = 0.1f;
 	cameraSpeed = 5;
 	mouseVisible = true;
-	firstMouse = true;
+	firstMouse = false;
 	mKeyHeld = false;
 
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
