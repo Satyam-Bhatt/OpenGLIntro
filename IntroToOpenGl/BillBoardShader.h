@@ -46,5 +46,8 @@ private:
 	bool camMoveRotate = false;
 
 	void InitializeCubes();
+
+	Mesh planeMesh;
+	Shader planeShader;
 };
 

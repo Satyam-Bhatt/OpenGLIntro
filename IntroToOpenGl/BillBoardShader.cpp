@@ -7,7 +7,7 @@ BillBoardShader BillBoardShader::instance;
 BillBoardShader::BillBoardShader()
 {
 	texture = 0;
-	cam = Camera(Vector3(0, 0, -10));
+	cam = Camera(Vector3(0, 2, -15), Vector3(0, 1, 0), 90, -10);
 }
 
 BillBoardShader::~BillBoardShader()
@@ -50,6 +50,8 @@ void BillBoardShader::Start()
 
 	InitializeCubes();
 
+	planeShader = Shader("GridPlane.shader");
+	planeMesh = Plane();
 }
 
 void BillBoardShader::Update()
@@ -84,6 +86,9 @@ void BillBoardShader::ImGuiRender(GLFWwindow* window)
 
 void BillBoardShader::Render()
 {
+	// Render all the opaques with depth write on
+	glDepthMask(GL_TRUE);
+
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture);
 
@@ -136,6 +141,25 @@ void BillBoardShader::Render()
 	}
 
 	glBindTexture(GL_TEXTURE_2D, 0);
+
+	// Render transparent objects after depth writes off
+	glDepthMask(GL_FALSE);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	model = Matrix4x4::Identity();
+	model = Matrix4x4::Scale(model, Vector3(1000, 1000, 1000));
+
+	// Draws a huge plane with grid for a sense of space
+	planeShader.Use();
+	planeShader.SetMat4_Custom("model", model.m);
+	planeShader.SetMat4_Custom("view", viewMatrix.m);
+	planeShader.SetMat4_Custom("projection", projection.m);
+	planeMesh.Draw();
+
+	// Restore state
+	glDepthMask(GL_TRUE);
+	glDisable(GL_BLEND);
 }
 
 void BillBoardShader::HandleInput(GLFWwindow* window)
