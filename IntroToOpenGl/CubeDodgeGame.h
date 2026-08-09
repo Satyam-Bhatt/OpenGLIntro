@@ -9,11 +9,19 @@ class CubeDodgeGame : public TestScene_Main
 		Texture
 	};
 
+	enum MeshType
+	{
+		Cuboid,
+		Quad
+	};
+
 	struct Transform {
 		Vector3 position;
+		Vector3 rotation;
 		Vector3 scale;
 		Vector4 color;
 		ShaderType shaderType;
+		MeshType meshType;
 	};
 
 public:
@@ -37,7 +45,7 @@ private:
 	Camera cam;
 
 	uint32_t texture = 0;
-	Mesh cube;
+	Mesh cube, plane;
 	Shader textureShader;
 
 	std::vector<Transform> transforms;
@@ -48,5 +56,7 @@ private:
 	bool mKeyHeld = false;
 
 	Vector4 tillingAndOffset = Vector4(1, 1, 1, 1);
+
+	void DefineWalls();
 };
 

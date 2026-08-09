@@ -38,6 +38,7 @@ void CubeDodgeGame::Start()
 	stbi_image_free(data);
 
 	cube = Cube();
+	plane = Plane();
 	textureShader = Shader("RenderTexture.shader");
 
 	textureShader.Use();
@@ -48,14 +49,50 @@ void CubeDodgeGame::Start()
 	t.scale = Vector3(1, 1, 1);
 	t.color = Vector4(1, 1, 1, 1);
 	t.shaderType = ShaderType::Color;
+	t.meshType = MeshType::Cuboid;
 
 	transforms.push_back(t);
 
 	projection = Matrix4x4::CreateProjectionMatrix_FOV_LeftHanded(45.0f * (PI / 180), (float)viewportData.width, (float)viewportData.height, 0.1f, 100.0f);
+
+	DefineWalls();
 }
 
 void CubeDodgeGame::Update()
 {}
+
+void CubeDodgeGame::DefineWalls()
+{
+	Vector3 HWD = Vector3(10, 20, 40);
+	Transform t;
+	// Platform
+	t.position = Vector3(0, -HWD.x/2, HWD.z / 2);
+	t.scale = Vector3(HWD.y, 0, HWD.z);
+	t.color = Vector4(1, 1, 1, 1);
+	t.shaderType = ShaderType::Texture;
+	t.meshType = MeshType::Quad;
+	transforms.push_back(t);
+
+	// Right Wall
+	t.position = Vector3(HWD.y/2, 0, HWD.z / 2);
+	t.scale = Vector3(0.1, HWD.x, HWD.z);
+	t.color = Vector4(1, 1, 1, 1);
+	t.shaderType = ShaderType::Texture;
+	t.meshType = MeshType::Cuboid;
+	transforms.push_back(t);
+
+	// Left Wall
+	t.position = Vector3(-HWD.y / 2, 0, HWD.z / 2);
+	t.scale = Vector3(0.1, HWD.x, HWD.z);
+	t.color = Vector4(1, 1, 1, 1);
+	t.shaderType = ShaderType::Texture;
+	t.meshType = MeshType::Cuboid;
+	transforms.push_back(t);
+
+	// Back Wall
+
+	// Front Wall
+}
 
 void CubeDodgeGame::ImGuiRender(GLFWwindow * window)
 {
@@ -102,7 +139,10 @@ void CubeDodgeGame::Render()
 		textureShader.SetVec4("_Color", t.color);
 		textureShader.SetVec4("tillingOffset", tillingAndOffset);
 
-		cube.Draw();
+		if(t.meshType == MeshType::Quad)
+			plane.Draw();
+		if(t.meshType == MeshType::Cuboid)
+			cube.Draw();
 	}
 }
 
@@ -169,3 +209,4 @@ CubeDodgeGame* CubeDodgeGame::GetInstance()
 {
 	return &instance;
 }
+
