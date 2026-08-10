@@ -90,6 +90,12 @@ void CubeDodgeGame::DefineWalls()
 	transforms.push_back(t);
 
 	// Back Wall
+	t.position = Vector3(0, 0, 0);
+	t.scale = Vector3(HWD.y, HWD.x, 0.1);
+	t.color = Vector4(1, 1, 1, 1);
+	t.shaderType = ShaderType::Texture;
+	t.meshType = MeshType::Cuboid;
+	transforms.push_back(t);
 
 	// Front Wall
 }
