@@ -56,6 +56,7 @@ private:
 	bool mKeyHeld = false;
 
 	Vector4 tillingAndOffset = Vector4(1, 1, 1, 1);
+	Vector3 WHD = Vector3(20, 10, 40);
 
 	void DefineWalls();
 };

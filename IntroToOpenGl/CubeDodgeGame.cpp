@@ -3,7 +3,7 @@
 CubeDodgeGame CubeDodgeGame::instance;
 CubeDodgeGame::CubeDodgeGame()
 {
-	cam = Camera(Vector3(0, 2, -10), Vector3(0, 1, 0), 90, -15);
+	cam = Camera(Vector3(0, 2, 1), Vector3(0, 1, 0), 90, -15);
 }
 
 CubeDodgeGame::~CubeDodgeGame()
@@ -63,27 +63,26 @@ void CubeDodgeGame::Update()
 
 void CubeDodgeGame::DefineWalls()
 {
-	Vector3 HWD = Vector3(10, 20, 40);
 	Transform t;
 	// Platform
-	t.position = Vector3(0, -HWD.x/2, HWD.z / 2);
-	t.scale = Vector3(HWD.y, 0, HWD.z);
+	t.position = Vector3(0, -WHD.y/2, WHD.z / 2);
+	t.scale = Vector3(WHD.x, 0, WHD.z);
 	t.color = Vector4(1, 1, 1, 1);
 	t.shaderType = ShaderType::Texture;
 	t.meshType = MeshType::Quad;
 	transforms.push_back(t);
 
 	// Right Wall
-	t.position = Vector3(HWD.y/2, 0, HWD.z / 2);
-	t.scale = Vector3(0.1, HWD.x, HWD.z);
+	t.position = Vector3(WHD.x/2, 0, WHD.z / 2);
+	t.scale = Vector3(0.1, WHD.y, WHD.z);
 	t.color = Vector4(1, 1, 1, 1);
 	t.shaderType = ShaderType::Texture;
 	t.meshType = MeshType::Cuboid;
 	transforms.push_back(t);
 
 	// Left Wall
-	t.position = Vector3(-HWD.y / 2, 0, HWD.z / 2);
-	t.scale = Vector3(0.1, HWD.x, HWD.z);
+	t.position = Vector3(-WHD.x / 2, 0, WHD.z / 2);
+	t.scale = Vector3(0.1, WHD.y, WHD.z);
 	t.color = Vector4(1, 1, 1, 1);
 	t.shaderType = ShaderType::Texture;
 	t.meshType = MeshType::Cuboid;
@@ -91,13 +90,21 @@ void CubeDodgeGame::DefineWalls()
 
 	// Back Wall
 	t.position = Vector3(0, 0, 0);
-	t.scale = Vector3(HWD.y, HWD.x, 0.1);
+	t.scale = Vector3(WHD.x, WHD.y, 0.1);
 	t.color = Vector4(1, 1, 1, 1);
 	t.shaderType = ShaderType::Texture;
 	t.meshType = MeshType::Cuboid;
 	transforms.push_back(t);
 
 	// Front Wall
+	t.position = Vector3(0, 0, WHD.z);
+	t.scale = Vector3(WHD.x, WHD.y, 0.1);
+	t.color = Vector4(1, 1, 1, 1);
+	t.shaderType = ShaderType::Texture;
+	t.meshType = MeshType::Cuboid;
+	transforms.push_back(t);
+
+	// Top Wall
 }
 
 void CubeDodgeGame::ImGuiRender(GLFWwindow * window)
@@ -114,6 +121,11 @@ void CubeDodgeGame::ImGuiRender(GLFWwindow * window)
 	ImGui::Begin("Spawn New Objects", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
 
 	ImGui::DragFloat4("Tiling and Offset", &tillingAndOffset.x, 0.05f);
+	if (ImGui::DragFloat3("HWD", &WHD.x, 0.05f))
+	{
+		transforms.clear();
+		DefineWalls();
+	}
 
 	ImGui::End();
 }
@@ -154,7 +166,7 @@ void CubeDodgeGame::Render()
 
 void CubeDodgeGame::HandleInput(GLFWwindow * window)
 {
-	if (glfwGetKey(window, GLFW_KEY_M) == GLFW_PRESS && !mKeyHeld)
+	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS && !mKeyHeld)
 	{
 		camMoveRotate = !camMoveRotate;
 
@@ -165,8 +177,9 @@ void CubeDodgeGame::HandleInput(GLFWwindow * window)
 
 		mKeyHeld = true;
 	}
-	if (glfwGetKey(window, GLFW_KEY_M) == GLFW_RELEASE && mKeyHeld)
+	else if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_RELEASE && mKeyHeld)
 		mKeyHeld = false;
+
 
 	if (camMoveRotate)
 	{
