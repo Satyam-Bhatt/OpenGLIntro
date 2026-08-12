@@ -105,6 +105,12 @@ void CubeDodgeGame::DefineWalls()
 	transforms.push_back(t);
 
 	// Top Wall
+	t.position = Vector3(0, WHD.y / 2, WHD.z / 2);
+	t.scale = Vector3(WHD.x, 0, WHD.z);
+	t.color = Vector4(1, 1, 1, 1);
+	t.shaderType = ShaderType::Texture;
+	t.meshType = MeshType::Quad;
+	transforms.push_back(t);
 }
 
 void CubeDodgeGame::ImGuiRender(GLFWwindow * window)
