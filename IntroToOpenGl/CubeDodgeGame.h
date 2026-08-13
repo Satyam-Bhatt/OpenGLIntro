@@ -15,6 +15,13 @@ class CubeDodgeGame : public TestScene_Main
 		Quad
 	};
 
+	enum ObjectType
+	{
+		Wall,
+		ObstacleKiller,
+		ObstacleNormal
+	};
+
 	struct Transform {
 		Vector3 position;
 		Vector3 rotation;
@@ -22,6 +29,7 @@ class CubeDodgeGame : public TestScene_Main
 		Vector4 color;
 		ShaderType shaderType;
 		MeshType meshType;
+		ObjectType objectType;
 	};
 
 public:
@@ -59,5 +67,6 @@ private:
 	Vector3 WHD = Vector3(20, 10, 40);
 
 	void DefineWalls();
+	bool DistanceCheck();
 };
 

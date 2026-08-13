@@ -45,9 +45,9 @@ void CubeDodgeGame::Start()
 	textureShader.SetTexture("myTexture", 0);
 
 	Transform t;
-	t.position = Vector3(0, 0, 0);
+	t.position = Vector3(0, 0, WHD.z/2);
 	t.scale = Vector3(1, 1, 1);
-	t.color = Vector4(1, 1, 1, 1);
+	t.color = Vector4(1, 0, 0, 1);
 	t.shaderType = ShaderType::Color;
 	t.meshType = MeshType::Cuboid;
 
@@ -111,6 +111,11 @@ void CubeDodgeGame::DefineWalls()
 	t.shaderType = ShaderType::Texture;
 	t.meshType = MeshType::Quad;
 	transforms.push_back(t);
+}
+
+bool CubeDodgeGame::DistanceCheck()
+{
+	return false;
 }
 
 void CubeDodgeGame::ImGuiRender(GLFWwindow * window)
