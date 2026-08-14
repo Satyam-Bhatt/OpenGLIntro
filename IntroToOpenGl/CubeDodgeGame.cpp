@@ -115,6 +115,17 @@ void CubeDodgeGame::DefineWalls()
 
 bool CubeDodgeGame::DistanceCheck()
 {
+	// Make player bounds and then do AABB check as done in SDL
+
+	for (const Transform& t : transforms)
+	{
+		if (t.objectType != ObjectType::ObstacleKiller) continue;
+
+		if (Vector3::Distance(cam.CameraPosition, t.position) < 0.1)
+		{
+
+		}
+	}
 	return false;
 }
 
