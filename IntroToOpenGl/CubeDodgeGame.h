@@ -22,7 +22,25 @@ class CubeDodgeGame : public TestScene_Main
 		ObstacleNormal
 	};
 
+	struct Extents
+	{
+		Vector3 min;
+		Vector3 max;
+	};
+
 	struct Transform {
+		
+		Transform()
+		{
+			position = Vector3(0, 0, 0);
+			rotation = Vector3(0, 0, 0);
+			scale = Vector3(1, 1, 1);
+			color = Vector4(1, 1, 1, 1);
+			meshType = MeshType::Cuboid;
+			shaderType = ShaderType::Texture;
+			objectType = ObjectType::ObstacleNormal;
+		}
+
 		Vector3 position;
 		Vector3 rotation;
 		Vector3 scale;
@@ -30,6 +48,17 @@ class CubeDodgeGame : public TestScene_Main
 		ShaderType shaderType;
 		MeshType meshType;
 		ObjectType objectType;
+
+		Extents GetExtents()
+		{
+			Extents l_T;
+			l_T.min = position - scale / 2;
+			l_T.max = position + scale / 2;
+			return l_T;
+		}
+
+	private:
+		Extents extents;
 	};
 
 public:
@@ -68,5 +97,6 @@ private:
 
 	void DefineWalls();
 	bool DistanceCheck();
+	bool CheckCollision(const Extents& a, const Extents& b);
 };
 
