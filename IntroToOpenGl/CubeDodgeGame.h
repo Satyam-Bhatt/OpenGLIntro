@@ -26,6 +26,14 @@ class CubeDodgeGame : public TestScene_Main
 	{
 		Vector3 min;
 		Vector3 max;
+
+		static Extents CalculateExtents(Vector3 pos, Vector3 scale)
+		{
+			Vector3 min = pos - scale / 2;
+			Vector3 max = pos + scale / 2;
+			return { min, max };
+			
+		}
 	};
 
 	struct Transform {
@@ -49,16 +57,13 @@ class CubeDodgeGame : public TestScene_Main
 		MeshType meshType;
 		ObjectType objectType;
 
-		Extents GetExtents()
+		Extents GetExtents() const
 		{
 			Extents l_T;
 			l_T.min = position - scale / 2;
 			l_T.max = position + scale / 2;
 			return l_T;
 		}
-
-	private:
-		Extents extents;
 	};
 
 public:
@@ -94,6 +99,9 @@ private:
 
 	Vector4 tillingAndOffset = Vector4(1, 1, 1, 1);
 	Vector3 WHD = Vector3(20, 10, 40);
+
+	Extents myExtents;
+	Vector3 myScale = Vector3(0.5f, 0.5f, 0.5f);
 
 	void DefineWalls();
 	bool DistanceCheck();

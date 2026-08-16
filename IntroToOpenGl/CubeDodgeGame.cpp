@@ -4,6 +4,7 @@ CubeDodgeGame CubeDodgeGame::instance;
 CubeDodgeGame::CubeDodgeGame()
 {
 	cam = Camera(Vector3(0, 2, 1), Vector3(0, 1, 0), 90, -15);
+	myExtents = Extents::CalculateExtents(cam.CameraPosition, myScale);
 }
 
 CubeDodgeGame::~CubeDodgeGame()
@@ -50,6 +51,7 @@ void CubeDodgeGame::Start()
 	t.color = Vector4(1, 0, 0, 1);
 	t.shaderType = ShaderType::Color;
 	t.meshType = MeshType::Cuboid;
+	t.objectType = ObjectType::ObstacleKiller;
 
 	transforms.push_back(t);
 
@@ -59,7 +61,9 @@ void CubeDodgeGame::Start()
 }
 
 void CubeDodgeGame::Update()
-{}
+{
+	DistanceCheck();
+}
 
 void CubeDodgeGame::DefineWalls()
 {
@@ -117,13 +121,19 @@ bool CubeDodgeGame::DistanceCheck()
 {
 	// Make player bounds and then do AABB check as done in SDL
 
+	myExtents = Extents::CalculateExtents(cam.CameraPosition, myScale);
+
 	for (const Transform& t : transforms)
 	{
 		if (t.objectType != ObjectType::ObstacleKiller) continue;
 
-		if (Vector3::Distance(cam.CameraPosition, t.position) < 0.1)
+		if (CheckCollision(myExtents, t.GetExtents()))
 		{
-
+			std::cout << "Collied Success" << std::endl;
+		}
+		else
+		{
+			std::cout << "No Collision" << std::endl;
 		}
 	}
 	return false;
