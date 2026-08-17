@@ -1,4 +1,6 @@
 #include "CubeDodgeGame.h"
+#include <random>
+#include <vector>
 
 CubeDodgeGame CubeDodgeGame::instance;
 CubeDodgeGame::CubeDodgeGame()
@@ -60,9 +62,13 @@ void CubeDodgeGame::Start()
 	DefineWalls();
 }
 
+// X - -(w/2 - 0.2) - (w/2 - 0.2)
+// Y - -(h/2 - 0.2) - (h/2 - 0.2)
+// Z - 0.2 - (d - 0.2)
 void CubeDodgeGame::Update()
 {
 	DistanceCheck();
+	cam.CameraPosition.Print();
 }
 
 void CubeDodgeGame::DefineWalls()
@@ -144,6 +150,40 @@ bool CubeDodgeGame::CheckCollision(const Extents& a, const Extents& b)
 	return (a.min.x <= b.max.x && a.max.x >= b.min.x) &&
 		   (a.min.y <= b.max.y && a.max.y >= b.min.y) &&
 		   (a.min.z <= b.max.z && a.max.z >= b.min.z);
+}
+
+void CubeDodgeGame::InitializeCubes()
+{
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_real_distribution<float> offsetRange(-0.2f, 0.2f);  // offset from grid position
+	std::uniform_real_distribution<float> axisRange(0.0f, 1.0f);       // rotation axis components
+	std::uniform_real_distribution<float> speedRange(0.5f, 2.0f);    // rotation Speed
+	std::uniform_real_distribution<float> offsetRangeZ(-3.0f, 0.2f); // offset in Z direction
+
+	cubes.clear();
+
+	float spacing = 0.6f; // Distance between cubes
+	int cubesPerRow = (int)std::ceil(std::sqrt((double)numCubes)); // number of columns
+
+	for (int i = 0; i < numCubes; i++)
+	{
+		Transform cube;
+
+		int row = i / cubesPerRow;
+		int col = i % cubesPerRow;
+
+		float offsetX = (cubesPerRow - 1) * spacing / 2.0f;
+		float offsetY = ((numCubes / cubesPerRow) - 1) * spacing / 2.0f;
+
+		cube.position = Vector3(
+			col * spacing - offsetX + offsetRange(gen),
+			row * spacing - offsetY + offsetRange(gen),
+			offsetRangeZ(gen)
+		);
+
+		cubes.push_back(cube);
+	}
 }
 
 void CubeDodgeGame::ImGuiRender(GLFWwindow * window)

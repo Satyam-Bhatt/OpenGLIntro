@@ -101,10 +101,15 @@ private:
 	Vector3 WHD = Vector3(20, 10, 40);
 
 	Extents myExtents;
-	Vector3 myScale = Vector3(0.5f, 0.5f, 0.5f);
+	Vector3 myScale = Vector3(0.2f, 0.2f, 0.2f);
+	int numCubes;
 
 	void DefineWalls();
 	bool DistanceCheck();
 	bool CheckCollision(const Extents& a, const Extents& b);
+
+	std::vector<Transform> cubes;
+	void InitializeCubes();
+
 };
 
