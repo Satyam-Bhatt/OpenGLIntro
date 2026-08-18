@@ -17,9 +17,9 @@ class CubeDodgeGame : public TestScene_Main
 
 	enum ObjectType
 	{
-		Wall,
-		ObstacleKiller,
-		ObstacleNormal
+		Wall = 0,
+		ObstacleKiller = 1,
+		ObstacleNormal = 2
 	};
 
 	struct Extents
@@ -90,7 +90,7 @@ private:
 	Mesh cube, plane;
 	Shader textureShader;
 
-	std::vector<Transform> transforms;
+	std::vector<Transform> walls;
 
 	Matrix4x4 projection;
 
@@ -102,7 +102,7 @@ private:
 
 	Extents myExtents;
 	Vector3 myScale = Vector3(0.2f, 0.2f, 0.2f);
-	int numCubes;
+	int numCubes = 10;
 
 	void DefineWalls();
 	bool DistanceCheck();

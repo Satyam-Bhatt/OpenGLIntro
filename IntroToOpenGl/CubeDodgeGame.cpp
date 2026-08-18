@@ -47,28 +47,16 @@ void CubeDodgeGame::Start()
 	textureShader.Use();
 	textureShader.SetTexture("myTexture", 0);
 
-	Transform t;
-	t.position = Vector3(0, 0, WHD.z/2);
-	t.scale = Vector3(1, 1, 1);
-	t.color = Vector4(1, 0, 0, 1);
-	t.shaderType = ShaderType::Color;
-	t.meshType = MeshType::Cuboid;
-	t.objectType = ObjectType::ObstacleKiller;
-
-	transforms.push_back(t);
-
 	projection = Matrix4x4::CreateProjectionMatrix_FOV_LeftHanded(45.0f * (PI / 180), (float)viewportData.width, (float)viewportData.height, 0.1f, 100.0f);
 
 	DefineWalls();
+	InitializeCubes();
 }
 
-// X - -(w/2 - 0.2) - (w/2 - 0.2)
-// Y - -(h/2 - 0.2) - (h/2 - 0.2)
-// Z - 0.2 - (d - 0.2)
+
 void CubeDodgeGame::Update()
 {
 	DistanceCheck();
-	cam.CameraPosition.Print();
 }
 
 void CubeDodgeGame::DefineWalls()
@@ -80,7 +68,7 @@ void CubeDodgeGame::DefineWalls()
 	t.color = Vector4(1, 1, 1, 1);
 	t.shaderType = ShaderType::Texture;
 	t.meshType = MeshType::Quad;
-	transforms.push_back(t);
+	walls.push_back(t);
 
 	// Right Wall
 	t.position = Vector3(WHD.x/2, 0, WHD.z / 2);
@@ -88,7 +76,7 @@ void CubeDodgeGame::DefineWalls()
 	t.color = Vector4(1, 1, 1, 1);
 	t.shaderType = ShaderType::Texture;
 	t.meshType = MeshType::Cuboid;
-	transforms.push_back(t);
+	walls.push_back(t);
 
 	// Left Wall
 	t.position = Vector3(-WHD.x / 2, 0, WHD.z / 2);
@@ -96,7 +84,7 @@ void CubeDodgeGame::DefineWalls()
 	t.color = Vector4(1, 1, 1, 1);
 	t.shaderType = ShaderType::Texture;
 	t.meshType = MeshType::Cuboid;
-	transforms.push_back(t);
+	walls.push_back(t);
 
 	// Back Wall
 	t.position = Vector3(0, 0, 0);
@@ -104,7 +92,7 @@ void CubeDodgeGame::DefineWalls()
 	t.color = Vector4(1, 1, 1, 1);
 	t.shaderType = ShaderType::Texture;
 	t.meshType = MeshType::Cuboid;
-	transforms.push_back(t);
+	walls.push_back(t);
 
 	// Front Wall
 	t.position = Vector3(0, 0, WHD.z);
@@ -112,7 +100,7 @@ void CubeDodgeGame::DefineWalls()
 	t.color = Vector4(1, 1, 1, 1);
 	t.shaderType = ShaderType::Texture;
 	t.meshType = MeshType::Cuboid;
-	transforms.push_back(t);
+	walls.push_back(t);
 
 	// Top Wall
 	t.position = Vector3(0, WHD.y / 2, WHD.z / 2);
@@ -120,7 +108,7 @@ void CubeDodgeGame::DefineWalls()
 	t.color = Vector4(1, 1, 1, 1);
 	t.shaderType = ShaderType::Texture;
 	t.meshType = MeshType::Quad;
-	transforms.push_back(t);
+	walls.push_back(t);
 }
 
 bool CubeDodgeGame::DistanceCheck()
@@ -129,17 +117,11 @@ bool CubeDodgeGame::DistanceCheck()
 
 	myExtents = Extents::CalculateExtents(cam.CameraPosition, myScale);
 
-	for (const Transform& t : transforms)
+	for (const Transform& t : cubes)
 	{
-		if (t.objectType != ObjectType::ObstacleKiller) continue;
-
 		if (CheckCollision(myExtents, t.GetExtents()))
 		{
-			std::cout << "Collied Success" << std::endl;
-		}
-		else
-		{
-			std::cout << "No Collision" << std::endl;
+			std::cout << "Collied Success" << std::endl; // move back if standard restart if killer
 		}
 	}
 	return false;
@@ -152,35 +134,35 @@ bool CubeDodgeGame::CheckCollision(const Extents& a, const Extents& b)
 		   (a.min.z <= b.max.z && a.max.z >= b.min.z);
 }
 
+// X - -(w/2 - 0.2) - (w/2 - 0.2)
+// Y - -(h/2 - 0.2) - (h/2 - 0.2)
+// Z - 0.2 - (d - 0.2)
 void CubeDodgeGame::InitializeCubes()
 {
 	std::random_device rd;
 	std::mt19937 gen(rd());
-	std::uniform_real_distribution<float> offsetRange(-0.2f, 0.2f);  // offset from grid position
-	std::uniform_real_distribution<float> axisRange(0.0f, 1.0f);       // rotation axis components
-	std::uniform_real_distribution<float> speedRange(0.5f, 2.0f);    // rotation Speed
-	std::uniform_real_distribution<float> offsetRangeZ(-3.0f, 0.2f); // offset in Z direction
+	std::uniform_real_distribution<float> offsetRange(-0.2f, 0.2f);
+	std::uniform_real_distribution<float> xRange(-(WHD.x/2 - 0.2f), WHD.x/2 - 0.2f); 
+	std::uniform_real_distribution<float> yRange(-(WHD.y/2 - 0.2f), WHD.y/2 - 0.2f); 
+	std::uniform_real_distribution<float> zRange(1.0f, WHD.z - 0.2f); 
+
+	std::uniform_real_distribution<float> xScale(1.0f, 4.0f); 
+	std::uniform_real_distribution<float> yScale(1.0f, 4.0f);
+
+	std::uniform_int_distribution<int> obstacleType(1,2);
 
 	cubes.clear();
-
-	float spacing = 0.6f; // Distance between cubes
-	int cubesPerRow = (int)std::ceil(std::sqrt((double)numCubes)); // number of columns
 
 	for (int i = 0; i < numCubes; i++)
 	{
 		Transform cube;
 
-		int row = i / cubesPerRow;
-		int col = i % cubesPerRow;
+		cube.position = Vector3(xRange(gen), yRange(gen), zRange(gen));
+		cube.scale = Vector3(xScale(gen), yScale(gen), 1);
 
-		float offsetX = (cubesPerRow - 1) * spacing / 2.0f;
-		float offsetY = ((numCubes / cubesPerRow) - 1) * spacing / 2.0f;
-
-		cube.position = Vector3(
-			col * spacing - offsetX + offsetRange(gen),
-			row * spacing - offsetY + offsetRange(gen),
-			offsetRangeZ(gen)
-		);
+		cube.objectType = (ObjectType)obstacleType(gen);
+		if (cube.objectType == ObjectType::ObstacleKiller) cube.color = Vector4(1, 0, 0, 1);
+		else cube.color = Vector4(1, 1, 1, 1);
 
 		cubes.push_back(cube);
 	}
@@ -202,7 +184,7 @@ void CubeDodgeGame::ImGuiRender(GLFWwindow * window)
 	ImGui::DragFloat4("Tiling and Offset", &tillingAndOffset.x, 0.05f);
 	if (ImGui::DragFloat3("HWD", &WHD.x, 0.05f))
 	{
-		transforms.clear();
+		walls.clear();
 		DefineWalls();
 	}
 
@@ -218,10 +200,34 @@ void CubeDodgeGame::Render()
 
 	Matrix4x4 model;
 
-	for (int i = 0; i < transforms.size(); i++)
+	for (int i = 0; i < walls.size(); i++)
 	{
 		// We get a refrence because we don't want to copy it 
-		const Transform& t = transforms[i];
+		const Transform& t = walls[i];
+
+		model = Matrix4x4::Identity();
+
+		model = Matrix4x4::Translation(model, t.position);
+		model = Matrix4x4::Scale(model, t.scale);
+
+		if (t.shaderType == ShaderType::Texture)
+			textureShader.Use();
+		textureShader.SetMat4_Custom("model", model.m);
+		textureShader.SetMat4_Custom("view", view.m);
+		textureShader.SetMat4_Custom("projection", projection.m);
+		textureShader.SetVec4("_Color", t.color);
+		textureShader.SetVec4("tillingOffset", tillingAndOffset);
+
+		if(t.meshType == MeshType::Quad)
+			plane.Draw();
+		if(t.meshType == MeshType::Cuboid)
+			cube.Draw();
+	}
+
+	for (int i = 0; i < cubes.size(); i++)
+	{
+		// We get a refrence because we don't want to copy it 
+		const Transform& t = cubes[i];
 
 		model = Matrix4x4::Identity();
 
@@ -294,7 +300,7 @@ void CubeDodgeGame::Exit()
 	}
 
 	if (textureShader.ID != 0) glDeleteProgram(textureShader.ID);
-	transforms.clear();
+	walls.clear();
 
 	camMoveRotate = false;
 	mKeyHeld = false;
