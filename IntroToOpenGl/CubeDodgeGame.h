@@ -111,5 +111,7 @@ private:
 	std::vector<Transform> cubes;
 	void InitializeCubes();
 
+	Vector3 previousPosition;
+
 };
 

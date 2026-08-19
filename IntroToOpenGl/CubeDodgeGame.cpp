@@ -7,6 +7,7 @@ CubeDodgeGame::CubeDodgeGame()
 {
 	cam = Camera(Vector3(0, 2, 1), Vector3(0, 1, 0), 90, -15);
 	myExtents = Extents::CalculateExtents(cam.CameraPosition, myScale);
+	previousPosition = cam.CameraPosition;
 }
 
 CubeDodgeGame::~CubeDodgeGame()
@@ -124,6 +125,16 @@ bool CubeDodgeGame::DistanceCheck()
 			std::cout << "Collied Success" << std::endl; // move back if standard restart if killer
 		}
 	}
+
+	for (const Transform& t : walls)
+	{
+		if (CheckCollision(myExtents, t.GetExtents()))
+		{
+			cam.CameraPosition = previousPosition;
+		}
+	}
+
+	previousPosition = cam.CameraPosition;
 	return false;
 }
 
