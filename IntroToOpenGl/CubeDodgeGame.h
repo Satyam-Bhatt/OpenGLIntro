@@ -112,6 +112,7 @@ private:
 	void InitializeCubes();
 
 	Vector3 previousPosition;
+	float cameraSpeed;
 
 };
 
