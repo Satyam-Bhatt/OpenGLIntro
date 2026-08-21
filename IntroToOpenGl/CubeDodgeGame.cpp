@@ -294,6 +294,12 @@ void CubeDodgeGame::HandleInput(GLFWwindow * window)
 	}
 }
 
+void CubeDodgeGame::InitializeWinTransforms()
+{
+	Transform t;
+	t.position = Vector3(0, 0, 0);
+}
+
 void CubeDodgeGame::OnMouseMove(float xOffset, float yOffset, float xPos, float yPos)
 {
 	if (camMoveRotate)

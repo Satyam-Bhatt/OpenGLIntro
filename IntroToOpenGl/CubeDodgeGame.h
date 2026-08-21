@@ -22,6 +22,12 @@ class CubeDodgeGame : public TestScene_Main
 		ObstacleNormal = 2
 	};
 
+	enum ActiveState
+	{
+		Active,
+		Inactive
+	};
+
 	struct Extents
 	{
 		Vector3 min;
@@ -47,6 +53,7 @@ class CubeDodgeGame : public TestScene_Main
 			meshType = MeshType::Cuboid;
 			shaderType = ShaderType::Texture;
 			objectType = ObjectType::ObstacleNormal;
+			activeState = ActiveState::Inactive;
 		}
 
 		Vector3 position;
@@ -56,7 +63,8 @@ class CubeDodgeGame : public TestScene_Main
 		ShaderType shaderType;
 		MeshType meshType;
 		ObjectType objectType;
-
+		ActiveState activeState;
+			 
 		Extents GetExtents() const
 		{
 			Extents l_T;
@@ -91,6 +99,10 @@ private:
 	Shader textureShader;
 
 	std::vector<Transform> walls;
+	std::vector<Transform> winConditions;
+	void InitializeWinTransforms();
+	std::vector<Transform> cubes;
+	void InitializeCubes();
 
 	Matrix4x4 projection;
 
@@ -107,9 +119,6 @@ private:
 	void DefineWalls();
 	bool DistanceCheck();
 	bool CheckCollision(const Extents& a, const Extents& b);
-
-	std::vector<Transform> cubes;
-	void InitializeCubes();
 
 	Vector3 previousPosition;
 	float cameraSpeed;
