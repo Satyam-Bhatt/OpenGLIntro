@@ -298,6 +298,22 @@ void CubeDodgeGame::InitializeWinTransforms()
 {
 	Transform t;
 	t.position = Vector3(0, 0, 0);
+	t.scale = Vector3(WHD.x, WHD.y, 0.5);
+	t.color = Vector4(0, 1, 0, 1);
+	t.shaderType = ShaderType::Texture;
+	t.meshType = MeshType::Cuboid;
+	t.objectType = ObjectType::WinWall;
+	t.activeState = ActiveState::Active;
+	winConditions.push_back(t);
+
+	t.position = Vector3(WHD.x, WHD.y, WHD.z - 0.5);
+	t.scale = Vector3(WHD.x, WHD.y, 0.5);
+	t.color = Vector4(0, 1, 0, 1);
+	t.shaderType = ShaderType::Texture;
+	t.meshType = MeshType::Cuboid;
+	t.objectType = ObjectType::WinWall;
+	t.activeState = ActiveState::Active;
+	winConditions.push_back(t);
 }
 
 void CubeDodgeGame::OnMouseMove(float xOffset, float yOffset, float xPos, float yPos)

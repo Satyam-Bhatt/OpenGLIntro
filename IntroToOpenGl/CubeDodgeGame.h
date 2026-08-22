@@ -19,7 +19,8 @@ class CubeDodgeGame : public TestScene_Main
 	{
 		Wall = 0,
 		ObstacleKiller = 1,
-		ObstacleNormal = 2
+		ObstacleNormal = 2,
+		WinWall = 3
 	};
 
 	enum ActiveState
