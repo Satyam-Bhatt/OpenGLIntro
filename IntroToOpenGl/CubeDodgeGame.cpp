@@ -52,6 +52,7 @@ void CubeDodgeGame::Start()
 
 	DefineWalls();
 	InitializeCubes();
+	InitializeWinTransforms();
 }
 
 
@@ -171,12 +172,34 @@ void CubeDodgeGame::InitializeCubes()
 		cube.position = Vector3(xRange(gen), yRange(gen), zRange(gen));
 		cube.scale = Vector3(xScale(gen), yScale(gen), 1);
 
-		cube.objectType = (ObjectType)obstacleType(gen);
+		cube.objectType = ObjectType::ObstacleKiller;//  (ObjectType)obstacleType(gen);
 		if (cube.objectType == ObjectType::ObstacleKiller) cube.color = Vector4(1, 0, 0, 1);
 		else cube.color = Vector4(1, 1, 1, 1);
 
 		cubes.push_back(cube);
 	}
+}
+
+void CubeDodgeGame::InitializeWinTransforms()
+{
+	Transform t;
+	t.position = Vector3(0, 0, 0);
+	t.scale = Vector3(WHD.x, WHD.y, 0.5);
+	t.color = Vector4(0, 1, 0, 1);
+	t.shaderType = ShaderType::Texture;
+	t.meshType = MeshType::Cuboid;
+	t.objectType = ObjectType::WinWall;
+	t.activeState = ActiveState::Inactive;
+	winConditions.push_back(t);
+
+	t.position = Vector3(0, 0, WHD.z - 0.5);
+	t.scale = Vector3(WHD.x, WHD.y, 0.5);
+	t.color = Vector4(0, 1, 0, 1);
+	t.shaderType = ShaderType::Texture;
+	t.meshType = MeshType::Cuboid;
+	t.objectType = ObjectType::WinWall;
+	t.activeState = ActiveState::Active;
+	winConditions.push_back(t);
 }
 
 void CubeDodgeGame::ImGuiRender(GLFWwindow * window)
@@ -258,6 +281,32 @@ void CubeDodgeGame::Render()
 		if(t.meshType == MeshType::Cuboid)
 			cube.Draw();
 	}
+
+	for (int i = 0; i < winConditions.size(); i++)
+	{
+		// We get a refrence because we don't want to copy it 
+		const Transform& t = winConditions[i];
+
+		if (t.activeState == ActiveState::Inactive) continue;
+
+		model = Matrix4x4::Identity();
+
+		model = Matrix4x4::Translation(model, t.position);
+		model = Matrix4x4::Scale(model, t.scale);
+
+		if (t.shaderType == ShaderType::Texture)
+			textureShader.Use();
+		textureShader.SetMat4_Custom("model", model.m);
+		textureShader.SetMat4_Custom("view", view.m);
+		textureShader.SetMat4_Custom("projection", projection.m);
+		textureShader.SetVec4("_Color", t.color);
+		textureShader.SetVec4("tillingOffset", tillingAndOffset);
+
+		if (t.meshType == MeshType::Quad)
+			plane.Draw();
+		if (t.meshType == MeshType::Cuboid)
+			cube.Draw();
+	}
 }
 
 void CubeDodgeGame::HandleInput(GLFWwindow * window)
@@ -292,28 +341,6 @@ void CubeDodgeGame::HandleInput(GLFWwindow * window)
 		if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
 			cam.ProcessKeyboard(Camera_Movement::DOWN);
 	}
-}
-
-void CubeDodgeGame::InitializeWinTransforms()
-{
-	Transform t;
-	t.position = Vector3(0, 0, 0);
-	t.scale = Vector3(WHD.x, WHD.y, 0.5);
-	t.color = Vector4(0, 1, 0, 1);
-	t.shaderType = ShaderType::Texture;
-	t.meshType = MeshType::Cuboid;
-	t.objectType = ObjectType::WinWall;
-	t.activeState = ActiveState::Active;
-	winConditions.push_back(t);
-
-	t.position = Vector3(WHD.x, WHD.y, WHD.z - 0.5);
-	t.scale = Vector3(WHD.x, WHD.y, 0.5);
-	t.color = Vector4(0, 1, 0, 1);
-	t.shaderType = ShaderType::Texture;
-	t.meshType = MeshType::Cuboid;
-	t.objectType = ObjectType::WinWall;
-	t.activeState = ActiveState::Active;
-	winConditions.push_back(t);
 }
 
 void CubeDodgeGame::OnMouseMove(float xOffset, float yOffset, float xPos, float yPos)
