@@ -135,6 +135,30 @@ bool CubeDodgeGame::DistanceCheck()
 		}
 	}
 
+	for (int i = 0; i < winConditions.size(); i++)
+	{
+		Transform& t = winConditions[i];
+		if (CheckCollision(myExtents, t.GetExtents()))
+		{
+			if (t.activeState == ActiveState::Inactive) continue;
+
+			t.activeState = ActiveState::Inactive;
+
+			if (i + 1 < winConditions.size()) winConditions[i + 1].activeState = ActiveState::Active;
+			else winConditions[i - 1].activeState = ActiveState::Active;
+		}
+	}
+
+	for (Transform& t : winConditions)
+	{
+		if (CheckCollision(myExtents, t.GetExtents()))
+		{
+			if (t.activeState == ActiveState::Inactive) continue;
+
+			t.activeState = ActiveState::Inactive;
+		}
+	}
+
 	previousPosition = cam.CameraPosition;
 	return false;
 }
