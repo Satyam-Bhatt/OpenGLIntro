@@ -121,6 +121,10 @@ public:
 		UpdateCameraVectors();
 	}
 
+	float GetSpeed() { return MovemenetSpeed; }
+
+	void UpdateSpeed(float speed) { MovemenetSpeed = speed; }
+
 private:
 	// calculate the fron vector from the Camera's (updated) Euler Angles
 	void UpdateCameraVectors()

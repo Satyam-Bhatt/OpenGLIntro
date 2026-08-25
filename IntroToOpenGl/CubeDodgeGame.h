@@ -123,6 +123,7 @@ private:
 
 	Vector3 previousPosition;
 	float cameraSpeed;
+	int score = 0;
 
 };
 

@@ -29,7 +29,7 @@ out vec4 FragColor;
 
 uniform vec4 _Color = vec4(1.0, 1.0, 1.0, 1.0); 
 uniform sampler2D myTexture;
-uniform vec4 tillingOffset = vec4(1.0, 1.0, 1.0, 1.0);
+uniform vec4 tillingOffset= vec4(1.0, 1.0, 1.0, 1.0);
 
 void main()
 {

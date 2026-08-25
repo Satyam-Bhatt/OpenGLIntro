@@ -144,18 +144,12 @@ bool CubeDodgeGame::DistanceCheck()
 
 			t.activeState = ActiveState::Inactive;
 
+			cam.UpdateSpeed(cam.GetSpeed() * 1.5f);
+
+			score++;
+
 			if (i + 1 < winConditions.size()) winConditions[i + 1].activeState = ActiveState::Active;
 			else winConditions[i - 1].activeState = ActiveState::Active;
-		}
-	}
-
-	for (Transform& t : winConditions)
-	{
-		if (CheckCollision(myExtents, t.GetExtents()))
-		{
-			if (t.activeState == ActiveState::Inactive) continue;
-
-			t.activeState = ActiveState::Inactive;
 		}
 	}
 
@@ -245,6 +239,7 @@ void CubeDodgeGame::ImGuiRender(GLFWwindow * window)
 		walls.clear();
 		DefineWalls();
 	}
+	ImGui::Text("Score: %d", score);
 
 	ImGui::End();
 }
