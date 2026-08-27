@@ -144,9 +144,11 @@ bool CubeDodgeGame::DistanceCheck()
 
 			t.activeState = ActiveState::Inactive;
 
-			cam.UpdateSpeed(cam.GetSpeed() * 1.5f);
+			cam.UpdateSpeed(cam.GetSpeed() * 1.25f);
 
 			score++;
+			numCubes = numCubes * 1.5;
+			InitializeCubes(); // TODO: Spiti Marathon
 
 			if (i + 1 < winConditions.size()) winConditions[i + 1].activeState = ActiveState::Active;
 			else winConditions[i - 1].activeState = ActiveState::Active;
