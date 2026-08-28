@@ -148,7 +148,7 @@ bool CubeDodgeGame::DistanceCheck()
 
 			score++;
 			numCubes = numCubes * 1.5;
-			InitializeCubes(); // TODO: Spiti Marathon I am here try 2
+			InitializeCubes(); // TODO: Spiti Marathon I am here try 2 test
 
 			if (i + 1 < winConditions.size()) winConditions[i + 1].activeState = ActiveState::Active;
 			else winConditions[i - 1].activeState = ActiveState::Active;
