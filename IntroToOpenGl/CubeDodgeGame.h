@@ -121,9 +121,12 @@ private:
 	bool DistanceCheck();
 	bool CheckCollision(const Extents& a, const Extents& b);
 
+	void LooseScreen(GLFWwindow* window);
+	void Reset();
+
 	Vector3 previousPosition;
 	float cameraSpeed;
 	int score = 0;
-
+	bool loose = false;
 };
 

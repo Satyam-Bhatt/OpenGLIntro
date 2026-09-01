@@ -148,7 +148,7 @@ bool CubeDodgeGame::DistanceCheck()
 
 			score++;
 			numCubes = numCubes * 1.5;
-			InitializeCubes(); // TODO: Spiti Marathon I am here try 2 test Tomorrow race complete
+			InitializeCubes(); 
 
 			if (i + 1 < winConditions.size()) winConditions[i + 1].activeState = ActiveState::Active;
 			else winConditions[i - 1].activeState = ActiveState::Active;
@@ -165,6 +165,7 @@ bool CubeDodgeGame::CheckCollision(const Extents& a, const Extents& b)
 		   (a.min.y <= b.max.y && a.max.y >= b.min.y) &&
 		   (a.min.z <= b.max.z && a.max.z >= b.min.z);
 }
+
 
 // X - -(w/2 - 0.2) - (w/2 - 0.2)
 // Y - -(h/2 - 0.2) - (h/2 - 0.2)
@@ -244,7 +245,37 @@ void CubeDodgeGame::ImGuiRender(GLFWwindow * window)
 	ImGui::Text("Score: %d", score);
 
 	ImGui::End();
+
+	if(loose)
+		LooseScreen(window);
 }
+
+void CubeDodgeGame::LooseScreen(GLFWwindow* window)
+{
+	GLint viewport[4];
+	glGetIntegerv(GL_VIEWPORT, viewport);
+
+	ImGui::SetNextWindowPos(
+		ImVec2(viewport[0] + viewport[2] / 2, viewport[3] / 2),
+		ImGuiCond_Always,
+		ImVec2(0.5f, 0.5f)
+	);
+
+	ImGui::Begin("Loose Panel", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
+
+	ImGui::Text("You Loose");
+	ImGui::Text("Your Score" );
+	if (ImGui::Button("Loose", ImVec2(100, 50)))
+	{
+		loose = false;
+		Reset();
+	}
+
+	ImGui::End();
+}
+
+void CubeDodgeGame::Reset()
+{}
 
 void CubeDodgeGame::Render()
 {
