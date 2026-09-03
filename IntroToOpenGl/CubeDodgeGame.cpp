@@ -123,7 +123,8 @@ bool CubeDodgeGame::DistanceCheck()
 	{
 		if (CheckCollision(myExtents, t.GetExtents()))
 		{
-			std::cout << "Collied Success" << std::endl; // move back if standard restart if killer
+			std::cout << "Collied Success" << std::endl; // move back if standard restart if killer Maheshwar bhai
+			loose = true;
 		}
 	}
 
@@ -264,7 +265,7 @@ void CubeDodgeGame::LooseScreen(GLFWwindow* window)
 	ImGui::Begin("Loose Panel", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
 
 	ImGui::Text("You Loose");
-	ImGui::Text("Your Score" );
+	ImGui::Text("Your Score %d", score);
 	if (ImGui::Button("Loose", ImVec2(100, 50)))
 	{
 		loose = false;
@@ -275,7 +276,15 @@ void CubeDodgeGame::LooseScreen(GLFWwindow* window)
 }
 
 void CubeDodgeGame::Reset()
-{}
+{
+	score = 0;
+	cam.UpdateSpeed(5);
+	cam.CameraPosition = Vector3(0, 2, 1);
+	numCubes = 10;
+	InitializeCubes();
+	winConditions[0].activeState = ActiveState::Inactive;
+	winConditions[1].activeState = ActiveState::Active;
+}
 
 void CubeDodgeGame::Render()
 {
