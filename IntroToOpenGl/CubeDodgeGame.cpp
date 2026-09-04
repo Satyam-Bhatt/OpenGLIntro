@@ -123,7 +123,7 @@ bool CubeDodgeGame::DistanceCheck()
 	{
 		if (CheckCollision(myExtents, t.GetExtents()))
 		{
-			std::cout << "Collied Success" << std::endl; // move back if standard restart if killer Maheshwar bhai
+			std::cout << "Collied Success" << std::endl; // move back if standard restart if killer
 			loose = true;
 		}
 	}
@@ -235,17 +235,15 @@ void CubeDodgeGame::ImGuiRender(GLFWwindow * window)
 		ImVec2(0.5f, 1.0f)
 	);
 
-	ImGui::Begin("Spawn New Objects", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
+	ImGui::Begin("Info", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
 
-	ImGui::DragFloat4("Tiling and Offset", &tillingAndOffset.x, 0.05f);
-	if (ImGui::DragFloat3("HWD", &WHD.x, 0.05f))
-	{
-		walls.clear();
-		DefineWalls();
-	}
-	ImGui::Text("Score: %d", score);
+	ImGui::Text("Right Click to gain and loose control");
+	ImGui::Text("WASD to Move || QE to go up and down");
+	ImGui::Text("Avoid obstacles");
 
 	ImGui::End();
+
+	HUD(window);
 
 	if(loose)
 		LooseScreen(window);
@@ -269,8 +267,27 @@ void CubeDodgeGame::LooseScreen(GLFWwindow* window)
 	if (ImGui::Button("Loose", ImVec2(100, 50)))
 	{
 		loose = false;
+		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 		Reset();
 	}
+
+	ImGui::End();
+}
+
+void CubeDodgeGame::HUD(GLFWwindow* window)
+{
+	GLint viewport[4];
+	glGetIntegerv(GL_VIEWPORT, viewport);
+
+	ImGui::SetNextWindowPos(
+		ImVec2(viewport[0] + viewport[2] / 2, viewport[1] ),
+		ImGuiCond_Always,
+		ImVec2(0.5f, 0.0f)
+	);
+
+	ImGui::Begin("HUD", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
+
+	ImGui::Text("Score %d", score);
 
 	ImGui::End();
 }
@@ -279,7 +296,7 @@ void CubeDodgeGame::Reset()
 {
 	score = 0;
 	cam.UpdateSpeed(5);
-	cam.CameraPosition = Vector3(0, 2, 1);
+	cam = Camera(Vector3(0, 2, 1), Vector3(0, 1, 0), 90, -15);
 	numCubes = 10;
 	InitializeCubes();
 	winConditions[0].activeState = ActiveState::Inactive;
@@ -372,6 +389,12 @@ void CubeDodgeGame::Render()
 
 void CubeDodgeGame::HandleInput(GLFWwindow * window)
 {
+	if (loose)
+	{
+		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+		return;
+	}
+
 	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS && !mKeyHeld)
 	{
 		camMoveRotate = !camMoveRotate;
@@ -406,7 +429,7 @@ void CubeDodgeGame::HandleInput(GLFWwindow * window)
 
 void CubeDodgeGame::OnMouseMove(float xOffset, float yOffset, float xPos, float yPos)
 {
-	if (camMoveRotate)
+	if (camMoveRotate && !loose)
 		cam.ProcessMouseMovement(xOffset, yOffset);
 }
 

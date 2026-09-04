@@ -122,6 +122,7 @@ private:
 	bool CheckCollision(const Extents& a, const Extents& b);
 
 	void LooseScreen(GLFWwindow* window);
+	void HUD(GLFWwindow* window);
 	void Reset();
 
 	Vector3 previousPosition;
