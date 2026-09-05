@@ -1,5 +1,7 @@
 #pragma once
 #include "TestScene_Main.h"
+#include <random>
+#include <vector>
 
 class CubeDodgeGame : public TestScene_Main
 {
@@ -99,12 +101,6 @@ private:
 	Mesh cube, plane;
 	Shader textureShader;
 
-	std::vector<Transform> walls;
-	std::vector<Transform> winConditions;
-	void InitializeWinTransforms();
-	std::vector<Transform> cubes;
-	void InitializeCubes();
-
 	Matrix4x4 projection;
 
 	bool camMoveRotate = false;
@@ -115,19 +111,31 @@ private:
 
 	Extents myExtents;
 	Vector3 myScale = Vector3(0.2f, 0.2f, 0.2f);
-	int numCubes = 10;
 
+	std::mt19937 gen;
+
+	int numCubes = 10;
+	
+	Vector3 previousPosition;
+	int score = 0, highScore = 0;
+	bool hasLost = false;
+
+	std::vector<Transform> walls;
+	std::vector<Transform> winConditions;
+	std::vector<Transform> cubes;
+	void InitializeWinTransforms();
+	void InitializeCubes();
 	void DefineWalls();
-	bool DistanceCheck();
+	void CollisionCheckWitDifferentObjects();
 	bool CheckCollision(const Extents& a, const Extents& b);
 
+	void PushGameStyle();
+	void PopGameStyle();
 	void LooseScreen(GLFWwindow* window);
 	void HUD(GLFWwindow* window);
+
 	void Reset();
 
-	Vector3 previousPosition;
-	float cameraSpeed;
-	int score = 0;
-	bool loose = false;
+	void RenderTransforms(const std::vector<Transform>& transforms, Matrix4x4& view, bool skipInactive);
 };
 

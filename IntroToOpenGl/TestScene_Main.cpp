@@ -191,7 +191,7 @@ void TestScene_Main::RenderText(SubScene sceneName)
 	}
 	else if (sceneName == SubScene::CubeDodgeGame)
 	{
-		ImGui::TextWrapped("High Score Time");
+		ImGui::TextWrapped("Everytime you reach the green wall your speed increases and the box count also increases. Boxes are placed randomly. Try to get the highest score as possible.");
 	}
 	else
 	{

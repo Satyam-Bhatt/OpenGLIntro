@@ -1,6 +1,4 @@
 #include "CubeDodgeGame.h"
-#include <random>
-#include <vector>
 
 CubeDodgeGame CubeDodgeGame::instance;
 CubeDodgeGame::CubeDodgeGame()
@@ -50,6 +48,9 @@ void CubeDodgeGame::Start()
 
 	projection = Matrix4x4::CreateProjectionMatrix_FOV_LeftHanded(45.0f * (PI / 180), (float)viewportData.width, (float)viewportData.height, 0.1f, 100.0f);
 
+	std::random_device rd;
+	gen.seed(rd());
+
 	DefineWalls();
 	InitializeCubes();
 	InitializeWinTransforms();
@@ -58,7 +59,7 @@ void CubeDodgeGame::Start()
 
 void CubeDodgeGame::Update()
 {
-	DistanceCheck();
+	CollisionCheckWitDifferentObjects();
 }
 
 void CubeDodgeGame::DefineWalls()
@@ -113,7 +114,7 @@ void CubeDodgeGame::DefineWalls()
 	walls.push_back(t);
 }
 
-bool CubeDodgeGame::DistanceCheck()
+void CubeDodgeGame::CollisionCheckWitDifferentObjects()
 {
 	// Make player bounds and then do AABB check as done in SDL
 
@@ -123,8 +124,8 @@ bool CubeDodgeGame::DistanceCheck()
 	{
 		if (CheckCollision(myExtents, t.GetExtents()))
 		{
-			std::cout << "Collied Success" << std::endl; // move back if standard restart if killer
-			loose = true;
+			if (score > highScore) highScore = score;
+			hasLost = true;
 		}
 	}
 
@@ -145,11 +146,13 @@ bool CubeDodgeGame::DistanceCheck()
 
 			t.activeState = ActiveState::Inactive;
 
-			cam.UpdateSpeed(cam.GetSpeed() * 1.25f);
+			cam.UpdateSpeed(std::min(cam.GetSpeed() * 1.25f, 40.0f));
 
 			score++;
-			numCubes = numCubes * 1.5;
+			numCubes = std::min((int)(numCubes * 1.5f), 200);
 			InitializeCubes(); 
+
+			std::cout << numCubes << " || " << cam.GetSpeed() << std::endl;
 
 			if (i + 1 < winConditions.size()) winConditions[i + 1].activeState = ActiveState::Active;
 			else winConditions[i - 1].activeState = ActiveState::Active;
@@ -157,7 +160,6 @@ bool CubeDodgeGame::DistanceCheck()
 	}
 
 	previousPosition = cam.CameraPosition;
-	return false;
 }
 
 bool CubeDodgeGame::CheckCollision(const Extents& a, const Extents& b)
@@ -168,17 +170,13 @@ bool CubeDodgeGame::CheckCollision(const Extents& a, const Extents& b)
 }
 
 
-// X - -(w/2 - 0.2) - (w/2 - 0.2)
-// Y - -(h/2 - 0.2) - (h/2 - 0.2)
-// Z - 0.2 - (d - 0.2)
 void CubeDodgeGame::InitializeCubes()
 {
-	std::random_device rd;
-	std::mt19937 gen(rd());
+
 	std::uniform_real_distribution<float> offsetRange(-0.2f, 0.2f);
 	std::uniform_real_distribution<float> xRange(-(WHD.x/2 - 0.2f), WHD.x/2 - 0.2f); 
 	std::uniform_real_distribution<float> yRange(-(WHD.y/2 - 0.2f), WHD.y/2 - 0.2f); 
-	std::uniform_real_distribution<float> zRange(1.0f, WHD.z - 0.2f); 
+	std::uniform_real_distribution<float> zRange(2.0f, WHD.z - 1.0f); 
 
 	std::uniform_real_distribution<float> xScale(1.0f, 4.0f); 
 	std::uniform_real_distribution<float> yScale(1.0f, 4.0f);
@@ -224,29 +222,54 @@ void CubeDodgeGame::InitializeWinTransforms()
 	winConditions.push_back(t);
 }
 
-void CubeDodgeGame::ImGuiRender(GLFWwindow * window)
+#pragma region ImGui
+
+void CubeDodgeGame::PushGameStyle()
+{
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 8.0f);
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(16, 12));
+	ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 6.0f);
+	ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.05f, 0.05f, 0.08f, 0.75f));
+	ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(1, 1, 1, 0.15f));
+}
+
+void CubeDodgeGame::PopGameStyle()
+{
+	ImGui::PopStyleColor(2);
+	ImGui::PopStyleVar(3);
+}
+
+void CubeDodgeGame::ImGuiRender(GLFWwindow* window)
 {
 	GLint viewport[4];
 	glGetIntegerv(GL_VIEWPORT, viewport);
+
+	PushGameStyle();
 
 	ImGui::SetNextWindowPos(
 		ImVec2(viewport[0] + viewport[2] / 2, viewport[3]),
 		ImGuiCond_Always,
 		ImVec2(0.5f, 1.0f)
 	);
+	ImGui::SetNextWindowBgAlpha(0.55f);
 
-	ImGui::Begin("Info", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
+	ImGui::Begin("Info", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse |
+		ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoTitleBar);
 
-	ImGui::Text("Right Click to gain and loose control");
-	ImGui::Text("WASD to Move || QE to go up and down");
-	ImGui::Text("Avoid obstacles");
+	ImGui::TextColored(ImVec4(0.6f, 0.9f, 1.0f, 1.0f), "Controls");
+	ImGui::Separator();
+	ImGui::BulletText("Right Click: toggle mouse look");
+	ImGui::BulletText("WASD: Move   |   Q/E: Down/Up");
+	ImGui::BulletText("Avoid the red cubes");
 
 	ImGui::End();
 
 	HUD(window);
 
-	if(loose)
+	if (hasLost)
 		LooseScreen(window);
+
+	PopGameStyle();
 }
 
 void CubeDodgeGame::LooseScreen(GLFWwindow* window)
@@ -259,17 +282,38 @@ void CubeDodgeGame::LooseScreen(GLFWwindow* window)
 		ImGuiCond_Always,
 		ImVec2(0.5f, 0.5f)
 	);
+	ImGui::SetNextWindowBgAlpha(0.9f);
 
-	ImGui::Begin("Loose Panel", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
+	ImGui::Begin("##LooseScreen", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse |
+		ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoTitleBar);
 
-	ImGui::Text("You Loose");
-	ImGui::Text("Your Score %d", score);
-	if (ImGui::Button("Loose", ImVec2(100, 50)))
+	ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.35f, 0.35f, 1.0f));
+	ImGui::SetWindowFontScale(1.4f);
+	ImGui::TextUnformatted("YOU LOST");
+	ImGui::SetWindowFontScale(1.0f);
+	ImGui::PopStyleColor();
+
+	ImGui::Spacing();
+	ImGui::Text("Score: %d", score);
+	if (score >= highScore && score > 0)
 	{
-		loose = false;
+		ImGui::SameLine();
+		ImGui::TextColored(ImVec4(1.0f, 0.85f, 0.2f, 1.0f), "  New Best!");
+	}
+
+	ImGui::Dummy(ImVec2(0, 8));
+
+	float w = ImGui::GetContentRegionAvail().x;
+	ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.55f, 0.9f, 1.0f));
+	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 0.65f, 1.0f, 1.0f));
+	ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.15f, 0.45f, 0.8f, 1.0f));
+	if (ImGui::Button("Restart", ImVec2(w, 32)))
+	{
+		hasLost = false;
 		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 		Reset();
 	}
+	ImGui::PopStyleColor(3);
 
 	ImGui::End();
 }
@@ -280,17 +324,23 @@ void CubeDodgeGame::HUD(GLFWwindow* window)
 	glGetIntegerv(GL_VIEWPORT, viewport);
 
 	ImGui::SetNextWindowPos(
-		ImVec2(viewport[0] + viewport[2] / 2, viewport[1] ),
+		ImVec2(viewport[0] + viewport[2] / 2, viewport[1] + 10),
 		ImGuiCond_Always,
 		ImVec2(0.5f, 0.0f)
 	);
+	ImGui::SetNextWindowBgAlpha(0.45f);
 
-	ImGui::Begin("HUD", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
+	ImGui::Begin("##HUD", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse |
+		ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoTitleBar);
 
-	ImGui::Text("Score %d", score);
+	ImGui::TextColored(ImVec4(1.0f, 0.85f, 0.2f, 1.0f), "High Score: %d", highScore);
+	ImGui::Text("Score: %d", score);
 
 	ImGui::End();
 }
+
+#pragma endregion
+
 
 void CubeDodgeGame::Reset()
 {
@@ -303,77 +353,22 @@ void CubeDodgeGame::Reset()
 	winConditions[1].activeState = ActiveState::Active;
 }
 
-void CubeDodgeGame::Render()
+void CubeDodgeGame::RenderTransforms(const std::vector<Transform>& transforms, Matrix4x4& view, bool skipInactive)
 {
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, texture);
-
-	Matrix4x4 view = cam.GetViewMatrix();
-
 	Matrix4x4 model;
 
-	for (int i = 0; i < walls.size(); i++)
+	for (const Transform& t : transforms)
 	{
-		// We get a refrence because we don't want to copy it 
-		const Transform& t = walls[i];
+		if (skipInactive && t.activeState == ActiveState::Inactive)
+			continue;
 
 		model = Matrix4x4::Identity();
-
 		model = Matrix4x4::Translation(model, t.position);
 		model = Matrix4x4::Scale(model, t.scale);
 
 		if (t.shaderType == ShaderType::Texture)
 			textureShader.Use();
-		textureShader.SetMat4_Custom("model", model.m);
-		textureShader.SetMat4_Custom("view", view.m);
-		textureShader.SetMat4_Custom("projection", projection.m);
-		textureShader.SetVec4("_Color", t.color);
-		textureShader.SetVec4("tillingOffset", tillingAndOffset);
 
-		if(t.meshType == MeshType::Quad)
-			plane.Draw();
-		if(t.meshType == MeshType::Cuboid)
-			cube.Draw();
-	}
-
-	for (int i = 0; i < cubes.size(); i++)
-	{
-		// We get a refrence because we don't want to copy it 
-		const Transform& t = cubes[i];
-
-		model = Matrix4x4::Identity();
-
-		model = Matrix4x4::Translation(model, t.position);
-		model = Matrix4x4::Scale(model, t.scale);
-
-		if (t.shaderType == ShaderType::Texture)
-			textureShader.Use();
-		textureShader.SetMat4_Custom("model", model.m);
-		textureShader.SetMat4_Custom("view", view.m);
-		textureShader.SetMat4_Custom("projection", projection.m);
-		textureShader.SetVec4("_Color", t.color);
-		textureShader.SetVec4("tillingOffset", tillingAndOffset);
-
-		if(t.meshType == MeshType::Quad)
-			plane.Draw();
-		if(t.meshType == MeshType::Cuboid)
-			cube.Draw();
-	}
-
-	for (int i = 0; i < winConditions.size(); i++)
-	{
-		// We get a refrence because we don't want to copy it 
-		const Transform& t = winConditions[i];
-
-		if (t.activeState == ActiveState::Inactive) continue;
-
-		model = Matrix4x4::Identity();
-
-		model = Matrix4x4::Translation(model, t.position);
-		model = Matrix4x4::Scale(model, t.scale);
-
-		if (t.shaderType == ShaderType::Texture)
-			textureShader.Use();
 		textureShader.SetMat4_Custom("model", model.m);
 		textureShader.SetMat4_Custom("view", view.m);
 		textureShader.SetMat4_Custom("projection", projection.m);
@@ -387,9 +382,21 @@ void CubeDodgeGame::Render()
 	}
 }
 
+void CubeDodgeGame::Render()
+{
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, texture);
+
+	Matrix4x4 view = cam.GetViewMatrix();
+
+	RenderTransforms(walls, view, false);
+	RenderTransforms(cubes, view, false);
+	RenderTransforms(winConditions, view, true); // skip inactive win walls
+}
+
 void CubeDodgeGame::HandleInput(GLFWwindow * window)
 {
-	if (loose)
+	if (hasLost)
 	{
 		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 		return;
@@ -429,7 +436,7 @@ void CubeDodgeGame::HandleInput(GLFWwindow * window)
 
 void CubeDodgeGame::OnMouseMove(float xOffset, float yOffset, float xPos, float yPos)
 {
-	if (camMoveRotate && !loose)
+	if (camMoveRotate && !hasLost)
 		cam.ProcessMouseMovement(xOffset, yOffset);
 }
 
@@ -443,13 +450,14 @@ void CubeDodgeGame::Exit()
 		texture = 0;
 	}
 
-	if (textureShader.ID != 0) glDeleteProgram(textureShader.ID);
+	if (textureShader.ID != 0) { glDeleteProgram(textureShader.ID); textureShader.ID = 0; }
 	walls.clear();
 
 	camMoveRotate = false;
 	mKeyHeld = false;
 
 	cube.CleanUp();
+	plane.CleanUp();
 	cam.Cleanup();
 }
 
