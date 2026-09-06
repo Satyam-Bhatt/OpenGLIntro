@@ -258,6 +258,9 @@
     <ClCompile Include="CubeDodgeGame.cpp">
       <Filter>Source Files\TestScenes</Filter>
     </ClCompile>
+    <ClCompile Include="SDF_Ellipse.cpp">
+      <Filter>Source Files\TestScenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameState.h">
@@ -449,6 +452,9 @@
     <ClInclude Include="CubeDodgeGame.h">
       <Filter>Header Files\TestScenes</Filter>
     </ClInclude>
+    <ClInclude Include="SDF_Ellipse.h">
+      <Filter>Header Files\TestScenes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ShaderClass.shader">
@@ -548,6 +554,9 @@
       <Filter>Shader\TestScenes</Filter>
     </None>
     <None Include="GridPlane.shader">
+      <Filter>Shader\TestScenes</Filter>
+    </None>
+    <None Include="SDF_Ellipse.shader">
       <Filter>Shader\TestScenes</Filter>
     </None>
   </ItemGroup>

@@ -156,6 +156,7 @@
     <ClCompile Include="MyLookAtMatrix.cpp" />
     <ClCompile Include="RayUtils.cpp" />
     <ClCompile Include="Right_LeftHanded.cpp" />
+    <ClCompile Include="SDF_Ellipse.cpp" />
     <ClCompile Include="StitchingTest.cpp" />
     <ClCompile Include="TestScene_Main.cpp" />
     <ClCompile Include="TextureMapping_3D.cpp" />
@@ -219,6 +220,7 @@
     <ClInclude Include="MyLookAtMatrix.h" />
     <ClInclude Include="RayUtils.h" />
     <ClInclude Include="Right_LeftHanded.h" />
+    <ClInclude Include="SDF_Ellipse.h" />
     <ClInclude Include="StitchingTest.h" />
     <ClInclude Include="TestScene_Main.h" />
     <ClInclude Include="TextureMapping_3D.h" />
@@ -290,6 +292,7 @@
     <None Include="RenderSingleColor.shader" />
     <None Include="RenderTexture.shader" />
     <None Include="Right_LeftHanded.shader" />
+    <None Include="SDF_Ellipse.shader" />
     <None Include="ShaderClass.shader" />
     <None Include="SierpinskiTriangle.shader" />
     <None Include="StitchingTest.shader" />

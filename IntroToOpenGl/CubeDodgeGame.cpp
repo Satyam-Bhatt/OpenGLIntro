@@ -17,6 +17,10 @@ void CubeDodgeGame::Start()
 {
 	glEnable(GL_DEPTH_TEST);
 
+	// Enable alpha blending
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 	glGenTextures(1, &texture);
 	glBindTexture(GL_TEXTURE_2D, texture);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -42,6 +46,7 @@ void CubeDodgeGame::Start()
 	cube = Cube();
 	plane = Plane();
 	textureShader = Shader("RenderTexture.shader");
+	colorShader = Shader("RenderSingleColor.shader");
 
 	textureShader.Use();
 	textureShader.SetTexture("myTexture", 0);
@@ -205,8 +210,8 @@ void CubeDodgeGame::InitializeWinTransforms()
 	Transform t;
 	t.position = Vector3(0, 0, 0);
 	t.scale = Vector3(WHD.x, WHD.y, 0.5);
-	t.color = Vector4(0, 1, 0, 1);
-	t.shaderType = ShaderType::Texture;
+	t.color = Vector4(0, 1, 0, 0.3);
+	t.shaderType = ShaderType::Color;
 	t.meshType = MeshType::Cuboid;
 	t.objectType = ObjectType::WinWall;
 	t.activeState = ActiveState::Inactive;
@@ -214,8 +219,8 @@ void CubeDodgeGame::InitializeWinTransforms()
 
 	t.position = Vector3(0, 0, WHD.z - 0.5);
 	t.scale = Vector3(WHD.x, WHD.y, 0.5);
-	t.color = Vector4(0, 1, 0, 1);
-	t.shaderType = ShaderType::Texture;
+	t.color = Vector4(0, 1, 0, 0.3);
+	t.shaderType = ShaderType::Color;
 	t.meshType = MeshType::Cuboid;
 	t.objectType = ObjectType::WinWall;
 	t.activeState = ActiveState::Active;
@@ -367,13 +372,23 @@ void CubeDodgeGame::RenderTransforms(const std::vector<Transform>& transforms, M
 		model = Matrix4x4::Scale(model, t.scale);
 
 		if (t.shaderType == ShaderType::Texture)
+		{
 			textureShader.Use();
+			textureShader.SetMat4_Custom("model", model.m);
+			textureShader.SetMat4_Custom("view", view.m);
+			textureShader.SetMat4_Custom("projection", projection.m);
+			textureShader.SetVec4("_Color", t.color);
+			textureShader.SetVec4("tillingOffset", tillingAndOffset);
+		}
+		if (t.shaderType == ShaderType::Color)
+		{
+			colorShader.Use();
+			colorShader.SetMat4_Custom("model", model.m);
+			colorShader.SetMat4_Custom("view", view.m);
+			colorShader.SetMat4_Custom("projection", projection.m);
+			colorShader.SetVec4("color", t.color);
+		}
 
-		textureShader.SetMat4_Custom("model", model.m);
-		textureShader.SetMat4_Custom("view", view.m);
-		textureShader.SetMat4_Custom("projection", projection.m);
-		textureShader.SetVec4("_Color", t.color);
-		textureShader.SetVec4("tillingOffset", tillingAndOffset);
 
 		if (t.meshType == MeshType::Quad)
 			plane.Draw();
@@ -459,6 +474,8 @@ void CubeDodgeGame::Exit()
 	cube.CleanUp();
 	plane.CleanUp();
 	cam.Cleanup();
+
+	glDisable(GL_BLEND);
 }
 
 CubeDodgeGame* CubeDodgeGame::GetInstance()

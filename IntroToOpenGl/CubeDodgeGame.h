@@ -99,7 +99,7 @@ private:
 
 	uint32_t texture = 0;
 	Mesh cube, plane;
-	Shader textureShader;
+	Shader textureShader, colorShader;
 
 	Matrix4x4 projection;
 
