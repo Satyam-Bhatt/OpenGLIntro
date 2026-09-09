@@ -2,6 +2,7 @@
 #include "MeshSpawner.h"
 #include "BillBoardShader.h"
 #include "CubeDodgeGame.h"
+#include "SDF_Ellipse.h"
 
 TestScene_Main* TestScene_Main::instance = nullptr;
 
@@ -15,6 +16,9 @@ TestScene_Main::TestScene_Main()
 
 	sceneNames[SubScene::CubeDodgeGame] = "Cube Dodge Game";
 	sceneFactories[SubScene::CubeDodgeGame] = []() -> TestScene_Main* {return CubeDodgeGame::GetInstance(); };
+
+	sceneNames[SubScene::SDFEllipse] = "SDF Elipse";
+	sceneFactories[SubScene::SDFEllipse] = []() -> TestScene_Main* {return SDF_Ellipse::GetInstance(); };
 }
 
 TestScene_Main::~TestScene_Main()
@@ -192,6 +196,10 @@ void TestScene_Main::RenderText(SubScene sceneName)
 	else if (sceneName == SubScene::CubeDodgeGame)
 	{
 		ImGui::TextWrapped("Everytime you reach the green wall your speed increases and the box count also increases. Boxes are placed randomly. Try to get the highest score as possible.");
+	}
+	else if (sceneName == SubScene::SDFEllipse)
+	{
+		ImGui::TextWrapped("Derivation of SDF of an Ellipse");
 	}
 	else
 	{

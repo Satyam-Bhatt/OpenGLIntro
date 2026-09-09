@@ -29,6 +29,7 @@ private:
 		MeshSpawner,
 		BillBoardShader,
 		CubeDodgeGame,
+		SDFEllipse,
 		COUNT
 	};
 
