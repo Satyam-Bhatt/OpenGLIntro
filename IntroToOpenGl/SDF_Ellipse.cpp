@@ -46,6 +46,7 @@ void SDF_Ellipse::ImGuiRender(GLFWwindow * window)
 void SDF_Ellipse::Render()
 {
 	shader.Use();
+	shader.SetFloat("_Time", glfwGetTime());
 	plane.Draw();
 }
 
