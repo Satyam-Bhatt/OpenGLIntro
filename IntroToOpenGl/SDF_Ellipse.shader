@@ -17,7 +17,7 @@ void main()
 #Satyam fragment
 #version 330 core
 
-
+// Newton Raphson
 float sdEllipse( vec2 p, vec2 ab )
 {
     // symmetry
