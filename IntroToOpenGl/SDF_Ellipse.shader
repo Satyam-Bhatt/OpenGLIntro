@@ -31,8 +31,10 @@ float sdEllipse( vec2 p, vec2 ab )
     // Xnorm = px/a || Ynorm = py/b
     // theta = atan2(Ynorm, Xnorm)
     // multiplying both the arguments by the constant ab doesn't change the angle. Also swap in the valye of Xnorm and Ynorm
-    // theta = atan(py * a, px & b)
+    // theta = atan(py * a, px * b)
     // What it does - its not the closest point on the ellipse but its the closest point after the space has been squashed into a circle and then mapped back. 
+
+    // INTERIOR CASE
 
     float w = s ? atan(p.y*ab.x, p.x*ab.y) : 
                   ((ab.x*(p.x-ab.x)<ab.y*(p.y-ab.y))? 1.5707963 : 0.0);
