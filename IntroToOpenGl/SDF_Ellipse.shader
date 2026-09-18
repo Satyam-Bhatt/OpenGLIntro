@@ -35,7 +35,7 @@ float sdEllipse( vec2 p, vec2 ab )
     // What it does - its not the closest point on the ellipse but its the closest point after the space has been squashed into a circle and then mapped back. 
 
     // INTERIOR CASE
-
+    // Will Explore later
     float w = s ? atan(p.y*ab.x, p.x*ab.y) : 
                   ((ab.x*(p.x-ab.x)<ab.y*(p.y-ab.y))? 1.5707963 : 0.0);
     
