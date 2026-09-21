@@ -36,7 +36,7 @@ float sdEllipse( vec2 p, vec2 ab )
 
     // INTERIOR CASE
     // So basically we draw a straight line with a slope a/b and then compare it with our slope (p.x - a)/ (p.y - b) and then check where does the point lie and snap Wo to the relevant location
-    // WAIT
+    // WAIT WAIT
     float w = s ? atan(p.y*ab.x, p.x*ab.y) : 
                   ((ab.x*(p.x-ab.x)<ab.y*(p.y-ab.y))? 1.5707963 : 0.0);
     
