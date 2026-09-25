@@ -35,12 +35,18 @@ float sdEllipse( vec2 p, vec2 ab )
     // What it does - its not the closest point on the ellipse but its the closest point after the space has been squashed into a circle and then mapped back. 
 
     // INTERIOR CASE
-    // So basically we draw a straight line with a slope a/b and then compare it with our slope (p.x - a)/ (p.y - b) and then check where does the point lie and snap Wo to the relevant location
-    // Hopefully Last Today Test
+    // So basically we draw a straight line with a slope a/b and then compare it with our slope (p.y - b)/(p.x - a) and then check where does the point lie and snap to the relevant location - 0 or PI/2 = 1.5707963
+    // a/b < (p.y - b)/(p.x - a)
+    // a(p.x - a) < b(p.y - b)  
+    // a*p.x - a^2 < b*p.y - b^2
+    // a*p.x - b*p.y < a^2 - b^2
+    // if p.x = a and p.y = b then we get
+    // a^2 - b^2 = a^2 - b^2 -> Hence proving that this line passes through a and b both
     float w = s ? atan(p.y*ab.x, p.x*ab.y) : 
                   ((ab.x*(p.x-ab.x)<ab.y*(p.y-ab.y))? 1.5707963 : 0.0);
     
-    // find root with Newton solver
+    // Newton Raphson Method
+    // Its an iterative method to approximate roots of a polynomial
     for( int i=0; i<5; i++ )
     {
         vec2 cs = vec2(cos(w),sin(w));
