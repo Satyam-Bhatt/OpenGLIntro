@@ -47,7 +47,7 @@ float sdEllipse( vec2 p, vec2 ab )
     
     // Newton Raphson Method
     // Its an iterative method to approximate roots of a polynomial
-    // Cry alone as time passes
+    // Cry alone as time passes - no clue
     for( int i=0; i<5; i++ )
     {
         vec2 cs = vec2(cos(w),sin(w));
