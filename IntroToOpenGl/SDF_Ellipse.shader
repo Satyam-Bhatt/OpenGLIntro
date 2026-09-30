@@ -46,8 +46,10 @@ float sdEllipse( vec2 p, vec2 ab )
                   ((ab.x*(p.x-ab.x)<ab.y*(p.y-ab.y))? 1.5707963 : 0.0);
     
     // Newton Raphson Method
-    // Its an iterative method to approximate roots of a polynomial
-    // Usinge my new keyboard
+    // Its an iterative method to approximate roots of a polynomial. Here we know that the shortest distance to point from the circumference is perpendicular to the slope at that point. So here we have the point and we are trying to find the w value where the distance would be the shortest
+    // u = a*cos(w), b*sin(w) gives us a point on the ellipse.
+    // v = -a*sin(w), b*cos(w) is the derivative. This gives us the slope at that point. The shortest distance would be perpendicular to this tangent
+    // 
     for( int i=0; i<5; i++ )
     {
         vec2 cs = vec2(cos(w),sin(w));
