@@ -49,7 +49,11 @@ float sdEllipse( vec2 p, vec2 ab )
     // Its an iterative method to approximate roots of a polynomial. Here we know that the shortest distance to point from the circumference is perpendicular to the slope at that point. So here we have the point and we are trying to find the w value where the distance would be the shortest
     // u = a*cos(w), b*sin(w) gives us a point on the ellipse.
     // v = -a*sin(w), b*cos(w) is the derivative. This gives us the slope at that point. The shortest distance would be perpendicular to this tangent
-    // 
+    // Formula - Xn+1 = Xn - (f(Xn) / f'(Xn)')
+    // Xn = Current guess of roots
+    // Xn+1 = Next root
+    // f(Xn): The value of the function at your current guess
+    // f'(Xn): The derivative (slope) of the function at your current guess
     for( int i=0; i<5; i++ )
     {
         vec2 cs = vec2(cos(w),sin(w));
