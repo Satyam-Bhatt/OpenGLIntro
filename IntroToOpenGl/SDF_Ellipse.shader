@@ -46,14 +46,19 @@ float sdEllipse( vec2 p, vec2 ab )
                   ((ab.x*(p.x-ab.x)<ab.y*(p.y-ab.y))? 1.5707963 : 0.0);
     
     // Newton Raphson Method
-    // Its an iterative method to approximate roots of a polynomial. Here we know that the shortest distance to point from the circumference is perpendicular to the slope at that point. So here we have the point and we are trying to find the w value where the distance would be the shortest
+    // Formula - Xn+1 = Xn - (f(Xn) / f'(Xn)')
+    // Its an iterative method to approximate roots of a polynomial. Here we know that the shortest distance to point from the circumference is perpendicular to the slope at that point. 
+    // If we get f(w) to be 0 then the second term becomes 0 and w stops changing
     // u = a*cos(w), b*sin(w) gives us a point on the ellipse.
     // v = -a*sin(w), b*cos(w) is the derivative. This gives us the slope at that point. The shortest distance would be perpendicular to this tangent
-    // Formula - Xn+1 = Xn - (f(Xn) / f'(Xn)')
     // Xn = Current guess of roots
     // Xn+1 = Next root
     // f(Xn): The value of the function at your current guess
     // f'(Xn): The derivative (slope) of the function at your current guess
+    // So here we have the point and we are trying to find the w value where the distance would be the shortest. So what we want is that the dot product of the perpendicular from point p and tangent of the elipse to be 0. We can get the value of w from it but it would form a polynomial and would be hard to compute plus we would have more than 1 root. In Newton Raphson We
+    // -> Compute f(w) = dot(p-u, v) at the current guess
+    // -> Compute f'(w) = -(dot(p-u,u) + dot(v,v)) at the current guess (Vector derivative)
+    // -> Move w by -f(w)/f'(w)
     for( int i=0; i<5; i++ )
     {
         vec2 cs = vec2(cos(w),sin(w));
