@@ -59,10 +59,14 @@ float sdEllipse( vec2 p, vec2 ab )
     // -> Compute f(w) = dot(p-u, v) at the current guess
     // -> Compute f'(w) = -(dot(p-u,u) + dot(v,v)) at the current guess (Vector derivative)
     // -> Move w by -f(w)/f'(w)
+    // Derivation done
     for( int i=0; i<5; i++ )
     {
+        // Direction
         vec2 cs = vec2(cos(w),sin(w));
+        // Point on the elipse in that Direction
         vec2 u = ab*vec2( cs.x,cs.y);
+        // Derivative of the point to get its tangent
         vec2 v = ab*vec2(-cs.y,cs.x);
         w = w + dot(p-u,v)/(dot(p-u,u)+dot(v,v));
     }
