@@ -68,6 +68,24 @@ float sdEllipse( vec2 p, vec2 ab )
         vec2 u = ab*vec2( cs.x,cs.y);
         // Derivative of the point to get its tangent
         vec2 v = ab*vec2(-cs.y,cs.x);
+        // This is the Newton Raphson equation.
+        // We take the function -> dot(p-u, v)
+        // and derivative of that function -> (dot(p-u),u)+dot(v,v)
+        // and shift the w accordingly. Now how did we derive it
+        // p is a point in space that we need to find minimum closest distance from the circumference of the elipse
+        // u is a point on the elipse at angle w
+        // p-u vector is the direction from u to p and to minimize the distance we want it to be exactly on the line of the vector from origin to p and also want it to be perpendicular to the tangent. If its not we move the w
+        // v vectors is the tangent of the point u which is basically a derivative of u
+        // and p-u should be perpendicular to v and at the w where both are perpendicular we get the shortest distance
+        // perpendicular means dot product to be 0
+        // dot(p-u,v) = 0 and that is what we are finding w for.
+        // As we are using newton Raphson we need the derivative of dot(p-u, v)
+        // Using derivative rule d/dx a(x) + b(x) = a'(x) b(x) + b(x)' a(x)
+        // f'(w) = dot(p-u,v') + dot((p-u)',v))
+        // Left side -> u' = v || v' = u'' || u = a cosw, b sinw || u' = -a sinw, b cosw || u'' = - a sinw, -b sinw || u'' = -u --> dot(p-u, -u)
+        // Right sidde -> (p-u)' || p is constant so 0 || u' = v --> dot(v,v)
+        // Hence we get -dot(p-u,u)+dot(v,v) 
+        // as newton Raphson has negative in the equation it becomes plus
         w = w + dot(p-u,v)/(dot(p-u,u)+dot(v,v));
     }
     
