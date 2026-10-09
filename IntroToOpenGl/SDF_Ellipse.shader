@@ -86,6 +86,7 @@ float sdEllipse( vec2 p, vec2 ab )
         // Right sidde -> (p-u)' || p is constant so 0 || u' = v --> dot(v,v)
         // Hence we get -dot(p-u,u)+dot(v,v) 
         // as newton Raphson has negative in the equation it becomes plus
+        // We got a new phone
         w = w + dot(p-u,v)/(dot(p-u,u)+dot(v,v));
     }
     
