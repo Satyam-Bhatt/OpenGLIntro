@@ -80,17 +80,18 @@ float sdEllipse( vec2 p, vec2 ab )
         // perpendicular means dot product to be 0
         // dot(p-u,v) = 0 and that is what we are finding w for.
         // As we are using newton Raphson we need the derivative of dot(p-u, v)
-        // Using derivative rule d/dx a(x) + b(x) = a'(x) b(x) + b(x)' a(x)
+        // Using product rule d/dw [A·B] = A'·B + A·B' 
         // f'(w) = dot(p-u,v') + dot((p-u)',v))
         // Left side -> u' = v || v' = u'' || u = a cosw, b sinw || u' = -a sinw, b cosw || u'' = - a sinw, -b sinw || u'' = -u --> dot(p-u, -u)
         // Right sidde -> (p-u)' || p is constant so 0 || u' = v --> dot(v,v)
         // Hence we get -dot(p-u,u)+dot(v,v) 
         // as newton Raphson has negative in the equation it becomes plus
-        // We got a new phone
         w = w + dot(p-u,v)/(dot(p-u,u)+dot(v,v));
     }
     
     // compute final point and distance
+    // After we get the w this means that we are almost close to the point where the distance is minimum. So we compute the distance
+    // We verify if the point is in or outside the elipse using s and then we change the sign accordingly so that distance starts from negative - goes to 0 and then positive
     return length(p-ab*vec2(cos(w),sin(w))) * (s?1.0:-1.0);
 }
 
