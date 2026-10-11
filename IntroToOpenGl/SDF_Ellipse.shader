@@ -31,26 +31,37 @@ float sdEllipse( vec2 p, vec2 ab )
     // Xnorm = px/a || Ynorm = py/b
     // theta = atan2(Ynorm, Xnorm)
     // multiplying both the arguments by the constant ab doesn't change the angle. Also swap in the valye of Xnorm and Ynorm
-    // theta = atan(py * a, px * b)
+    // theta = atan2(py * a, px * b)
     // What it does - its not the closest point on the ellipse but its the closest point after the space has been squashed into a circle and then mapped back. 
 
     // INTERIOR CASE
+    // a*(p.x-a) < b*(p.y-b)
+   //  Left < right (true): x is further from a than y is from b, in the weighted sense. The point is far to the left and relatively high, so the top of the ellipse is closest, and the seed is π/2.
+    // Left ≥ right (false): y is further from b than x is from a. The point is far down and relatively far right, so the right end is closest, and the seed is 0.
     // So basically we draw a straight line with a slope a/b and then compare it with our slope (p.y - b)/(p.x - a) and then check where does the point lie and snap to the relevant location - 0 or PI/2 = 1.5707963
     // a/b < (p.y - b)/(p.x - a)
     // a(p.x - a) < b(p.y - b)  
     // a*p.x - a^2 < b*p.y - b^2
     // a*p.x - b*p.y < a^2 - b^2
     // if p.x = a and p.y = b then we get
-    // a^2 - b^2 = a^2 - b^2 -> Hence proving that this line passes through a and b both
+    // a^2 - b^2 = a^2 - b^2
+    // true  -> above the line -> seed at PI/2 (near the b-vertex)
+    // false -> below the line -> seed at 0    (near the a-vertex)
+    // ANOTHER APPROACH
+    // If you take the terms to one side and compute a value like this
+    // g(p) = a(p.x - a) - b(p.y - b)
+    // Its basically a dot product with a,-b - normal to the line
+    // and sign of dot porduct tells if its behind or in the front of the normal
+    // We also have direction vector (b,a). wedge product with that gives us if the point is to the left or right
     float w = s ? atan(p.y*ab.x, p.x*ab.y) : 
                   ((ab.x*(p.x-ab.x)<ab.y*(p.y-ab.y))? 1.5707963 : 0.0);
     
     // Newton Raphson Method
-    // Formula - Xn+1 = Xn - (f(Xn) / f'(Xn)')
-    // Its an iterative method to approximate roots of a polynomial. Here we know that the shortest distance to point from the circumference is perpendicular to the slope at that point. 
+    // Formula - Xn+1 = Xn - (f(Xn) / f'(Xn))
+    // Its an iterative method to approximate roots of a polynomial. It just finds one root depending on the seed. Here we know that the shortest distance to point from the circumference is perpendicular to the slope at that point. 
     // If we get f(w) to be 0 then the second term becomes 0 and w stops changing
     // u = a*cos(w), b*sin(w) gives us a point on the ellipse.
-    // v = -a*sin(w), b*cos(w) is the derivative. This gives us the slope at that point. The shortest distance would be perpendicular to this tangent
+    // v = -a*sin(w), b*cos(w) is the derivative. This gives us the tangent at that point. The shortest distance would be perpendicular to this tangent
     // Xn = Current guess of roots
     // Xn+1 = Next root
     // f(Xn): The value of the function at your current guess
@@ -82,10 +93,10 @@ float sdEllipse( vec2 p, vec2 ab )
         // As we are using newton Raphson we need the derivative of dot(p-u, v)
         // Using product rule d/dw [A·B] = A'·B + A·B' 
         // f'(w) = dot(p-u,v') + dot((p-u)',v))
-        // Left side -> u' = v || v' = u'' || u = a cosw, b sinw || u' = -a sinw, b cosw || u'' = - a sinw, -b sinw || u'' = -u --> dot(p-u, -u)
-        // Right sidde -> (p-u)' || p is constant so 0 || u' = v --> dot(v,v)
-        // Hence we get -dot(p-u,u)+dot(v,v) 
-        // as newton Raphson has negative in the equation it becomes plus
+        // Left side -> u' = v || v' = u'' || u = a cos(w), b sin(w) || u' = -a sin(w), b cos(w) || u'' = - a cos(w), -b sin(w) || u'' = -u --> dot(p-u, -u)
+        // Right sidde -> (p-u)' || p is constant so 0 || -u' = -v --> -dot(v,v)
+        // Hence we get -dot(p-u,u)-dot(v,v) 
+        // as newton Raphson has negative in the equation it becomes plus as we have 2 negative sign and we take their common
         w = w + dot(p-u,v)/(dot(p-u,u)+dot(v,v));
     }
     
