@@ -107,6 +107,7 @@ float sdEllipse( vec2 p, vec2 ab )
 }
 
 // Newton Raphson - Rotation
+// Here we track the unit vector cs = cos w, sin w -> which removes the sin, cos and atan call
 float sdEllipse( vec2 p, vec2 ab )
 {
     // symmetry
