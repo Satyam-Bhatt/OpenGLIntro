@@ -113,7 +113,9 @@ float sdEllipse( vec2 p, vec2 ab )
     // symmetry
     p = abs( p );
     
-    // initial value
+    // Similar to what we did above for interior case
+    // a*(p.x-a) < b*(p.y-b)
+    // As per which is greater it picks up the seed - either 0.01,1 if x is further away from a than y is from b. and vice versa if its the other way around
     vec2 q = ab*(p-ab);
     vec2 cs = normalize( (q.x<q.y) ? vec2(0.01,1) : vec2(1,0.01) );
     
