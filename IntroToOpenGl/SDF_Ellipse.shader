@@ -116,17 +116,30 @@ float sdEllipse( vec2 p, vec2 ab )
     // Similar to what we did above for interior case
     // a*(p.x-a) < b*(p.y-b)
     // As per which is greater it picks up the seed - either 0.01,1 if x is further away from a than y is from b. and vice versa if its the other way around
+    // This time we don't care about if its inside or outside
     vec2 q = ab*(p-ab);
     vec2 cs = normalize( (q.x<q.y) ? vec2(0.01,1) : vec2(1,0.01) );
     
     // find root with Newton solver
+    // 
     for( int i=0; i<5; i++ )
     {
+        // u is the general point lying on the elipse as its being multiplied by elipse radii
         vec2 u = ab*vec2( cs.x,cs.y);
+        // v is perpendicular to u and is a derivative of It
         vec2 v = ab*vec2(-cs.y,cs.x);
+        // The function we want to equate to 0 (dot product)
         float a = dot(p-u,v);
+        // derivative of the function above derivied in the method above
         float c = dot(p-u,u) + dot(v,v);
+        // 
         float b = sqrt(c*c-a*a);
+        // Here we don't calculate the angle but rotate the vector. 2D vector rotation is by multiplying by 2D matrix of sin cos which comes out to be
+        // Matrix = [cosd -sind]
+        //          [cosd  sind]
+        // cs = (cs.x cosd - cs.y sind, cs.y cosd + cs.x sind)
+        // Now we need the sind and cosd without trignometry 
+        // 
         cs = vec2( cs.x*b-cs.y*a, cs.y*b+cs.x*a )/c;
     }
     
