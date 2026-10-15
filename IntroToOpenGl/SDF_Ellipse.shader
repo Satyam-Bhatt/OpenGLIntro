@@ -129,24 +129,35 @@ float sdEllipse( vec2 p, vec2 ab )
         // v is perpendicular to u and is a derivative of It
         vec2 v = ab*vec2(-cs.y,cs.x);
         // The function we want to equate to 0 (dot product)
-        float a = dot(p-u,v);
+        float a = dot(p-u,v); // sind
         // derivative of the function above derivied in the method above
-        float c = dot(p-u,u) + dot(v,v);
-        // 
-        float b = sqrt(c*c-a*a);
+        float c = dot(p-u,u) + dot(v,v); // common division factor
         // Here we don't calculate the angle but rotate the vector. 2D vector rotation is by multiplying by 2D matrix of sin cos which comes out to be
         // Matrix = [cosd -sind]
-        //          [cosd  sind]
+        //          [sind  cosd]
         // cs = (cs.x cosd - cs.y sind, cs.y cosd + cs.x sind)
         // Now we need the sind and cosd without trignometry 
-        // 
+        // as Newton Raphson works on small delta we can assume that sind = d when d is small
+        // the value of d = a/c as newton raphson tells that w = w0 + f(x)/f'(x). So delta is basically f(x)/f'(x) which in our case is a/c
+        // we will find cos using sin^2 d + cos^2 d = 1 and we get cos d = sqrt(1 - sin^2 d)
+        // replacing sin^2 d with a/c gives us => cos d = sqrt(c^2 - a^2)/c hence the value of b (we removed the c as c is common and we put it back in cs)
+        float b = sqrt(c*c-a*a); // cosd
+        // as sind is a and cosd is b (c is common so we divide later) we replace it in the matrix
+        // Matrix = [cosd -sind]
+        //          [sind  cosd]
+        // which makes it
+        // Matrix = [b -a]
+        //          [a  b]
+        // multiply it with cs vector to get the result below and divide by common divisor c
         cs = vec2( cs.x*b-cs.y*a, cs.y*b+cs.x*a )/c;
     }
     
     // compute final point and distance
+    // Simiar as above
     float d = length(p-ab*cs);
     
     // return signed distance
+    // Similar as above method
     return (dot(p/ab,p/ab)>1.0) ? d : -d;
 }
 
