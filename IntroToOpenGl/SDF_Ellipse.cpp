@@ -37,6 +37,7 @@ void SDF_Ellipse::ImGuiRender(GLFWwindow * window)
 	ImGui::Checkbox("Animate Ellipse", &animateEllipse);
 	ImGui::DragFloat2("Radii", &ellipseRadii.x, 0.005f);
 	ImGui::TextLinkOpenURL("Inigo Quilez - ellipse distance", "https://iquilezles.org/articles/ellipsedist/");
+	ImGui::TextLinkOpenURL("Visualizer", "https://satyam-bhatt.github.io/DerivationOfSDFCircle/");
 
 	ImGui::End();
 }
