@@ -34,11 +34,9 @@ void SDF_Ellipse::ImGuiRender(GLFWwindow * window)
 	ImGui::Begin("Info", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse |
 		ImGuiWindowFlags_AlwaysAutoResize);
 
-	ImGui::TextColored(ImVec4(0.6f, 0.9f, 1.0f, 1.0f), "Controls");
-	ImGui::Separator();
-	ImGui::BulletText("Right Click: toggle mouse look");
-	ImGui::BulletText("WASD: Move   |   Q/E: Down/Up");
-	ImGui::BulletText("Avoid the red cubes");
+	ImGui::Checkbox("Animate Ellipse", &animateEllipse);
+	ImGui::DragFloat2("Radii", &ellipseRadii.x, 0.005f);
+	ImGui::TextLinkOpenURL("Inigo Quilez - ellipse distance", "https://iquilezles.org/articles/ellipsedist/");
 
 	ImGui::End();
 }
@@ -47,6 +45,8 @@ void SDF_Ellipse::Render()
 {
 	shader.Use();
 	shader.SetFloat("_Time", glfwGetTime());
+	shader.SetVec2("_EllipseRadii", ellipseRadii.x, ellipseRadii.y);
+	shader.SetBool("_AnimateEllipse", animateEllipse);
 	plane.Draw();
 }
 

@@ -18,7 +18,7 @@ void main()
 #version 330 core
 
 // Newton Raphson - Trig
-float sdEllipse( vec2 p, vec2 ab )
+float sdfEllipse( vec2 p, vec2 ab )
 {
     // symmetry
     p = abs( p );
@@ -108,7 +108,7 @@ float sdEllipse( vec2 p, vec2 ab )
 
 // Newton Raphson - Rotation
 // Here we track the unit vector cs = cos w, sin w -> which removes the sin, cos and atan call
-float sdEllipse( vec2 p, vec2 ab )
+float sdfEllipseRot( vec2 p, vec2 ab )
 {
     // symmetry
     p = abs( p );
@@ -116,7 +116,7 @@ float sdEllipse( vec2 p, vec2 ab )
     // Similar to what we did above for interior case
     // a*(p.x-a) < b*(p.y-b)
     // As per which is greater it picks up the seed - either 0.01,1 if x is further away from a than y is from b. and vice versa if its the other way around
-    // This time we don't care about if its inside or outside
+    // This time we don't care about if its inside or outside but the final sign still uses it.
     vec2 q = ab*(p-ab);
     vec2 cs = normalize( (q.x<q.y) ? vec2(0.01,1) : vec2(1,0.01) );
     
@@ -126,21 +126,21 @@ float sdEllipse( vec2 p, vec2 ab )
     {
         // u is the general point lying on the elipse as its being multiplied by elipse radii
         vec2 u = ab*vec2( cs.x,cs.y);
-        // v is perpendicular to u and is a derivative of It
+        // v a derivative of u and tangent to the ellipse at u. (v is perpendicular to u when its a circle)
         vec2 v = ab*vec2(-cs.y,cs.x);
         // The function we want to equate to 0 (dot product)
-        float a = dot(p-u,v); // sind
+        float a = dot(p-u,v); // f(x)
         // derivative of the function above derivied in the method above
-        float c = dot(p-u,u) + dot(v,v); // common division factor
+        float c = dot(p-u,u) + dot(v,v); // common division factor || -f'(x)
         // Here we don't calculate the angle but rotate the vector. 2D vector rotation is by multiplying by 2D matrix of sin cos which comes out to be
         // Matrix = [cosd -sind]
         //          [sind  cosd]
         // cs = (cs.x cosd - cs.y sind, cs.y cosd + cs.x sind)
         // Now we need the sind and cosd without trignometry 
-        // as Newton Raphson works on small delta we can assume that sind = d when d is small
-        // the value of d = a/c as newton raphson tells that w = w0 + f(x)/f'(x). So delta is basically f(x)/f'(x) which in our case is a/c
+        // as Newton Raphson works on small delta we can assume that sind = d when d is small. We take sind because when d is small like 0 we get 0 -> sin0 = 0. We can't take cos0 as it equates to 1
+        // the value of d = a/c as newton raphson tells that w = w0 - f(x)/f'(x). So delta is basically -f(x)/f'(x) which in our case is a/-c as minus sign cancels out we get d = a/c
         // we will find cos using sin^2 d + cos^2 d = 1 and we get cos d = sqrt(1 - sin^2 d)
-        // replacing sin^2 d with a/c gives us => cos d = sqrt(c^2 - a^2)/c hence the value of b (we removed the c as c is common and we put it back in cs)
+        // replacing sin^2 d with a^2/c^2 gives us => cos d = sqrt(c^2 - a^2)/c hence the value of b (we removed the c as c is common and we put it back in cs)
         float b = sqrt(c*c-a*a); // cosd
         // as sind is a and cosd is b (c is common so we divide later) we replace it in the matrix
         // Matrix = [cosd -sind]
@@ -165,12 +165,20 @@ in vec2 UV;
 
 out vec4 FragColor;
 
+uniform vec2 _EllipseRadii;
+uniform bool _AnimateEllipse;
 uniform float _Time;
 
 void main()
 {
 	vec2 centerUV = UV * 2.0 - 1.0;
-    float sdfElip = sdEllipse(centerUV, vec2(0.8,sin(_Time * 0.5) * 0.5 + 0.5));
+    float sdfElip;
+    if(_AnimateEllipse)
+    {
+        float ellipseRadiiy = sin(_Time * 0.5) * _EllipseRadii.y/2 + _EllipseRadii.y/2;
+        sdfElip = sdfEllipse(centerUV, vec2(_EllipseRadii.x, ellipseRadiiy));   
+    }
+    else sdfElip = sdfEllipse(centerUV, _EllipseRadii);
     sdfElip = 1.0 - smoothstep(-0.01, 0.01, sdfElip);
 	FragColor = vec4(vec3(sdfElip), 1.0);
 }

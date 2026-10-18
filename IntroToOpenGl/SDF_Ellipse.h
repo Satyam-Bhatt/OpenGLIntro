@@ -19,6 +19,9 @@ public:
 private:
 	static SDF_Ellipse instance;
 
+	Vector2 ellipseRadii = Vector2(0.8, 0.5);
+	bool animateEllipse = false;
+
 	Mesh plane;
 	Shader shader;
 };
