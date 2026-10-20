@@ -200,6 +200,8 @@ void TestScene_Main::RenderText(SubScene sceneName)
 	else if (sceneName == SubScene::SDFEllipse)
 	{
 		ImGui::TextWrapped("Derivation of SDF of an Ellipse");
+		ImGui::Separator();
+		ImGui::TextWrapped("Shader file contains the derivation of the ellipse and links include explaination by IQ and a visualizer that I created using claude");
 	}
 	else
 	{

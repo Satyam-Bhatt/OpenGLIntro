@@ -11,7 +11,7 @@ out vec2 UV;
 void main()
 {
 	UV = aUV;
-	gl_Position = vec4(aPos, 1.0);
+	gl_Position = vec4(aPos.x, aPos.y - 0.15, aPos.z, 1.0);
 }
 
 #Satyam fragment
