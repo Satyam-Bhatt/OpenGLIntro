@@ -261,6 +261,9 @@
     <ClCompile Include="SDF_Ellipse.cpp">
       <Filter>Source Files\TestScenes</Filter>
     </ClCompile>
+    <ClCompile Include="TextureLoader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameState.h">
@@ -454,6 +457,9 @@
     </ClInclude>
     <ClInclude Include="SDF_Ellipse.h">
       <Filter>Header Files\TestScenes</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureLoader.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

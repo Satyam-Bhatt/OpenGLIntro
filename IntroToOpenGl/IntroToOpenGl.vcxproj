@@ -159,6 +159,7 @@
     <ClCompile Include="SDF_Ellipse.cpp" />
     <ClCompile Include="StitchingTest.cpp" />
     <ClCompile Include="TestScene_Main.cpp" />
+    <ClCompile Include="TextureLoader.cpp" />
     <ClCompile Include="TextureMapping_3D.cpp" />
     <ClCompile Include="constants.cpp" />
     <ClCompile Include="CoordinateSystems.cpp" />
@@ -223,6 +224,7 @@
     <ClInclude Include="SDF_Ellipse.h" />
     <ClInclude Include="StitchingTest.h" />
     <ClInclude Include="TestScene_Main.h" />
+    <ClInclude Include="TextureLoader.h" />
     <ClInclude Include="TextureMapping_3D.h" />
     <ClInclude Include="constants.h" />
     <ClInclude Include="CoordinateSystems.h" />
