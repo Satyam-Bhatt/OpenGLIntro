@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include <glad.h>
 #include <GLFW/glfw3.h>
+#include "Vector.h"
+#include "stb_image.h"
 
 #ifndef  TEXTURELOADER_H
 #define TEXTURELOADER_H
@@ -16,7 +18,7 @@ enum TextureWrapping
 	Border
 };
 
-enum TextureFiltering
+enum TextureMinFiltering
 {
 	Nearest,
 	Linear,
@@ -24,6 +26,12 @@ enum TextureFiltering
 	Linear_MipNearest,
 	Nearest_MipLinear,
 	Linear_MipLinear
+};
+
+enum TextureMagFiltering
+{
+	Nearest,
+	Linear,
 };
 
 enum ColorType
@@ -39,8 +47,10 @@ struct TextureProperties
 	int height = 0, width = 0;
 	TextureWrapping textureWrappingS = TextureWrapping::Repeat;
 	TextureWrapping textureWrappingT = TextureWrapping::Repeat;
-	TextureFiltering textureFiltering = TextureFiltering::Linear_MipLinear;
+	TextureMinFiltering textureMinFiltering = TextureMinFiltering::Linear_MipLinear;
+	TextureMagFiltering textureMagFiltering = TextureMagFiltering::Linear;
 	ColorType colorType = ColorType::RGBA;
+	Vector::Vector4 borderColor = Vector::Vector4(1,1,1,1);
 
 	TextureProperties()
 	{
@@ -51,25 +61,27 @@ struct TextureProperties
 		textureWrappingS = TextureWrapping::Repeat;
 		textureWrappingT = TextureWrapping::Repeat;
 		colorType = ColorType::RGBA;
+		borderColor = Vector::Vector4(1, 1, 1, 1);
 		if (generateMipmaps)
-			textureFiltering = TextureFiltering::Linear_MipLinear;
+			textureMinFiltering = TextureMinFiltering::Linear_MipLinear;
 		else
-			textureFiltering = TextureFiltering::Linear;
+			textureMinFiltering = TextureMinFiltering::Linear;
+
+		textureMagFiltering = TextureMagFiltering::Linear;
 	}
 };
 
 class TextureLoader
 {
 public:
-	unsigned int ID;
+	unsigned int ID = 0;
 
 	TextureLoader();
 
-	TextureLoader(const std::string& texturePath, TextureProperties texProp);
+	TextureLoader(const std::string& texturePath, TextureProperties texProp); // TODO: Have something default
 
 	void Use();
+	void Dispose();
 };
-
-
 
 #endif
