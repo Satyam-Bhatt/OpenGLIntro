@@ -22,6 +22,7 @@
 #include "Event.h"
 #include "EngineEvents.h"
 #include "Utils.h"
+#include "TextureLoader.h"
 
 using namespace Matrix;
 using namespace Vector;
