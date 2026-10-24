@@ -18,7 +18,7 @@ enum TextureWrapping
 	Border
 };
 
-enum TextureMinFiltering
+enum class TextureMinFiltering
 {
 	Nearest,
 	Linear,
@@ -28,7 +28,7 @@ enum TextureMinFiltering
 	Linear_MipLinear
 };
 
-enum TextureMagFiltering
+enum class TextureMagFiltering
 {
 	Nearest,
 	Linear,
@@ -80,8 +80,8 @@ public:
 
 	TextureLoader(const std::string& texturePath, TextureProperties texProp); // TODO: Have something default
 
-	void Use();
-	void Dispose();
+	void Bind();
+	void Unbind();
 };
 
 #endif

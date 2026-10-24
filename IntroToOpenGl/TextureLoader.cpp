@@ -50,7 +50,7 @@ TextureLoader::TextureLoader(const std::string & texturePath, TextureProperties 
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
 	int width, height, nChannels;
-	unsigned char* data = stbi_load("texturePath", &width, &height, &nChannels, 0);
+	unsigned char* data = stbi_load(texturePath.c_str(), &width, &height, &nChannels, 0);
 
 	if (data)
 	{
@@ -72,12 +72,12 @@ TextureLoader::TextureLoader(const std::string & texturePath, TextureProperties 
 TextureLoader::TextureLoader()
 {}
 
-void TextureLoader::Use()
+void TextureLoader::Bind()
 {
 	glBindTexture(GL_TEXTURE_2D, ID);
 }
 
-void TextureLoader::Dispose()
+void TextureLoader::Unbind()
 {
 	if (ID != 0) {
 		glDeleteTextures(1, &ID); // TODO: Can I have more textures?

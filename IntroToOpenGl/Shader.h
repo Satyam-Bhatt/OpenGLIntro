@@ -33,6 +33,7 @@ public:
     
     // Use/activate the shader
     void Use();
+    void Dispose();
 
     // Utility uniform functions
     void SetBool(const std::string& name, bool value);

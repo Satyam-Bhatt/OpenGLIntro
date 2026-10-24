@@ -139,6 +139,14 @@ void Shader::Use()
 	glUseProgram(ID);
 }
 
+void Shader::Dispose()
+{
+	if (ID != 0) {
+		glDeleteProgram(ID);
+		ID = 0;
+	}
+}
+
 // Set bool uniform. It checks if we have the location cached or not
 void Shader::SetBool(const std::string& name, bool value)
 {

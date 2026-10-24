@@ -10,9 +10,9 @@ layout(location = 3) in vec4 aColor;
 
 out vec2 UV;
 
-uniform mat4 model;
-uniform mat4 view;
-uniform mat4 projection;
+uniform mat4 model = mat4(1.0);
+uniform mat4 view = mat4(1.0);
+uniform mat4 projection = mat4(1.0);
 
 void main()
 {

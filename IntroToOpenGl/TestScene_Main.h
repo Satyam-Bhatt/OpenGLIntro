@@ -30,6 +30,7 @@ private:
 		BillBoardShader,
 		CubeDodgeGame,
 		SDFEllipse,
+		TextureLoaderTest,
 		COUNT
 	};
 

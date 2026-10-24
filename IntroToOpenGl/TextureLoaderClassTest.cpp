@@ -12,6 +12,10 @@ void TextureLoaderClassTest::Start()
 {
 	plane = PlaneY(1);
 	shader = Shader("RenderTexture.shader");
+	TextureProperties props;
+	tex = TextureLoader("Images/MYawesomeface.png", props);
+
+	shader.SetTexture("myTexture", 0);
 }
 
 void TextureLoaderClassTest::Update()
@@ -37,10 +41,18 @@ void TextureLoaderClassTest::ImGuiRender(GLFWwindow * window)
 }
 
 void TextureLoaderClassTest::Render()
-{}
+{
+	glActiveTexture(GL_TEXTURE0);
+	tex.Bind();
+	shader.Use();
+	plane.Draw();
+}
 
 void TextureLoaderClassTest::Exit()
-{}
+{
+	tex.Unbind();
+	shader.Dispose();
+}
 
 TextureLoaderClassTest* TextureLoaderClassTest::GetInstance()
 {

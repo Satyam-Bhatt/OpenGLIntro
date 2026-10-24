@@ -3,6 +3,7 @@
 #include "BillBoardShader.h"
 #include "CubeDodgeGame.h"
 #include "SDF_Ellipse.h"
+#include "TextureLoaderClassTest.h"
 
 TestScene_Main* TestScene_Main::instance = nullptr;
 
@@ -19,6 +20,9 @@ TestScene_Main::TestScene_Main()
 
 	sceneNames[SubScene::SDFEllipse] = "SDF Elipse";
 	sceneFactories[SubScene::SDFEllipse] = []() -> TestScene_Main* {return SDF_Ellipse::GetInstance(); };
+	
+	sceneNames[SubScene::TextureLoaderTest] = "Texture Loader Test";
+	sceneFactories[SubScene::TextureLoaderTest] = []() -> TestScene_Main* {return TextureLoaderClassTest::GetInstance(); };
 }
 
 TestScene_Main::~TestScene_Main()
@@ -202,6 +206,10 @@ void TestScene_Main::RenderText(SubScene sceneName)
 		ImGui::TextWrapped("Derivation of SDF of an Ellipse");
 		ImGui::Separator();
 		ImGui::TextWrapped("Shader file contains the derivation of the ellipse and links include explaination by IQ and a visualizer that I created using claude");
+	}
+	else if (sceneName == SubScene::TextureLoaderTest)
+	{
+		ImGui::TextWrapped("Testing my new convinience");
 	}
 	else
 	{
