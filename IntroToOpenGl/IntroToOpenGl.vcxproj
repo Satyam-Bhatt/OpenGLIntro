@@ -301,6 +301,7 @@
     <None Include="SierpinskiTriangle.shader" />
     <None Include="StitchingTest.shader" />
     <None Include="TexelViewer.shader" />
+    <None Include="TextureLoaderClassTest.shader" />
     <None Include="TextureMapping_3D.shader" />
     <None Include="Transformation_3D.shader" />
     <None Include="Translate_Rotate_Scale.shader" />

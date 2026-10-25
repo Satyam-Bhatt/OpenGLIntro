@@ -571,5 +571,8 @@
     <None Include="SDF_Ellipse.shader">
       <Filter>Shader\TestScenes</Filter>
     </None>
+    <None Include="TextureLoaderClassTest.shader">
+      <Filter>Shader\TestScenes</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -18,7 +18,9 @@ private:
 	static TextureLoaderClassTest instance;
 
 	Shader shader;
-	TextureLoader tex;
+	TextureLoader tex0,tex1,tex2,tex3;
 	Mesh plane;
+
+	float startTime = 0;
 };
 

@@ -209,7 +209,7 @@ void TestScene_Main::RenderText(SubScene sceneName)
 	}
 	else if (sceneName == SubScene::TextureLoaderTest)
 	{
-		ImGui::TextWrapped("Testing my new convinience");
+		ImGui::TextWrapped("Created a new Texuture loader class where I can easily bind textures with different parameters. It also shortens the overall code, also helps me manage multiple textures");
 	}
 	else
 	{

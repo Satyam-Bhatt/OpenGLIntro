@@ -36,6 +36,7 @@ enum class TextureMagFiltering
 
 enum ColorType
 {
+	Auto,
 	RGB,
 	RGBA
 };
@@ -43,13 +44,13 @@ enum ColorType
 struct TextureProperties
 {
 	bool generateMipmaps = true;
-	int mipMapBias = 0;
+	float mipMapBias = 0;
 	int height = 0, width = 0;
 	TextureWrapping textureWrappingS = TextureWrapping::Repeat;
 	TextureWrapping textureWrappingT = TextureWrapping::Repeat;
 	TextureMinFiltering textureMinFiltering = TextureMinFiltering::Linear_MipLinear;
 	TextureMagFiltering textureMagFiltering = TextureMagFiltering::Linear;
-	ColorType colorType = ColorType::RGBA;
+	ColorType colorType = ColorType::Auto;
 	Vector::Vector4 borderColor = Vector::Vector4(1,1,1,1);
 
 	TextureProperties()
@@ -60,7 +61,7 @@ struct TextureProperties
 		width = 0;
 		textureWrappingS = TextureWrapping::Repeat;
 		textureWrappingT = TextureWrapping::Repeat;
-		colorType = ColorType::RGBA;
+		colorType = ColorType::Auto;
 		borderColor = Vector::Vector4(1, 1, 1, 1);
 		if (generateMipmaps)
 			textureMinFiltering = TextureMinFiltering::Linear_MipLinear;
@@ -68,6 +69,23 @@ struct TextureProperties
 			textureMinFiltering = TextureMinFiltering::Linear;
 
 		textureMagFiltering = TextureMagFiltering::Linear;
+	}
+
+	static TextureProperties Pixelated()
+	{
+		TextureProperties p;
+		p.textureMinFiltering = TextureMinFiltering::Nearest;
+		p.textureMagFiltering = TextureMagFiltering::Nearest;
+		p.generateMipmaps = false;
+		return p;
+	}
+	static TextureProperties UI()
+	{
+		TextureProperties p;
+		p.textureWrappingS = p.textureWrappingT = TextureWrapping::Clamp;
+		p.generateMipmaps = false;
+		p.textureMinFiltering = TextureMinFiltering::Linear;
+		return p;
 	}
 };
 
@@ -78,9 +96,10 @@ public:
 
 	TextureLoader();
 
-	TextureLoader(const std::string& texturePath, TextureProperties texProp); // TODO: Have something default
+	// TextureLoader.h
+	TextureLoader(const std::string& texturePath, const TextureProperties& texProp = TextureProperties()); 
 
-	void Bind();
+	void Bind(unsigned int slot = 0);
 	void Unbind();
 };
 

@@ -1,6 +1,6 @@
 #include "TextureLoader.h"
 
-TextureLoader::TextureLoader(const std::string & texturePath, TextureProperties texProp)
+TextureLoader::TextureLoader(const std::string & texturePath, const TextureProperties& texProp)
 {
 	glGenTextures(1, &ID);
 	glBindTexture(GL_TEXTURE_2D, ID);
@@ -14,7 +14,7 @@ TextureLoader::TextureLoader(const std::string & texturePath, TextureProperties 
 	else if(texProp.textureWrappingS == TextureWrapping::Border)
 	{
 		float col[4] = { texProp.borderColor.x, texProp.borderColor.y, texProp.borderColor.z, texProp.borderColor.w };
-		glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, col); // TODO: How to
+		glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, col);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
 	}
 
@@ -27,7 +27,7 @@ TextureLoader::TextureLoader(const std::string & texturePath, TextureProperties 
 	else if (texProp.textureWrappingT == TextureWrapping::Border)
 	{
 		float col[4] = { texProp.borderColor.x, texProp.borderColor.y, texProp.borderColor.z, texProp.borderColor.w };
-		glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, col); // TODO: How to
+		glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, col); 
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
 	}
 
@@ -35,29 +35,50 @@ TextureLoader::TextureLoader(const std::string & texturePath, TextureProperties 
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	else if (texProp.textureMinFiltering == TextureMinFiltering::Nearest)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	else if (texProp.mipMapBias && texProp.textureMinFiltering == TextureMinFiltering::Nearest_MipNearest)
+	else if (texProp.generateMipmaps && texProp.textureMinFiltering == TextureMinFiltering::Nearest_MipNearest)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
-	else if (texProp.mipMapBias && texProp.textureMinFiltering == TextureMinFiltering::Linear_MipNearest)
+	else if (texProp.generateMipmaps && texProp.textureMinFiltering == TextureMinFiltering::Linear_MipNearest)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
-	else if (texProp.mipMapBias && texProp.textureMinFiltering == TextureMinFiltering::Nearest_MipLinear)
+	else if (texProp.generateMipmaps && texProp.textureMinFiltering == TextureMinFiltering::Nearest_MipLinear)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
-	else if (texProp.mipMapBias && texProp.textureMinFiltering == TextureMinFiltering::Linear_MipLinear)
+	else if (texProp.generateMipmaps && texProp.textureMinFiltering == TextureMinFiltering::Linear_MipLinear)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	else
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
 	if(texProp.textureMagFiltering == TextureMagFiltering::Linear)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	else if(texProp.textureMagFiltering == TextureMagFiltering::Nearest)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
+	if (texProp.generateMipmaps && texProp.mipMapBias != 0.0f)
+	{
+		GLfloat maxBias = 0.0f;
+		glGetFloatv(GL_MAX_TEXTURE_LOD_BIAS, &maxBias);
+
+		float bias = texProp.mipMapBias;
+		if (bias > maxBias)  bias = maxBias;
+		if (bias < -maxBias) bias = -maxBias;
+
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_LOD_BIAS, bias);
+	}
+
+	stbi_set_flip_vertically_on_load(true);
+
 	int width, height, nChannels;
 	unsigned char* data = stbi_load(texturePath.c_str(), &width, &height, &nChannels, 0);
 
 	if (data)
 	{
+		GLenum format;
+		format = (nChannels == 1) ? GL_RED : (nChannels == 3) ? GL_RGB : GL_RGBA;
+		if (texProp.colorType == ColorType::RGB)  format = GL_RGB;  
+		if (texProp.colorType == ColorType::RGBA) format = GL_RGBA;
+
 		if(texProp.colorType == ColorType::RGB)
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+			glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
 		else
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+			glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
 
 		if(texProp.generateMipmaps) glGenerateMipmap(GL_TEXTURE_2D);
 	}
@@ -72,8 +93,15 @@ TextureLoader::TextureLoader(const std::string & texturePath, TextureProperties 
 TextureLoader::TextureLoader()
 {}
 
-void TextureLoader::Bind()
+void TextureLoader::Bind(unsigned int slot)
 {
+	// In Glad they are defined as 
+	// #define GL_TEXTURE0 0x84C0
+	// #define GL_TEXTURE1 0x84C1
+	// #define GL_TEXTURE2 0x84C2
+	// #define GL_TEXTURE3 0x84C3
+	// These values are basically integers and increment by 1 that is why we are able to access them by incrementing
+	glActiveTexture(GL_TEXTURE0 + slot);
 	glBindTexture(GL_TEXTURE_2D, ID);
 }
 

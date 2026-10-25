@@ -11,11 +11,20 @@ TextureLoaderClassTest::~TextureLoaderClassTest()
 void TextureLoaderClassTest::Start()
 {
 	plane = PlaneY(1);
-	shader = Shader("RenderTexture.shader");
+	shader = Shader("TextureLoaderClassTest.shader");
 	TextureProperties props;
-	tex = TextureLoader("Images/MYawesomeface.png", props);
+	tex0 = TextureLoader("Images/Happy.jpg");
+	tex1 = TextureLoader("Images/Sad.jpg");
+	tex2 = TextureLoader("Images/Disgust.jpg");
+	tex3 = TextureLoader("Images/Wow.jpg");
 
-	shader.SetTexture("myTexture", 0);
+	shader.Use();
+	shader.SetTexture("myTexture0", 0);
+	shader.SetTexture("myTexture1", 1);
+	shader.SetTexture("myTexture2", 2);
+	shader.SetTexture("myTexture3", 3);
+
+	startTime = glfwGetTime();
 }
 
 void TextureLoaderClassTest::Update()
@@ -35,22 +44,29 @@ void TextureLoaderClassTest::ImGuiRender(GLFWwindow * window)
 	ImGui::Begin("Info", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse |
 		ImGuiWindowFlags_AlwaysAutoResize);
 
-	ImGui::Text("Great");
+	ImGui::Text("This is me testing my new texture loader class.");
 
 	ImGui::End();
 }
 
 void TextureLoaderClassTest::Render()
 {
-	glActiveTexture(GL_TEXTURE0);
-	tex.Bind();
+	tex0.Bind();
+	tex1.Bind(1);
+	tex2.Bind(2);
+	tex3.Bind(3);
+
 	shader.Use();
+	shader.SetFloat("time", glfwGetTime() - startTime);
 	plane.Draw();
 }
 
 void TextureLoaderClassTest::Exit()
 {
-	tex.Unbind();
+	tex0.Unbind();
+	tex1.Unbind();
+	tex2.Unbind();
+	tex3.Unbind();
 	shader.Dispose();
 }
 
