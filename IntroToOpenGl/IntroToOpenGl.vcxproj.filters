@@ -76,6 +76,15 @@
     <Filter Include="Shader\TestScenes">
       <UniqueIdentifier>{b8bde49f-9421-4fa4-82e7-25063b8af5d7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\MazeGame">
+      <UniqueIdentifier>{5c490ddb-8a91-40fd-9420-f6778b162e62}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shader\MazeGame">
+      <UniqueIdentifier>{123cb0a3-731b-43fa-921f-53d14ab32b28}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\MazeGame">
+      <UniqueIdentifier>{f552fa7e-4ae1-4081-82d9-7a655716d87f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -266,6 +275,9 @@
     </ClCompile>
     <ClCompile Include="TextureLoaderClassTest.cpp">
       <Filter>Source Files\TestScenes</Filter>
+    </ClCompile>
+    <ClCompile Include="MazeGameMain.cpp">
+      <Filter>Source Files\MazeGame</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -466,6 +478,9 @@
     </ClInclude>
     <ClInclude Include="TextureLoader.h">
       <Filter>Header Files\TestScenes</Filter>
+    </ClInclude>
+    <ClInclude Include="MazeGameMain.h">
+      <Filter>Header Files\MazeGame</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -151,6 +151,7 @@
     <ClCompile Include="geometry.cpp" />
     <ClCompile Include="GLMLookAtCamera.cpp" />
     <ClCompile Include="CameraMain.cpp" />
+    <ClCompile Include="MazeGameMain.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="MeshSpawner.cpp" />
     <ClCompile Include="MyLookAtMatrix.cpp" />
@@ -217,6 +218,7 @@
     <ClInclude Include="Geometry.h" />
     <ClInclude Include="GLMLookAtCamera.h" />
     <ClInclude Include="CameraMain.h" />
+    <ClInclude Include="MazeGameMain.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="MeshSpawner.h" />
     <ClInclude Include="MyLookAtMatrix.h" />
