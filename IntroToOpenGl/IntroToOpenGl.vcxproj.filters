@@ -279,6 +279,9 @@
     <ClCompile Include="MazeGameMain.cpp">
       <Filter>Source Files\MazeGame</Filter>
     </ClCompile>
+    <ClCompile Include="ShadowMapping.cpp">
+      <Filter>Source Files\TestScenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameState.h">
@@ -481,6 +484,9 @@
     </ClInclude>
     <ClInclude Include="MazeGameMain.h">
       <Filter>Header Files\MazeGame</Filter>
+    </ClInclude>
+    <ClInclude Include="ShadowMapping.h">
+      <Filter>Header Files\TestScenes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

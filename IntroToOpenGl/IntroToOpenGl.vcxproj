@@ -158,6 +158,7 @@
     <ClCompile Include="RayUtils.cpp" />
     <ClCompile Include="Right_LeftHanded.cpp" />
     <ClCompile Include="SDF_Ellipse.cpp" />
+    <ClCompile Include="ShadowMapping.cpp" />
     <ClCompile Include="StitchingTest.cpp" />
     <ClCompile Include="TestScene_Main.cpp" />
     <ClCompile Include="TextureLoader.cpp" />
@@ -225,6 +226,7 @@
     <ClInclude Include="RayUtils.h" />
     <ClInclude Include="Right_LeftHanded.h" />
     <ClInclude Include="SDF_Ellipse.h" />
+    <ClInclude Include="ShadowMapping.h" />
     <ClInclude Include="StitchingTest.h" />
     <ClInclude Include="TestScene_Main.h" />
     <ClInclude Include="TextureLoader.h" />
