@@ -1,7 +1,9 @@
 #include "ShadowMapping.h"
 
 ShadowMapping::ShadowMapping()
-{}
+{
+// late
+}
 
 ShadowMapping::~ShadowMapping()
 {}
