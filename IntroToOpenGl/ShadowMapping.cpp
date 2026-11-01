@@ -2,14 +2,18 @@
 
 ShadowMapping::ShadowMapping()
 {
-// late againS
 }
 
 ShadowMapping::~ShadowMapping()
 {}
 
 void ShadowMapping::Start()
-{}
+{
+	shader = Shader("RenderSingleColor.shader");
+
+	meshes[0] = Cube();
+	meshes[1] = Sphere();
+}
 
 void ShadowMapping::Update()
 {}

@@ -32,8 +32,8 @@ private:
 
 	Camera cam;
 
-	Shader shaders[3];
-	Mesh meshes[4];
+	Shader shader;
+	Mesh meshes[2];
 
 	TextureLoader tex;
 
