@@ -35,11 +35,19 @@ private:
 	Shader shader;
 	Mesh meshes[2];
 
+	Vector4 color;
+	int shaderSelection = 0, meshSelection = 0;
+
 	TextureLoader tex;
 
 	std::vector<Transform> transforms;
+
 	Vector3 position = Vector3(0, 0, 0);
 	Vector3 scale = Vector3(1, 1, 1);
 	Vector3 rotation = Vector3(0, 0, 0);
+
+	Matrix4x4 model, projection, view;
+
+	int token = 0;
 };
 
