@@ -97,7 +97,11 @@ void ShadowMapping::OnScroll(float xOffset, float yOffset)
 
 // TODO
 void ShadowMapping::Exit()
-{}
+{
+	shader.Dispose();
+	for (Mesh& m : meshes)
+		m.CleanUp();
+}
 
 ShadowMapping* ShadowMapping::GetInstance()
 {
