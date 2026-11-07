@@ -1,5 +1,7 @@
 #include "ShadowMapping.h"
 
+//we had a great day out and we had a lot of fun
+
 ShadowMapping ShadowMapping::instance;
 
 ShadowMapping::ShadowMapping()
