@@ -27,12 +27,12 @@ void main()
 in vec2 UV;
 out vec4 FragColor;
 
-uniform vec4 _Color = vec4(1.0, 1.0, 1.0, 1.0); 
+uniform vec4 color = vec4(1.0, 1.0, 1.0, 1.0); 
 uniform sampler2D myTexture;
 uniform vec4 tillingOffset= vec4(1.0, 1.0, 1.0, 1.0);
 
 void main()
 {
 	vec2 uv = UV * vec2(tillingOffset.x, tillingOffset.y) + vec2(tillingOffset.z, tillingOffset.w);
-	FragColor = _Color * texture(myTexture, uv);
+	FragColor = color * texture(myTexture, uv);
 }

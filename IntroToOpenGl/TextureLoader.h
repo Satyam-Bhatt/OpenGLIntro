@@ -100,7 +100,8 @@ public:
 	TextureLoader(const std::string& texturePath, const TextureProperties& texProp = TextureProperties()); 
 
 	void Bind(unsigned int slot = 0);
-	void Unbind();
+	void Unbind(unsigned int slot = 0);
+	void Delete();
 };
 
 #endif

@@ -31,6 +31,7 @@ private:
 		CubeDodgeGame,
 		SDFEllipse,
 		TextureLoaderTest,
+		ShadowMapping,
 		COUNT
 	};
 

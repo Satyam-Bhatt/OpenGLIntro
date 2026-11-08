@@ -73,12 +73,9 @@ TextureLoader::TextureLoader(const std::string & texturePath, const TexturePrope
 		GLenum format;
 		format = (nChannels == 1) ? GL_RED : (nChannels == 3) ? GL_RGB : GL_RGBA;
 		if (texProp.colorType == ColorType::RGB)  format = GL_RGB;  
-		if (texProp.colorType == ColorType::RGBA) format = GL_RGBA;
+		else if (texProp.colorType == ColorType::RGBA) format = GL_RGBA;
 
-		if(texProp.colorType == ColorType::RGB)
-			glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
-		else
-			glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+		glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
 
 		if(texProp.generateMipmaps) glGenerateMipmap(GL_TEXTURE_2D);
 	}
@@ -105,10 +102,16 @@ void TextureLoader::Bind(unsigned int slot)
 	glBindTexture(GL_TEXTURE_2D, ID);
 }
 
-void TextureLoader::Unbind()
+void TextureLoader::Unbind(unsigned int slot)
+{
+	glActiveTexture(GL_TEXTURE0 + slot);
+	glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+void TextureLoader::Delete()
 {
 	if (ID != 0) {
-		glDeleteTextures(1, &ID); // TODO: Can I have more textures?
+		glDeleteTextures(1, &ID); 
 		ID = 0;
 	}
 }

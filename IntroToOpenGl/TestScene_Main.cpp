@@ -4,6 +4,7 @@
 #include "CubeDodgeGame.h"
 #include "SDF_Ellipse.h"
 #include "TextureLoaderClassTest.h"
+#include "ShadowMapping.h"
 
 TestScene_Main* TestScene_Main::instance = nullptr;
 
@@ -23,6 +24,9 @@ TestScene_Main::TestScene_Main()
 	
 	sceneNames[SubScene::TextureLoaderTest] = "Texture Loader Test";
 	sceneFactories[SubScene::TextureLoaderTest] = []() -> TestScene_Main* {return TextureLoaderClassTest::GetInstance(); };
+	
+	sceneNames[SubScene::ShadowMapping] = "Shadow Mapping";
+	sceneFactories[SubScene::ShadowMapping] = []() -> TestScene_Main* {return ShadowMapping::GetInstance(); };
 }
 
 TestScene_Main::~TestScene_Main()
@@ -210,6 +214,10 @@ void TestScene_Main::RenderText(SubScene sceneName)
 	else if (sceneName == SubScene::TextureLoaderTest)
 	{
 		ImGui::TextWrapped("Created a new Texuture loader class where I can easily bind textures with different parameters. It also shortens the overall code, also helps me manage multiple textures");
+	}
+	else if (sceneName == SubScene::ShadowMapping)
+	{
+		ImGui::TextWrapped("Quick Shadow Mapping implementation so that I can apply it in my job.");
 	}
 	else
 	{

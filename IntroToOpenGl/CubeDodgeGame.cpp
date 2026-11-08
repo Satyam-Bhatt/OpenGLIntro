@@ -377,7 +377,7 @@ void CubeDodgeGame::RenderTransforms(const std::vector<Transform>& transforms, M
 			textureShader.SetMat4_Custom("model", model.m);
 			textureShader.SetMat4_Custom("view", view.m);
 			textureShader.SetMat4_Custom("projection", projection.m);
-			textureShader.SetVec4("_Color", t.color);
+			textureShader.SetVec4("color", t.color);
 			textureShader.SetVec4("tillingOffset", tillingAndOffset);
 		}
 		if (t.shaderType == ShaderType::Color)

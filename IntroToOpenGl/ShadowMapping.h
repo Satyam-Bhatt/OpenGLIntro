@@ -10,6 +10,7 @@ class ShadowMapping : public TestScene_Main
 		Vector4 color;
 		int shaderToUse;
 		int meshToUse;
+		Vector4 tillingAndOffset;
 	};
 
 public:
@@ -30,21 +31,20 @@ public:
 private:
 	static ShadowMapping instance;
 
+	void AddCubeTransform();
+	void AddSphereTransform();
+	void AddTransform(Vector4 a_Color = Vector4(1, 1, 1, 1), int mesh = 0, int shader = 0, Vector4 tl_of = Vector4(1, 1, 0, 0));
+
 	Camera cam;
 
-	Shader shader;
+	Shader shaders[2];
 	Mesh meshes[2];
-
-	Vector4 color;
-	int shaderSelection = 0, meshSelection = 0;
 
 	TextureLoader tex;
 
-	std::vector<Transform> transforms;
+	Vector4 color = Vector4(1,1,1,1);
 
-	Vector3 position = Vector3(0, 0, 0);
-	Vector3 scale = Vector3(1, 1, 1);
-	Vector3 rotation = Vector3(0, 0, 0);
+	std::vector<Transform> transforms;
 
 	Matrix4x4 model, projection, view;
 
