@@ -595,5 +595,8 @@
     <None Include="TextureLoaderClassTest.shader">
       <Filter>Shader\TestScenes</Filter>
     </None>
+    <None Include="DepthOnly.shader">
+      <Filter>Shader\CommonShaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -281,6 +281,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="BillBoardShader.shader" />
+    <None Include="DepthOnly.shader" />
     <None Include="FirstPersonCamera.shader" />
     <None Include="GridPlane.shader" />
     <None Include="GLMLookAtCamera.shader" />

@@ -8,11 +8,26 @@ ShadowMapping::ShadowMapping()
 }
 
 ShadowMapping::~ShadowMapping()
-{}
+{
+	Exit();
+}
 
 void ShadowMapping::Start()
 {
 	glEnable(GL_DEPTH_TEST);
+
+	//Shadow
+	depthTex.CreateDepth(SHADOW_W, SHADOW_H);
+
+	glGenFramebuffers(1, &depthFBO);
+	glBindFramebuffer(GL_FRAMEBUFFER, depthFBO);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthTex.ID, 0);
+	glDrawBuffer(GL_NONE);// TODO: is it needed?
+	glReadBuffer(GL_NONE);// TODO: is it needed?
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	depthShader = Shader("DepthOnly.shader");
+	//
 
 	tex = TextureLoader("Images/WhiteCheck.png");
 
@@ -25,8 +40,6 @@ void ShadowMapping::Start()
 
 	AddCubeTransform();
 	AddSphereTransform();
-	AddTransform();
-	AddTransform();
 
 	projection = Matrix4x4::CreateProjectionMatrix_FOV_LeftHanded(45.0f * (PI / 180), (float)viewportData.width, (float)viewportData.height, 0.1f, 100.0f);
 
@@ -37,32 +50,17 @@ void ShadowMapping::Start()
 		});
 }
 
-void ShadowMapping::AddTransform(Vector4 a_Color = Vector4(1, 1, 1, 1), int mesh = 0, int shader = 0, Vector4 tl_of = Vector4(1, 1, 0, 0))
-{
-	// Adds a cube to the scene
-	Transform t;
-	t.position = Vector3(0, 0, 0);
-	t.rotation = Vector3(0, 0, 0);
-	t.scale = Vector3(1, 1, 1);
-	t.color = a_Color;
-	t.meshToUse = mesh;
-	t.shaderToUse = shader;
-	t.tillingAndOffset = tl_of;
-
-	transforms.push_back(t);
-}
-
 void ShadowMapping::AddCubeTransform()
 {
 	// Adds a cube to the scene
 	Transform t;
-	t.position = Vector3(0, 0, 0);
+	t.position = Vector3(0, -2, 0);
 	t.rotation = Vector3(0, 0, 0);
-	t.scale = Vector3(1, 1, 1);
+	t.scale = Vector3(50, 1, 50);
 	t.color = Vector4(1, 1, 1, 1);
 	t.meshToUse = 0;
 	t.shaderToUse = 1;
-	t.tillingAndOffset = Vector4(1, 1, 0, 0);
+	t.tillingAndOffset = Vector4(10, 10, 0, 0);
 
 	transforms.push_back(t);
 }
@@ -71,11 +69,11 @@ void ShadowMapping::AddSphereTransform()
 {
 	// Adds a cube to the scene
 	Transform t;
-	t.position = position;
-	t.rotation = rotation;
-	t.scale = scale;
-	t.color = color;
-	t.meshToUse = 0;
+	t.position = Vector3(0, 0, 0);
+	t.rotation = Vector3(0, 0, 0);
+	t.scale = Vector3(1, 1, 1);
+	t.color = Vector4(1, 0, 0, 1);
+	t.meshToUse = 1;
 	t.shaderToUse = 1;
 	t.tillingAndOffset = Vector4(1, 1, 0, 0);
 
@@ -83,9 +81,10 @@ void ShadowMapping::AddSphereTransform()
 }
 
 void ShadowMapping::Update()
-{}
+{
+}
 
-void ShadowMapping::ImGuiRender(GLFWwindow * window)
+void ShadowMapping::ImGuiRender(GLFWwindow* window)
 {
 	GLint viewport[4];
 	glGetIntegerv(GL_VIEWPORT, viewport);
@@ -106,6 +105,8 @@ void ShadowMapping::ImGuiRender(GLFWwindow * window)
 
 void ShadowMapping::Render()
 {
+	RenderDepthMap();
+
 	view = cam.GetViewMatrix();
 
 	tex.Bind();
@@ -135,14 +136,74 @@ void ShadowMapping::Render()
 	}
 }
 
-void ShadowMapping::HandleInput(GLFWwindow * window)
-{}
+void ShadowMapping::RenderDepthMap()
+{
+	// Light matrices: same for every object, so compute once
+	lightProj = Matrix4x4::CreateProjectionMatrixSymmetric_ORTHO_LeftHanded(15.0f, 15.0f, 1.0f, 60.0f); // TODO: Why these matrices are needed
+
+	Vector3 lightPos = lightDir.Normalize() * -20.0f;
+	lightView = Matrix4x4::CreateLookAtMatrix_LeftHanded(lightPos, Vector3(0, 0, 0), Vector3(0, 1, 0)); // TODO: Why these matrices are needed
+	lightSpace = lightProj * lightView;
+
+	glViewport(0, 0, SHADOW_W, SHADOW_H);
+	glBindFramebuffer(GL_FRAMEBUFFER, depthFBO);
+	glClear(GL_DEPTH_BUFFER_BIT);
+
+	depthShader.Use();
+	depthShader.SetMat4_Custom("lightSpace", lightSpace.m);
+
+	for (int i = 0; i < transforms.size(); i++)
+	{
+		const Transform& t = transforms[i];
+
+		model = Matrix4x4::Identity();
+		model = Matrix4x4::Translation(model, t.position);
+		model = Matrix4x4::Rotation(model, Vector3(1, 0, 0), t.rotation.x * (PI / 180));
+		model = Matrix4x4::Rotation(model, Vector3(0, 1, 0), t.rotation.y * (PI / 180));
+		model = Matrix4x4::Rotation(model, Vector3(0, 0, 1), t.rotation.z * (PI / 180));
+		model = Matrix4x4::Scale(model, t.scale);
+
+		depthShader.SetMat4_Custom("model", model.m);
+		meshes[t.meshToUse].Draw();
+	}
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glViewport(viewportData.leftPanel, 0, viewportData.width, viewportData.height);
+}
+
+void ShadowMapping::HandleInput(GLFWwindow* window)
+{
+	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT))
+		camMoveRotate = true;
+	else
+		camMoveRotate = false;
+
+	if (camMoveRotate)
+	{
+		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+			cam.ProcessKeyboard(Camera_Movement::FORWARD);
+		if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+			cam.ProcessKeyboard(Camera_Movement::BACKWARD);
+		if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+			cam.ProcessKeyboard(Camera_Movement::LEFT);
+		if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+			cam.ProcessKeyboard(Camera_Movement::RIGHT);
+		if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
+			cam.ProcessKeyboard(Camera_Movement::UP);
+		if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
+			cam.ProcessKeyboard(Camera_Movement::DOWN);
+	}
+}
 
 void ShadowMapping::OnMouseMove(float xOffset, float yOffset, float xPos, float yPos)
-{}
+{
+	if (camMoveRotate)
+		cam.ProcessMouseMovement(xOffset, yOffset);
+}
 
 void ShadowMapping::OnScroll(float xOffset, float yOffset)
-{}
+{
+}
 
 void ShadowMapping::Exit()
 {

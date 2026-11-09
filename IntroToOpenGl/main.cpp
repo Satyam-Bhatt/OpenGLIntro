@@ -47,7 +47,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 		}
 	}
 
-	viewportData.height = height;
+	viewportData.width = height;
 	viewportData.width = viewportWidth;
 	viewportData.leftPanel = viewportStartPos;
 	viewportData.totalWidth = width;

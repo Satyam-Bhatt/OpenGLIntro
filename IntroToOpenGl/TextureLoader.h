@@ -99,6 +99,8 @@ public:
 	// TextureLoader.h
 	TextureLoader(const std::string& texturePath, const TextureProperties& texProp = TextureProperties()); 
 
+	void CreateDepth(float width, float height, const TextureProperties& texProp = TextureProperties());
+
 	void Bind(unsigned int slot = 0);
 	void Unbind(unsigned int slot = 0);
 	void Delete();

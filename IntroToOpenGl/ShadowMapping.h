@@ -33,7 +33,6 @@ private:
 
 	void AddCubeTransform();
 	void AddSphereTransform();
-	void AddTransform(Vector4 a_Color = Vector4(1, 1, 1, 1), int mesh = 0, int shader = 0, Vector4 tl_of = Vector4(1, 1, 0, 0));
 
 	Camera cam;
 
@@ -48,6 +47,17 @@ private:
 
 	Matrix4x4 model, projection, view;
 
+	bool camMoveRotate = false;
+
 	int token = 0;
+
+	//Shadow 
+	TextureLoader depthTex;
+	GLuint depthFBO = 0;
+	const int SHADOW_W = 2048, SHADOW_H = 2048;
+	Shader depthShader;
+	Matrix4x4 lightView, lightProj, lightSpace;
+	Vector3 lightDir = Vector3(-0.5f, -1.0f, -0.3f);
+	void RenderDepthMap();
 };
 

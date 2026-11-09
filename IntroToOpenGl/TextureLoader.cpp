@@ -1,17 +1,17 @@
 #include "TextureLoader.h"
 
-TextureLoader::TextureLoader(const std::string & texturePath, const TextureProperties& texProp)
+TextureLoader::TextureLoader(const std::string& texturePath, const TextureProperties& texProp)
 {
 	glGenTextures(1, &ID);
 	glBindTexture(GL_TEXTURE_2D, ID);
 
-	if(texProp.textureWrappingS == TextureWrapping::Repeat)
+	if (texProp.textureWrappingS == TextureWrapping::Repeat)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	else if(texProp.textureWrappingS == TextureWrapping::Mirror)
+	else if (texProp.textureWrappingS == TextureWrapping::Mirror)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
-	else if(texProp.textureWrappingS == TextureWrapping::Clamp)
+	else if (texProp.textureWrappingS == TextureWrapping::Clamp)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	else if(texProp.textureWrappingS == TextureWrapping::Border)
+	else if (texProp.textureWrappingS == TextureWrapping::Border)
 	{
 		float col[4] = { texProp.borderColor.x, texProp.borderColor.y, texProp.borderColor.z, texProp.borderColor.w };
 		glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, col);
@@ -27,11 +27,11 @@ TextureLoader::TextureLoader(const std::string & texturePath, const TexturePrope
 	else if (texProp.textureWrappingT == TextureWrapping::Border)
 	{
 		float col[4] = { texProp.borderColor.x, texProp.borderColor.y, texProp.borderColor.z, texProp.borderColor.w };
-		glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, col); 
+		glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, col);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
 	}
 
-	if(texProp.textureMinFiltering == TextureMinFiltering::Linear)
+	if (texProp.textureMinFiltering == TextureMinFiltering::Linear)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	else if (texProp.textureMinFiltering == TextureMinFiltering::Nearest)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -46,9 +46,9 @@ TextureLoader::TextureLoader(const std::string & texturePath, const TexturePrope
 	else
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
-	if(texProp.textureMagFiltering == TextureMagFiltering::Linear)
+	if (texProp.textureMagFiltering == TextureMagFiltering::Linear)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	else if(texProp.textureMagFiltering == TextureMagFiltering::Nearest)
+	else if (texProp.textureMagFiltering == TextureMagFiltering::Nearest)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
 	if (texProp.generateMipmaps && texProp.mipMapBias != 0.0f)
@@ -72,23 +72,43 @@ TextureLoader::TextureLoader(const std::string & texturePath, const TexturePrope
 	{
 		GLenum format;
 		format = (nChannels == 1) ? GL_RED : (nChannels == 3) ? GL_RGB : GL_RGBA;
-		if (texProp.colorType == ColorType::RGB)  format = GL_RGB;  
+		if (texProp.colorType == ColorType::RGB)  format = GL_RGB;
 		else if (texProp.colorType == ColorType::RGBA) format = GL_RGBA;
 
 		glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
 
-		if(texProp.generateMipmaps) glGenerateMipmap(GL_TEXTURE_2D);
+		if (texProp.generateMipmaps) glGenerateMipmap(GL_TEXTURE_2D);
 	}
 	else
 	{
 		std::cout << "Failed to load texture" << std::endl;
 	}
-	
+
 	stbi_image_free(data);
+
+	glBindTexture(GL_TEXTURE_2D, 0);
+}
+TextureLoader::TextureLoader()
+{
 }
 
-TextureLoader::TextureLoader()
-{}
+void TextureLoader::CreateDepth(float width, float height, const TextureProperties& texProp)
+{
+	glGenTextures(1, &ID);
+	glBindTexture(GL_TEXTURE_2D, ID);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, width, height, 0,GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+
+	float border[4] = { texProp.borderColor.x, texProp.borderColor.y,texProp.borderColor.z, texProp.borderColor.w };
+	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, border);
+
+	glBindTexture(GL_TEXTURE_2D, 0);
+}
 
 void TextureLoader::Bind(unsigned int slot)
 {
@@ -111,7 +131,7 @@ void TextureLoader::Unbind(unsigned int slot)
 void TextureLoader::Delete()
 {
 	if (ID != 0) {
-		glDeleteTextures(1, &ID); 
+		glDeleteTextures(1, &ID);
 		ID = 0;
 	}
 }
