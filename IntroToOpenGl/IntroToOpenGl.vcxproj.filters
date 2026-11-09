@@ -598,5 +598,6 @@
     <None Include="DepthOnly.shader">
       <Filter>Shader\CommonShaders</Filter>
     </None>
+    <None Include="RenderTexture_Shadow.shader" />
   </ItemGroup>
 </Project>

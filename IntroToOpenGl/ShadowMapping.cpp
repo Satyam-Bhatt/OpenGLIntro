@@ -32,8 +32,9 @@ void ShadowMapping::Start()
 	tex = TextureLoader("Images/WhiteCheck.png");
 
 	shaders[0] = Shader("RenderSingleColor.shader");
-	shaders[1] = Shader("RenderTexture.shader");
+	shaders[1] = Shader("RenderTexture_Shadow.shader");
 	shaders[1].SetTexture("myTexture", 0);
+	shaders[1].SetTexture("shadowMap", 1);
 
 	meshes[0] = Cube();
 	meshes[1] = Sphere();
@@ -101,6 +102,10 @@ void ShadowMapping::ImGuiRender(GLFWwindow* window)
 	ImGui::Text("Welcome to my leap to shadow mapping");
 
 	ImGui::End();
+
+	ImGui::Begin("Shadow Map Debug");
+	ImGui::Image((ImTextureID)(intptr_t)depthTex.ID, ImVec2(256, 256), ImVec2(0, 1), ImVec2(1, 0));
+	ImGui::End();
 }
 
 void ShadowMapping::Render()
@@ -109,7 +114,8 @@ void ShadowMapping::Render()
 
 	view = cam.GetViewMatrix();
 
-	tex.Bind();
+	tex.Bind(0);
+	depthTex.Bind(1);
 
 	for (int i = 0; i < transforms.size(); i++)
 	{
@@ -130,7 +136,10 @@ void ShadowMapping::Render()
 		shaders[t.shaderToUse].SetMat4_Custom("projection", projection.m);
 		shaders[t.shaderToUse].SetVec4("color", t.color);
 		if (t.shaderToUse == 1)
+		{
 			shaders[t.shaderToUse].SetVec4("tillingOffset", t.tillingAndOffset);
+			shaders[t.shaderToUse].SetMat4_Custom("lightSpace", lightSpace.m);
+		}
 
 		meshes[t.meshToUse].Draw();
 	}
@@ -205,6 +214,7 @@ void ShadowMapping::OnScroll(float xOffset, float yOffset)
 {
 }
 
+// TODO: Add Clean
 void ShadowMapping::Exit()
 {
 	glDisable(GL_DEPTH_TEST);

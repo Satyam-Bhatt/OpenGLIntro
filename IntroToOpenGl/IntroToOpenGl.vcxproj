@@ -300,6 +300,7 @@
     <None Include="RenderColor_PerVertex.shader" />
     <None Include="RenderSingleColor.shader" />
     <None Include="RenderTexture.shader" />
+    <None Include="RenderTexture_Shadow.shader" />
     <None Include="Right_LeftHanded.shader" />
     <None Include="SDF_Ellipse.shader" />
     <None Include="ShaderClass.shader" />
