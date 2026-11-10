@@ -1,5 +1,7 @@
 #include "ShadowMapping.h"
 
+//TODO: WHy not work
+
 ShadowMapping ShadowMapping::instance;
 
 ShadowMapping::ShadowMapping()
