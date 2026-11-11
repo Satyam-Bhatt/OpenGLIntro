@@ -110,7 +110,7 @@ void ShadowMapping::ImGuiRender(GLFWwindow* window)
 	ImGui::End();
 
 	ImGui::Begin("Shadow Map Debug");
-	ImGui::Image((ImTextureID)(intptr_t)depthTex.ID, ImVec2(256, 256), ImVec2(0, 1), ImVec2(1, 0));
+	ImGui::Image((ImTextureID)(intptr_t)depthTex.ID, ImVec2(256, 256), ImVec2(0, 1), ImVec2(1, 0)); // TODO: How works
 	ImGui::End();
 }
 
@@ -154,7 +154,6 @@ void ShadowMapping::Render()
 void ShadowMapping::RenderDepthMap()
 {
 	// Light matrices: same for every object, so compute once
-	// TODO: Why these numbers are fixed
 	lightProj = Matrix4x4::CreateProjectionMatrixSymmetric_ORTHO_LeftHanded(15.0f, 15.0f, 1.0f, 100.0f); // TODO: Why these matrices are needed
 
 	Vector3 lightPos = lightDir.Normalize() * -20.0f;

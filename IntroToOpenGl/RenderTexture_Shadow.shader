@@ -70,13 +70,13 @@ float CalcShadowPCF(vec4 posLS)
 		}
 	}
 
-	return shadow / 9.0;
+	return shadow / 25.0;
 }
 
 void main()
 {
 	vec2 uv = UV * vec2(tillingOffset.x, tillingOffset.y) + vec2(tillingOffset.z, tillingOffset.w);
-	float shadow = CalcShadow(fragPosLightSpace); // TODO: What???
+	float shadow = CalcShadowPCF(fragPosLightSpace); // TODO: What???
 	FragColor = color * texture(myTexture, uv);
 	FragColor *= (1.0 - shadow); // TODO: What???
 }
