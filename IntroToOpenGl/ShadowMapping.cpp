@@ -33,8 +33,11 @@ void ShadowMapping::Start()
 
 	tex = TextureLoader("Images/WhiteCheck.png");
 
-	shaders[0] = Shader("RenderSingleColor.shader");
+	shaders[0] = Shader("RenderSingleColor.shader"); // TODO: Make a shadow relevant shader
 	shaders[1] = Shader("RenderTexture_Shadow.shader");
+	//shaders[1] = Shader("RenderTexture.shader");
+	//
+	shaders[1].Use();
 	shaders[1].SetTexture("myTexture", 0);
 	shaders[1].SetTexture("shadowMap", 1);
 
@@ -102,6 +105,7 @@ void ShadowMapping::ImGuiRender(GLFWwindow* window)
 		ImGuiWindowFlags_AlwaysAutoResize);
 
 	ImGui::Text("Welcome to my leap to shadow mapping");
+	ImGui::DragFloat3("light Position", &lightDir.x, 0.005f);
 
 	ImGui::End();
 
@@ -150,7 +154,8 @@ void ShadowMapping::Render()
 void ShadowMapping::RenderDepthMap()
 {
 	// Light matrices: same for every object, so compute once
-	lightProj = Matrix4x4::CreateProjectionMatrixSymmetric_ORTHO_LeftHanded(15.0f, 15.0f, 1.0f, 60.0f); // TODO: Why these matrices are needed
+	// TODO: Why these numbers are fixed
+	lightProj = Matrix4x4::CreateProjectionMatrixSymmetric_ORTHO_LeftHanded(15.0f, 15.0f, 1.0f, 100.0f); // TODO: Why these matrices are needed
 
 	Vector3 lightPos = lightDir.Normalize() * -20.0f;
 	lightView = Matrix4x4::CreateLookAtMatrix_LeftHanded(lightPos, Vector3(0, 0, 0), Vector3(0, 1, 0)); // TODO: Why these matrices are needed

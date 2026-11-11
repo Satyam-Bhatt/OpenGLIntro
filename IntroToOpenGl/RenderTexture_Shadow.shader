@@ -48,6 +48,31 @@ float CalcShadow(vec4 posLS)
 	return (p.z - 0.005 > closest) ? 1.0 : 0.0;
 }
 
+// TODO: More expensive probably a cheaper billenear would be better
+float CalcShadowPCF(vec4 posLS)
+{
+	vec3 p = posLS.xyz / posLS.w;
+	p = p * 0.5 + 0.5;
+
+	// Outside the light's frustum: lit
+	if (p.x < 0.0 || p.x > 1.0 || p.y < 0.0 || p.y > 1.0 || p.z > 1.0)
+		return 0.0;
+
+	vec2 texelSize = 1.0 / vec2(textureSize(shadowMap, 0));
+	float shadow = 0.0;
+
+	for (int x = -1; x <= 1; x++)
+	{
+		for (int y = -1; y <= 1; y++)
+		{
+			float closest = texture(shadowMap, p.xy + vec2(x, y) * texelSize).r;
+			shadow += (p.z - 0.005 > closest) ? 1.0 : 0.0;
+		}
+	}
+
+	return shadow / 9.0;
+}
+
 void main()
 {
 	vec2 uv = UV * vec2(tillingOffset.x, tillingOffset.y) + vec2(tillingOffset.z, tillingOffset.w);
