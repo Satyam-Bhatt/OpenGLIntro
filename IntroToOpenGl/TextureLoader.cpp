@@ -92,13 +92,16 @@ TextureLoader::TextureLoader()
 {
 }
 
+// TODO: Verify
 void TextureLoader::CreateDepth(float width, float height, const TextureProperties& texProp)
 {
 	glGenTextures(1, &ID);
 	glBindTexture(GL_TEXTURE_2D, ID);
 
+	// GL_DEPTH_COMPONENT24 this ensures that we create a depth texture
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, width, height, 0,GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
 
+	// We don't need any mipmaps. We want pixels to be crisp
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
