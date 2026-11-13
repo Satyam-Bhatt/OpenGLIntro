@@ -1,7 +1,5 @@
 #include "ShadowMapping.h"
 
-//TODO: WHy not work
-
 ShadowMapping ShadowMapping::instance;
 
 ShadowMapping::ShadowMapping()
@@ -24,8 +22,15 @@ void ShadowMapping::Start()
 	glGenFramebuffers(1, &depthFBO);
 	glBindFramebuffer(GL_FRAMEBUFFER, depthFBO);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthTex.ID, 0);
-	glDrawBuffer(GL_NONE);// TODO: is it needed?
-	glReadBuffer(GL_NONE);// TODO: is it needed?
+	// Defalt state of glDrawBuffer and glReadBuffer is GL_COLOR_ATTACHMENT0
+	// As we are attaching depth texture, those defaults should point to nothing.
+	// We set them to null so that glCheckFramebufferStatus doesn't return GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER or GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER
+	// Rendering to an incomplete FBO generates GL_INVALID_FRAMEBUFFER_OPERATION and draws nothing
+	// Most drivers take care of it but some might not
+	glDrawBuffer(GL_NONE);// Tells that fragment shader output goes nowhere
+	glReadBuffer(GL_NONE);// Tells that read operations like glReadPixels, glBlitFramebuffer, glCopyTexImage have no color source
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+		std::cout << "Shadow FBO is incomplete" << std::endl;
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	depthShader = Shader("DepthOnly.shader");
@@ -232,12 +237,22 @@ void ShadowMapping::Exit()
 		m.CleanUp();
 
 	tex.Unbind();
+	depthTex.Unbind();
 
 	transforms.clear();
 
 	cam.Cleanup();
 	onWindowResize.unsubscribe(token);
 	token = 0;
+
+	model = projection = view = Matrix4x4::Identity();
+
+	// Shadow
+	glDeleteFramebuffers(1, &depthFBO);
+	depthFBO = 0;
+	depthShader.Dispose();
+	lightView = lightProj = lightProj = Matrix4x4::Identity();
+	lightDir = Vector3(-0.5f, -1.0f, -0.3f);
 }
 
 ShadowMapping* ShadowMapping::GetInstance()

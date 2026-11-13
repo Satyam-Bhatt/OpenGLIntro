@@ -41,8 +41,6 @@ private:
 
 	TextureLoader tex;
 
-	Vector4 color = Vector4(1,1,1,1);
-
 	std::vector<Transform> transforms;
 
 	Matrix4x4 model, projection, view;

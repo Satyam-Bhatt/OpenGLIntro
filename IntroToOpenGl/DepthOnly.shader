@@ -1,4 +1,5 @@
 // TODO: Explain in detail why we don't require a fragment here - because its bound to FBO with format Depth24 and depth 24 only needs Vertex position.z for depth buffer there is no color output in this shader as FBO format of Depth 24 doesn't require it
+// But how is the fragment written is there something internal?
 #Satyam vertex
 
 #version 330 core
