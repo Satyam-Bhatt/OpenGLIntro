@@ -38,13 +38,15 @@ void ShadowMapping::Start()
 
 	tex = TextureLoader("Images/WhiteCheck.png");
 
-	shaders[0] = Shader("RenderSingleColor.shader"); // TODO: Make a shadow relevant shader
+	shaders[0] = Shader("RenderSingleColor_Shadow.shader"); // TODO: Make a shadow relevant shader
+	shaders[0].Use();
+	shaders[0].SetTexture("shadowMap", 0);
+
 	shaders[1] = Shader("RenderTexture_Shadow.shader");
-	//shaders[1] = Shader("RenderTexture.shader");
-	//
+
 	shaders[1].Use();
-	shaders[1].SetTexture("myTexture", 0);
-	shaders[1].SetTexture("shadowMap", 1);
+	shaders[1].SetTexture("shadowMap", 0);
+	shaders[1].SetTexture("myTexture", 1);
 
 	meshes[0] = Cube();
 	meshes[1] = Sphere();
@@ -70,7 +72,7 @@ void ShadowMapping::AddCubeTransform()
 	t.scale = Vector3(50, 1, 50);
 	t.color = Vector4(1, 1, 1, 1);
 	t.meshToUse = 0;
-	t.shaderToUse = 1;
+	t.shaderToUse = 0;
 	t.tillingAndOffset = Vector4(10, 10, 0, 0);
 
 	transforms.push_back(t);
@@ -85,7 +87,7 @@ void ShadowMapping::AddSphereTransform()
 	t.scale = Vector3(1, 1, 1);
 	t.color = Vector4(1, 0, 0, 1);
 	t.meshToUse = 1;
-	t.shaderToUse = 1;
+	t.shaderToUse = 0;
 	t.tillingAndOffset = Vector4(1, 1, 0, 0);
 
 	transforms.push_back(t);
@@ -125,8 +127,8 @@ void ShadowMapping::Render()
 
 	view = cam.GetViewMatrix();
 
-	tex.Bind(0);
-	depthTex.Bind(1);
+	depthTex.Bind(0);
+	tex.Bind(1);
 
 	for (int i = 0; i < transforms.size(); i++)
 	{
@@ -146,10 +148,10 @@ void ShadowMapping::Render()
 		shaders[t.shaderToUse].SetMat4_Custom("view", view.m);
 		shaders[t.shaderToUse].SetMat4_Custom("projection", projection.m);
 		shaders[t.shaderToUse].SetVec4("color", t.color);
+		shaders[t.shaderToUse].SetMat4_Custom("lightSpace", lightSpace.m);
 		if (t.shaderToUse == 1)
 		{
 			shaders[t.shaderToUse].SetVec4("tillingOffset", t.tillingAndOffset);
-			shaders[t.shaderToUse].SetMat4_Custom("lightSpace", lightSpace.m);
 		}
 
 		meshes[t.meshToUse].Draw();

@@ -299,6 +299,7 @@
     <None Include="PickingShader.shader" />
     <None Include="RenderColor_PerVertex.shader" />
     <None Include="RenderSingleColor.shader" />
+    <None Include="RenderSingleColor_Shadow.shader" />
     <None Include="RenderTexture.shader" />
     <None Include="RenderTexture_Shadow.shader" />
     <None Include="Right_LeftHanded.shader" />
