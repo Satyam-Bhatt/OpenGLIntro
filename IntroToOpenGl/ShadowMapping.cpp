@@ -16,7 +16,7 @@ void ShadowMapping::Start()
 {
 	glEnable(GL_DEPTH_TEST);
 
-	//Shadow
+	// === Shadow ====
 	depthTex.CreateDepth(SHADOW_W, SHADOW_H);
 
 	glGenFramebuffers(1, &depthFBO);
@@ -32,18 +32,17 @@ void ShadowMapping::Start()
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 		std::cout << "Shadow FBO is incomplete" << std::endl;
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	// ===============
 
 	depthShader = Shader("DepthOnly.shader");
-	//
 
 	tex = TextureLoader("Images/WhiteCheck.png");
 
-	shaders[0] = Shader("RenderSingleColor_Shadow.shader"); // TODO: Make a shadow relevant shader
+	shaders[0] = Shader("RenderSingleColor_Shadow.shader"); 
 	shaders[0].Use();
 	shaders[0].SetTexture("shadowMap", 0);
 
 	shaders[1] = Shader("RenderTexture_Shadow.shader");
-
 	shaders[1].Use();
 	shaders[1].SetTexture("shadowMap", 0);
 	shaders[1].SetTexture("myTexture", 1);
@@ -161,6 +160,8 @@ void ShadowMapping::Render()
 void ShadowMapping::RenderDepthMap()
 {
 	// Light matrices: same for every object, so compute once
+	// TODO: Spot light 
+	// 
 	lightProj = Matrix4x4::CreateProjectionMatrixSymmetric_ORTHO_LeftHanded(15.0f, 15.0f, 1.0f, 100.0f); // TODO: Why these matrices are needed
 
 	Vector3 lightPos = lightDir.Normalize() * -20.0f;
