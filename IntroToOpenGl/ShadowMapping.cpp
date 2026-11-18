@@ -64,7 +64,6 @@ void ShadowMapping::Start()
 
 void ShadowMapping::AddCubeTransform()
 {
-	// Adds a cube to the scene
 	Transform t;
 	t.position = Vector3(0, -2, 0);
 	t.rotation = Vector3(0, 0, 0);
@@ -79,7 +78,6 @@ void ShadowMapping::AddCubeTransform()
 
 void ShadowMapping::AddSphereTransform()
 {
-	// Adds a cube to the scene
 	Transform t;
 	t.position = Vector3(0, 0, 0);
 	t.rotation = Vector3(0, 0, 0);
