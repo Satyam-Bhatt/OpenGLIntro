@@ -159,7 +159,6 @@ void ShadowMapping::RenderDepthMap()
 {
 	// Light matrices: same for every object, so compute once
 	// TODO: Spot light 
-	// 
 	lightProj = Matrix4x4::CreateProjectionMatrixSymmetric_ORTHO_LeftHanded(15.0f, 15.0f, 1.0f, 100.0f); // TODO: Why these matrices are needed
 
 	Vector3 lightPos = lightDir.Normalize() * -20.0f;
