@@ -49,6 +49,8 @@ private:
 
 	int token = 0;
 
+	float renderArea = 20;
+
 	//Shadow 
 	TextureLoader depthTex;
 	GLuint depthFBO = 0;
@@ -57,5 +59,6 @@ private:
 	Matrix4x4 lightView, lightProj, lightSpace;
 	Vector3 lightDir = Vector3(-0.5f, -1.0f, -0.3f);
 	void RenderDepthMap();
+
 };
 
