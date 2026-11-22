@@ -111,6 +111,9 @@ void ShadowMapping::ImGuiRender(GLFWwindow* window)
 	ImGui::Text("Welcome to my leap to shadow mapping");
 	ImGui::DragFloat3("light Position", &lightDir.x, 0.005f);
 	ImGui::DragFloat("Test", &renderArea, 0.005f);
+	ImGui::DragFloat("LeftRightBound", &leftRightBound, 0.005f);
+	ImGui::DragFloat("Near Clip", &nearClip, 0.005f);
+	ImGui::DragFloat("Far Clip", &farClip, 0.5f);
 
 	ImGui::End();
 
@@ -160,7 +163,7 @@ void ShadowMapping::RenderDepthMap()
 {
 	// We want to render shadows around the camera and move with it
 	Vector3 target = cam.CameraPosition;
-	// - lightDir * renderArea moves it back so that we can gather objects in front of the light. for example lightDir is (-0.5f, -1.0f, -0.3f) and renderArea is 20 so the final position is -(-10.0f, -20.0f, -6.0f). The negative sign makes it positive pushing it back in the postive direction as we are looking from above to down below. Target just move it with the camera
+	// - lightDir * renderArea moves it back so that we can gather objects in front of the light. for example lightDir is (-0.5f, -1.0f, -0.3f) and renderArea is 20 so the final position is -(-10.0f, -20.0f, -6.0f). The negative sign makes it positive pushing it back in the postive direction as we are looking from above to down below. Target is added just move it with the camera
 	Vector3 lightPos = target - lightDir.Normalize() * renderArea;
 	// Basically a view matrix from the position of the light. Moves everything from world space to light space. Light is pointing towards the camera but the shadow changes as the light direction changes
 	// TODO: Create an offset around the camera. So that we don't get a lot that is behind the camera
@@ -168,8 +171,9 @@ void ShadowMapping::RenderDepthMap()
 	lightSpace = lightProj * lightView;
 
 	// Creates an orthographic view of the scene being rendered throught the light. As we are applying directional light we use ortho graphic projection because all objects recieve same amount of light hence should cast some shadows.
-	// TODO: Why ortho for directional
-	lightProj = Matrix4x4::CreateProjectionMatrixSymmetric_ORTHO_LeftHanded(20.0f, 20.0f, 1.0f, 100.0f); // TODO: Why these matrices are needed
+	// We can change the bounds here to decide what gets shadows and what doesn't. This also decides how far the objects get shadow
+	// We use orthographic projection as in directional light all the light rays are parallel to each other.
+	lightProj = Matrix4x4::CreateProjectionMatrixSymmetric_ORTHO_LeftHanded(leftRightBound, leftRightBound, nearClip, farClip); 
 
 	glViewport(0, 0, SHADOW_W, SHADOW_H);
 	glBindFramebuffer(GL_FRAMEBUFFER, depthFBO);

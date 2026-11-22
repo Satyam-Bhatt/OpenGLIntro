@@ -49,7 +49,6 @@ private:
 
 	int token = 0;
 
-	float renderArea = 20;
 
 	//Shadow 
 	TextureLoader depthTex;
@@ -58,6 +57,8 @@ private:
 	Shader depthShader;
 	Matrix4x4 lightView, lightProj, lightSpace;
 	Vector3 lightDir = Vector3(-0.5f, -1.0f, -0.3f);
+	float leftRightBound = 20.0f, nearClip = 1, farClip = 100;
+	float renderArea = 20;
 	void RenderDepthMap();
 
 };
