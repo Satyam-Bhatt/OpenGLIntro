@@ -1,5 +1,13 @@
 #include "ShadowMapping.h"
 
+
+// INTRO TO SHADOW MAPPING
+// So we create a frame buffer texture 2D first which is of type depth that means we don't have a color output
+// The texture is pixelated - no mipmaps and nearrest filtering so that we can get exact values 
+// Then we write on that texture by binding the frame buffer and rendering each object from the perspective of the light
+// The shader that we use for this rendering only has the vertex shader and fragment is empty as we are just writing the depth value in this texture
+// When we render normally we read from the texture we just created. We check for each fragment if its in shadow by tallying with the depth texture. For this we convert the fragment from object space to light space and then map from 0-1 and then check if the z value of the position is more than the z value of the depth texture. If z of the position is more the value of depth texture then we return 0 else 1 telling us if its in shadow or not.
+// =======================
 ShadowMapping ShadowMapping::instance;
 
 ShadowMapping::ShadowMapping()
@@ -175,6 +183,7 @@ void ShadowMapping::RenderDepthMap()
 	// We use orthographic projection as in directional light all the light rays are parallel to each other.
 	lightProj = Matrix4x4::CreateProjectionMatrixSymmetric_ORTHO_LeftHanded(leftRightBound, leftRightBound, nearClip, farClip); 
 
+	// TODO: experiment with default values
 	glViewport(0, 0, SHADOW_W, SHADOW_H);
 	glBindFramebuffer(GL_FRAMEBUFFER, depthFBO);
 	glClear(GL_DEPTH_BUFFER_BIT);
