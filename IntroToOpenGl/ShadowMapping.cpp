@@ -272,6 +272,9 @@ void ShadowMapping::Exit()
 	depthShader.Dispose();
 	lightView = lightProj = lightProj = Matrix4x4::Identity();
 	lightDir = Vector3(-0.5f, -1.0f, -0.3f);
+	leftRightBound = 20.0f;
+	nearClip = 1;
+	farClip = 100;
 }
 
 ShadowMapping* ShadowMapping::GetInstance()
